@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/api/pom.xml" />
         <option value="$PROJECT_DIR$/common/pom.xml" />
+        <option value="$PROJECT_DIR$/lucene/pom.xml" />
       </list>
     </option>
   </component>
