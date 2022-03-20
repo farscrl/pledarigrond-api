@@ -7,15 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="common" />
         <module name="lucene" />
         <module name="api" />
+        <module name="common" />
+        <module name="mongodb" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="17" />
       <module name="common" target="17" />
       <module name="lucene" target="17" />
+      <module name="monbo-db" target="17" />
+      <module name="mongodb" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

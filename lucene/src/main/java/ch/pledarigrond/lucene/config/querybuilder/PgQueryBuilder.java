@@ -50,9 +50,10 @@ public abstract class PgQueryBuilder {
 	 * Initialize the builder for the given column.
 	 * @param column the column to search in
 	 */
-	public void setColumn(String column) {
+	public PgQueryBuilder setColumn(String column) {
 		this.column = column;
 		buildColumnToFieldsMapping();
+		return this;
 	}
 	
 	/**

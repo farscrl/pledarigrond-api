@@ -20,7 +20,7 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
 import ch.pledarigrond.lucene.exceptions.IndexException;
-import ch.pledarigrond.lucene.util.LuceneConfiguration;
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -43,7 +43,7 @@ import java.util.*;
  */
 class DictionaryCreator {
 
-	private LuceneConfiguration environment;
+	private LuceneConfiguration luceneConfiguration;
 
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryCreator.class);
 	private NIOFSDirectory indexDirectory;
@@ -51,12 +51,12 @@ class DictionaryCreator {
 	private final boolean tracing = logger.isTraceEnabled();
 	private IndexManagerSurmiran indexManager;
 	
-	LuceneConfiguration getEnvironment() {
-		return environment;
+	LuceneConfiguration getLuceneConfiguration() {
+		return luceneConfiguration;
 	}
 
-	void setEnvironment(LuceneConfiguration environment) {
-		this.environment = environment;
+	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {
+		this.luceneConfiguration = luceneConfiguration;
 	}
 
 	void initialize() throws IOException {
@@ -75,7 +75,7 @@ class DictionaryCreator {
 			counter = indexDocs(writer, iterator);
 			writer.close();
 			OutputStreamWriter osw = new OutputStreamWriter(
-					new FileOutputStream(environment.getLuceneTimestampFile()),
+					new FileOutputStream(luceneConfiguration.getLuceneTimestampFile()),
 					"UTF-8");
 			BufferedWriter bw = new BufferedWriter(osw);
 			bw.write("Created on " + new Date());
@@ -97,7 +97,7 @@ class DictionaryCreator {
 		if(indexDirectory != null) {
 			indexDirectory.close();
 		}
-		indexDirectory = new NIOFSDirectory(environment.getLuceneIndexDir());
+		indexDirectory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir());
 	}
 
 	private IndexWriter initIndexWriter() throws IOException {
@@ -114,7 +114,7 @@ class DictionaryCreator {
 	}
 
 	private boolean indexAvailable() {
-		if (!environment.getLuceneTimestampFile().exists()) {
+		if (!luceneConfiguration.getLuceneTimestampFile().exists()) {
 			logger.warn("No timestamp file available, preparing new index...");
 			deleteIndexDirectory();
 			return false;
@@ -123,11 +123,11 @@ class DictionaryCreator {
 	}
 
 	private void deleteIndexDirectory() {
-		File[] files = environment.getLuceneIndexDir().listFiles();
+		File[] files = luceneConfiguration.getLuceneIndexDir().listFiles();
 		if (files != null) {
 			logger.warn("Cleanup - Deleting " + files.length
 					+ " possibly broken index files in "
-					+ environment.getLuceneIndexDir().getAbsolutePath());
+					+ luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
 			for (File file : files) {
 				boolean deleted = file.delete();
 				if (!deleted) {

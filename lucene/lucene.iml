@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration />
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -12,6 +17,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="common" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.4" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:4.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-queries:4.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:4.6.1" level="project" />
@@ -21,5 +31,10 @@
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-highlighter:4.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-memory:4.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:5.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.16" level="project" />
   </component>
 </module>

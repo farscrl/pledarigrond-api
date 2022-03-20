@@ -46,9 +46,6 @@ public class IndexManagerSurmiran extends IndexManager {
         logger.info("Creating lucene index for surmiran"); // TODO: correct?
         languageConfig = new SurmiranLanguageConfig();
 
-        // the final set of columns, that should be added to the index
-        Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
-
         setDefaultValues(languageConfig.getDatabaseColumns(), finalColumnSet);
 
         // add sort fields

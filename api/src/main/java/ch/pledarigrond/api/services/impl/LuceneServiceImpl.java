@@ -1,9 +1,14 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.QueryResult;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
+import ch.pledarigrond.common.data.user.Pagination;
+import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.core.Dictionary;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -24,21 +29,22 @@ import java.util.List;
 
 @Service
 public class LuceneServiceImpl implements LuceneService {
+
     @Autowired
-    private Environment environment;
+    private PgEnvironment pgEnvironment;
+
     private Dictionary dictionary;
 
     @PostConstruct
     public void initialize() throws IOException {
-        dictionary = new Dictionary(environment.getLuceneConfig());
+        dictionary = new Dictionary(pgEnvironment.getLuceneConfig());
     }
 
     /**
-     * Queries the index and returns the result in form of a
-     * {@link QueryResult}.
+     * Queries the index and returns the result in form of a {@link QueryResult}.
      */
-    public QueryResult query(MaalrQuery maalrQuery, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-        QueryResult result = dictionary.query(maalrQuery);
+    public QueryResult query(SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+        QueryResult result = dictionary.query(searchCriteria, pagination);
         if(removeInternalData) return clean(result);
         return result;
     }
@@ -49,8 +55,8 @@ public class LuceneServiceImpl implements LuceneService {
         return result;
     }
 
-    public QueryResult getAllStartingWith(String language, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-        QueryResult result = dictionary.getAllStartingWith(language, prefix, page);
+    public QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+        QueryResult result = dictionary.getAllStartingWith(searchDirection, prefix, page);
         return clean(result);
     }
 
@@ -88,8 +94,7 @@ public class LuceneServiceImpl implements LuceneService {
         }
     }
 
-    public List<String> getSuggestionsForFieldChoice(String id, String query,
-                                                     int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
+    public List<String> getSuggestionsForFieldChoice(String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
         return dictionary.getSuggestionsForFieldChoice(id, query, limit);
     }
 

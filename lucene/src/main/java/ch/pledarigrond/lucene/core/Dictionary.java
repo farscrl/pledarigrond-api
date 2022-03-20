@@ -17,11 +17,14 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.QueryResult;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.config.SurmiranLanguageConfig;
+import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
@@ -30,7 +33,7 @@ import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.lucene.util.LuceneConfiguration;
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
@@ -64,7 +67,7 @@ import java.util.*;
  */
 public class Dictionary {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final NumberFormat formatter;
 
@@ -72,10 +75,8 @@ public class Dictionary {
 
 	private DictionaryCreator indexCreator;
 
-	private LuceneConfiguration environment;
-	
-	private LemmaDescription description;
-	
+	private LuceneConfiguration luceneConfiguration;
+
 	private IndexManagerSurmiran indexManager;
 
 	private HashMap<String, Type> sortTypes;
@@ -88,37 +89,36 @@ public class Dictionary {
 
 	private ExactMatchQueryBuilder exactMatchesLangB;
 
-	private SurmiranLanguageConfig languageConfig;
+	private final SurmiranLanguageConfig languageConfig;
 
 	public Dictionary(LuceneConfiguration configuration) throws IOException {
 		this();
-		setEnvironment(configuration);
+		setLuceneConfiguration(configuration);
 	}
 
 	public Dictionary() {
 		formatter = (NumberFormat) NumberFormat.getNumberInstance().clone();
 		formatter.setMaximumFractionDigits(3);
-		description = Configuration.getInstance().getLemmaDescription();
 		logger.info("Created new index.");
 		languageConfig = new SurmiranLanguageConfig();
 	}
 	
-	public LuceneConfiguration getEnvironment() {
-		return environment;
+	public LuceneConfiguration getLuceneConfiguration() {
+		return luceneConfiguration;
 	}
 
-	public void setEnvironment(LuceneConfiguration environment)
+	public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration)
 			throws IOException {
-		this.environment = environment;
+		this.luceneConfiguration = luceneConfiguration;
 		indexProvider = new DictionaryLoader();
-		indexProvider.setEnvironment(environment);
+		indexProvider.setLuceneConfiguration(luceneConfiguration);
 		indexCreator = new DictionaryCreator();
-		indexCreator.setEnvironment(environment);
+		indexCreator.setLuceneConfiguration(luceneConfiguration);
 		indexCreator.initialize();
 		indexCreator.resetIndexDirectory();
 		indexManager = IndexManagerSurmiran.getInstance();
-		List<IndexedColumn> columns = languageConfig.getDatabaseColumns();
-		sortTypes = new HashMap<String, Type>();
+		Set<IndexedColumn> columns = indexManager.getFinalColumnSet();
+		sortTypes = new HashMap<>();
 		for (IndexedColumn item : columns) {
 			sortTypes.put(item.getIndexFieldName(), getType(item.getType()));
 		}
@@ -134,6 +134,9 @@ public class Dictionary {
 	}
 
 	private Type getType(FieldType type) {
+		if (type == null) {
+			return Type.STRING;
+		}
 		switch(type) {
 		case INTEGER: return Type.INT;
 		default: return Type.STRING;
@@ -142,20 +145,20 @@ public class Dictionary {
 
 
 	
-	public QueryResult query(MaalrQuery maalrQuery, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
+	public QueryResult query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
-		validateQuery(pagination);
-		int pageSize = pagination.getPageSize();
+		validatePagination(pagination);
+
 		long s1 = System.nanoTime();
-		Query query = indexManager.buildQuery(maalrQuery);
+		Query query = indexManager.buildQuery(searchCriteria);
 		TopDocs docs = null;
-		// TODO: Make this configurable!
+
 		Sort sort = new Sort();
 		String[] items = null;
-		if(maalrQuery.getValue("language") != null && maalrQuery.getValue("language").equals(description.getLanguageName(false))) {
-			items = description.getSortList(false);
+		if(searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
+			items = new String[] { "RStichwort", "RStichwort_sort"};
 		} else {
-			items = description.getSortList(true);
+			items = new String[] { "DStichwort", "DStichwort_sort"};
 		}
 		SortField[] fields = new SortField[items.length+1];
 		fields[0] = SortField.FIELD_SCORE;
@@ -165,14 +168,15 @@ public class Dictionary {
 		}
 		sort.setSort(fields);
 		QueryResult result = null;
-		int pageNr = maalrQuery.getPageNr();
+
+		int pageSize = pagination.getPageSize();
+		int pageNr = pagination.getPage();
 		long e1 = System.nanoTime();
 		try {
 			long s2 = System.nanoTime();
-			docs = indexProvider.getSearcher().search(query,
-					pageSize * (pageNr + 1), sort);
+			docs = indexProvider.getSearcher().search(query, pageSize * (pageNr + 1), sort);
 			long e2 = System.nanoTime();
-			result = toQueryResult(docs, pageSize * pageNr, maalrQuery.getPageSize());
+			result = toQueryResult(docs, pageSize * pageNr, pageSize);
 			if(logger.isDebugEnabled()) {
 				logger.debug("Time to build query: " + (e1-s1)/1000000 + ", Time to execute query: " + ((e2-s2)/1000000));
 			}
@@ -183,16 +187,14 @@ public class Dictionary {
 		double time = (end - start) / 1000000D;
 		// Warn if query takes more than 100 ms.
 		if (time > 100) {
-			logger.warn("Slow query: " + formatter.format(time) + " ms for "
-					+ maalrQuery);
+			logger.warn("Slow query: " + formatter.format(time) + " ms for " + searchCriteria);
 		} else if (logger.isDebugEnabled()) {
-			logger.debug("Processed query in " + formatter.format(time)
-					+ " ms :" + maalrQuery);
+			logger.debug("Processed query in " + formatter.format(time) + " ms :" + searchCriteria);
 		}
 		return result;
 	}
 
-	private void validateQuery(Pagination pagination) {
+	private void validatePagination(Pagination pagination) {
 		if (pagination.getPage() < 0) {
 			pagination.setPage(0);
 		}
@@ -204,7 +206,7 @@ public class Dictionary {
 		}
 	}
 	
-	private QueryResult toQueryResult(TopDocs docs, int startIndex, int pageSize) throws NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+	private QueryResult toQueryResult(TopDocs docs, int startIndex, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
 		final ArrayList<LemmaVersion> results = new ArrayList<LemmaVersion>(pageSize);
 		final ScoreDoc[] scoreDocs = docs.scoreDocs;
 		IndexSearcher searcher = indexProvider.getSearcher();
@@ -221,7 +223,7 @@ public class Dictionary {
 	public QueryResult queryExact(String phrase, boolean firstLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		String sortField = null;
 		List<Query> queries = null;
-		sortField = description.getSortOrder(firstLanguage);
+		sortField = firstLanguage ? "DStichwort_sort" : "RStichwort_sort";
 		if(firstLanguage) {
 			queries = exactMatchesLangA.transform(phrase);
 		} else {
@@ -237,8 +239,7 @@ public class Dictionary {
 			bc.add(query, Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
 			query = bc;
-			TopDocs docs = indexProvider.getSearcher().search(query,
-					null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
+			TopDocs docs = indexProvider.getSearcher().search(query, null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
 
 			return toQueryResult(docs, 0, pageSize);
 		} catch (IOException e) {
@@ -248,12 +249,17 @@ public class Dictionary {
 		}
 	}
 
-	public QueryResult getAllStartingWith(String language, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+	public QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		String field = null;
 		String sortField = null;
 		List<Query> queries = null;
-		boolean firstLanguage = language.equals(description.getLanguageName(true));
-		field = description.getDictField(firstLanguage);
+		field = "RStichwort";
+		boolean firstLanguage = false;
+		if (searchDirection == SearchDirection.GERMAN) {
+			field = "DStichwort";
+			firstLanguage = true;
+		}
+
 		if(firstLanguage) {
 			queries = langAIndexBuilder.transform(prefix);
 			sortField = langAIndexBuilder.getIndexSortField();
@@ -374,7 +380,7 @@ public class Dictionary {
 	}
 	
 	public ArrayList<String> getSuggestionsForFieldChoice(String fieldName, String value, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
-		MaalrQuery maalrQuery = new MaalrQuery();
+		/*MaalrQuery maalrQuery = new MaalrQuery();
 		maalrQuery.setQueryValue(fieldName, value);
 		Query query = indexManager.buildQuery(maalrQuery);
 		if(query == null) {
@@ -406,7 +412,8 @@ public class Dictionary {
 			return new ArrayList<String>(resultList);
 		} else {
 			return results;
-		}
+		}*/
+		return new ArrayList<String>();
 	}
 
 	private IndexCommandQueue queue = IndexCommandQueue.getInstance();

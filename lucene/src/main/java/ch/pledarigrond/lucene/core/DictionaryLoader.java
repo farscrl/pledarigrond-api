@@ -19,7 +19,7 @@ import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.lucene.util.LuceneConfiguration;
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -50,21 +50,20 @@ import java.util.Set;
  class DictionaryLoader {
 
 	private IndexSearcher searcher;
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryLoader.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryLoader.class);
 
-	private LuceneConfiguration environment;
+	private LuceneConfiguration luceneConfiguration;
 	private IndexManagerSurmiran indexManager;
 
 	private RAMDirectory ram;
 	private DirectoryReader reader;
 	
-	LuceneConfiguration getEnvironment() {
-		return environment;
+	LuceneConfiguration getLuceneConfiguration() {
+		return luceneConfiguration;
 	}
 
-	void setEnvironment(LuceneConfiguration environment) {
-		this.environment = environment;
+	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {
+		this.luceneConfiguration = luceneConfiguration;
 		indexManager = IndexManagerSurmiran.getInstance();
 	}
 
@@ -86,8 +85,8 @@ import java.util.Set;
 	private synchronized void loadIndex() throws NoIndexAvailableException {
 		if (searcher == null) {
 			try {
-				logger.info("Loading index from directory " + environment.getLuceneIndexDir().getAbsolutePath());
-				NIOFSDirectory directory = new NIOFSDirectory(environment.getLuceneIndexDir());
+				logger.info("Loading index from directory " + luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
+				NIOFSDirectory directory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir());
 				ram = new RAMDirectory(directory, new IOContext());
 				reader = DirectoryReader.open(ram);
 				searcher = new IndexSearcher(reader);

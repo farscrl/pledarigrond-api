@@ -2,8 +2,10 @@ package ch.pledarigrond.lucene.config;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
+import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.config.querybuilder.FieldFactory;
 import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.DefaultQueryBuilder;
@@ -22,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class IndexManager {
 
@@ -32,6 +36,9 @@ public abstract class IndexManager {
     protected String[] allColumns;
 
     protected BuilderRegistry builderRegistry = new BuilderRegistry();
+
+    // the final set of columns, that should be added to the index
+    protected Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
 
     /**
      * The {@link FieldFactory}-objects required by the current search configuration.
@@ -46,6 +53,14 @@ public abstract class IndexManager {
      * oracle queries.
      */
     protected Map<String, PgQueryBuilder> oracleBuilder = new HashMap<>();
+
+    /**
+     * Contains all field names which are ignored when generating the index.
+     * A field is ignored if it has not been set up in the indexConfiguration-
+     * section of the search configuration. For each ignored field, a warning
+     * message will be logged.
+     */
+    private final Set<String> ignored = new HashSet<>();
 
 
     public IndexManager() {
@@ -69,34 +84,31 @@ public abstract class IndexManager {
         return bq;
     }
 
-    public Query buildQuery(MaalrQuery maalrQuery) {
+    public Query buildQuery(SearchCriteria searchCriteria) {
         long prepareStart = System.nanoTime();
-        Set<String> queryBuilderIds = builderRegistry.allQueryBuilderIds;
-        TreeMap<String, String> queryMap = maalrQuery.getValues();
-        BooleanQuery bq = new BooleanQuery(true);
-        // Build a query by iterating over all registered query builders
-        for (String queryBuilderId : queryBuilderIds) {
-            Set<Query> queryParts = builderRegistry.getQuery(queryMap, queryBuilderId);
-            if(queryParts == null) continue;
+        BooleanQuery finalQuery = new BooleanQuery(true);
+
+        if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().equals("")) {
+            List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
+                case GERMAN -> builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase());
+                case ROMANSH -> builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase());
+                case BOTH -> Stream.concat(
+                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()).stream(),
+                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()).stream()
+                ).collect(Collectors.toList());
+            };
             BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : queryParts) {
+            for (Query tf : searchPhraseQueries) {
                 part.add(tf, BooleanClause.Occur.SHOULD);
             }
-            bq.add(part, BooleanClause.Occur.MUST);
+            finalQuery.add(part, BooleanClause.Occur.MUST);
         }
-        Query query = bq;
-        // Unless a user wants to see unverified suggestions, each item returned must be verified.
-        if(!maalrQuery.isSuggestions()) {
-            BooleanQuery bc = new BooleanQuery();
-            bc.add(query, BooleanClause.Occur.MUST);
-            bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-            query = bc;
-        }
+
         long prepareEnd = System.nanoTime();
         if(logger.isDebugEnabled()) {
-            logger.debug("Final query: " + query + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
+            logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
         }
-        return query;
+        return finalQuery;
     }
 
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
@@ -134,6 +146,10 @@ public abstract class IndexManager {
         }
         addMaalrFieldsToLemmaVersion(document, lv);
         return lv;
+    }
+
+    public Set<IndexedColumn> getFinalColumnSet() {
+        return this.finalColumnSet;
     }
 
     protected abstract List<String> getEditorFields();
@@ -199,7 +215,7 @@ public abstract class IndexManager {
 
     protected void extractListOfAllColumns(Set<IndexedColumn> finalColumnSet, String firstLanguageMain, String secondLanguageMain) {
         // Keep track of all column names - required to convert from lucene documents to lemma versions
-        Set<String> columnNames = new TreeSet<String>();
+        Set<String> columnNames = new TreeSet<>();
         for (IndexedColumn item : finalColumnSet) {
             columnNames.add(item.getColumnName());
         }
@@ -209,7 +225,7 @@ public abstract class IndexManager {
         if(!columnNames.contains(secondLanguageMain)) {
             errors.add("Main column '" + secondLanguageMain + "' was not found in the set of all columns.");
         }
-        allColumns = columnNames.toArray(allColumns);
+        allColumns = columnNames.toArray(new String[0]);
     }
 
     protected List<IndexableField> toField(String key, String value) {

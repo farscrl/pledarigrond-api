@@ -1,8 +1,11 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.QueryResult;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
+import ch.pledarigrond.common.data.user.Pagination;
+import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
@@ -18,11 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public interface LuceneService {
-    QueryResult query(MaalrQuery maalrQuery, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+    QueryResult query(SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
     QueryResult queryExact(String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult getAllStartingWith(String language, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
+    QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
 
     IndexStatistics getIndexStatistics();
 

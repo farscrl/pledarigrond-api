@@ -13,35 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package ch.pledarigrond.lucene.util;
+package ch.pledarigrond.mongodb.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class InvalidUserException extends Exception {
 
-import java.io.File;
+	private static final long serialVersionUID = 5630453797375039188L;
 
-/**
- * This class gives access to some base information of the currently used lucene instance.
- */
-public class LuceneConfiguration {
-
-	private static final Logger logger = LoggerFactory.getLogger(LuceneConfiguration.class);
-
-	private File indexDir;
-
-	public File getLuceneTimestampFile() {
-		return new File(indexDir, ".stamp");
+	public InvalidUserException() {
+		
+	}
+	
+	public InvalidUserException(String message) {
+		super(message);
 	}
 
-	public File getLuceneIndexDir() {
-		return indexDir;
-	}
-
-	public void setBaseDirectory(String luceneDir) {
-		this.indexDir = new File(luceneDir);
-		boolean result = indexDir.mkdirs();
-		if (!result) {
-			logger.error("Impossible to create index directory");
-		}
-	}
 }

@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class SearchCriteria {
-    public String searchPhrase = "";
-    public SearchDirection searchDirection = SearchDirection.BOTH;
-    public SearchMethod searchMethod = SearchMethod.NORMAL;
-    public Boolean highlight = false;
-    public Boolean suggestions = false;
+    private String searchPhrase = "";
+    private SearchDirection searchDirection = SearchDirection.BOTH;
+    private SearchMethod searchMethod = SearchMethod.NORMAL;
+    private Boolean highlight = false;
+    private Boolean suggestions = false;
 }
