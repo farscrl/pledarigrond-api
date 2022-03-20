@@ -3,25 +3,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>ch.pledarigrond</groupId>
+		<artifactId>parent</artifactId>
+		<version>${revision}</version>
+		<relativePath>../parent</relativePath>
 	</parent>
-	<groupId>ch.pledarigrond</groupId>
 	<artifactId>api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>api</name>
-	<description>API for the Pledari Grond</description>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
+	<description>Public API for the Pledari Grond</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -35,17 +30,17 @@
 		<dependency>
 			<groupId>ch.pledarigrond</groupId>
 			<artifactId>common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.pledarigrond</groupId>
 			<artifactId>lucene</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
         <dependency>
             <groupId>ch.pledarigrond</groupId>
             <artifactId>mongodb</artifactId>
-            <version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 		<dependency>
@@ -53,7 +48,6 @@
 			<artifactId>spring-security-core</artifactId>
 			<scope>compile</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -62,6 +56,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<mainClass>ch.pledarigrond.api.ApiApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -69,6 +64,14 @@
 						</exclude>
 					</excludes>
 				</configuration>
+				<!-- used to define main class correctly: https://stackoverflow.com/a/54867850 -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<resources>
@@ -78,5 +81,4 @@
 			</resource>
 		</resources>
 	</build>
-
 </project>
