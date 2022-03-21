@@ -33,6 +33,12 @@ public class PgEnvironment {
 	@Value( "pg.demoData.surmiran}")
 	private String demoDataSurmiran;
 
+	@Value( "${pg.admin.user}")
+	private String adminUsername;
+
+	@Value( "${pg.admin.password}")
+	private String adminPassword;
+
 	private LuceneConfiguration luceneConfig;
 
 	private boolean isInitialized = false;
