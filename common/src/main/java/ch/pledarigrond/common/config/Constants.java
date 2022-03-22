@@ -17,32 +17,25 @@ package ch.pledarigrond.common.config;
 
 public interface Constants {
 	
-	public interface Roles {
-		public static final String ROLE = "Role";
+	interface Roles {
+		String ROLE = "Role";
 		
-		public static final String GUEST_1 = "ROLE_GUEST";
-		public static final String TRUSTED_EX_3 = "ROLE_TRUSTED_EX";
-		public static final String TRUSTED_IN_4 = "ROLE_TRUSTED_IN";
-		public static final String ADMIN_5 = "ROLE_ADMIN";
-		
-		public static final String[] ALL_ROLES = new String[] {GUEST_1, TRUSTED_EX_3, TRUSTED_IN_4, ADMIN_5};
+		String GUEST_1 = "ROLE_GUEST";
+		String TRUSTED_EX_3 = "ROLE_TRUSTED_EX";
+		String TRUSTED_IN_4 = "ROLE_TRUSTED_IN";
+		String ADMIN_5 = "ROLE_ADMIN";
 	}
 	
-	public interface Users {
-		public static final String LOGIN = "login";
-		public static final String PASSWORD = "password";
-		public static final String EMAIL = "email";
-		public static final String FIRSTNAME = "firstname";
-		public static final String LASTNAME = "lastname";
-		public static final String TITLE = "title";
-		public static final String ROLE = "role";
-		public static final String EDITS = "edits";
-		public static final String UPVOTES = "upvotes";
-		public static final String DOWNVOTES = "downvotes";
-		public static final String CREATION_DATE = "creationDate";
-		public static final String LAST_MODIFICATION = "lastModDate";
+	interface Users {
+		String LOGIN = "login";
+		String PASSWORD = "password";
+		String EMAIL = "email";
+		String ROLE = "role";
+		String LANGUAGES = "languages";
+		String CREATION_DATE = "creationDate";
+		String LAST_MODIFICATION = "lastModDate";
 		// SPRING SOCIAL SPECIFIC KEYS
-		public static final String PROVIDER_USER_ID = "providerUserId";
-		public static final String PROVIDER_ID = "providerId";
+		String PROVIDER_USER_ID = "providerUserId";
+		String PROVIDER_ID = "providerId";
 	}
 }

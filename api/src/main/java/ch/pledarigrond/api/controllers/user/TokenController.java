@@ -5,6 +5,7 @@ import ch.pledarigrond.api.dtos.JwtResponse;
 import ch.pledarigrond.api.services.JwtUserDetailsService;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.api.utils.JwtTokenUtil;
+import ch.pledarigrond.mongodb.model.PgUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,15 +28,17 @@ public class TokenController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("")
     public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+        final PgUserInfo userInfo = userService.getByLogin(authenticationRequest.getUsername());
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final String token = jwtTokenUtil.generateToken(userInfo);
 
         return ResponseEntity.ok(new JwtResponse(token));
 

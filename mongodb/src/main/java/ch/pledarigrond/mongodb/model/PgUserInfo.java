@@ -16,11 +16,16 @@
 package ch.pledarigrond.mongodb.model;
 
 import ch.pledarigrond.common.config.Constants;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.common.data.common.Role;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class PgUserInfo extends BasicDBObject {
 
@@ -95,26 +100,23 @@ public class PgUserInfo extends BasicDBObject {
 	public long getLastModificationDate() {
 		return super.getLong(Constants.Users.LAST_MODIFICATION);
 	}
-	
-	public String getDisplayName() {
-		return getLogin();
+
+	public void setLanguages(List<Language> languages) {
+		super.put(Constants.Users.LANGUAGES, languages.toString());
 	}
 
-	@Deprecated
-	public void setProviderUserId(String providerUserId) {
-		super.put(Constants.Users.PROVIDER_USER_ID, providerUserId);
-	}
+	public List<Language> getLanguages() {
+		ArrayList<Language> list = new ArrayList<>();
+		String languages = super.getString(Constants.Users.LANGUAGES);
+		if(languages == null) {
+			return list;
+		}
 
-	public void setProviderId(String providerId) {
-		super.put(Constants.Users.PROVIDER_ID, providerId);
-	}
-	
-	public String getProviderUserId() {
-		return super.getString(Constants.Users.PROVIDER_USER_ID);
-	}
-	
-	public String getProviderId() {
-		return super.getString(Constants.Users.PROVIDER_ID);
+		languages = languages.substring(1, languages.length() - 1); // chop off brackets
+		for (String token : languages.split(",")) {
+			list.add(Language.valueOf(token.trim()));
+		}
+		return list;
 	}
 	
 	@Override
