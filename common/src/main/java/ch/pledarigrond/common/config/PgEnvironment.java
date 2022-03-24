@@ -41,24 +41,17 @@ public class PgEnvironment {
 
 	private LuceneConfiguration luceneConfig;
 
-	private boolean isInitialized = false;
-
 	public PgEnvironment() {
 
 	}
 
 	@PostConstruct
 	public void init() {
-		if (isInitialized) {
-			return;
-		}
 		luceneConfig = new LuceneConfiguration();
 		luceneConfig.setBaseDirectory(luceneBaseFolder);
 		logger.info("**********************************************************************************");
 		logger.info("Initializing " + name + " (" + version + ")");
 		logger.info("**********************************************************************************");
-
-		isInitialized = true;
 	}
 
 	public File getDemoDataSurmiranFile() {

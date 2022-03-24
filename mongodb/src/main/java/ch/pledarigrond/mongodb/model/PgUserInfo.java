@@ -16,9 +16,7 @@
 package ch.pledarigrond.mongodb.model;
 
 import ch.pledarigrond.common.config.Constants;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LightUserInfo;
-import ch.pledarigrond.common.data.common.Role;
+import ch.pledarigrond.common.data.common.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -38,48 +36,140 @@ public class PgUserInfo extends BasicDBObject {
 		super.putAll(obj);
 	}
 
-	public PgUserInfo(String login, Role role) {
-		setLogin(login);
-		setRole(role);
+	public PgUserInfo(String email) {
+		setEmail(email);
 	}
 
-	public PgUserInfo(final String login, final String password, Role role) {
-		setLogin(login);
+	public PgUserInfo(final String email, final String password) {
+		setEmail(email);
 		setPassword(password);
-		setRole(role);
 	}
-	
-	public void setLogin(final String login) {
-		super.put(Constants.Users.LOGIN, login);
+
+	public void setEmail(final String email) {
+		super.put(Constants.Users.EMAIL, email);
 	}
-	
-	public String getLogin() {
-		return super.getString(Constants.Users.LOGIN);
+
+	public String getEmail() {
+		return super.getString(Constants.Users.EMAIL);
 	}
 	
 	public void setPassword(final String password) {
+		if (password == null) {
+			return;
+		}
 		super.put(Constants.Users.PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt()));
 	}
-	
+
+	public boolean getAdmin() {
+		return super.getBoolean(Constants.Users.IS_ADMIN);
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		super.put(Constants.Users.IS_ADMIN, isAdmin);
+	}
+
+	public EditorRole getPuterRole() {
+		String role = super.getString(Constants.Users.ROLE_PUTER);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setPuterRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_PUTER, role.toString());
+	}
+
+	public EditorRole getRumantschgrischunRole() {
+		String role = super.getString(Constants.Users.ROLE_RUMANTSCHGRISCHUN);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setRumantschgrischunRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_RUMANTSCHGRISCHUN, role.toString());
+	}
+
+	public EditorRole getSurmiranRole() {
+		String role = super.getString(Constants.Users.ROLE_SURMIRAN);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setSurmiranRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_SURMIRAN, role.toString());
+	}
+
+	public EditorRole getSursilvanRole() {
+		String role = super.getString(Constants.Users.ROLE_SURSILVAN);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setSursilvanRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_SURSILVAN, role.toString());
+	}
+
+	public EditorRole getSutsilvanRole() {
+		String role = super.getString(Constants.Users.ROLE_SUTSILVAN);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setSutsilvanRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_SUTSILVAN, role.toString());
+	}
+
+	public EditorRole getValladerRole() {
+		String role = super.getString(Constants.Users.ROLE_VALLADER);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setValladerRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_VALLADER, role.toString());
+	}
+
+	public EditorRole getNamesRole() {
+		String role = super.getString(Constants.Users.ROLE_NAMES);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setNamesRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_NAMES, role.toString());
+	}
+
 	public String getPassword() {
 		return super.getString(Constants.Users.PASSWORD);
 	}
 	
-	public void setRole(Role role) {
-		super.put(Constants.Users.ROLE, role.toString());
-	}
-	
-	public Role getRole() {
-		String role = super.getString(Constants.Users.ROLE);
-		if(role == null)
-			return null;
-		return Role.valueOf(role);
-	}
-	
 	public LightUserInfo toLightUser() {
+		RolesObject roles = new RolesObject();
+		roles.setPuterRole(getPuterRole());
+		roles.setRumantschgrischunRole(getRumantschgrischunRole());
+		roles.setSurmiranRole(getSurmiranRole());
+		roles.setSursilvanRole(getSursilvanRole());
+		roles.setSutsilvanRole(getSutsilvanRole());
+		roles.setValladerRole(getValladerRole());
+		roles.setNamesRole(getNamesRole());
+
 		LightUserInfo userInfo = new LightUserInfo();
-		userInfo.setLogin(getLogin());
-		userInfo.setRole(getRole());
+		userInfo.setEmail(getEmail());
+		userInfo.setAdmin(getAdmin());
+		userInfo.setRoles(roles);
 		userInfo.setLastModificationDate(getLastModificationDate());
 		userInfo.setCreationDate(getCreationDate());
 		return userInfo;
@@ -99,24 +189,6 @@ public class PgUserInfo extends BasicDBObject {
 	
 	public long getLastModificationDate() {
 		return super.getLong(Constants.Users.LAST_MODIFICATION);
-	}
-
-	public void setLanguages(List<Language> languages) {
-		super.put(Constants.Users.LANGUAGES, languages.toString());
-	}
-
-	public List<Language> getLanguages() {
-		ArrayList<Language> list = new ArrayList<>();
-		String languages = super.getString(Constants.Users.LANGUAGES);
-		if(languages == null) {
-			return list;
-		}
-
-		languages = languages.substring(1, languages.length() - 1); // chop off brackets
-		for (String token : languages.split(",")) {
-			list.add(Language.valueOf(token.trim()));
-		}
-		return list;
 	}
 	
 	@Override

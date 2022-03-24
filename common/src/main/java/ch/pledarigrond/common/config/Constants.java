@@ -16,7 +16,8 @@
 package ch.pledarigrond.common.config;
 
 public interface Constants {
-	
+
+	@Deprecated
 	interface Roles {
 		String ROLE = "Role";
 		
@@ -27,15 +28,20 @@ public interface Constants {
 	}
 	
 	interface Users {
-		String LOGIN = "login";
 		String PASSWORD = "password";
 		String EMAIL = "email";
-		String ROLE = "role";
-		String LANGUAGES = "languages";
 		String CREATION_DATE = "creationDate";
 		String LAST_MODIFICATION = "lastModDate";
-		// SPRING SOCIAL SPECIFIC KEYS
-		String PROVIDER_USER_ID = "providerUserId";
-		String PROVIDER_ID = "providerId";
+
+		String IS_ADMIN = "isAdmin";
+
+		String ROLE_PUTER = "rolePuter";
+		String ROLE_RUMANTSCHGRISCHUN = "roleRumantschgrischun";
+		String ROLE_SURMIRAN = "roleSurmiran";
+		String ROLE_SURSILVAN = "roleSursilvan";
+		String ROLE_SUTSILVAN = "roleSutsilvan";
+		String ROLE_VALLADER = "roleVallader";
+
+		String ROLE_NAMES = "roleNames";
 	}
 }

@@ -158,8 +158,8 @@ public class MongoDbServiceImpl implements MongoDbService {
 
     private String getUserLogin() {
         try {
-            PgUserInfo user = userService.getOrCreateCurrentUser();
-            return user.getLogin();
+            PgUserInfo user = userService.getCurrentUserOrDefaultUser();
+            return user.getEmail();
 
         } catch (Exception e) {
             throw new BadCredentialsException("Failed to get user login");
@@ -169,6 +169,6 @@ public class MongoDbServiceImpl implements MongoDbService {
     private void addUserInfo(LemmaVersion lemma) {
         String ip = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
         lemma.setIP(ip);
-        lemma.setCreatorRole(userService.getOrCreateCurrentUser().getRole());
+        //lemma.setCreatorRole(userService.getOrCreateCurrentUser().getRole()); // TODO(CGA): Add again
     }
 }

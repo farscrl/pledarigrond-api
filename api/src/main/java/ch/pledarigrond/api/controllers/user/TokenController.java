@@ -36,7 +36,7 @@ public class TokenController {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final PgUserInfo userInfo = userService.getByLogin(authenticationRequest.getUsername());
+        final PgUserInfo userInfo = userService.getByEmail(authenticationRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userInfo);
 

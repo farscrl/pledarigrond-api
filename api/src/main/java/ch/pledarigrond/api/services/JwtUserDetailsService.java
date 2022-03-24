@@ -17,14 +17,14 @@ public class JwtUserDetailsService implements UserDetailsService {
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        PgUserInfo userInfo = userService.getByLogin(username);
+        PgUserInfo userInfo = userService.getByEmail(email);
 
         if (userInfo == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        return new User(userInfo.getLogin(), userInfo.getPassword(), new ArrayList<>());
+        return new User(userInfo.getEmail(), userInfo.getPassword(), new ArrayList<>());
     }
 }

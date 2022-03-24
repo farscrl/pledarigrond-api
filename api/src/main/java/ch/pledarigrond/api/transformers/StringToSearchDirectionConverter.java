@@ -1,4 +1,4 @@
-package ch.pledarigrond.api.converters;
+package ch.pledarigrond.api.transformers;
 
 import ch.pledarigrond.common.data.common.SearchDirection;
 import org.springframework.core.convert.converter.Converter;

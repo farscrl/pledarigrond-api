@@ -19,7 +19,6 @@ import ch.pledarigrond.common.config.Constants;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.DatabaseException;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.mongodb.model.PgUserInfo;
 import ch.pledarigrond.mongodb.util.MongoHelper;
@@ -30,18 +29,19 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserInfoDatabase {
 
@@ -65,7 +65,7 @@ public class UserInfoDatabase {
 		
 		try {
 			MongoDatabase db = MongoHelper.getDB("users");
-			userCollection = db.getCollection("sm_users");
+			userCollection = db.getCollection("users");
 			if(userCollection.countDocuments() == 0) {
 				createIndex();
 			}
@@ -76,15 +76,15 @@ public class UserInfoDatabase {
 	}
 	
 	private void createIndex() {
-		userCollection.createIndex(Indexes.ascending(Constants.Users.LOGIN), new IndexOptions().unique(true));
+		userCollection.createIndex(Indexes.ascending(Constants.Users.EMAIL), new IndexOptions().unique(true));
 		userCollection.createIndex(Indexes.ascending(Constants.Users.CREATION_DATE));
 		userCollection.createIndex(Indexes.ascending(Constants.Users.LAST_MODIFICATION));
 		userCollection.createIndex(Indexes.ascending(Constants.Users.PASSWORD));
 	}
 
-	public boolean userExists(String login) {
+	public boolean userExists(String email) {
 		BasicDBObject obj = new BasicDBObject();
-		obj.put(Constants.Users.LOGIN, login);
+		obj.put(Constants.Users.EMAIL, email);
 		MongoCursor<Document> cursor = userCollection.find(obj).iterator();
 		boolean hasNext = cursor.hasNext();
 		cursor.close();
@@ -100,19 +100,13 @@ public class UserInfoDatabase {
 	}
 
 	public PgUserInfo insert(PgUserInfo user) throws InvalidUserException {
-		if(userExists(user.getLogin())) throw new InvalidUserException("User already exists!");
+		if(userExists(user.getEmail())) throw new InvalidUserException("User already exists!");
 		long now = System.currentTimeMillis();
 		user.setCreationDate(now);
 		user.setLastModificationDate(now);
 		userCollection.insertOne(new Document(user));
-		logger.info("Inserted new user " + user.getLogin());
+		logger.info("Inserted new user " + user.getEmail());
 		return user;
-	}
-
-	public PgUserInfo getByLogin(String login) {
-		BasicDBObject obj = new BasicDBObject();
-		obj.put(Constants.Users.LOGIN, login);
-		return findByDbObject(obj);
 	}
 	
 	public PgUserInfo getByEmail(String email) {
@@ -129,26 +123,27 @@ public class UserInfoDatabase {
 		return toReturn;
 	}
 
-	public PgUserInfo getOrCreate(String login) throws InvalidUserException {
-		if(userExists(login)) {
-			return getByLogin(login);
+	public PgUserInfo getOrCreate(String email) throws InvalidUserException {
+		if(userExists(email)) {
+			return getByEmail(email);
 		} else {
-			Role role = "admin".equals(login) ? Role.ADMIN_5 : Role.GUEST_1;
-			return insert(new PgUserInfo(login, role));
+			return insert(new PgUserInfo(email));
 		}
 	}
 
-	public void updateUser(PgUserInfo user) throws InvalidUserException {
-		if(!userExists(user.getLogin())) {
+	public PgUserInfo updateUser(PgUserInfo user) throws InvalidUserException {
+		if(!userExists(user.getEmail())) {
 			throw new InvalidUserException("User does not exist");
 		}
-		update(user);
+		return update(user);
 	}
 
-	private void update(PgUserInfo user) {
+	private PgUserInfo update(PgUserInfo user) {
 		Document document = new Document(user);
-		userCollection.insertOne(document);
+		// userCollection.updateOne(Filters.eq("_id", new ObjectId(user.getString("_id"))), document);
+		userCollection.replaceOne(eq("_id", new ObjectId(user.getString("_id"))), document, new ReplaceOptions());
 		logger.info("user updated: {}", document.toJson());
+		return user;
 	}
 	
 	public List<PgUserInfo> getAllUsers(int from, int length, String sortColumn, boolean sortAscending) {
@@ -175,18 +170,15 @@ public class UserInfoDatabase {
 		return all;
 	}
 	
-	public List<PgUserInfo> getAllUsers(Role role, String text, String sortColumn, boolean sortAscending, int from, int length) {
+	public List<PgUserInfo> getAllUsers(String text, String sortColumn, boolean sortAscending, int from, int length) {
 		BasicDBObject query = new BasicDBObject();
 		Pattern pattern = Pattern.compile(".*" + text + ".*", Pattern.CASE_INSENSITIVE);
-		if(role != null) {
-			query.put(Constants.Users.ROLE, role.toString());
-		}
 		// The value for the variable 'text' is set in 'maalr.gwt > ListFilter.java'
 		if(text != null && text.trim().length() > 0) {
 			BasicDBList attributes = new BasicDBList();
-			DBObject login = new BasicDBObject();
-			login.put(Constants.Users.LOGIN, pattern);
-			attributes.add(login);
+			DBObject email = new BasicDBObject();
+			email.put(Constants.Users.EMAIL, pattern);
+			attributes.add(email);
 			query.append("$or", attributes);
 		}
 		FindIterable<Document> find = userCollection.find(query);
@@ -216,7 +208,7 @@ public class UserInfoDatabase {
 
 	public boolean deleteUser(LightUserInfo user) {
 		BasicDBObject obj = new BasicDBObject();
-		obj.put(Constants.Users.LOGIN, user.getLogin());
+		obj.put(Constants.Users.EMAIL, user.getEmail());
 		DeleteResult deleteOne = userCollection.deleteOne(obj);
 		return deleteOne.getDeletedCount() == 1;
 	}

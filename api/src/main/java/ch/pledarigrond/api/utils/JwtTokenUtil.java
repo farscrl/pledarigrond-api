@@ -49,9 +49,16 @@ public class JwtTokenUtil {
     //generate token for user
     public String generateToken(PgUserInfo userInfo) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userInfo.getRole());
-        claims.put("languages", userInfo.getLanguages());
-        return doGenerateToken(claims, userInfo.getLogin());
+        claims.put("is_admin", userInfo.getAdmin());
+        claims.put("role_puter", userInfo.getPuterRole());
+        claims.put("role_rumantschgrischun", userInfo.getRumantschgrischunRole());
+        claims.put("role_surmiran", userInfo.getSurmiranRole());
+        claims.put("role_sursilvan", userInfo.getSursilvanRole());
+        claims.put("role_sutsilvan", userInfo.getSutsilvanRole());
+        claims.put("role_vallader", userInfo.getValladerRole());
+        claims.put("role_names", userInfo.getNamesRole());
+
+        return doGenerateToken(claims, userInfo.getEmail());
     }
 
     //while creating the token -
