@@ -1,12 +1,15 @@
 package ch.pledarigrond.mongodb.util.backup;
 
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
+import ch.pledarigrond.mongodb.util.DbSelector;
 import ch.pledarigrond.mongodb.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,52 +21,67 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-// TODO: make backups of all DBs
 @Service("scheduledBackupHelper")
 public class ScheduledBackupHelper extends AbstractBackupHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ScheduledBackupHelper.class);
 
-	@Value("${backup.location:backup}")
-	private String backupDir;
+	@Autowired
+	private PgEnvironment pgEnvironment;
 
-	@Value("${db.name:surmiran}")
-	private String dbName;
+	@Scheduled(cron = "${pg.backup.cron.rumantschgrischun}")
+	public void backupRumantschgrischun() {
+		backup(Language.RUMANTSCHGRISCHUN);
+	}
 
-	@Scheduled(initialDelayString = "${backup.initial.delay}", fixedRateString = "${backup.fixed.rate}")
-	public void backup() throws ScheduledBackupException {
+	@Scheduled(cron = "${pg.backup.cron.surmiran}")
+	public void backupSurmiran() {
+		backup(Language.SURMIRAN);
+	}
 
-		LOG.info("started scheduled backup");
+	@Scheduled(cron = "${pg.backup.cron.sutsilvan}")
+	public void backupSutsilvan() {
+		backup(Language.SUTSILVAN);
+	}
 
-		String backupFileName = buildName();
+	private void backup(Language language) {
+		LOG.info("started scheduled backup for: " + language);
+
+		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+
+		String backupFileName = buildName(dbName);
 		LOG.info("backup file name created: {}", backupFileName);
 
-		File backupFile = buidlBackup(backupDir, backupFileName, dbName);
+		File backupFile = buildBackup(pgEnvironment.getBackupLocation(), backupFileName, dbName);
 		LOG.info("backup file created: {}", backupFile.getAbsolutePath());
 
-		if (valid(backupFile)) {
+		if (valid(backupFile, dbName)) {
 			LOG.info("backup file valid");
-			cleanup();
+			try {
+				cleanup();
+			} catch (ScheduledBackupException e) {
+				LOG.error("back up file is not valid.");
+			}
 		} else {
-			throw new ScheduledBackupException("back up file is not valid.");
+			LOG.error("back up file is not valid.");
 		}
 
 		LOG.info("finished scheduled backup");
 	}
 
-	private File buidlBackup(String dir, String backupFileName, String locale) {
+	private File buildBackup(String dir, String backupFileName, String locale) {
 		File backupFile = new File(dir, backupFileName);
 		try {
 			Database.getInstance(locale).exportData(true, false, new FileOutputStream(backupFile), backupFileName);
 		} catch (Exception e) {
-			LOG.error("error occured... {}", e);
+			LOG.error("error occured...", e);
 		}
 		return backupFile;
 	}
 
 	private void cleanup() throws ScheduledBackupException {
-		List<File> backupFiles = listBackupFilesAsc(backupDir);
-		if (backupFiles.size() >= 7) {
+		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation());
+		if (backupFiles.size() >= Integer.parseInt(pgEnvironment.getBackupNumber())) {
 			boolean delete = backupFiles.get(0).delete();
 			if (!delete) {
 				throw new ScheduledBackupException(String.format(
@@ -78,7 +96,7 @@ public class ScheduledBackupHelper extends AbstractBackupHelper {
 		}
 	}
 
-	private boolean valid(File backupFile) {
+	private boolean valid(File backupFile, String dbName) {
 		if (null == backupFile) {
 			return false;
 		}
@@ -94,13 +112,13 @@ public class ScheduledBackupHelper extends AbstractBackupHelper {
 			}
 			return true;
 		} catch (Exception e) {
-			LOG.error("error occured: {}", e);
+			LOG.error("error occured: ", e);
 			return false;
 		}
 	}
 
-	private String buildName() {
-		return String.format("%s_db_dump_%s.zip", dbName, new SimpleDateFormat(
+	private String buildName(String dbName) {
+		return String.format("%s/%s_db_dump_%s.zip", dbName, dbName, new SimpleDateFormat(
 				"yyyy-MM-dd_HH-mm-ss").format(new Date()));
 	}
 }

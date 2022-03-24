@@ -4,6 +4,7 @@ import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.api.services.DumpLoaderService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.exception.DatabaseException;
@@ -114,7 +115,7 @@ public class AdminServiceImpl implements AdminService {
         Database.getInstance("surmiran").exportData(allVersions, dropKeys, out, fileName);
     }
 
-    public BackupInfos getBackupInfos() {
-        return backupInfoHelper.getBackupInfos();
+    public BackupInfos getBackupInfos(Language language) {
+        return backupInfoHelper.getBackupInfos(language);
     }
 }

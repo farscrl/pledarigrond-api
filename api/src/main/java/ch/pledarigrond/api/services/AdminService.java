@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -36,5 +37,5 @@ public interface AdminService {
 
     void exportData(boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException;
 
-    BackupInfos getBackupInfos();
+    BackupInfos getBackupInfos(Language language);
 }

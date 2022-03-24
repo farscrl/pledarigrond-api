@@ -27,6 +27,24 @@ public class PgEnvironment {
 	@Value( "${pg.version}")
 	private String version;
 
+	@Value( "${pg.db.puter}")
+	private String dbPuter;
+
+	@Value( "${pg.db.rumantschgrischun}")
+	private String dbRumantschgrischun;
+
+	@Value( "${pg.db.surmiran}")
+	private String dbSurmiran;
+
+	@Value( "${pg.db.sursilvan}")
+	private String dbSursilvan;
+
+	@Value( "${pg.db.sutsilvan}")
+	private String dbSutsilvan;
+
+	@Value( "${pg.db.vallader}")
+	private String dbVallader;
+
 	@Value( "${pg.lucene.baseFolder}")
 	private String luceneBaseFolder;
 
@@ -38,6 +56,30 @@ public class PgEnvironment {
 
 	@Value( "${pg.admin.password}")
 	private String adminPassword;
+
+	@Value( "${pg.backup.location}")
+	private String backupLocation;
+
+	@Value( "${pg.backup.number}")
+	private String backupNumber;
+
+	@Value( "${pg.backup.cron.puter}")
+	private String backupPuterCron;
+
+	@Value( "${pg.backup.cron.rumantschgrischun}")
+	private String backupRumantschgrischunCron;
+
+	@Value( "${pg.backup.cron.surmiran}")
+	private String backupSurmiranCron;
+
+	@Value( "${pg.backup.cron.sursilvan}")
+	private String backupSursilvanCron;
+
+	@Value( "${pg.backup.cron.sutsilvan}")
+	private String backupSutsilvanCron;
+
+	@Value( "${pg.backup.cron.vallader}")
+	private String backupValladerCron;
 
 	private LuceneConfiguration luceneConfig;
 

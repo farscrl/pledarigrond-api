@@ -1,10 +1,13 @@
 package ch.pledarigrond.mongodb.util.backup;
 
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.mongodb.model.BackupInfos;
 import ch.pledarigrond.mongodb.model.FileInfo;
+import ch.pledarigrond.mongodb.util.DbSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,30 +20,23 @@ import java.util.List;
 @Service("backupInfoHelper")
 public class BackupInfoHelper extends AbstractBackupHelper {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(BackupInfoHelper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(BackupInfoHelper.class);
 
-	@Value("${backup.location:backup}")
-	private String backupDir;
-
-	@Value("${backup.num:7}")
-	private String backupNum;
+	@Autowired
+	private PgEnvironment pgEnvironment;
 
 	/**
 	 * Returns a wrapper class for displaying backup information within the gwt
 	 * admin-module.
 	 */
-	public BackupInfos getBackupInfos() {
-
-		LOG.debug("admin-gwt-module called backup infos...");
+	public BackupInfos getBackupInfos(Language language) {
+		LOG.debug("backup infos called...");
 
 		List<FileInfo> list = new ArrayList<FileInfo>();
-
-		List<File> backupFiles = listBackupFilesAsc(backupDir);
+		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation());
 
 		try {
 			for (File file : backupFiles) {
-
 				list.add(new FileInfo().setAbsolutePath(file.getAbsolutePath())
 						.setLastModified(getLastModified(file))
 						.setName(file.getName())
@@ -49,10 +45,16 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 						.setSize(getSize(file)));
 			}
 		} catch (Exception e) {
-			LOG.error("error occured: {}", e);
+			LOG.error("error occured: ", e);
 		}
 
-		return new BackupInfos(list).setBackupNums(backupDir).setBackupNums(backupNum);
+		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+		String cronExpression = DbSelector.getDbCronByLanguage(pgEnvironment, language);
+
+		return new BackupInfos(list)
+				.setBackupLocation(pgEnvironment.getBackupLocation() + dbName + "/")
+				.setTriggerTime(cronExpression)
+				.setBackupNums(pgEnvironment.getBackupNumber());
 	}
 
 	private String getSize(File file) {
@@ -68,5 +70,4 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 		return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
 				.format(new Date(file.lastModified()));
 	}
-
 }
