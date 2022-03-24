@@ -37,23 +37,13 @@ public class DatabaseStatistics implements Serializable {
 
 	private long numberOfUndefined;
 
-	private ArrayList<StatEntry> dbStats = new ArrayList<StatEntry>();
-
 	private Integer numberOfOutdated;
-
-	public void addDBProperty(String key, String value) {
-		dbStats.add(new StatEntry(key, value, StatEntry.Category.NORMAL));
-	}
-
-	public void addDBProperty(String key, String value, StatEntry.Category category) {
-		dbStats.add(new StatEntry(key, value, category));
-	}
 
 	@Override
 	public String toString() {
 		return "DatabaseStatistics [numberOfLemmata=" + numberOfLemmata + ", numberOfEntries=" + numberOfEntries
 				+ ", numberOfSuggestions=" + numberOfSuggestions + ", numberOfApproved=" + numberOfApproved
-				+ ", numberOfDeleted=" + numberOfDeleted + ", numberOfUndefined=" + numberOfUndefined + ", dbStats="
-				+ dbStats + ", numberOfOutdated=" + numberOfOutdated + "]";
+				+ ", numberOfDeleted=" + numberOfDeleted + ", numberOfUndefined=" + numberOfUndefined + ", "
+				+ " numberOfOutdated=" + numberOfOutdated + "]";
 	}
 }

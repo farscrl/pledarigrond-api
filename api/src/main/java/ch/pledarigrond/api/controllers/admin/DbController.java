@@ -29,6 +29,16 @@ public class DbController {
         adminService.importDemoDatabase();
     }
 
+    @GetMapping("/db_stats")
+    ResponseEntity<?> getDbStats() {
+        // TODO: Make generic
+        try {
+            return ResponseEntity.ok(adminService.getDatabaseStats());
+        } catch (NoDatabaseAvailableException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Database not found.");
+        }
+    }
+
     @GetMapping("/backup_infos")
     ResponseEntity<?> getBackupInfos() {
         // TODO: Make generic
