@@ -4,9 +4,12 @@ import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.Constants;
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.PgException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
@@ -30,99 +33,103 @@ public class MongoDbServiceImpl implements MongoDbService {
     @Autowired
     private LuceneService luceneService;
 
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void insert(LexEntry entry, String locale) throws Exception {
+    @Autowired
+    private PgEnvironment pgEnvironment;
+
+    @Override
+    public void insert(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
 
         addUserInfo(entry.getCurrent());
-        LexEntry modified = queue.push(new InsertOperation(entry, locale).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new InsertOperation(language, entry).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-    public void suggestNewEntry(LexEntry entry, String locale) throws Exception {
+    @Override
+    public void suggestNewEntry(Language language, LexEntry entry) throws Exception {
         if(entry == null) throw new InvalidEntryException("LexEntry must not be null!");
         if(entry.getVersionHistory() == null || entry.getVersionHistory().size() != 1) throw new InvalidEntryException("Invalid suggestion!");
         validateUserModification(entry.getCurrent(), entry.getMostRecent());
         String login = getUserLogin();
         addUserInfo(entry.getMostRecent());
-        LexEntry modified = queue.push(new InsertOperation(entry, locale).setLogin(login).asSuggestion(), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new InsertOperation(language, entry).setLogin(login).asSuggestion(), language);
+        luceneService.update(language, modified);
     }
 
-    public void suggestUpdate(LexEntry oldEntry, LemmaVersion newEntry, String locale) throws Exception {
+    @Override
+    public void suggestUpdate(Language language, LexEntry oldEntry, LemmaVersion newEntry) throws Exception {
         if(newEntry == null) throw new InvalidEntryException("Lemma must not be null!");
         if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
-        oldEntry = Converter.convertToLexEntry(Database.getInstance(locale).getById(oldEntry.getId()));
+        oldEntry = Converter.convertToLexEntry(Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(oldEntry.getId()));
         if(oldEntry == null) throw new InvalidEntryException("Entry not found!");
         validateUserModification(oldEntry.getCurrent(), newEntry);
         String login = getUserLogin();
         addUserInfo(newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(oldEntry, newEntry, locale).setLogin(login).asSuggestion(), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new UpdateOperation(language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
+        luceneService.update(language, modified);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void update(LexEntry oldEntry, LemmaVersion newEntry, String locale) throws Exception {
+    @Override
+    public void update(Language language, LexEntry oldEntry, LemmaVersion newEntry) throws Exception {
         if(newEntry == null) throw new InvalidEntryException("Lemma must not be null!");
         if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
         String login = getUserLogin();
         addUserInfo(newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(oldEntry, newEntry, locale).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new UpdateOperation(language, oldEntry, newEntry).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void delete(LexEntry entry, String locale) throws Exception {
+    @Override
+    public void delete(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
-        queue.push(new DeleteOperation(entry, locale).setLogin(login), locale);
-        luceneService.delete(entry);
+        queue.push(new DeleteOperation(language, entry).setLogin(login), language);
+        luceneService.delete(language, entry);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void restore(LemmaVersion invalid, LemmaVersion valid, String locale) throws Exception {
+    @Override
+    public void restore(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception {
 //		if(valid == null) throw new InvalidEntryException("Lemma must not be null!");
 //		if(invalid == null) throw new InvalidEntryException("Lemma must not be null!");
         String login = getUserLogin();
         addUserInfo(valid);
-        LexEntry modified = queue.push(new RestoreOperation(invalid, valid).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new RestoreOperation(invalid, valid).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void accept(LexEntry entry, LemmaVersion version, String locale) throws Exception {
+    @Override
+    public void accept(Language language, LexEntry entry, LemmaVersion version) throws Exception {
         String login = getUserLogin();
-        LexEntry modified = queue.push(new AcceptOperation(entry, version, locale).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new AcceptOperation(language, entry, version).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_EX_3, Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void reject(LexEntry entry, LemmaVersion version, String locale) throws Exception {
+    @Override
+    public void reject(Language language, LexEntry entry, LemmaVersion version) throws Exception {
         String login = getUserLogin();
         addUserInfo(version);
-        LexEntry modified = queue.push(new RejectOperation(entry, version, locale).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new RejectOperation(language, entry, version).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void acceptAfterUpdate(LexEntry entry, LemmaVersion suggested, LemmaVersion modified, String locale) throws Exception {
+    @Override
+    public void acceptAfterUpdate(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) throws Exception {
         String login = getUserLogin();
-        LexEntry mod = queue.push(new AcceptAfterUpdateOperation(entry, suggested, modified, locale).setLogin(login), locale);
-        luceneService.update(mod);
+        LexEntry mod = queue.push(new AcceptAfterUpdateOperation(language, entry, suggested, modified).setLogin(login), language);
+        luceneService.update(language, mod);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public void dropOutdatedHistory(LexEntry entry, String locale) throws Exception {
+    @Override
+    public void dropOutdatedHistory(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
-        LexEntry modified = queue.push(new DropHistoryOperation(entry, locale).setLogin(login), locale);
-        luceneService.update(modified);
+        LexEntry modified = queue.push(new DropHistoryOperation(language, entry).setLogin(login), language);
+        luceneService.update(language, modified);
     }
 
-    @Secured( { Constants.Roles.TRUSTED_IN_4, Constants.Roles.ADMIN_5 })
-    public List<LexEntry> updateOrder(boolean firstLang, List<LemmaVersion> ordered, String locale) throws Exception {
+    @Override
+    public List<LexEntry> updateOrder(Language language, boolean firstLang, List<LemmaVersion> ordered) throws Exception {
         String login = getUserLogin();
-        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(firstLang, ordered, locale).setLogin(login), locale);
-        luceneService.updateAll(modified);
+        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(language, firstLang, ordered).setLogin(login), language);
+        luceneService.updateAll(language, modified);
         return modified;
     }
 

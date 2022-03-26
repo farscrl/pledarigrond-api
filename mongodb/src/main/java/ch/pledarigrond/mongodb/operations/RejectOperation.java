@@ -15,11 +15,13 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.model.DictionaryStatistics;
 
@@ -28,10 +30,10 @@ public class RejectOperation extends BaseOperation implements IDBOperation {
 	private LexEntry entry;
 	private LemmaVersion version;
 
-	public RejectOperation(LexEntry entry, LemmaVersion version, String locale) {
+	public RejectOperation(Language language, LexEntry entry, LemmaVersion version) {
 		this.entry = entry;
 		this.version = version;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class RejectOperation extends BaseOperation implements IDBOperation {
 		try {
 			version.setVerification(LemmaVersion.Verification.REJECTED);
 			version.setVerifierId(getUserId());
-			Database.getInstance(this.locale).reject(entry, version);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).reject(entry, version);
 			DictionaryStatistics.userSuggestionRejected();
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);

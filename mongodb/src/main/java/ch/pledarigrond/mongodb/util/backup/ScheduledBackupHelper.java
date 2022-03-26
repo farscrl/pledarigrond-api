@@ -5,7 +5,7 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
-import ch.pledarigrond.mongodb.util.DbSelector;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.util.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

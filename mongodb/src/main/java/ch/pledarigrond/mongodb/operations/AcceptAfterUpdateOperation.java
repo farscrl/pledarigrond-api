@@ -15,25 +15,27 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.model.DictionaryStatistics;
 
 public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOperation {
 
-	private LexEntry entry;
-	private LemmaVersion modified;
-	private LemmaVersion suggested;
+	private final LexEntry entry;
+	private final LemmaVersion modified;
+	private final LemmaVersion suggested;
 
-	public AcceptAfterUpdateOperation(LexEntry entry, LemmaVersion suggested, LemmaVersion modified, String locale) {
+	public AcceptAfterUpdateOperation(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) {
 		this.entry = entry;
 		this.suggested = suggested;
 		this.modified = modified;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOper
 			suggested.setVerifierId(getUserId());
 			modified.setVerification(LemmaVersion.Verification.ACCEPTED);
 			modified.setVerifierId(getUserId());
-			Database.getInstance(this.locale).acceptAfterUpdate(entry, suggested, modified);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).acceptAfterUpdate(entry, suggested, modified);
 			DictionaryStatistics.userSuggestionAccepted(approved);
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);

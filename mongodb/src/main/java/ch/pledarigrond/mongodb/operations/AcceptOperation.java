@@ -15,22 +15,24 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 
 public class AcceptOperation extends BaseOperation implements IDBOperation {
 
-	private LexEntry entry;
-	private LemmaVersion version;
+	private final LexEntry entry;
+	private final LemmaVersion version;
 
-	public AcceptOperation(LexEntry entry, LemmaVersion version, String locale) {
+	public AcceptOperation(Language language, LexEntry entry, LemmaVersion version) {
 		this.entry = entry;
 		this.version = version;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -40,6 +42,7 @@ public class AcceptOperation extends BaseOperation implements IDBOperation {
 			LemmaVersion current = entry.getCurrent();
 			if(current != null) {
 				current.setVerification(LemmaVersion.Verification.OUTDATED);
+				// TODO: re-add or delete
 //				String sortField = Configuration.getInstance().getLemmaDescription().getSortOrderLangA();
 //				version.setValue(sortField, current.getEntryValue(sortField));
 //				sortField = Configuration.getInstance().getLemmaDescription().getSortOrderLangB();
@@ -47,7 +50,7 @@ public class AcceptOperation extends BaseOperation implements IDBOperation {
 			}
 			version.setVerification(LemmaVersion.Verification.ACCEPTED);
 			version.setVerifierId(getUserId());
-			Database.getInstance(this.locale).accept(entry, version);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).accept(entry, version);
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);
 		}

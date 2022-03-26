@@ -1,4 +1,4 @@
-package ch.pledarigrond.mongodb.util;
+package ch.pledarigrond.common.util;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;

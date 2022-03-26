@@ -4,7 +4,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.mongodb.model.BackupInfos;
 import ch.pledarigrond.mongodb.model.FileInfo;
-import ch.pledarigrond.mongodb.util.DbSelector;
+import ch.pledarigrond.common.util.DbSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

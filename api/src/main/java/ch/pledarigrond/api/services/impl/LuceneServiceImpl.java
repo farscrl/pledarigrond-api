@@ -2,10 +2,7 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.QueryResult;
-import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
@@ -40,61 +37,74 @@ public class LuceneServiceImpl implements LuceneService {
         dictionary = new Dictionary(pgEnvironment.getLuceneConfig());
     }
 
-    /**
-     * Queries the index and returns the result in form of a {@link QueryResult}.
-     */
-    public QueryResult query(SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+    @Override
+    public QueryResult query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
         QueryResult result = dictionary.query(searchCriteria, pagination);
-        if(removeInternalData) return clean(result);
+        if (removeInternalData) {
+            return clean(result);
+        }
         return result;
     }
 
-    public QueryResult queryExact(String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+    @Override
+    public QueryResult queryExact(Language language, String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
         QueryResult result = dictionary.queryExact(phrase, firstLanguage);
-        if(removeInternalData) return clean(result);
+        if (removeInternalData) {
+            return clean(result);
+        }
         return result;
     }
 
-    public QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+    @Override
+    public QueryResult getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
         QueryResult result = dictionary.getAllStartingWith(searchDirection, prefix, page);
         return clean(result);
     }
 
-    public IndexStatistics getIndexStatistics() {
+    @Override
+    public IndexStatistics getIndexStatistics(Language language) {
         return dictionary.getIndexStatistics();
     }
 
-    public void reloadIndex() throws NoIndexAvailableException {
+    @Override
+    public void reloadIndex(Language language) throws NoIndexAvailableException {
         dictionary.reloadIndex();
     }
 
-    public void dropIndex() throws IndexException {
+    @Override
+    public void dropIndex(Language language) throws IndexException {
         dictionary.dropIndex();
     }
 
-    public void addToIndex(Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
+    @Override
+    public void addToIndex(Language language, Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
         dictionary.addToIndex(iterator);
     }
 
-    public ArrayList<String> getSuggestionsForField(String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
+    @Override
+    public ArrayList<String> getSuggestionsForField(Language language, String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
         return dictionary.getSuggestionsForField(fieldName, query, limit);
     }
 
-    public void update(LexEntry entry) throws IOException {
+    @Override
+    public void update(Language language, LexEntry entry) throws IOException {
         dictionary.update(entry);
     }
 
-    public void delete(LexEntry entry) throws IOException {
+    @Override
+    public void delete(Language language, LexEntry entry) throws IOException {
         dictionary.delete(entry);
     }
 
-    public void updateAll(List<LexEntry> modified) throws IOException {
+    @Override
+    public void updateAll(Language language, List<LexEntry> modified) throws IOException {
         for (LexEntry entry : modified) {
             dictionary.update(entry);
         }
     }
 
-    public List<String> getSuggestionsForFieldChoice(String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
+    @Override
+    public List<String> getSuggestionsForFieldChoice(Language language, String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
         return dictionary.getSuggestionsForFieldChoice(id, query, limit);
     }
 

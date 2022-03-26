@@ -15,26 +15,28 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 
 public class DropHistoryOperation extends BaseOperation implements IDBOperation {
 
 	private LexEntry entry;
 
-	public DropHistoryOperation(LexEntry entry, String locale) {
+	public DropHistoryOperation(Language language, LexEntry entry) {
 		this.entry = entry;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
 	public void execute() throws OperationRejectedException {
 		validate(entry);
 		try {
-			Database.getInstance(this.locale).dropHistory(entry);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).dropHistory(entry);
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);
 		}

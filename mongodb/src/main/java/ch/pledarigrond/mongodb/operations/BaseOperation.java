@@ -15,18 +15,24 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.util.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseOperation implements IDBOperation {
+
+	@Autowired
+	PgEnvironment pgEnvironment;
 
 	private final long timeStamp;
 	private boolean suggestion;
 	private String userId;
-	protected String locale;
+	protected Language language;
 
 	public BaseOperation() {
 		timeStamp = System.nanoTime();

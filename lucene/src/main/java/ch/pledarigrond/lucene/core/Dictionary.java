@@ -341,7 +341,6 @@ public class Dictionary {
 		} catch (Exception e) {
 			return new IndexStatistics();
 		}
-			
 	}
 	
 	public ArrayList<String> getSuggestionsForField(String fieldName, String value, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {

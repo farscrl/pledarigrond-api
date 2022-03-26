@@ -2,10 +2,13 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.DumpLoaderService;
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
@@ -26,16 +29,19 @@ import java.util.zip.ZipFile;
 @Service
 public class DumpLoaderServiceImpl implements DumpLoaderService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private LuceneService luceneService;
 
+    @Autowired
+    private PgEnvironment pgEnvironment;
+
     /*@Autowired
     private PGAutenticationProvider authProvider;*/ // TODO: re-add me
 
-
-    public void createFromSQLDump(File file, int maxEntries) throws IOException, NoDatabaseAvailableException, InvalidEntryException, IndexException {
+    @Override
+    public void createFromSQLDump(Language language, File file, int maxEntries) throws IOException, NoDatabaseAvailableException, InvalidEntryException, IndexException {
 
         if(!file.exists()) {
             logger.info("No data to import - file " + file + " does not exist.");
@@ -62,7 +68,7 @@ public class DumpLoaderServiceImpl implements DumpLoaderService {
 
         String line = br.readLine();
         String[] keys = line.split("\t",-1);
-        Database db = Database.getInstance("surmiran"); // TODO: implement for all idioms
+        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)); // TODO: implement for all idioms
         List<Document> entries = new ArrayList();
         int counter = 0;
         //String userId = authProvider.getCurrentUserId();
@@ -109,10 +115,10 @@ public class DumpLoaderServiceImpl implements DumpLoaderService {
         db.insertBatch(entries);
         entries.clear();
         Iterator<LexEntry> iterator = db.getEntries();
-        luceneService.dropIndex();
-        luceneService.addToIndex(iterator);
+        luceneService.dropIndex(language);
+        luceneService.addToIndex(language, iterator);
         logger.info("Index has been created, swapping to RAM...");
-        luceneService.reloadIndex();
+        luceneService.reloadIndex(language);
         logger.info("RAM-Index updated.");
         br.close();
         if(zipFile != null) {

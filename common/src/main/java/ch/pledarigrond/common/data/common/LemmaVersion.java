@@ -21,13 +21,20 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlRootElement
 public class LemmaVersion implements Serializable {
 
 	private static final long serialVersionUID = -3937300849636141916L;
 
 	public enum Status {
 		DELETED("Deleted"), NEW_ENTRY("New"), NEW_MODIFICATION("Modified"), UNDEFINED("Undefined");
-		
+
 		private String value;
 
 		private Status(String value) {
@@ -41,7 +48,7 @@ public class LemmaVersion implements Serializable {
 
 	public enum Verification {
 		REJECTED ("Rejected"), ACCEPTED("Accepted"), OUTDATED ("Outdated"), UNVERIFIED ("Unverified");
-		
+
 		private String value;
 
 		private Verification(String value) {
@@ -52,23 +59,23 @@ public class LemmaVersion implements Serializable {
 			return value;
 		}
 	}
-	
+
 	public static final String TIMESTAMP = "maalr_timestamp";
 
 	public static final String CREATOR = "maalr_creator";
 
 	public static final String ID = "internal_id";
-	
+
 	public static final String LEXENTRY_ID = "entry_id";
 
 	public static final String STATUS = "maalr_status";
-	
+
 	public static final String VERIFICATION = "maalr_verification";
-	
+
 	public static final String VERIFIER = "maalr_verifier";
 
 	private static final String VOTER = "maalr_voter";
-	
+
 	public static final Set<String> MAALR_KEYS;
 
 	public static final String COMMENT = "maalr_comment";
@@ -83,7 +90,7 @@ public class LemmaVersion implements Serializable {
 
 	public static final String OVERLAY_LANG2 = "maalr_overlay_lang2";
 	public static final String OVERLAY_LANG1 = "maalr_overlay_lang1";
-	
+
 	static {
 		MAALR_KEYS = new HashSet<String>();
 		MAALR_KEYS.add(TIMESTAMP);
@@ -104,7 +111,7 @@ public class LemmaVersion implements Serializable {
 	}
 
 	private LightUserInfo userInfo;
-	
+
 	private HashMap<String, String> entryValues = new HashMap<String, String>();
 	private HashMap<String, String> maalrValues = new HashMap<String, String>();
 
@@ -154,6 +161,7 @@ public class LemmaVersion implements Serializable {
 		setTimestamp(0L);
 	}
 
+	@XmlAttribute
 	public Status getStatus() {
 		if(maalrValues.get(STATUS) == null) return null;
 		return Status.valueOf((String) maalrValues.get(STATUS));
@@ -162,7 +170,8 @@ public class LemmaVersion implements Serializable {
 	public void setStatus(Status status) {
 		maalrValues.put(STATUS, status.name());
 	}
-	
+
+	@XmlAttribute
 	public Verification getVerification() {
 		if(maalrValues.get(VERIFICATION) == null) return null;
 		return Verification.valueOf((String) maalrValues.get(VERIFICATION));
@@ -171,7 +180,8 @@ public class LemmaVersion implements Serializable {
 	public void setVerification(Verification status) {
 		maalrValues.put(VERIFICATION, status.name());
 	}
-	
+
+	@XmlElement(name="creator")
 	public LightUserInfo getUserInfo() {
 		return userInfo;
 	}
@@ -179,11 +189,13 @@ public class LemmaVersion implements Serializable {
 	public void setUserInfo(LightUserInfo userInfo) {
 		this.userInfo = userInfo;
 	}
-	
+
+	@XmlElementWrapper(name="fields")
 	public HashMap<String, String> getEntryValues() {
 		return entryValues;
 	}
-	
+
+	@XmlTransient
 	public HashMap<String, String> getMaalrValues() {
 		return maalrValues;
 	}
@@ -192,6 +204,7 @@ public class LemmaVersion implements Serializable {
 		this.entryValues = entryValues;
 	}
 
+	@XmlAttribute(name="timeStamp")
 	public Long getTimestamp() {
 		if(maalrValues.get(TIMESTAMP) == null) return 0L;
 		return Long.parseLong(maalrValues.get(TIMESTAMP));
@@ -201,6 +214,7 @@ public class LemmaVersion implements Serializable {
 		maalrValues.put(TIMESTAMP, timestamp+"");
 	}
 
+	@XmlElement(name="userId")
 	public String getUserId() {
 		return (String) maalrValues.get(CREATOR);
 	}
@@ -212,11 +226,13 @@ public class LemmaVersion implements Serializable {
 	public void setVerifierId(String verifierId) {
 		maalrValues.put(VERIFIER, verifierId);
 	}
-	
+
+	@XmlElement(name="verifierId")
 	public String getVerifierId() {
 		return maalrValues.get(VERIFIER);
 	}
 
+	@XmlAttribute(name="id")
 	public Integer getInternalId() {
 		String idString = maalrValues.get(ID);
 		if(idString == null) return null;
@@ -234,6 +250,7 @@ public class LemmaVersion implements Serializable {
 		return Verification.ACCEPTED == Verification.valueOf(verification);
 	}
 
+	@XmlAttribute
 	public String getLexEntryId() {
 		return maalrValues.get(LEXENTRY_ID);
 	}
@@ -241,7 +258,7 @@ public class LemmaVersion implements Serializable {
 	public void setIP(String ip) {
 		maalrValues.put(IP_ADDRESS, ip);
 	}
-	
+
 	public void setCreatorRole(Role role) {
 		if(role == null) {
 			maalrValues.put(CREATOR_ROLE, null);
@@ -249,16 +266,18 @@ public class LemmaVersion implements Serializable {
 			maalrValues.put(CREATOR_ROLE, role.toString());
 		}
 	}
-	
+
+	@XmlAttribute(name="creatorRole")
 	public Role getCreatorRole() {
-		if(maalrValues.get(CREATOR_ROLE) == null) return null; 
+		if(maalrValues.get(CREATOR_ROLE) == null) return null;
 		try {
 			return Role.valueOf(maalrValues.get(CREATOR_ROLE));
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	
+
+	@XmlAttribute(name="ip")
 	public String getIP() {
 		return maalrValues.get(IP_ADDRESS);
 	}

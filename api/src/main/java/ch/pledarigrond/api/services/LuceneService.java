@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.QueryResult;
 import ch.pledarigrond.common.data.common.SearchDirection;
@@ -21,27 +22,30 @@ import java.util.Iterator;
 import java.util.List;
 
 public interface LuceneService {
-    QueryResult query(SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+    /**
+     * Queries the index and returns the result in form of a {@link QueryResult}.
+     */
+    QueryResult query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult queryExact(String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+    QueryResult queryExact(Language language, String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
+    QueryResult getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
 
-    IndexStatistics getIndexStatistics();
+    IndexStatistics getIndexStatistics(Language language);
 
-    void reloadIndex() throws NoIndexAvailableException;
+    void reloadIndex(Language language) throws NoIndexAvailableException;
 
-    void dropIndex() throws IndexException;
+    void dropIndex(Language language) throws IndexException;
 
-    void addToIndex(Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException;
+    void addToIndex(Language language, Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException;
 
-    ArrayList<String> getSuggestionsForField(String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
+    ArrayList<String> getSuggestionsForField(Language language, String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
 
-    void update(LexEntry entry) throws IOException;
+    void update(Language language, LexEntry entry) throws IOException;
 
-    void delete(LexEntry entry) throws IOException;
+    void delete(Language language, LexEntry entry) throws IOException;
 
-    void updateAll(List<LexEntry> modified) throws IOException;
+    void updateAll(Language language, List<LexEntry> modified) throws IOException;
 
-    List<String> getSuggestionsForFieldChoice(String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
+    List<String> getSuggestionsForFieldChoice(Language language, String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
 }

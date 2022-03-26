@@ -15,10 +15,12 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DictionaryStatistics;
@@ -27,17 +29,18 @@ public class DeleteOperation extends BaseOperation implements IDBOperation {
 
 	private LexEntry entry;
 
-	public DeleteOperation(LexEntry entry, String locale) {
+	public DeleteOperation(Language language, LexEntry entry) {
 		this.entry = entry;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
 	public void execute() throws InvalidEntryException, OperationRejectedException {
+		// TODO: re-add or delete
 		//Validator.validatePostInsert(entry);
 		try {
 			boolean approved = entry.getCurrent().isApproved();
-			Database.getInstance(this.locale).delete(entry);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).delete(entry);
 			DictionaryStatistics.entryDeleted(approved);
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);

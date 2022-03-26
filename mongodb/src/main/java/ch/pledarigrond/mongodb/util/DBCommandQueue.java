@@ -15,13 +15,17 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.util;
 
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,11 +33,14 @@ import java.util.concurrent.*;
 
 public class DBCommandQueue {
 
-	private ExecutorService executor;
+	private final ExecutorService executor;
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private static DBCommandQueue instance;
+
+	@Autowired
+	private PgEnvironment pgEnvironment;
 
 	public static synchronized DBCommandQueue getInstance() {
 		if(instance == null) {
@@ -55,7 +62,7 @@ public class DBCommandQueue {
 		executor = Executors.newSingleThreadExecutor(factory);
 	}
 	
-	public List<LexEntry> pushMulti(final IDBOperation<List<LexEntry>> operation, String locale) throws Exception {
+	public List<LexEntry> pushMulti(final IDBOperation<List<LexEntry>> operation, Language language) throws Exception {
 		final List<LexEntry> entries = operation.getLexEntry();
 		logger.debug("Received operation for " + entries.size() + " entries");
 
@@ -66,7 +73,7 @@ public class DBCommandQueue {
 				try {
 					for (LexEntry entry : entries) {
 						if(entry.getId() != null) {
-							LexEntry stored = Converter.convertToLexEntry(Database.getInstance(locale).getById(entry.getId()));
+							LexEntry stored = Converter.convertToLexEntry(Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(entry.getId()));
 							if(stored.getChangeStamp() != null && !stored.getChangeStamp().equals(entry.getChangeStamp())) {
 								throw new OperationRejectedException("Local data outdated, please refresh the page and try again.");
 							}
@@ -99,7 +106,7 @@ public class DBCommandQueue {
 		}
 	}
 	
-	public LexEntry push(final IDBOperation<LexEntry> operation, String locale) throws Exception {
+	public LexEntry push(final IDBOperation<LexEntry> operation, Language language) throws Exception {
 		final LexEntry entry = operation.getLexEntry();
 		logger.debug("Received operation for entry id " + entry.getId());
 		Callable<LexEntry> callable = new Callable<LexEntry>() {
@@ -108,7 +115,7 @@ public class DBCommandQueue {
 			public LexEntry call() throws Exception {
 				try {
 					if(entry.getId() != null) {
-						LexEntry stored = Converter.convertToLexEntry(Database.getInstance(locale).getById(entry.getId()));
+						LexEntry stored = Converter.convertToLexEntry(Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(entry.getId()));
 						if(stored.getChangeStamp() != null && !stored.getChangeStamp().equals(entry.getChangeStamp())) {
 							throw new OperationRejectedException("Local data outdated, please refresh the page and try again.");
 						}

@@ -15,31 +15,38 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import com.mongodb.BasicDBObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 
+	@Autowired
+	private PgEnvironment pgEnvironment;
+
 	private final List<LemmaVersion> items;
 	private final String sortField;
 	private String login;
 	private final List<LexEntry> entries = new ArrayList<LexEntry>();
 	private final long timeStamp;
-	private final String locale;
+	private final Language language;
 
-	public UpdateOrderOperation(boolean firstLang, List<LemmaVersion> ordered, String locale) {
+	public UpdateOrderOperation(Language language, boolean firstLang, List<LemmaVersion> ordered) {
 		this.items = ordered;
 		sortField = firstLang ? "DStichwort_sort" : "RStichwort_sort";
 		this.timeStamp = System.nanoTime();
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -54,14 +61,14 @@ public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 		 */
 		for(int i = 0; i < items.size(); i++) {
 			LemmaVersion version = items.get(i);
-			BasicDBObject object = Database.getInstance(this.locale).getById(version.getLexEntryId());
+			BasicDBObject object = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(version.getLexEntryId());
 			LexEntry entry = Converter.convertToLexEntry(object);
 			System.out.println("Entry " + version.getEntryValue("DStichwort") + " <-> " + version.getEntryValue("RStichwort") + " had sortVal " + version.getEntryValue(sortField) + ", now is " + i + ", sortField is " + sortField);
 			version.setValue(sortField, i+"");
 			LemmaVersion newVersion = new LemmaVersion();
 			newVersion.getEntryValues().putAll(version.getEntryValues());
 			newVersion.getMaalrValues().putAll(version.getMaalrValues());
-			Database.getInstance(this.locale).update(entry, version);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).update(entry, version);
 			newVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
 			newVersion.setVerifierId(login);
 			newVersion.setUserId(login);

@@ -21,7 +21,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LexEntry implements Serializable {
 
 	private static final long serialVersionUID = 2842502932915291640L;
@@ -31,17 +39,22 @@ public class LexEntry implements Serializable {
 	public static final String INTERNAL_ID = "internal_id";
 	public static final String CHANGE_STAMP = "change_stamp";
 
+	@XmlElement(name="version")
+	@XmlElementWrapper(name="versions")
 	private ArrayList<LemmaVersion> versionHistory;
 
+	@XmlAttribute(name="nextId")
 	private int nextId = 0;
-	
+
+	@XmlAttribute(name="currentVersion")
 	private Integer currentId;
-	
+
+	@XmlAttribute
 	private String id;
-	
+
+	@XmlAttribute(name="changeStamp")
 	private String changeStamp;
-	
-	
+
 	public String getChangeStamp() {
 		return changeStamp;
 	}
@@ -92,8 +105,6 @@ public class LexEntry implements Serializable {
 		return true;
 	}
 
-	
-	
 	@Override
 	public String toString() {
 		return "LexEntry [versions=" + versionHistory + ", id=" + id
@@ -101,9 +112,8 @@ public class LexEntry implements Serializable {
 	}
 
 	public LexEntry() {
-		
 	}
-	
+
 	public LexEntry(final LemmaVersion entry) {
 		addLemma(entry);
 		setCurrent(entry);
@@ -154,11 +164,10 @@ public class LexEntry implements Serializable {
 		});
 	}
 
-	public boolean addLemma(final LemmaVersion entry) {
+	public void addLemma(final LemmaVersion entry) {
 		loadVersions();
 		entry.setInternalId(nextId++);
 		versionHistory.add(0,entry);
-		return true;
 	}
 
 	public LemmaVersion getCurrent() {
@@ -210,13 +219,12 @@ public class LexEntry implements Serializable {
 	public int getNextInternalId() {
 		return nextId;
 	}
-	
+
 	public void setCurrentId(int id) {
 		this.currentId = id;
 	}
-	
+
 	public int getCurrentId() {
 		return currentId;
 	}
-
 }

@@ -15,10 +15,12 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DictionaryStatistics;
@@ -29,9 +31,9 @@ public class InsertOperation extends BaseOperation {
 
 	private LexEntry entry;
 
-	public InsertOperation(LexEntry entry, String locale) {
+	public InsertOperation(Language language, LexEntry entry) {
 		this.entry = entry;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class InsertOperation extends BaseOperation {
 		current.setTimestamp(System.currentTimeMillis());
 		entry.setCurrent(current);
 		try {
-			Database.getInstance(this.locale).insert(entry);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).insert(entry);
 			if(isSuggestion()) {
 				DictionaryStatistics.newSuggestion();
 			} else {

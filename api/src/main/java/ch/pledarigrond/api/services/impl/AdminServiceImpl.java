@@ -9,8 +9,8 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.lucene.exceptions.IndexException;
-import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.BackupInfos;
@@ -29,11 +29,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
-import java.util.zip.ZipException;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -51,54 +51,59 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private BackupInfoHelper backupInfoHelper;
 
-    private Logger logger = LoggerFactory.getLogger(AdminService.class);
+    private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
-    public void importDemoDatabase() throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
-        dumpLoaderService.createFromSQLDump(pgEnvironment.getDemoDataSurmiranFile(), -1);
-        rebuildIndex();
+    public void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
+        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), -1);
+        rebuildIndex(language);
     }
 
-    public void importDemoDatabase(int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
-        dumpLoaderService.createFromSQLDump(pgEnvironment.getDemoDataSurmiranFile(), max);
-        rebuildIndex();
+    public void importDemoDatabase(Language language, int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
+        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), max);
+        rebuildIndex(language);
     }
 
-    public void dropDatabase() throws DatabaseException {
-        Database.getInstance("surmiran").deleteAllEntries();
+    @Override
+    public void dropDatabase(Language language) throws DatabaseException {
+        Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).deleteAllEntries();
         boolean empty = Database.getInstance("surmiran").isEmpty();
         if (!empty) {
             throw new DatabaseException("The database has been dropped but is still not empty, which is weird.");
         }
     }
 
-    public void reloadDemoDatabase() throws DatabaseException, IndexException {
-        dropDatabase();
+    @Override
+    public void reloadDemoDatabase(Language language) throws DatabaseException, IndexException {
+        dropDatabase(language);
         try {
-            dumpLoaderService.createFromSQLDump(pgEnvironment.getDemoDataSurmiranFile(), -1);
+            dumpLoaderService.createFromSQLDump(language, pgEnvironment.getDemoDataSurmiranFile(), -1);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void rebuildIndex() throws NoDatabaseAvailableException, IndexException {
+    @Override
+    public void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException {
         logger.info("Rebuilding index...");
-        Database db = Database.getInstance("surmiran");
+        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
         Iterator<LexEntry> iterator = db.getEntries();
-        luceneService.dropIndex();
-        luceneService.addToIndex(iterator);
+        luceneService.dropIndex(language);
+        luceneService.addToIndex(language, iterator);
         logger.info("Index has been created, swapping to RAM...");
-        luceneService.reloadIndex();
+        luceneService.reloadIndex(language);
         logger.info("RAM-Index updated!");
     }
 
-    public DatabaseStatistics getDatabaseStats() throws NoDatabaseAvailableException {
-        DatabaseStatistics statistics = Database.getInstance("surmiran").getStatistics();
+    @Override
+    public DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException {
+        DatabaseStatistics statistics = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getStatistics();
         logger.info(statistics.toString());
         return statistics;
     }
 
-    public IndexStatistics getIndexStats() throws NoIndexAvailableException {
-        IndexStatistics statistics = luceneService.getIndexStatistics();
+    @Override
+    public IndexStatistics getIndexStats(Language language) {
+        IndexStatistics statistics = luceneService.getIndexStatistics(language);
         DictionaryStatistics.initialize(statistics.getUnverifiedEntries(), statistics.getApprovedEntries(), statistics.getLastUpdated(), statistics.getOverlayCount());
         return statistics;
     }
@@ -111,11 +116,18 @@ public class AdminServiceImpl implements AdminService {
         Database.getInstance("surmiran").importData(in);
     }
 
-    public void exportData(boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException {
-        Database.getInstance("surmiran").exportData(allVersions, dropKeys, out, fileName);
+    @Override
+    public void exportData(Language language, boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException {
+        Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
+                .exportData(allVersions, dropKeys, out, fileName);
     }
 
     public BackupInfos getBackupInfos(Language language) {
         return backupInfoHelper.getBackupInfos(language);
+    }
+
+    private File getDemoFileByLanguage(Language language) {
+        // TODO: implement, if more demo-files are available
+        return pgEnvironment.getDemoDataSurmiranFile();
     }
 }

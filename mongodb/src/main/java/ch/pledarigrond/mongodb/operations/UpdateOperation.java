@@ -15,11 +15,13 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.exception.OperationRejectedException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DictionaryStatistics;
@@ -30,10 +32,10 @@ public class UpdateOperation extends BaseOperation implements IDBOperation {
 	private LexEntry entry;
 	private LemmaVersion newVersion;
 
-	public UpdateOperation(LexEntry oldEntry, LemmaVersion newEntry, String locale) {
+	public UpdateOperation(Language language, LexEntry oldEntry, LemmaVersion newEntry) {
 		this.entry = oldEntry;
 		this.newVersion = newEntry;
-		this.locale = locale;
+		this.language = language;
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class UpdateOperation extends BaseOperation implements IDBOperation {
 		newVersion.setUserId(getUserId());
 		newVersion.setTimestamp(System.currentTimeMillis());
 		try {
-			Database.getInstance(this.locale).update(entry, newVersion);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).update(entry, newVersion);
 			if(isSuggestion()) {
 				DictionaryStatistics.newEntryModificationSuggestion();
 			} else {

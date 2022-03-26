@@ -19,23 +19,23 @@ import java.security.NoSuchAlgorithmException;
 
 public interface AdminService {
 
-    void importDemoDatabase() throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
+    void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
 
-    void importDemoDatabase(int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
+    void importDemoDatabase(Language language, int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
 
-    void dropDatabase() throws DatabaseException;
+    void dropDatabase(Language language) throws DatabaseException;
 
-    void reloadDemoDatabase() throws DatabaseException, IndexException;
+    void reloadDemoDatabase(Language language) throws DatabaseException, IndexException;
 
-    void rebuildIndex() throws NoDatabaseAvailableException, IndexException;
+    void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException;
 
-    DatabaseStatistics getDatabaseStats() throws NoDatabaseAvailableException;
+    DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException;
 
-    IndexStatistics getIndexStats() throws NoIndexAvailableException;
+    IndexStatistics getIndexStats(Language language) throws NoIndexAvailableException;
 
     void importDatabase(HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException;
 
-    void exportData(boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException;
+    void exportData(Language language, boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException;
 
     BackupInfos getBackupInfos(Language language);
 }
