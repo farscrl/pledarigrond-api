@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.util;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.exception.DatabaseException;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -35,7 +36,7 @@ public class MongoHelper {
 
 	private static final Object lock = new Object();
 
-	public static MongoDatabase getDB(String dbName) throws UnknownHostException, DatabaseException {
+	public static MongoDatabase getDB(PgEnvironment pgEnvironment, String dbName) throws UnknownHostException, DatabaseException {
 		synchronized(lock) {
 
 			if (dbName == null) {
@@ -43,8 +44,7 @@ public class MongoHelper {
 			}
 
 			if(MONGO_CLIENT == null) {
-				// TODO: import values from application.properties
-				MONGO_CLIENT = MongoClients.create("mongodb://rootuser:rootpass@localhost:27017/?authSource=admin");
+				MONGO_CLIENT = MongoClients.create(pgEnvironment.getMongoDbClientUrl());
 			}
 			
 			DATABASE = MONGO_CLIENT.getDatabase(dbName);

@@ -43,17 +43,7 @@ public class LuceneConfiguration {
 	}
 
 	public void setBaseDirectory(String luceneDir) {
-		try {
-			Path dir = Paths.get(luceneDir);
-			Files.createDirectory(dir);
-			this.indexDir = new File(luceneDir);
-		} catch (FileAlreadyExistsException e) {
-			// folder already exists -> save directory to config
-			this.indexDir = new File(luceneDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Impossible to create index directory: ");
-			e.printStackTrace();
-		}
+		this.indexDir = new File(luceneDir);
+		this.indexDir.mkdirs();
 	}
 }

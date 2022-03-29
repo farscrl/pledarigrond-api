@@ -16,6 +16,7 @@
 package ch.pledarigrond.mongodb.core;
 
 import ch.pledarigrond.common.config.Constants;
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.DatabaseException;
@@ -35,6 +36,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -43,17 +46,20 @@ import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
 
+@Component
 public class UserInfoDatabase {
+
+	private PgEnvironment pgEnvironment;
 
 	private MongoCollection<Document> userCollection;
 	private static final Logger logger = LoggerFactory.getLogger(UserInfoDatabase.class);
 
 	private static UserInfoDatabase instance;
 
-	public static synchronized UserInfoDatabase getInstance() {
+	public static synchronized UserInfoDatabase getInstance(PgEnvironment pgEnvironment) {
 		if (instance == null) {
 			try {
-				instance = new UserInfoDatabase();
+				instance = new UserInfoDatabase(pgEnvironment);
 			} catch (DatabaseException e) {
 				logger.error(String.valueOf(e));
 			}
@@ -61,16 +67,18 @@ public class UserInfoDatabase {
 		return instance;
 	}
 
-	UserInfoDatabase() throws DatabaseException {
-		
+	@Autowired
+	UserInfoDatabase(PgEnvironment pgEnvironment) throws DatabaseException {
+		this.pgEnvironment = pgEnvironment;
+
 		try {
-			MongoDatabase db = MongoHelper.getDB("users");
+			MongoDatabase db = MongoHelper.getDB(pgEnvironment, "users");
 			userCollection = db.getCollection("users");
 			if(userCollection.countDocuments() == 0) {
 				createIndex();
 			}
-				
-		} catch (UnknownHostException e) {
+
+		} catch (UnknownHostException | DatabaseException e) {
 			throw new RuntimeException(e);
 		}
 	}

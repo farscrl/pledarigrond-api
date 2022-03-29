@@ -70,6 +70,8 @@ public class ScheduledBackupHelper extends AbstractBackupHelper {
 	}
 
 	private File buildBackup(String dir, String backupFileName, String locale) {
+		File backupDir = new File(dir);
+		backupDir.mkdirs();
 		File backupFile = new File(dir, backupFileName);
 		try {
 			Database.getInstance(locale).exportData(true, false, new FileOutputStream(backupFile), backupFileName);

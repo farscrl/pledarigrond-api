@@ -27,6 +27,21 @@ public class PgEnvironment {
 	@Value( "${pg.version}")
 	private String version;
 
+	@Value( "${pg.db.host}")
+	private String dbHost;
+
+	@Value( "${pg.db.port}")
+	private String dbPort;
+
+	@Value( "${pg.db.username}")
+	private String dbUsername;
+
+	@Value( "${pg.db.password}")
+	private String dbPassword;
+
+	@Value( "${pg.db.authentication-database}")
+	private String dbAuthDb;
+
 	@Value( "${pg.db.puter}")
 	private String dbPuter;
 
@@ -98,5 +113,9 @@ public class PgEnvironment {
 
 	public File getDemoDataSurmiranFile() {
 		return new File(this.getDemoDataSurmiran());
+	}
+
+	public String getMongoDbClientUrl() {
+		return String.format("mongodb://%s:%s@%s:%s/?authSource=%s", getDbUsername(), getDbPassword(), getDbHost(), getDbPort(), getDbAuthDb());
 	}
 }

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.core;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.LexEntryList;
@@ -38,7 +39,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -57,6 +60,9 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
 
+	@Autowired
+	private PgEnvironment pgEnvironment;
+
 	private static final String ENTRIES = "entries";
 	private static final String QUERY_VERSION_CREATOR = LemmaVersion.CREATOR;
 	private static final String QUERY_VERSION_ROLE = LemmaVersion.CREATOR_ROLE;
@@ -66,13 +72,13 @@ public class Database {
 	private static final String QUERY_VERSION_STATE = LemmaVersion.STATUS;
 	private static final String QUERY_VERSION_VERIFIER = LemmaVersion.VERIFIER;
 
-	private static Map<String, Database> instances = new HashMap<>();
+	private static final Map<String, Database> instances = new HashMap<>();
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private MongoCollection<Document> entryCollection;
 
-	private String locale;
+	private final String locale;
 
 	// private LemmaDescription description = Configuration.getInstance().getLemmaDescription();
 
@@ -81,7 +87,7 @@ public class Database {
 	Database(String locale) throws UnknownHostException, DatabaseException {
 		this.locale = locale;
 		debugging = logger.isDebugEnabled();
-		entryCollection = MongoHelper.getDB(this.locale).getCollection(ENTRIES);
+		entryCollection = MongoHelper.getDB(pgEnvironment, this.locale).getCollection(ENTRIES);
 		long entries = entryCollection.countDocuments();
 		logger.info("Connected to entries-collection containing " + entries + " items.");
 		createIndex();
@@ -260,7 +266,7 @@ public class Database {
 		logger.warn("Dropping database!");
 		entryCollection.drop();
 		try {
-			entryCollection = MongoHelper.getDB(this.locale).getCollection(ENTRIES);
+			entryCollection = MongoHelper.getDB(pgEnvironment, this.locale).getCollection(ENTRIES);
 			createIndex();
 		} catch (UnknownHostException | DatabaseException e) {
 			throw new RuntimeException(e);

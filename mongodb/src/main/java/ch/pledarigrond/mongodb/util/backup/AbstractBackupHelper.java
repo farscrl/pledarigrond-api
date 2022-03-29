@@ -7,7 +7,9 @@ import java.util.*;
 public abstract class AbstractBackupHelper {
 
 	protected List<File> listBackupFilesAsc(String backupDir) {
-		File[] files = new File(backupDir).listFiles(filter());
+		File backupFolder = new File(backupDir);
+		backupFolder.mkdirs();
+		File[] files = backupFolder.listFiles(filter());
 		if (files == null) {
 			return new ArrayList<File>();
 		}
