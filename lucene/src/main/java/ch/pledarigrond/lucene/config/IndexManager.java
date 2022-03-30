@@ -1,5 +1,6 @@
 package ch.pledarigrond.lucene.config;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.SearchDirection;
@@ -64,6 +65,17 @@ public abstract class IndexManager {
 
 
     public IndexManager() {
+    }
+
+    public static IndexManager getInstance(Language language) {
+        return switch (language) {
+            case PUTER -> IndexManagerSurmiran.getInstance();
+            case RUMANTSCHGRISCHUN -> IndexManagerSurmiran.getInstance();
+            case SURMIRAN -> IndexManagerSurmiran.getInstance();
+            case SURSILVAN -> IndexManagerSurmiran.getInstance();
+            case SUTSILVAN -> IndexManagerSurmiran.getInstance();
+            case VALLADER -> IndexManagerSurmiran.getInstance();
+        };
     }
 
     public Query getSuggestionsQuery(String fieldName, String value) {

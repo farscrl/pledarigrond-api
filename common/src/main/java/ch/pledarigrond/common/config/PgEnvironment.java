@@ -1,5 +1,6 @@
 package ch.pledarigrond.common.config;
 
+import ch.pledarigrond.common.data.common.Language;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +97,12 @@ public class PgEnvironment {
 	@Value( "${pg.backup.cron.vallader}")
 	private String backupValladerCron;
 
-	private LuceneConfiguration luceneConfig;
+	private LuceneConfiguration luceneConfigPuter;
+	private LuceneConfiguration luceneConfigRumantschgrischun;
+	private LuceneConfiguration luceneConfigSurmiran;
+	private LuceneConfiguration luceneConfigSursilvan;
+	private LuceneConfiguration luceneConfigSutsilvan;
+	private LuceneConfiguration luceneConfigVallader;
 
 	public PgEnvironment() {
 
@@ -104,8 +110,12 @@ public class PgEnvironment {
 
 	@PostConstruct
 	public void init() {
-		luceneConfig = new LuceneConfiguration();
-		luceneConfig.setBaseDirectory(luceneBaseFolder);
+		luceneConfigPuter = new LuceneConfiguration(Language.PUTER, luceneBaseFolder);
+		luceneConfigRumantschgrischun = new LuceneConfiguration(Language.RUMANTSCHGRISCHUN, luceneBaseFolder);
+		luceneConfigSurmiran = new LuceneConfiguration(Language.SURMIRAN, luceneBaseFolder);
+		luceneConfigSursilvan = new LuceneConfiguration(Language.SURSILVAN, luceneBaseFolder);
+		luceneConfigSutsilvan = new LuceneConfiguration(Language.SUTSILVAN, luceneBaseFolder);
+		luceneConfigVallader = new LuceneConfiguration(Language.VALLADER, luceneBaseFolder);
 		logger.info("**********************************************************************************");
 		logger.info("Initializing " + name + " (" + version + ")");
 		logger.info("**********************************************************************************");

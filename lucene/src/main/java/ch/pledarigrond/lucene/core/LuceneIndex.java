@@ -15,18 +15,14 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.QueryResult;
-import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.config.SurmiranLanguageConfig;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
+import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.SimplePrefixQueryBuilder;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -65,19 +61,19 @@ import java.util.*;
  * @author matana
  *
  */
-public class Dictionary {
+public class LuceneIndex {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+	private final Language language;
+
 	private final NumberFormat formatter;
 
-	private DictionaryLoader indexProvider;
+	private final Map<Language, LuceneIndexRam> luceneIndexRam = new HashMap<>();
 
-	private DictionaryCreator indexCreator;
+	private final Map<Language, LuceneIndexFilesystem> luceneIndexFilesystem = new HashMap<>();
 
-	private LuceneConfiguration luceneConfiguration;
-
-	private IndexManagerSurmiran indexManager;
+	private IndexManager indexManager;
 
 	private HashMap<String, Type> sortTypes;
 
@@ -89,34 +85,25 @@ public class Dictionary {
 
 	private ExactMatchQueryBuilder exactMatchesLangB;
 
-	private final SurmiranLanguageConfig languageConfig;
+	private final IndexCommandQueue queue;
 
-	public Dictionary(LuceneConfiguration configuration) throws IOException {
-		this();
-		setLuceneConfiguration(configuration);
-	}
-
-	public Dictionary() {
+	public LuceneIndex(LuceneConfiguration luceneConfiguration) throws IOException {
+		this.language = luceneConfiguration.getLanguage();
+		queue = IndexCommandQueue.getInstance(this.language);
 		formatter = (NumberFormat) NumberFormat.getNumberInstance().clone();
 		formatter.setMaximumFractionDigits(3);
 		logger.info("Created new index.");
-		languageConfig = new SurmiranLanguageConfig();
-	}
-	
-	public LuceneConfiguration getLuceneConfiguration() {
-		return luceneConfiguration;
+		setLuceneConfiguration(luceneConfiguration);
 	}
 
 	public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration)
 			throws IOException {
-		this.luceneConfiguration = luceneConfiguration;
-		indexProvider = new DictionaryLoader();
-		indexProvider.setLuceneConfiguration(luceneConfiguration);
-		indexCreator = new DictionaryCreator();
-		indexCreator.setLuceneConfiguration(luceneConfiguration);
-		indexCreator.initialize();
-		indexCreator.resetIndexDirectory();
-		indexManager = IndexManagerSurmiran.getInstance();
+		//this.luceneConfiguration = luceneConfiguration;
+		luceneIndexRam.put(this.language, new LuceneIndexRam(luceneConfiguration));
+		luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
+		luceneIndexFilesystem.get(this.language).initialize();
+		luceneIndexFilesystem.get(this.language).resetIndexDirectory();
+		indexManager = IndexManager.getInstance(this.language);
 		Set<IndexedColumn> columns = indexManager.getFinalColumnSet();
 		sortTypes = new HashMap<>();
 		for (IndexedColumn item : columns) {
@@ -174,7 +161,7 @@ public class Dictionary {
 		long e1 = System.nanoTime();
 		try {
 			long s2 = System.nanoTime();
-			docs = indexProvider.getSearcher().search(query, pageSize * (pageNr + 1), sort);
+			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
 			long e2 = System.nanoTime();
 			result = toQueryResult(docs, pageSize * pageNr, pageSize);
 			if(logger.isDebugEnabled()) {
@@ -209,7 +196,7 @@ public class Dictionary {
 	private QueryResult toQueryResult(TopDocs docs, int startIndex, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
 		final ArrayList<LemmaVersion> results = new ArrayList<LemmaVersion>(pageSize);
 		final ScoreDoc[] scoreDocs = docs.scoreDocs;
-		IndexSearcher searcher = indexProvider.getSearcher();
+		IndexSearcher searcher = luceneIndexRam.get(language).getSearcher();
 		for (int i = startIndex; i < scoreDocs.length
 				&& i < startIndex + pageSize; i++) {
 			Document doc = searcher.doc(scoreDocs[i].doc);
@@ -239,7 +226,7 @@ public class Dictionary {
 			bc.add(query, Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
 			query = bc;
-			TopDocs docs = indexProvider.getSearcher().search(query, null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
 
 			return toQueryResult(docs, 0, pageSize);
 		} catch (IOException e) {
@@ -277,7 +264,7 @@ public class Dictionary {
 			bc.add(query, Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
 			query = bc;
-			TopDocs docs = indexProvider.getSearcher().search(query,
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
 					new DuplicateFilter(field), Integer.MAX_VALUE,
 					new Sort(new SortField(sortField, Type.STRING)));
 			return toQueryResult(docs, page * pageSize, pageSize);
@@ -292,14 +279,14 @@ public class Dictionary {
 		final IndexStatistics statistics = new IndexStatistics();
 		try {
 			queue.push(new IndexOperation() {
-				
+
 				@Override
-				public void execute() throws Exception {
-					int all = indexProvider.getSearcher().getIndexReader().numDocs();
+				public void execute(Language language) throws Exception {
+					int all = luceneIndexRam.get(language).getSearcher().getIndexReader().numDocs();
 					int unverified = 0;
 					int approved = 0;
 					int unknown = 0;
-					IndexReader reader = indexProvider.getSearcher().getIndexReader();
+					IndexReader reader = luceneIndexRam.get(language).getSearcher().getIndexReader();
 					HashMap<String, Integer> byCategory = new HashMap<String, Integer>();
 					for (int i = 0; i < all; i++) {
 						Document document = reader.document(i);
@@ -334,7 +321,7 @@ public class Dictionary {
 					statistics.setUnverifiedEntries(unverified);
 					statistics.setApprovedEntries(approved);
 					statistics.setUnknown(unknown);
-					statistics.setLastUpdated(indexCreator.getLastUpdated());
+					statistics.setLastUpdated(luceneIndexFilesystem.get(language).getLastUpdated());
 				}
 			});
 			return statistics;
@@ -353,10 +340,10 @@ public class Dictionary {
 		ArrayList<String> fields = new ArrayList<String>();
 		fields.add(fieldName);
 		for (String field : fields) {
-			TopDocs docs = indexProvider.getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
 			ScoreDoc[] scoreDocs = docs.scoreDocs;
 			for (int i = 0; i < scoreDocs.length; i++) {
-				Document doc = indexProvider.getSearcher().doc(scoreDocs[i].doc);
+				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
 				// FIXME: Don't split always - instead, implement MaalrFieldType.CSV!
 				for (IndexableField indexedField : indexableFields) {
@@ -415,16 +402,14 @@ public class Dictionary {
 		return new ArrayList<String>();
 	}
 
-	private IndexCommandQueue queue = IndexCommandQueue.getInstance();
-
 	public void reloadIndex() throws NoIndexAvailableException {
 		try {
 			queue.push(new IndexOperation() {
 				
 				@Override
-				public void execute() throws NoIndexAvailableException {
+				public void execute(Language language) throws NoIndexAvailableException {
 					logger.info("Reloading index...");
-					indexProvider.reloadIndex();
+					luceneIndexRam.get(language).reloadIndex();
 					logger.info("Index reloaded");
 				}
 			});
@@ -438,8 +423,8 @@ public class Dictionary {
 			queue.push(new IndexOperation() {
 				
 				@Override
-				public void execute() throws Exception {
-					int added = indexCreator.addToIndex(iterator);
+				public void execute(Language language) throws Exception {
+					int added = luceneIndexFilesystem.get(language).addToIndex(iterator);
 				}
 			});
 		} catch (Exception e) {
@@ -450,10 +435,10 @@ public class Dictionary {
 	public void dropIndex() throws IndexException {
 		try {
 			queue.push(new IndexOperation() {
-				
+
 				@Override
-				public void execute() throws Exception {
-					indexCreator.dropIndex();
+				public void execute(Language language) throws Exception {
+					luceneIndexFilesystem.get(language).dropIndex();
 				}
 			});
 		} catch (Exception e) {
@@ -466,10 +451,10 @@ public class Dictionary {
 			queue.push(new IndexOperation() {
 				
 				@Override
-				public void execute() throws Exception {
+				public void execute(Language language) throws Exception {
 					long start = System.currentTimeMillis();
-					indexCreator.update(entry);
-					indexProvider.update(entry);
+					luceneIndexFilesystem.get(language).update(entry);
+					luceneIndexRam.get(language).update(entry);
 					long end = System.currentTimeMillis();
 					logger.info("Index update for entry " + entry.getId()
 							+ " completed after " + (end - start) + " ms.");
@@ -486,9 +471,9 @@ public class Dictionary {
 			queue.push(new IndexOperation() {
 				
 				@Override
-				public void execute() throws Exception {
-					indexCreator.delete(entry);
-					indexProvider.delete(entry);
+				public void execute(Language language) throws Exception {
+					luceneIndexFilesystem.get(language).delete(entry);
+					luceneIndexRam.get(language).delete(entry);
 				}
 			});
 		} catch (Exception e) {

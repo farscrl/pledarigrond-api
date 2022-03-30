@@ -15,28 +15,36 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.data.common.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 public class IndexCommandQueue {
 
-	private ExecutorService executor;
+	private final ExecutorService executor;
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final Language language;
 	
-	private static IndexCommandQueue instance;
+	private static final Map<Language, IndexCommandQueue> instancesMap = new HashMap<>();
 	
-	public static synchronized IndexCommandQueue getInstance() {
-		if(instance == null) {
-			instance = new IndexCommandQueue();
+	public static synchronized IndexCommandQueue getInstance(Language language) {
+		if(instancesMap.get(language) == null) {
+			IndexCommandQueue instance = new IndexCommandQueue(language);
+			instancesMap.put(language, instance);
 		}
-		return instance;
+		return instancesMap.get(language);
 	}
 	
-	private IndexCommandQueue() {
+	private IndexCommandQueue(Language language) {
+		this.language = language;
+
 		ThreadFactory factory = new ThreadFactory() {
 			
 			@Override
@@ -57,7 +65,7 @@ public class IndexCommandQueue {
 			public Void call() throws Exception {
 				try {
 					for (IndexOperation op : operation) {
-						op.execute();
+						op.execute(language);
 					}
 					return null;
 				} catch (Exception e) {
@@ -85,7 +93,7 @@ public class IndexCommandQueue {
 			@Override
 			public Void call() throws Exception {
 				try {
-					operation.execute();
+					operation.execute(language);
 					return null;
 				} catch (Exception e) {
 					e.printStackTrace();

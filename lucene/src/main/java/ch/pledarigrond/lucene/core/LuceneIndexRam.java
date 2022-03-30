@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
@@ -43,23 +44,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Helper class used by {@link Dictionary}. It manages the lucene index
+ * Helper class used by {@link LuceneIndex}. It manages the lucene index
  * kept in a {@link RAMDirectory}.
  *
  */
- class DictionaryLoader {
+ class LuceneIndexRam {
 
 	private IndexSearcher searcher;
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryLoader.class);
+	private static final Logger logger = LoggerFactory.getLogger(LuceneIndexRam.class);
 
 	private LuceneConfiguration luceneConfiguration;
 	private IndexManagerSurmiran indexManager;
 
 	private RAMDirectory ram;
 	private DirectoryReader reader;
-	
-	LuceneConfiguration getLuceneConfiguration() {
-		return luceneConfiguration;
+
+	private final Language language;
+
+	public LuceneIndexRam(LuceneConfiguration luceneConfiguration) {
+		this.language = luceneConfiguration.getLanguage();
+		setLuceneConfiguration(luceneConfiguration);
 	}
 
 	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {

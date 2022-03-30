@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -37,22 +38,25 @@ import java.text.NumberFormat;
 import java.util.*;
 
 /**
- * Helper class used by {@link Dictionary}. It manages the lucene index
+ * Helper class used by {@link LuceneIndex}. It manages the lucene index
  * held in a {@link NIOFSDirectory}.
  *
  */
-class DictionaryCreator {
+class LuceneIndexFilesystem {
 
 	private LuceneConfiguration luceneConfiguration;
 
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryCreator.class);
+	private static final Logger logger = LoggerFactory.getLogger(LuceneIndexFilesystem.class);
 	private NIOFSDirectory indexDirectory;
 	private Analyzer analyzer;
 	private final boolean tracing = logger.isTraceEnabled();
 	private IndexManagerSurmiran indexManager;
-	
-	LuceneConfiguration getLuceneConfiguration() {
-		return luceneConfiguration;
+
+	private Language language;
+
+	public LuceneIndexFilesystem(LuceneConfiguration luceneConfiguration) {
+		this.language = luceneConfiguration.getLanguage();
+		setLuceneConfiguration(luceneConfiguration);
 	}
 
 	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {

@@ -16,9 +16,10 @@
 package ch.pledarigrond.lucene.core;
 
 
+import ch.pledarigrond.common.data.common.Language;
 
 public interface IndexOperation {
 	
-	public void execute() throws Exception;
+	public void execute(Language language) throws Exception;
 
 }

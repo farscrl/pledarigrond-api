@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.common.config;
 
+import ch.pledarigrond.common.data.common.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,16 +35,27 @@ public class LuceneConfiguration {
 
 	private File indexDir;
 
+	private final Language language;
+
+	public LuceneConfiguration(Language language, String baseDirectory) {
+		this.language = language;
+		setBaseDirectory(baseDirectory);
+	}
+
 	public File getLuceneTimestampFile() {
-		return new File(indexDir, ".stamp");
+		return new File(indexDir + "/" + language.getName(), ".stamp");
 	}
 
 	public File getLuceneIndexDir() {
 		return indexDir;
 	}
 
-	public void setBaseDirectory(String luceneDir) {
-		this.indexDir = new File(luceneDir);
+	private void setBaseDirectory(String luceneDir) {
+		this.indexDir = new File(luceneDir + "/" + language.getName());
 		this.indexDir.mkdirs();
+	}
+
+	public Language getLanguage() {
+		return language;
 	}
 }
