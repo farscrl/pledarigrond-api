@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("")
     ResponseEntity<?> list() {
         Pageable pageable = PageRequest.of(0, 10000);
@@ -33,6 +35,7 @@ public class UsersController {
         return ResponseEntity.ok(new PageImpl<>(users, pageable, users.size()));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     ResponseEntity<?> create(@Validated @RequestBody LightUserInfo user) throws InvalidUserException {
         PgUserInfo pgUserInfo = LightUserToPgUserTransformer.toPgUserInfo(user);
@@ -40,6 +43,7 @@ public class UsersController {
         return ResponseEntity.ok(userService.insert(pgUserInfo).toLightUser());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{email}")
     ResponseEntity<?> getOne(@PathVariable("email")String email) {
         PgUserInfo user = userService.getByEmail(email);
@@ -50,6 +54,7 @@ public class UsersController {
         return ResponseEntity.ok(user.toLightUser());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{email}")
     ResponseEntity<?> update(@PathVariable("email")String email, @Validated @RequestBody LightUserInfo user) throws InvalidUserException {
         if (!email.equals(user.getEmail())) {
@@ -61,6 +66,7 @@ public class UsersController {
         return ResponseEntity.ok(userService.updateUser(pgUserInfo));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{email}")
     ResponseEntity<?> delete(@PathVariable("email")String email) {
         PgUserInfo user = userService.getByEmail(email);

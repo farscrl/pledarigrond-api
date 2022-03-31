@@ -9,6 +9,7 @@ import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,11 +28,13 @@ public class DbController {
     @Autowired
     private AdminService adminService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/import_db")
     void importDemoDb(@PathVariable("language")Language language) throws IndexException, InvalidEntryException, NoDatabaseAvailableException, IOException {
         adminService.importDemoDatabase(language);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value="/export_db", produces="application/zip")
     void exportDb(
             @PathVariable("language")Language language,
@@ -76,6 +79,7 @@ public class DbController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/db_stats")
     ResponseEntity<?> getDbStats(@PathVariable("language")Language language) {
         try {
@@ -85,11 +89,13 @@ public class DbController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/backup_infos")
     ResponseEntity<?> getBackupInfos(@PathVariable("language")Language language) {
         return ResponseEntity.ok(adminService.getBackupInfos(language));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/index_stats")
     ResponseEntity<?> getIndexStats(@PathVariable("language")Language language) {
         try {
@@ -99,6 +105,7 @@ public class DbController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/rebuild_index")
     ResponseEntity<?> rebuildIndex(@PathVariable("language")Language language) {
         try {

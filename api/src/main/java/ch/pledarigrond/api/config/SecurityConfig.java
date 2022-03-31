@@ -62,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 // dont authenticate user requests
+                .authorizeRequests().antMatchers("/user/**").permitAll().and()
                 .authorizeRequests().antMatchers("/puter/user/**").permitAll().and()
                 .authorizeRequests().antMatchers("/rumantschgrischun/user/**").permitAll().and()
                 .authorizeRequests().antMatchers("/surmiran/user/**").permitAll().and()

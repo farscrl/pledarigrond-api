@@ -19,6 +19,8 @@ import ch.pledarigrond.common.config.Constants;
 import ch.pledarigrond.common.data.common.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ import java.util.StringTokenizer;
 public class PgUserInfo extends BasicDBObject {
 
 	private static final long serialVersionUID = 1188500902567455955L;
+
+	final String ROLE_PREFIX = "ROLE_";
 
 	public PgUserInfo() {
 	}
@@ -189,6 +193,38 @@ public class PgUserInfo extends BasicDBObject {
 	
 	public long getLastModificationDate() {
 		return super.getLong(Constants.Users.LAST_MODIFICATION);
+	}
+
+	public ArrayList<GrantedAuthority> getRoles() {
+		ArrayList<GrantedAuthority> roles = new ArrayList<>();
+		if (getAdmin()) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "ADMIN"));
+		}
+
+		if (getPuterRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_PUTER"));
+		}
+		if (getRumantschgrischunRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_RUMANTSCHGRISCHUN"));
+		}
+		if (getSurmiranRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_SURMIRAN"));
+		}
+		if (getSursilvanRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_SURSILVAN"));
+		}
+		if (getSutsilvanRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_SUTSILVAN"));
+		}
+		if (getValladerRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_VALLADER"));
+		}
+
+		if (getNamesRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_NAMES"));
+		}
+
+		return roles;
 	}
 	
 	@Override

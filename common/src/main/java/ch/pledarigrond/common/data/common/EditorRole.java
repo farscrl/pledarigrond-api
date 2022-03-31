@@ -1,8 +1,7 @@
 package ch.pledarigrond.common.data.common;
 
 public enum EditorRole {
-    INTERNAL("internal"),
-    EXTERNAL("external"),
+    EDITOR("editor"),
     NONE("none");
 
     public final String role;

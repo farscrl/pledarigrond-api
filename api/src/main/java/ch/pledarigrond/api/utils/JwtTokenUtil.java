@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.function.Function;
 
 import ch.pledarigrond.mongodb.model.PgUserInfo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -49,14 +51,13 @@ public class JwtTokenUtil {
     //generate token for user
     public String generateToken(PgUserInfo userInfo) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("is_admin", userInfo.getAdmin());
-        claims.put("role_puter", userInfo.getPuterRole());
-        claims.put("role_rumantschgrischun", userInfo.getRumantschgrischunRole());
-        claims.put("role_surmiran", userInfo.getSurmiranRole());
-        claims.put("role_sursilvan", userInfo.getSursilvanRole());
-        claims.put("role_sutsilvan", userInfo.getSutsilvanRole());
-        claims.put("role_vallader", userInfo.getValladerRole());
-        claims.put("role_names", userInfo.getNamesRole());
+
+        // add roles
+        ArrayList<String> roles = new ArrayList<>();
+        for(GrantedAuthority authority: userInfo.getRoles()) {
+            roles.add(authority.getAuthority());
+        }
+        claims.put("roles", roles);
 
         return doGenerateToken(claims, userInfo.getEmail());
     }
