@@ -161,9 +161,9 @@ public class LuceneIndex {
 		long e1 = System.nanoTime();
 		try {
 			long s2 = System.nanoTime();
-			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
+			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * pageNr, sort);
 			long e2 = System.nanoTime();
-			result = toQueryResult(docs, pageSize * pageNr, pageSize);
+			result = toQueryResult(docs, pageSize * (pageNr - 1), pageSize);
 			if(logger.isDebugEnabled()) {
 				logger.debug("Time to build query: " + (e1-s1)/1000000 + ", Time to execute query: " + ((e2-s2)/1000000));
 			}
