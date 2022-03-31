@@ -21,11 +21,9 @@ public interface AdminService {
 
     void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
 
-    void importDemoDatabase(Language language, int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
-
     void dropDatabase(Language language) throws DatabaseException;
 
-    void reloadDemoDatabase(Language language) throws DatabaseException, IndexException;
+    void reloadDemoDatabase(Language language) throws DatabaseException, IndexException, IOException;
 
     void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException;
 
@@ -33,7 +31,7 @@ public interface AdminService {
 
     IndexStatistics getIndexStats(Language language) throws NoIndexAvailableException;
 
-    void importDatabase(HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException;
+    void importDatabase(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException;
 
     void exportData(Language language, boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException;
 

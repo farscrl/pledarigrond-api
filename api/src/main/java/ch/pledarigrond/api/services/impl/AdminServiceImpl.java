@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -53,33 +54,25 @@ public class AdminServiceImpl implements AdminService {
 
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
+    @Override
     public void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
         dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), -1);
-        rebuildIndex(language);
-    }
-
-    public void importDemoDatabase(Language language, int max) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
-        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), max);
         rebuildIndex(language);
     }
 
     @Override
     public void dropDatabase(Language language) throws DatabaseException {
         Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).deleteAllEntries();
-        boolean empty = Database.getInstance("surmiran").isEmpty();
+        boolean empty = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).isEmpty();
         if (!empty) {
             throw new DatabaseException("The database has been dropped but is still not empty, which is weird.");
         }
     }
 
     @Override
-    public void reloadDemoDatabase(Language language) throws DatabaseException, IndexException {
+    public void reloadDemoDatabase(Language language) throws DatabaseException, IndexException, IOException {
         dropDatabase(language);
-        try {
-            dumpLoaderService.createFromSQLDump(language, pgEnvironment.getDemoDataSurmiranFile(), -1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), -1);
     }
 
     @Override
@@ -108,12 +101,13 @@ public class AdminServiceImpl implements AdminService {
         return statistics;
     }
 
-    public void importDatabase(HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException {
-        DefaultMultipartHttpServletRequest dmhsRequest = (DefaultMultipartHttpServletRequest) request;
+    @Override
+    public void importDatabase(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException {
+        StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile multipartFile = (MultipartFile) dmhsRequest.getFile("file");
         InputStream in = multipartFile.getInputStream();
         logger.info("Importing from XML file... {}", multipartFile.getName());
-        Database.getInstance("surmiran").importData(in);
+        Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).importData(in);
     }
 
     @Override

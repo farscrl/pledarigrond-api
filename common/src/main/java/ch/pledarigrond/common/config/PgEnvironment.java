@@ -64,7 +64,7 @@ public class PgEnvironment {
 	@Value( "${pg.lucene.baseFolder}")
 	private String luceneBaseFolder;
 
-	@Value( "pg.demoData.surmiran}")
+	@Value( "${pg.demoData.surmiran}")
 	private String demoDataSurmiran;
 
 	@Value( "${pg.admin.user}")

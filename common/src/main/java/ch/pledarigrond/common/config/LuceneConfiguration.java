@@ -43,7 +43,7 @@ public class LuceneConfiguration {
 	}
 
 	public File getLuceneTimestampFile() {
-		return new File(indexDir + "/" + language.getName(), ".stamp");
+		return new File(indexDir + "/" +  ".stamp");
 	}
 
 	public File getLuceneIndexDir() {
@@ -51,7 +51,7 @@ public class LuceneConfiguration {
 	}
 
 	private void setBaseDirectory(String luceneDir) {
-		this.indexDir = new File(luceneDir + "/" + language.getName());
+		this.indexDir = new File(luceneDir + "/" + language.getName() + "/");
 		this.indexDir.mkdirs();
 	}
 

@@ -49,6 +49,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.*;
 import java.io.*;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.util.*;
@@ -386,16 +387,7 @@ public class Database {
 
 	public DatabaseStatistics getStatistics() {
 		logger.info("getStatistics called...");
-//		try {
-		/*
-		 * matana@2019-05-12 TODO: Check if stats are needed in backend?
-		 */
-		// Document collStats = MongoHelper.getDB(this.locale).runCommand(new
-		// Document("collStats", ENTRIES));
-		// logger.info("collStats: {}", collStats.toJson());
-//		} catch (UnknownHostException e) {
-//			e.printStackTrace();
-//		}
+
 		DatabaseStatistics stats = new DatabaseStatistics();
 		stats.setNumberOfEntries((int) entryCollection.countDocuments());
 		Map<LemmaVersion.Verification, Integer> count = new HashMap<>();
@@ -468,7 +460,7 @@ public class Database {
 		ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(output));
 		zout.putNextEntry(new ZipEntry(fileName + ".xml"));
 		MD5OutputStream md5 = new MD5OutputStream(zout);
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(md5, "UTF-8"));
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(md5, StandardCharsets.UTF_8));
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		out.write("\n<entries>\n");
 		Marshaller marshaller = context.createMarshaller();
@@ -506,7 +498,7 @@ public class Database {
 		out.flush();
 		zout.closeEntry();
 		zout.putNextEntry(new ZipEntry("About.txt"));
-		out = new BufferedWriter(new OutputStreamWriter(zout, "UTF-8"));
+		out = new BufferedWriter(new OutputStreamWriter(zout, StandardCharsets.UTF_8));
 		out.write("MD5:\t" + md5.getHash() + "\n");
 		out.write("Entries:\t" + entryCounter + "\n");
 		out.write("Versions:\t" + versionCounter + "\n");
@@ -515,8 +507,7 @@ public class Database {
 		zout.close();
 	}
 
-	public void importData(InputStream input)
-			throws JAXBException, IOException, XMLStreamException, InvalidEntryException {
+	public void importData(InputStream input) throws JAXBException, IOException, XMLStreamException, InvalidEntryException {
 		XMLStreamReader xsr = getXMLStreamReader(new BufferedInputStream(input));
 		xsr.nextTag(); // Advance to statements element
 		Unmarshaller unmarshaller = JAXBContext.newInstance(LexEntry.class).createUnmarshaller();
@@ -535,13 +526,12 @@ public class Database {
 		logger.info("Importing done.");
 	}
 
-	public Iterator<LexEntry> getExportedData(InputStream input)
-			throws JAXBException, IOException, XMLStreamException, InvalidEntryException {
+	public Iterator<LexEntry> getExportedData(InputStream input) throws JAXBException, IOException, XMLStreamException {
 		final XMLStreamReader xsr = getXMLStreamReader(new BufferedInputStream(input));
 		xsr.nextTag();
 		xsr.nextTag();
 		final Unmarshaller unmarshaller = JAXBContext.newInstance(LexEntry.class).createUnmarshaller();
-		Iterator<LexEntry> allEntries = new Iterator<LexEntry>() {
+		Iterator<LexEntry> allEntries = new Iterator<>() {
 
 			private LexEntry next = (LexEntry) unmarshaller.unmarshal(xsr);
 
@@ -588,7 +578,7 @@ public class Database {
 		ZipInputStream in = new ZipInputStream(input);
 		getNextEntry(in);
 		XMLInputFactory xif = XMLInputFactory.newInstance();
-		XMLStreamReader xsr = xif.createXMLStreamReader(new BufferedReader(new InputStreamReader(in, "UTF-8")));
+		XMLStreamReader xsr = xif.createXMLStreamReader(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 		return xsr;
 	}
 

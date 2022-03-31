@@ -2,6 +2,7 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -29,9 +32,34 @@ public class DbController {
     private AdminService adminService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/import_db")
+    @PostMapping("/import_demo_db")
     void importDemoDb(@PathVariable("language")Language language) throws IndexException, InvalidEntryException, NoDatabaseAvailableException, IOException {
         adminService.importDemoDatabase(language);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/drop_db")
+    void dropDb(@PathVariable("language")Language language) {
+        try {
+            adminService.dropDatabase(language);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/import_db")
+    void importDb(@PathVariable("language")Language language, HttpServletRequest request) {
+        try {
+            adminService.importDatabase(language, request);
+        } catch (DatabaseException | IOException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (XMLStreamException | JAXBException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,16 +61,16 @@ public class DumpLoaderServiceImpl implements DumpLoaderService {
                 zipFile.close();
                 return;
             }
-            br = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry), StandardCharsets.UTF_8));
         } else {
             logger.info("Trying to read data from file " + file);
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
         }
 
         String line = br.readLine();
         String[] keys = line.split("\t",-1);
-        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)); // TODO: implement for all idioms
-        List<Document> entries = new ArrayList();
+        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
+        List<Document> entries = new ArrayList<>();
         int counter = 0;
         //String userId = authProvider.getCurrentUserId();
         String userId = "Import"; // TODO: read correct user ID
