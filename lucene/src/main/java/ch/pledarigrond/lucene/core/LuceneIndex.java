@@ -203,7 +203,13 @@ public class LuceneIndex {
 			LemmaVersion e = indexManager.getLemmaVersion(doc);
 			results.add(e);
 		}
-		return new QueryResult(results, docs.totalHits, pageSize);
+
+		int currentPage = 1;
+		if (startIndex != 0) {
+			currentPage = (startIndex / pageSize) + 1;
+		}
+
+		return new QueryResult(results, docs.totalHits, pageSize, currentPage);
 	}
 
 	
@@ -267,7 +273,7 @@ public class LuceneIndex {
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
 					new DuplicateFilter(field), Integer.MAX_VALUE,
 					new Sort(new SortField(sortField, Type.STRING)));
-			return toQueryResult(docs, page * pageSize, pageSize);
+			return toQueryResult(docs, (page - 1) * pageSize, pageSize);
 		} catch (IOException e) {
 			throw new BrokenIndexException("Broken index!", e);
 		} catch (InvalidTokenOffsetsException e) {

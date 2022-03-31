@@ -17,14 +17,17 @@ public class QueryResult implements Serializable {
 	private int totalEntries;
 
 	private int pageSize;
+
+	private int currentPage;
 	
 	public QueryResult() {
 	}
 
-	public QueryResult(List<LemmaVersion> entries, int maxEntries, int pageSize) {
+	public QueryResult(List<LemmaVersion> entries, int maxEntries, int pageSize, int currentPage) {
 		this.entries = entries;
 		this.totalEntries = maxEntries;
 		this.pageSize = pageSize;
+		this.currentPage = currentPage;
 	}
 
 	@Override
