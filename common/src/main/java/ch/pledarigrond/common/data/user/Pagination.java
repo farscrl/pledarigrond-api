@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Pagination {
-    public int pageSize = 15;
-    public int page = 1;
+    private int pageSize = 15;
+    private int page = 1;
 }

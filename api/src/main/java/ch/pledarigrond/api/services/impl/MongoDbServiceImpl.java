@@ -19,11 +19,13 @@ import ch.pledarigrond.mongodb.util.DBCommandQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 
+@Service
 public class MongoDbServiceImpl implements MongoDbService {
     private DBCommandQueue queue = DBCommandQueue.getInstance();
 

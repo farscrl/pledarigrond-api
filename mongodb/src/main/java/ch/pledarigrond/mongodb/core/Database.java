@@ -18,7 +18,6 @@ package ch.pledarigrond.mongodb.core;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.LexEntryList;
 import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -40,6 +39,10 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
@@ -283,11 +286,11 @@ public class Database {
 		return entryCollection.countDocuments();
 	}
 
-	public LexEntryList queryForLexEntries(String login, Role role, LemmaVersion.Verification verification, String verifier,
-										   long startTime, long endTime, LemmaVersion.Status[] states, int limit, int offset, String orderField,
-										   boolean ascending) {
+	public Page<LexEntry> queryForLexEntries(String login, Role role, LemmaVersion.Verification verification, String verifier,
+											 long startTime, long endTime, LemmaVersion.Status[] states, int limit, int offset, String orderField,
+											 boolean ascending) {
 		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime
-				+ ", " + states + ", " + limit + ", " + offset + ", " + orderField + ", " + ascending);
+				+ ", " + Arrays.toString(states) + ", " + limit + ", " + offset + ", " + orderField + ", " + ascending);
 		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, limit,
 				offset, orderField, ascending);
 		List<LexEntry> results = new ArrayList<LexEntry>();
@@ -299,7 +302,8 @@ public class Database {
 			count += 1;
 		}
 		cursor.close();
-		return new LexEntryList(results, count);
+		Pageable pageable = PageRequest.of(1, limit);
+		return new PageImpl<>(results, pageable, count);
 	}
 
 	private MongoCursor<Document> query(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
