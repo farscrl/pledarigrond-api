@@ -57,7 +57,9 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public Page<LexEntry> getLexEntries(Language language, EditorQuery query, Pagination pagination) throws Exception {
-        Page<LexEntry> result = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
+        Page<LexEntry> result = Database
+                .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
+                .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
         for (LexEntry lexEntry : result.getContent()) {
             addUserInfos(lexEntry);
         }
@@ -241,7 +243,9 @@ public class EditorServiceImpl implements EditorService {
         }
         writer.write("\n");
         while(true) {
-            Page<LexEntry> result = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
+            Page<LexEntry> result = Database
+                    .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
+                    .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
             if(result == null || result.getContent().size() == 0) break;
             for (LexEntry lexEntry : result.getContent()) {
                 addUserInfos(lexEntry);

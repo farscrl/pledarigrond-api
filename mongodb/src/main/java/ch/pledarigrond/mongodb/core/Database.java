@@ -287,12 +287,10 @@ public class Database {
 	}
 
 	public Page<LexEntry> queryForLexEntries(String login, Role role, LemmaVersion.Verification verification, String verifier,
-											 long startTime, long endTime, LemmaVersion.Status[] states, int limit, int offset, String orderField,
+											 long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
 											 boolean ascending) {
-		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime
-				+ ", " + Arrays.toString(states) + ", " + limit + ", " + offset + ", " + orderField + ", " + ascending);
-		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, limit,
-				offset, orderField, ascending);
+		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime + ", " + Arrays.toString(states) + ", " + pageSize + ", " + page + ", " + orderField + ", " + ascending);
+		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, pageSize, page, orderField, ascending);
 		List<LexEntry> results = new ArrayList<LexEntry>();
 		int count = 0;
 		while (cursor.hasNext()) {
@@ -302,13 +300,57 @@ public class Database {
 			count += 1;
 		}
 		cursor.close();
-		Pageable pageable = PageRequest.of(1, limit);
-		return new PageImpl<>(results, pageable, count);
+		Pageable pageable = PageRequest.of(page, pageSize);
+		return new PageImpl<>(results, pageable, getTotalResults(login, role, verification, verifier, startTime, endTime, states));
 	}
 
 	private MongoCursor<Document> query(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
-										long startTime, long endTime, LemmaVersion.Status[] states, int limit, int offset, String orderField,
+										long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
 										boolean ascending) {
+		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
+
+		FindIterable<Document> found;
+		if (queryOptional.isPresent()) {
+			found = entryCollection.find(queryOptional.get());
+		} else {
+			found = entryCollection.find();
+		}
+		if (orderField != null) {
+			if (ascending) {
+				found = found.sort(Sorts.ascending(LexEntry.VERSIONS + "." + orderField));
+			} else {
+				found = found.sort(Sorts.descending(LexEntry.VERSIONS + "." + orderField));
+			}
+
+		}
+		// TODO: This is inefficient! However, it should be ok for
+		// small queries, which is the expected usecase.
+
+		if (page >= 0 && pageSize > 0) {
+			found = found.skip(page * pageSize);
+		}
+
+		if (pageSize > 0) {
+			found = found.limit(pageSize);
+		}
+
+		return found.iterator();
+	}
+
+	private long getTotalResults(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
+								 long startTime, long endTime, LemmaVersion.Status[] states) {
+		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
+
+		if (queryOptional.isPresent()) {
+			return entryCollection.countDocuments(queryOptional.get());
+		} else {
+			return entryCollection.countDocuments();
+		}
+	}
+
+	private Optional<BasicDBObject> getQuery(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
+											 long startTime, long endTime, LemmaVersion.Status[] states) {
+
 		// TODO: Add querying for 'current' state
 		BasicDBObject query = new BasicDBObject();
 		BasicDBObject attributes = new BasicDBObject();
@@ -351,34 +393,13 @@ public class Database {
 			obj.put("$gt", startTime);
 			attributes.put(QUERY_VERSION_TIMESTAMP, obj);
 		}
-		FindIterable<Document> found;
 		if (attributes.size() > 0) {
 			BasicDBObject elemMatch = new BasicDBObject("$elemMatch", attributes);
 			query.append(LexEntry.VERSIONS, elemMatch);
-			found = entryCollection.find(query);
+			return Optional.of(query);
 		} else {
-			found = entryCollection.find();
+			return Optional.empty();
 		}
-		if (orderField != null) {
-			if (ascending) {
-				found = entryCollection.find().sort(Sorts.ascending(LexEntry.VERSIONS + "." + orderField));
-			} else {
-				found = entryCollection.find().sort(Sorts.descending(LexEntry.VERSIONS + "." + orderField));
-			}
-
-		}
-		// TODO: This is inefficient! However, it should be ok for
-		// small queries, which is the expected usecase.
-
-		if (offset > 0) {
-			found = found.skip(offset);
-		}
-
-		if (limit > 0) {
-			found = found.limit(limit);
-		}
-
-		return found.iterator();
 	}
 
 	public String getCollection() {
