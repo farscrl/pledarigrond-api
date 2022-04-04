@@ -18,7 +18,6 @@ package ch.pledarigrond.mongodb.core;
 import ch.pledarigrond.common.config.Constants;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LightUserInfo;
-import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.mongodb.model.PgUserInfo;

@@ -17,16 +17,6 @@ package ch.pledarigrond.common.config;
 
 public interface Constants {
 
-	@Deprecated
-	interface Roles {
-		String ROLE = "Role";
-		
-		String GUEST_1 = "ROLE_GUEST";
-		String TRUSTED_EX_3 = "ROLE_TRUSTED_EX";
-		String TRUSTED_IN_4 = "ROLE_TRUSTED_IN";
-		String ADMIN_5 = "ROLE_ADMIN";
-	}
-	
 	interface Users {
 		String PASSWORD = "password";
 		String EMAIL = "email";

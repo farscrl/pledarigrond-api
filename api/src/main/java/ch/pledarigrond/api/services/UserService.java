@@ -1,7 +1,7 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.LightUserInfo;
-import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.mongodb.model.PgUserInfo;
 
@@ -75,7 +75,7 @@ public interface UserService {
      *            the number of elements to return
      * @return
      */
-    List<PgUserInfo> getAllUsers(Role role, String text, String sortColumn, boolean sortAscending, int from, int length);
+    List<PgUserInfo> getAllUsers(EditorRole role, String text, String sortColumn, boolean sortAscending, int from, int length);
 
     List<PgUserInfo> getAllUsers(int from, int length, String sortColumn, boolean sortAscending);
 

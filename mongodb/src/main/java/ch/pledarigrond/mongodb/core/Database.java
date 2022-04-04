@@ -16,9 +16,9 @@
 package ch.pledarigrond.mongodb.core;
 
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.Role;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
@@ -44,7 +44,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -286,7 +285,7 @@ public class Database {
 		return entryCollection.countDocuments();
 	}
 
-	public Page<LexEntry> queryForLexEntries(String login, Role role, LemmaVersion.Verification verification, String verifier,
+	public Page<LexEntry> queryForLexEntries(String login, EditorRole role, LemmaVersion.Verification verification, String verifier,
 											 long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
 											 boolean ascending) {
 		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime + ", " + Arrays.toString(states) + ", " + pageSize + ", " + page + ", " + orderField + ", " + ascending);
@@ -304,7 +303,7 @@ public class Database {
 		return new PageImpl<>(results, pageable, getTotalResults(login, role, verification, verifier, startTime, endTime, states));
 	}
 
-	private MongoCursor<Document> query(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
+	private MongoCursor<Document> query(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
 										long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
 										boolean ascending) {
 		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
@@ -337,7 +336,7 @@ public class Database {
 		return found.iterator();
 	}
 
-	private long getTotalResults(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
+	private long getTotalResults(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
 								 long startTime, long endTime, LemmaVersion.Status[] states) {
 		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
 
@@ -348,7 +347,7 @@ public class Database {
 		}
 	}
 
-	private Optional<BasicDBObject> getQuery(String loginOrIP, Role role, LemmaVersion.Verification verification, String verifier,
+	private Optional<BasicDBObject> getQuery(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
 											 long startTime, long endTime, LemmaVersion.Status[] states) {
 
 		// TODO: Add querying for 'current' state

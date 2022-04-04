@@ -259,7 +259,7 @@ public class LemmaVersion implements Serializable {
 		maalrValues.put(IP_ADDRESS, ip);
 	}
 
-	public void setCreatorRole(Role role) {
+	public void setCreatorRole(EditorRole role) {
 		if(role == null) {
 			maalrValues.put(CREATOR_ROLE, null);
 		} else {
@@ -268,12 +268,17 @@ public class LemmaVersion implements Serializable {
 	}
 
 	@XmlAttribute(name="creatorRole")
-	public Role getCreatorRole() {
-		if(maalrValues.get(CREATOR_ROLE) == null) return null;
+	public EditorRole getCreatorRole() {
+		if(maalrValues.get(CREATOR_ROLE) == null) return EditorRole.GUEST;
 		try {
-			return Role.valueOf(maalrValues.get(CREATOR_ROLE));
+			return EditorRole.valueOf(maalrValues.get(CREATOR_ROLE));
 		} catch (Exception e) {
-			return null;
+			String role = maalrValues.get(CREATOR_ROLE);
+			if (role.equals("ADMIN_5")) { return EditorRole.ADMIN; }
+			if (role.equals("TRUSTED_IN_4")) { return EditorRole.EDITOR; }
+			if (role.equals("TRUSTED_EX_3")) { return EditorRole.GUEST; }
+			if (role.equals("GUEST_1")) { return EditorRole.GUEST; }
+			return EditorRole.NONE;
 		}
 	}
 

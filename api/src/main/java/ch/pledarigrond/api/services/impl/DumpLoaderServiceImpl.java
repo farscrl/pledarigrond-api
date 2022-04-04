@@ -3,10 +3,7 @@ package ch.pledarigrond.api.services.impl;
 import ch.pledarigrond.api.services.DumpLoaderService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.Role;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.lucene.exceptions.IndexException;
@@ -100,7 +97,7 @@ public class DumpLoaderServiceImpl implements DumpLoaderService {
             }
             entry.getCurrent().setUserId(userId);
             entry.getCurrent().setTimestamp(timestamp);
-            entry.getCurrent().setCreatorRole(Role.ADMIN_5);
+            entry.getCurrent().setCreatorRole(EditorRole.ADMIN);
             entries.add(new Document(Converter.convertLexEntry(entry)));
             if(entries.size() == 10000) {
                 db.insertBatch(entries);

@@ -27,7 +27,7 @@ public class EditorQuery {
 
     private long startTime = System.currentTimeMillis() - HALF_YEAR;
 
-    private Role role;
+    private EditorRole role;
 
     private long endTime;
 
