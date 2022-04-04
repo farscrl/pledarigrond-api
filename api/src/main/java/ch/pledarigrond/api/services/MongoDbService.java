@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -27,5 +28,5 @@ public interface MongoDbService {
 
     void dropOutdatedHistory(Language language, LexEntry entry) throws Exception;
 
-    List<LexEntry> updateOrder(Language language, boolean firstLang, List<LemmaVersion> ordered) throws Exception;
+    List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception;
 }

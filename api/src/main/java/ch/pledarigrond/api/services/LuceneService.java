@@ -1,9 +1,6 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.QueryResult;
-import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
@@ -27,7 +24,7 @@ public interface LuceneService {
      */
     QueryResult query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult queryExact(Language language, String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+    QueryResult queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
     QueryResult getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
 

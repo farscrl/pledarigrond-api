@@ -213,11 +213,11 @@ public class LuceneIndex {
 	}
 
 	
-	public QueryResult queryExact(String phrase, boolean firstLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+	public QueryResult queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		String sortField = null;
 		List<Query> queries = null;
-		sortField = firstLanguage ? "DStichwort_sort" : "RStichwort_sort";
-		if(firstLanguage) {
+		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
+		if(dictionaryLanguage == DictionaryLanguage.GERMAN) {
 			queries = exactMatchesLangA.transform(phrase);
 		} else {
 			queries = exactMatchesLangB.transform(phrase);

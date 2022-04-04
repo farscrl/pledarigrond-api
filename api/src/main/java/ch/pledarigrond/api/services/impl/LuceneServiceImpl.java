@@ -50,8 +50,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public QueryResult queryExact(Language language, String phrase, boolean firstLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-        QueryResult result = luceneIndexMap.get(language).queryExact(phrase, firstLanguage);
+    public QueryResult queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+        QueryResult result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
         if (removeInternalData) {
             return clean(result);
         }

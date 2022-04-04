@@ -88,8 +88,6 @@ public class EditorServiceImpl implements EditorService {
         return entry;
     }
 
-
-
     @Override
     public LexEntry update(Language language, LexEntry entry, LemmaVersion updated) throws Exception {
         db.update(language, entry, updated);
@@ -118,37 +116,14 @@ public class EditorServiceImpl implements EditorService {
         return entry;
     }
 
-
-    @RequestMapping("/editor/export")
-    public void export(@RequestParam(value = "all", defaultValue = "true") boolean allVersions,
-                       @RequestParam(value = "dropKeys", defaultValue = "false") boolean dropKeys,
-                       Language language,
-                       HttpServletResponse response) throws IOException, NoDatabaseAvailableException, JAXBException, NoSuchAlgorithmException {
-        response.setContentType("application/zip");
-        StringBuilder fileName = new StringBuilder();
-        fileName.append("maalr_db_dump_");
-        if(allVersions) {
-            fileName.append("all_versions_");
-        } else {
-            fileName.append("current_versions_");
-        }
-        if(dropKeys) {
-            fileName.append("anonymized_");
-        }
-        fileName.append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date()));
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".zip");
-        ServletOutputStream out = response.getOutputStream();
-        Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).exportData(allVersions, dropKeys, out, fileName.toString());
+    @Override
+    public List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception {
+        return db.updateOrder(language, dictionaryLanguage, ordered);
     }
 
     @Override
-    public List<LexEntry> updateOrder(Language language, boolean firstLang, List<LemmaVersion> ordered) throws Exception {
-        return db.updateOrder(language, firstLang, ordered);
-    }
-
-    @Override
-    public ArrayList<LemmaVersion> getOrder(Language language, String lemma, boolean firstLanguage) throws Exception {
-        return new ArrayList<LemmaVersion>(index.queryExact(language, lemma, firstLanguage, false).getEntries());
+    public ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception {
+        return new ArrayList<LemmaVersion>(index.queryExact(language, lemma, dictionaryLanguage, false).getEntries());
     }
 
     @Override

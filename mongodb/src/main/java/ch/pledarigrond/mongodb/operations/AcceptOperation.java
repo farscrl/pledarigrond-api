@@ -42,11 +42,6 @@ public class AcceptOperation extends BaseOperation implements IDBOperation {
 			LemmaVersion current = entry.getCurrent();
 			if(current != null) {
 				current.setVerification(LemmaVersion.Verification.OUTDATED);
-				// TODO: re-add or delete
-//				String sortField = Configuration.getInstance().getLemmaDescription().getSortOrderLangA();
-//				version.setValue(sortField, current.getEntryValue(sortField));
-//				sortField = Configuration.getInstance().getLemmaDescription().getSortOrderLangB();
-//				version.setValue(sortField, version.getEntryValue(sortField));
 			}
 			version.setVerification(LemmaVersion.Verification.ACCEPTED);
 			version.setVerifierId(getUserId());

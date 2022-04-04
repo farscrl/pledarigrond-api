@@ -16,6 +16,7 @@
 package ch.pledarigrond.mongodb.operations;
 
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -42,9 +43,9 @@ public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 	private final long timeStamp;
 	private final Language language;
 
-	public UpdateOrderOperation(Language language, boolean firstLang, List<LemmaVersion> ordered) {
+	public UpdateOrderOperation(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
 		this.items = ordered;
-		sortField = firstLang ? "DStichwort_sort" : "RStichwort_sort";
+		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
 		this.timeStamp = System.nanoTime();
 		this.language = language;
 	}

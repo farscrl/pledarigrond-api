@@ -1,19 +1,24 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.EditorService;
-import ch.pledarigrond.common.data.common.EditorQuery;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
+import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("{language}/editor")
@@ -23,7 +28,7 @@ public class EditorController {
     private EditorService editorService;
 
     // TODO: authorization
-    @PostMapping("/search")
+    @GetMapping("/lex_entries")
     ResponseEntity<?> getLexEntries(@PathVariable("language") Language language, EditorQuery editorQuery, Pagination pagination) {
         try {
             Page<LexEntry> list = editorService.getLexEntries(language, editorQuery, pagination);
@@ -32,6 +37,146 @@ public class EditorController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @GetMapping("/lex_entries/{id}")
+    ResponseEntity<?> getLexEntry(@PathVariable("language") Language language, @PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok(editorService.getLexEntry(language, id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/lex_entries")
+    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, LexEntry lexEntry) {
+        try {
+            return ResponseEntity.ok(editorService.insert(language, lexEntry));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/accept_version")
+    ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
+        try {
+            return ResponseEntity.ok(editorService.accept(language, entry, version));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/reject_version")
+    ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
+        try {
+            return ResponseEntity.ok(editorService.reject(language, entry, version));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/drop_entry")
+    ResponseEntity<?> dropEntry(@PathVariable("language") Language language, LexEntry entry) {
+        try {
+            return ResponseEntity.ok(editorService.drop(language, entry));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/modify_and_accept_version")
+    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion baseVersion, LemmaVersion modifiedVersion) {
+        try {
+            return ResponseEntity.ok(editorService.acceptAfterUpdate(language, entry, baseVersion, modifiedVersion));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/modify_version")
+    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion modifiedVersion) {
+        try {
+            return ResponseEntity.ok(editorService.update(language, entry, modifiedVersion));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/drop_outdated_history")
+    ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, LexEntry entry) {
+        try {
+            return ResponseEntity.ok(editorService.dropOutdatedHistory(language, entry));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/search")
+    ResponseEntity<?> searchLexEntries(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
+        try {
+            return ResponseEntity.ok(editorService.search(language, searchCriteria, pagination));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @PostMapping("/update_order")
+    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
+        try {
+            return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, ordered));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    // TODO: authorization
+    @GetMapping("/get_order")
+    ResponseEntity<?> getLexEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
+        try {
+            return ResponseEntity.ok(editorService.getOrder(language, lemma, dictionaryLanguage));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+    
+    @GetMapping("/search_export")
+    public void exportBySearchQuery(@PathVariable("language") Language language, Set<String> fields, SearchCriteria query) {
+        try {
+            editorService.export(language, fields, query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/lex_entries_export")
+    public void exportByEditorQuery(@PathVariable("language") Language language, Set<String> fields, EditorQuery query) {
+        try {
+            editorService.export(language, fields, query);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

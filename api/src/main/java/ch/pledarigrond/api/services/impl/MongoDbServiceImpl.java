@@ -5,6 +5,7 @@ import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.Constants;
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -128,9 +129,9 @@ public class MongoDbServiceImpl implements MongoDbService {
     }
 
     @Override
-    public List<LexEntry> updateOrder(Language language, boolean firstLang, List<LemmaVersion> ordered) throws Exception {
+    public List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception {
         String login = getUserLogin();
-        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(language, firstLang, ordered).setLogin(login), language);
+        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(language, dictionaryLanguage, ordered).setLogin(login), language);
         luceneService.updateAll(language, modified);
         return modified;
     }
