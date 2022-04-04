@@ -73,11 +73,7 @@ public class Converter {
 			entryValues.keySet().removeAll(LemmaVersion.MAALR_KEYS);
 			Map<String, String> maalrValues = new HashMap(doc);
 			maalrValues.keySet().retainAll(LemmaVersion.MAALR_KEYS);
-			Object timestampObject = doc.remove(LemmaVersion.TIMESTAMP);
-			long timeStamp = 0L;
-			if (timestampObject instanceof Integer) {
-				timeStamp = ((Integer) timestampObject).longValue();
-			}
+			Long timeStamp = (Long) doc.remove(LemmaVersion.TIMESTAMP);
 			LemmaVersion lemmaVersion = new LemmaVersion();
 			lemmaVersion.getEntryValues().putAll(entryValues);
 			lemmaVersion.getMaalrValues().putAll(maalrValues);
