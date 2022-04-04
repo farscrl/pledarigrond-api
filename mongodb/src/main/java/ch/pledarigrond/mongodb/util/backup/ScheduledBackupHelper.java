@@ -53,6 +53,7 @@ public class ScheduledBackupHelper extends AbstractBackupHelper {
 		LOG.info("backup file name created: {}", backupFileName);
 
 		File backupFile = buildBackup(pgEnvironment.getBackupLocation(), backupFileName, dbName);
+		backupFile.mkdirs();
 		LOG.info("backup file created: {}", backupFile.getAbsolutePath());
 
 		if (valid(backupFile, dbName)) {

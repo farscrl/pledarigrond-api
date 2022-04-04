@@ -51,8 +51,11 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
 		String cronExpression = DbSelector.getDbCronByLanguage(pgEnvironment, language);
 
+		File backupFile = new File(pgEnvironment.getBackupLocation() + dbName + "/");
+		backupFile.mkdirs();
+
 		return new BackupInfos(list)
-				.setBackupLocation(pgEnvironment.getBackupLocation() + dbName + "/")
+				.setBackupLocation(backupFile.getPath())
 				.setTriggerTime(cronExpression)
 				.setBackupNums(pgEnvironment.getBackupNumber());
 	}
