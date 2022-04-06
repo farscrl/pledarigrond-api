@@ -113,7 +113,7 @@ public class LuceneIndex {
 		langAIndexBuilder = new SimplePrefixQueryBuilder();
 		langAIndexBuilder.setColumn("DStichwort");
 		langBIndexBuilder = new SimplePrefixQueryBuilder();
-		langBIndexBuilder.setColumn("DStichwort"); // TODO: Should this be "RStichwort"?
+		langBIndexBuilder.setColumn("RStichwort");
 		exactMatchesLangA = new ExactMatchQueryBuilder();
 		exactMatchesLangA.setColumn("DStichwort");
 		exactMatchesLangB = new ExactMatchQueryBuilder();

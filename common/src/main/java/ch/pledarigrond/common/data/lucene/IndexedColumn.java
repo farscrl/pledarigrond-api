@@ -39,6 +39,8 @@ public class IndexedColumn {
 	
 	private FieldType type;
 
+	private boolean whitespaceAnalyzer;
+
 	private boolean lowerCase;
 
 	public IndexedColumn() {
@@ -57,51 +59,7 @@ public class IndexedColumn {
 	public String toString() {
 		return "IndexedItem [source=" + columnName + ", dest=" + indexFieldName + ", stored="
 				+ stored + ", analyzed=" + analyzed + ", type=" + type
-				+ ", lowerCase="
+				+ ", whitespaceAnalyzer=" + whitespaceAnalyzer + ", lowerCase="
 				+ lowerCase + "]";
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (analyzed ? 1231 : 1237);
-		result = prime * result + ((indexFieldName == null) ? 0 : indexFieldName.hashCode());
-		result = prime * result + (lowerCase ? 1231 : 1237);
-		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
-		result = prime * result + (stored ? 1231 : 1237);
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IndexedColumn other = (IndexedColumn) obj;
-		if (analyzed != other.analyzed)
-			return false;
-		if (indexFieldName == null) {
-			if (other.indexFieldName != null)
-				return false;
-		} else if (!indexFieldName.equals(other.indexFieldName))
-			return false;
-		if (lowerCase != other.lowerCase)
-			return false;
-		if (columnName == null) {
-			if (other.columnName != null)
-				return false;
-		} else if (!columnName.equals(other.columnName))
-			return false;
-		if (stored != other.stored)
-			return false;
-		if (type != other.type)
-			return false;
-		return true;
-	}	
-	
 }

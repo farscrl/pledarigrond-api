@@ -49,9 +49,9 @@ public class DefaultSurmiranQueryBuilder extends PgQueryBuilder {
 
 	@Override
 	protected void buildColumnToFieldsMapping() {
-		registerFieldMapping("first", false, FieldType.STRING, true);
-		registerFieldMapping("second",true, FieldType.STRING, false);
-		registerFieldMapping("third", false, FieldType.STRING, true);
+		registerFieldMapping("first", false, FieldType.STRING, true, false);
+		registerFieldMapping("second",true, FieldType.STRING, false, false);
+		registerFieldMapping("third", false, FieldType.STRING, true, false);
 	}
 
 

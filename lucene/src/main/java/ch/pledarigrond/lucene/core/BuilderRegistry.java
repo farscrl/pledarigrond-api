@@ -17,6 +17,7 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
+import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.*;
@@ -55,6 +56,15 @@ public class BuilderRegistry {
             };
         }
         return null;
+    }
+
+    public List<IndexedColumn> getAllRegisteredColumns() {
+        List<IndexedColumn> returnValue = new ArrayList<>();
+        for(PgQueryBuilder builder : builderMap.values()) {
+            returnValue.addAll(builder.getRegisteredColumns());
+        }
+
+        return returnValue;
     }
 
     private void init() {

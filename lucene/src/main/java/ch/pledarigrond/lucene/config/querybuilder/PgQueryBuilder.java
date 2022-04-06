@@ -58,7 +58,7 @@ public abstract class PgQueryBuilder {
 	
 	/**
 	 * Subclasses must override this method and register the index fields they
-	 * require to perform searches, by calling {@link PgQueryBuilder#registerFieldMapping(String, boolean, FieldType, boolean)}
+	 * require performing searches, by calling {@link PgQueryBuilder#registerFieldMapping(String, boolean, FieldType, boolean, boolean)}
 	 * for each individual field.
 	 */
 	protected abstract void buildColumnToFieldsMapping();
@@ -75,23 +75,25 @@ public abstract class PgQueryBuilder {
 	 *
 	 * @see LuceneHelper
 	 */
-	protected void registerFieldMapping(String name, boolean analyzed, FieldType type, boolean lowercase) {
+	protected void registerFieldMapping(String name, boolean analyzed, FieldType type, boolean lowercase, boolean whitespace) {
 		IndexedColumn item = new IndexedColumn();
 		item.setAnalyzed(analyzed);
 		item.setLowerCase(lowercase);
 		item.setStored(false);
 		item.setType(type);
+		item.setWhitespaceAnalyzer(whitespace);
 		item.setColumnName(column);
-		String destField = column + getFieldSuffix(analyzed, lowercase, type);
+		String destField = column + getFieldSuffix(analyzed, whitespace, lowercase, type);
 		finalFieldNames.put(name, destField);
 		item.setIndexFieldName(destField);
 		columns.add(item);
 	}
 	
-	private String getFieldSuffix(boolean analyzed, boolean lowercase,
-			FieldType type) {
+	private String getFieldSuffix(boolean analyzed, boolean lowercase, boolean whitespace, FieldType type) {
 		return "_" +
 				(analyzed ? "a" : "na") +
+				"_" +
+				(whitespace ? "w" : "nw") +
 				"_" +
 				(lowercase ? "l" : "nl") +
 				"_" +

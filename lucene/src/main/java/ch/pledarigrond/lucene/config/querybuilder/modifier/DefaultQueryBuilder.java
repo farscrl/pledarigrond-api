@@ -41,16 +41,13 @@ import java.util.List;
  *
  */
 public class DefaultQueryBuilder extends PgQueryBuilder {
-	
 
 	@Override
 	protected void buildColumnToFieldsMapping() {
-		registerFieldMapping("first", false, FieldType.STRING, true);
-		registerFieldMapping("second",true, FieldType.TEXT, true);
-		registerFieldMapping("third", false, FieldType.STRING, true);
+		registerFieldMapping("first", false, FieldType.STRING, true, false);
+		registerFieldMapping("second",true, FieldType.TEXT, true, false);
+		registerFieldMapping("third", false, FieldType.STRING, true, false);
 	}
-
-
 
 	@Override
 	public List<Query> transform(String value) {

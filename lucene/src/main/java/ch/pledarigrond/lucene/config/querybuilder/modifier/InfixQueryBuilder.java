@@ -36,8 +36,8 @@ public class InfixQueryBuilder extends PgQueryBuilder {
 
 	@Override
 	protected void buildColumnToFieldsMapping() {
-		registerFieldMapping("first", false, FieldType.STRING, true);
-		registerFieldMapping("second",true, FieldType.STRING, false);
+		registerFieldMapping("first", false, FieldType.STRING, true, false);
+		registerFieldMapping("second",true, FieldType.STRING, false, false);
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class ExactMatchQueryBuilder extends PgQueryBuilder {
 
 	@Override
 	protected void buildColumnToFieldsMapping() {
-		registerFieldMapping("first", false, FieldType.STRING, true);
+		registerFieldMapping("first", false, FieldType.STRING, true, false);
 	}
 
 	@Override
