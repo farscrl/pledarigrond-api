@@ -28,7 +28,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -218,7 +217,7 @@ public class EditorServiceImpl implements EditorService {
     public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
         SearchSuggestions suggestions = new SearchSuggestions();
         suggestions.setGrammar(index.getSuggestionsForFieldChoice(language, SuggestionField.GRAMMAR, "", 10000));
-        suggestions.setGenus(index.getSuggestionsForFieldChoice(language, SuggestionField.GENUS, "", 10000));
+        suggestions.setGender(index.getSuggestionsForFieldChoice(language, SuggestionField.GENDER, "", 10000));
         return suggestions;
     }
 

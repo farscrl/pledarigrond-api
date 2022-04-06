@@ -116,17 +116,17 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
-        if (searchCriteria.getGenus() != null) {
-            List<Query> genusQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> builderRegistry.getGenusBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGenus());
-                case ROMANSH -> builderRegistry.getGenusBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGenus());
+        if (searchCriteria.getGender() != null) {
+            List<Query> genderQueries = switch (searchCriteria.getSearchDirection()) {
+                case GERMAN -> builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
+                case ROMANSH -> builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
                 case BOTH -> Stream.concat(
-                        builderRegistry.getGenusBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGenus()).stream(),
-                        builderRegistry.getGenusBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGenus()).stream()
+                        builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()).stream(),
+                        builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender()).stream()
                 ).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : genusQueries) {
+            for (Query tf : genderQueries) {
                 part.add(tf, BooleanClause.Occur.SHOULD);
             }
             finalQuery.add(part, BooleanClause.Occur.MUST);

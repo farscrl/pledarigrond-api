@@ -58,7 +58,7 @@ public class BuilderRegistry {
         return null;
     }
 
-    public PgQueryBuilder getGenusBuilder(SearchDirection direction) {
+    public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RGenus_prefix");
         }
@@ -102,7 +102,7 @@ public class BuilderRegistry {
         builderMap.put("DStichwort_suffix", new SuffixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_exact", new ExactMatchQueryBuilder().setColumn("DStichwort"));
 
-        // Search Genus
+        // Search Gender
         builderMap.put("DGenus_prefix", new PrefixQueryBuilder().setColumn("DGenus"));
         builderMap.put("RGenus_prefix", new PrefixQueryBuilder().setColumn("RGenus"));
 

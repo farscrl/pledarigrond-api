@@ -377,8 +377,8 @@ public class LuceneIndex {
 		SearchCriteria searchCriteria = new SearchCriteria();
 		searchCriteria.setSuggestions(true);
 		Set<String> fields = Set.of();
-		if (suggestionField == SuggestionField.GENUS) {
-			searchCriteria.setGenus(value);
+		if (suggestionField == SuggestionField.GENDER) {
+			searchCriteria.setGender(value);
 			fields = Set.of("DGenus", "RGenus");
 		} else if (suggestionField == SuggestionField.GRAMMAR) {
 			searchCriteria.setGrammar(value);

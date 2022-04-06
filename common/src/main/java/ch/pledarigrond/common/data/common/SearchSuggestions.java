@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class SearchSuggestions {
     private List<String> grammar;
-    private List<String> genus;
+    private List<String> gender;
 }
