@@ -36,6 +36,7 @@ public class InitializationBean implements InitializingBean {
             }
 
             PgUserInfo pgUserInfo = new PgUserInfo(pgEnvironment.getAdminUsername(), pgEnvironment.getAdminPassword());
+            pgUserInfo.setAdmin(true);
 
             userService.insert(pgUserInfo);
         }
