@@ -1,0 +1,29 @@
+package ch.pledarigrond.api.security;
+
+import ch.pledarigrond.common.data.common.Language;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.io.Serializable;
+
+public class LanguagePermissionEvaluator implements PermissionEvaluator {
+    @Override
+    public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        Language language = (Language) targetDomainObject;
+        for (GrantedAuthority grantedAuth : authentication.getAuthorities()) {
+            if (grantedAuth.getAuthority().equals("ROLE_ADMIN")) {
+                return true;
+            }
+            if (grantedAuth.getAuthority().startsWith("ROLE_") && grantedAuth.getAuthority().contains(language.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        return false;
+    }
+}

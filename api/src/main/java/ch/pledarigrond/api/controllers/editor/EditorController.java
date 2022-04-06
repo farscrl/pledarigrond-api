@@ -3,13 +3,13 @@ package ch.pledarigrond.api.controllers.editor;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,7 +26,7 @@ public class EditorController {
     @Autowired
     private LuceneService luceneService;
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries")
     ResponseEntity<?> getLexEntries(@PathVariable("language") Language language, EditorQuery editorQuery, Pagination pagination) {
         try {
@@ -39,7 +39,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries/{id}")
     ResponseEntity<?> getLexEntry(@PathVariable("language") Language language, @PathVariable("id") String id) {
         try {
@@ -50,7 +50,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/lex_entries")
     ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, LexEntry lexEntry) {
         try {
@@ -62,7 +62,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/accept_version")
     ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
         try {
@@ -73,7 +73,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/reject_version")
     ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
         try {
@@ -84,7 +84,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/drop_entry")
     ResponseEntity<?> dropEntry(@PathVariable("language") Language language, LexEntry entry) {
         try {
@@ -95,7 +95,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/modify_and_accept_version")
     ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion baseVersion, LemmaVersion modifiedVersion) {
         try {
@@ -106,7 +106,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/modify_version")
     ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion modifiedVersion) {
         try {
@@ -117,7 +117,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/drop_outdated_history")
     ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, LexEntry entry) {
         try {
@@ -128,7 +128,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/search")
     ResponseEntity<?> searchLexEntries(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
         try {
@@ -139,7 +139,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/update_order")
     ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
         try {
@@ -150,7 +150,7 @@ public class EditorController {
         }
     }
 
-    // TODO: authorization
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/get_order")
     ResponseEntity<?> getLexEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
         try {
@@ -161,6 +161,7 @@ public class EditorController {
         }
     }
 
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/search_export")
     public void exportBySearchQuery(@PathVariable("language") Language language, Set<String> fields, SearchCriteria query) {
         try {
@@ -170,6 +171,7 @@ public class EditorController {
         }
     }
 
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries_export")
     public void exportByEditorQuery(@PathVariable("language") Language language, Set<String> fields, EditorQuery query) {
         try {
@@ -179,6 +181,7 @@ public class EditorController {
         }
     }
 
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/search_suggestions_choice")
     public ResponseEntity<?> getSearchSuggestionsChoice(@PathVariable("language") Language language) {
         try {
@@ -189,6 +192,7 @@ public class EditorController {
         }
     }
 
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/search_suggestions")
     public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language, String field, String searchTerm) {
         if (searchTerm == null) {
