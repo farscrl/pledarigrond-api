@@ -19,6 +19,7 @@ import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -335,7 +336,7 @@ public class LuceneIndex {
 			return new IndexStatistics();
 		}
 	}
-	
+
 	public ArrayList<String> getSuggestionsForField(String fieldName, String value, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
 		Query query = indexManager.getSuggestionsQuery(fieldName, value);
 		if(query == null) {
@@ -370,22 +371,29 @@ public class LuceneIndex {
 			return results;
 		}
 	}
-	
-	public ArrayList<String> getSuggestionsForFieldChoice(String fieldName, String value, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
-		/*MaalrQuery maalrQuery = new MaalrQuery();
-		maalrQuery.setQueryValue(fieldName, value);
-		Query query = indexManager.buildQuery(maalrQuery);
-		if(query == null) {
-			return new ArrayList<String>();
+
+	// p.ex. grammar, gender
+	public ArrayList<String> getSuggestionsForFieldChoice(SuggestionField suggestionField, String value, int limit) throws NoIndexAvailableException, IOException {
+		SearchCriteria searchCriteria = new SearchCriteria();
+		searchCriteria.setSuggestions(true);
+		Set<String> fields = Set.of();
+		if (suggestionField == SuggestionField.GENUS) {
+			searchCriteria.setGenus(value);
+			fields = Set.of("DGenus", "RGenus");
+		} else if (suggestionField == SuggestionField.GRAMMAR) {
+			searchCriteria.setGrammar(value);
+			fields = Set.of("DGrammatik", "RGrammatik");
 		}
-		ArrayList<String> results = new ArrayList<String>();
-		Set<String> allValues = new TreeSet<String>();
-		Set<String> fields = indexManager.getFieldNames(fieldName);
+		Query query = indexManager.buildQuery(searchCriteria);
+		if(query == null) {
+			return new ArrayList<>();
+		}
+		Set<String> allValues = new TreeSet<>();
 		for (String field : fields) {
-			TopDocs docs = indexProvider.getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
 			ScoreDoc[] scoreDocs = docs.scoreDocs;
 			for (int i = 0; i < scoreDocs.length; i++) {
-				Document doc = indexProvider.getSearcher().doc(scoreDocs[i].doc);
+				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
 				// FIXME: Don't split always - instead, implement MaalrFieldType.CSV!
 				for (IndexableField indexedField : indexableFields) {
@@ -398,14 +406,13 @@ public class LuceneIndex {
 				}
 			}
 		}
-		results.addAll(allValues);
+		ArrayList<String> results = new ArrayList<>(allValues);
 		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit));//restrict length to 'limit'
-			return new ArrayList<String>(resultList);
+			List<String> resultList = results.subList(0, Math.min(results.size(), limit)); //restrict length to 'limit'
+			return new ArrayList<>(resultList);
 		} else {
 			return results;
-		}*/
-		return new ArrayList<String>();
+		}
 	}
 
 	public void reloadIndex() throws NoIndexAvailableException {
@@ -475,7 +482,7 @@ public class LuceneIndex {
 	public void delete(final LexEntry entry) throws IOException {
 		try {
 			queue.push(new IndexOperation() {
-				
+
 				@Override
 				public void execute(Language language) throws Exception {
 					luceneIndexFilesystem.get(language).delete(entry);

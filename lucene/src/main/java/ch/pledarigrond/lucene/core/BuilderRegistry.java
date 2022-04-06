@@ -58,6 +58,26 @@ public class BuilderRegistry {
         return null;
     }
 
+    public PgQueryBuilder getGenusBuilder(SearchDirection direction) {
+        if (direction == SearchDirection.ROMANSH) {
+            return builderMap.get("RGenus_prefix");
+        }
+        if (direction == SearchDirection.GERMAN) {
+            return builderMap.get("DGenus_prefix");
+        }
+        return null;
+    }
+
+    public PgQueryBuilder getGrammarBuilder(SearchDirection direction) {
+        if (direction == SearchDirection.ROMANSH) {
+            return builderMap.get("RGrammatik_prefix");
+        }
+        if (direction == SearchDirection.GERMAN) {
+            return builderMap.get("DGrammatik_prefix");
+        }
+        return null;
+    }
+
     public List<IndexedColumn> getAllRegisteredColumns() {
         List<IndexedColumn> returnValue = new ArrayList<>();
         for(PgQueryBuilder builder : builderMap.values()) {
@@ -68,16 +88,26 @@ public class BuilderRegistry {
     }
 
     private void init() {
+        // Search RStichwort
         builderMap.put("RStichwort_normal", new DefaultQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_intern", new InfixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_prefix", new PrefixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_suffix", new SuffixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_exact", new ExactMatchQueryBuilder().setColumn("RStichwort"));
 
+        // Search DStichwort
         builderMap.put("DStichwort_normal", new DefaultQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_intern", new InfixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_prefix", new PrefixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_suffix", new SuffixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_exact", new ExactMatchQueryBuilder().setColumn("DStichwort"));
+
+        // Search Genus
+        builderMap.put("DGenus_prefix", new PrefixQueryBuilder().setColumn("DGenus"));
+        builderMap.put("RGenus_prefix", new PrefixQueryBuilder().setColumn("RGenus"));
+
+        // Search Grammar
+        builderMap.put("DGrammatik_prefix", new PrefixQueryBuilder().setColumn("DGrammatik"));
+        builderMap.put("RGrammatik_prefix", new PrefixQueryBuilder().setColumn("RGrammatik"));
     }
 }

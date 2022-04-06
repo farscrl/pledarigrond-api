@@ -6,6 +6,7 @@ import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -17,6 +18,8 @@ import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.model.PgUserInfo;
 import org.apache.commons.io.IOUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,6 +214,13 @@ public class EditorServiceImpl implements EditorService {
     }
     */
 
+    @Override
+    public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
+        SearchSuggestions suggestions = new SearchSuggestions();
+        suggestions.setGrammar(index.getSuggestionsForFieldChoice(language, SuggestionField.GRAMMAR, "", 10000));
+        suggestions.setGenus(index.getSuggestionsForFieldChoice(language, SuggestionField.GENUS, "", 10000));
+        return suggestions;
+    }
 
     private void addUserInfos(LexEntry lexEntry) {
         List<LemmaVersion> lemmata = lexEntry.getVersionHistory();

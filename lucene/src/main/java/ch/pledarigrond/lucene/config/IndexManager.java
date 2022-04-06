@@ -116,6 +116,46 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
+        if (searchCriteria.getGenus() != null) {
+            List<Query> genusQueries = switch (searchCriteria.getSearchDirection()) {
+                case GERMAN -> builderRegistry.getGenusBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGenus());
+                case ROMANSH -> builderRegistry.getGenusBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGenus());
+                case BOTH -> Stream.concat(
+                        builderRegistry.getGenusBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGenus()).stream(),
+                        builderRegistry.getGenusBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGenus()).stream()
+                ).collect(Collectors.toList());
+            };
+            BooleanQuery part = new BooleanQuery(true);
+            for (Query tf : genusQueries) {
+                part.add(tf, BooleanClause.Occur.SHOULD);
+            }
+            finalQuery.add(part, BooleanClause.Occur.MUST);
+        }
+
+        if (searchCriteria.getGrammar() != null) {
+            List<Query> grammarQueries = switch (searchCriteria.getSearchDirection()) {
+                case GERMAN -> builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
+                case ROMANSH -> builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
+                case BOTH -> Stream.concat(
+                        builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()).stream(),
+                        builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar()).stream()
+                ).collect(Collectors.toList());
+            };
+            BooleanQuery part = new BooleanQuery(true);
+            for (Query tf : grammarQueries) {
+                part.add(tf, BooleanClause.Occur.SHOULD);
+            }
+            finalQuery.add(part, BooleanClause.Occur.MUST);
+        }
+
+        // Unless a user wants to see unverified suggestions, each item returned must be verified.
+        if (!searchCriteria.getSuggestions()) {
+            BooleanQuery bc = new BooleanQuery();
+            bc.add(finalQuery, BooleanClause.Occur.MUST);
+            bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+            finalQuery = bc;
+        }
+
         long prepareEnd = System.nanoTime();
         if(logger.isDebugEnabled()) {
             logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");

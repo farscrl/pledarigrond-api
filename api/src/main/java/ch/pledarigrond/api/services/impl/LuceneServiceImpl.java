@@ -4,6 +4,7 @@ import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -85,11 +86,6 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public ArrayList<String> getSuggestionsForField(Language language, String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
-        return luceneIndexMap.get(language).getSuggestionsForField(fieldName, query, limit);
-    }
-
-    @Override
     public void update(Language language, LexEntry entry) throws IOException {
         luceneIndexMap.get(language).update(entry);
     }
@@ -107,8 +103,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public List<String> getSuggestionsForFieldChoice(Language language, String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
-        return luceneIndexMap.get(language).getSuggestionsForFieldChoice(id, query, limit);
+    public List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, IOException {
+        return luceneIndexMap.get(language).getSuggestionsForFieldChoice(suggestionField, query, limit);
     }
 
     private QueryResult clean(QueryResult result) {

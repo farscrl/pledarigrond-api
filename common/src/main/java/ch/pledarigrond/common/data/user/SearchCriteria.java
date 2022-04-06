@@ -11,4 +11,6 @@ public class SearchCriteria {
     private SearchMethod searchMethod = SearchMethod.NORMAL;
     private Boolean highlight = false;
     private Boolean suggestions = false;
+    private String genus = null;
+    private String grammar = null;
 }

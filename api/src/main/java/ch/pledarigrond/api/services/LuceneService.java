@@ -2,6 +2,7 @@ package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public interface LuceneService {
     /**
@@ -36,13 +38,11 @@ public interface LuceneService {
 
     void addToIndex(Language language, Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException;
 
-    ArrayList<String> getSuggestionsForField(Language language, String fieldName, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
-
     void update(Language language, LexEntry entry) throws IOException;
 
     void delete(Language language, LexEntry entry) throws IOException;
 
     void updateAll(Language language, List<LexEntry> modified) throws IOException;
 
-    List<String> getSuggestionsForFieldChoice(Language language, String id, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
+    List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
 }

@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.EditorService;
+import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
@@ -171,6 +172,16 @@ public class EditorController {
             editorService.export(language, fields, query);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/search_suggestions")
+    public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language) {
+        try {
+            return ResponseEntity.ok(editorService.getSuggestionsForFields(language));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
