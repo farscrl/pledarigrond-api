@@ -44,5 +44,7 @@ public interface LuceneService {
 
     void updateAll(Language language, List<LexEntry> modified) throws IOException;
 
+    List<String> getSuggestionsForField(Language language, String field, String searchTerm, int limit) throws NoIndexAvailableException, IOException, QueryNodeException, ParseException;
+
     List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
 }

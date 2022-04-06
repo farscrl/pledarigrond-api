@@ -13,4 +13,5 @@ public class SearchCriteria {
     private Boolean suggestions = false;
     private String gender = null;
     private String grammar = null;
+    private String subSemantics = null;
 }

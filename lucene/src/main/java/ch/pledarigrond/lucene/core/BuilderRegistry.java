@@ -60,20 +60,30 @@ public class BuilderRegistry {
 
     public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RGenus_prefix");
+            return builderMap.get("RGenus_simple_prefix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DGenus_prefix");
+            return builderMap.get("DGenus_simple_prefix");
         }
         return null;
     }
 
     public PgQueryBuilder getGrammarBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RGrammatik_prefix");
+            return builderMap.get("RGrammatik_simple_prefix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DGrammatik_prefix");
+            return builderMap.get("DGrammatik_simple_prefix");
+        }
+        return null;
+    }
+
+    public PgQueryBuilder getSubSemanticsBuilder(SearchDirection direction) {
+        if (direction == SearchDirection.ROMANSH) {
+            return builderMap.get("DSubsemantik_simple_prefix");
+        }
+        if (direction == SearchDirection.GERMAN) {
+            return builderMap.get("RSubsemantik_simple_prefix");
         }
         return null;
     }
@@ -103,11 +113,15 @@ public class BuilderRegistry {
         builderMap.put("DStichwort_exact", new ExactMatchQueryBuilder().setColumn("DStichwort"));
 
         // Search Gender
-        builderMap.put("DGenus_prefix", new PrefixQueryBuilder().setColumn("DGenus"));
-        builderMap.put("RGenus_prefix", new PrefixQueryBuilder().setColumn("RGenus"));
+        builderMap.put("DGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGenus"));
+        builderMap.put("RGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RGenus"));
 
         // Search Grammar
-        builderMap.put("DGrammatik_prefix", new PrefixQueryBuilder().setColumn("DGrammatik"));
-        builderMap.put("RGrammatik_prefix", new PrefixQueryBuilder().setColumn("RGrammatik"));
+        builderMap.put("DGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGrammatik"));
+        builderMap.put("RGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RGrammatik"));
+        
+        // Search SubSemantics
+        builderMap.put("DSubsemantik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DSubsemantik"));
+        builderMap.put("RSubsemantik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RSubsemantik"));
     }
 }

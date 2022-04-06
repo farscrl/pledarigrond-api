@@ -3,6 +3,7 @@ package ch.pledarigrond.api.controllers.editor;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class EditorController {
 
     @Autowired
     private EditorService editorService;
+
+    @Autowired
+    private LuceneService luceneService;
 
     // TODO: authorization
     @GetMapping("/lex_entries")
@@ -175,10 +179,23 @@ public class EditorController {
         }
     }
 
-    @GetMapping("/search_suggestions")
-    public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language) {
+    @GetMapping("/search_suggestions_choice")
+    public ResponseEntity<?> getSearchSuggestionsChoice(@PathVariable("language") Language language) {
         try {
             return ResponseEntity.ok(editorService.getSuggestionsForFields(language));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/search_suggestions")
+    public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language, String field, String searchTerm) {
+        if (searchTerm == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no value sent");
+        }
+        try {
+            return ResponseEntity.ok(luceneService.getSuggestionsForField(language, field, searchTerm, 10));
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

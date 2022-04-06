@@ -148,6 +148,22 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
+        if (searchCriteria.getSubSemantics() != null) {
+            List<Query> subSemanticsQueries = switch (searchCriteria.getSearchDirection()) {
+                case GERMAN -> builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
+                case ROMANSH -> builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
+                case BOTH -> Stream.concat(
+                        builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()).stream(),
+                        builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics()).stream()
+                ).collect(Collectors.toList());
+            };
+            BooleanQuery part = new BooleanQuery(true);
+            for (Query tf : subSemanticsQueries) {
+                part.add(tf, BooleanClause.Occur.SHOULD);
+            }
+            finalQuery.add(part, BooleanClause.Occur.MUST);
+        }
+
         // Unless a user wants to see unverified suggestions, each item returned must be verified.
         if (!searchCriteria.getSuggestions()) {
             BooleanQuery bc = new BooleanQuery();

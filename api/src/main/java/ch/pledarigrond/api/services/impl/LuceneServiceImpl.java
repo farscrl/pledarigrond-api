@@ -103,6 +103,11 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
+    public List<String> getSuggestionsForField(Language language, String field, String searchTerm, int limit) throws NoIndexAvailableException, IOException, QueryNodeException, ParseException {
+        return luceneIndexMap.get(language).getSuggestionsForField(field, searchTerm, limit);
+    }
+
+    @Override
     public List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, IOException {
         return luceneIndexMap.get(language).getSuggestionsForFieldChoice(suggestionField, query, limit);
     }

@@ -337,14 +337,14 @@ public class LuceneIndex {
 		}
 	}
 
-	public ArrayList<String> getSuggestionsForField(String fieldName, String value, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
-		Query query = indexManager.getSuggestionsQuery(fieldName, value);
+	public ArrayList<String> getSuggestionsForField(String fieldName, String searchTerm, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
+		Query query = indexManager.getSuggestionsQuery(fieldName, searchTerm);
 		if(query == null) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
-		ArrayList<String> results = new ArrayList<String>();
-		Set<String> allValues = new TreeSet<String>();
-		ArrayList<String> fields = new ArrayList<String>();
+		ArrayList<String> results = new ArrayList<>();
+		Set<String> allValues = new TreeSet<>();
+		ArrayList<String> fields = new ArrayList<>();
 		fields.add(fieldName);
 		for (String field : fields) {
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
@@ -356,7 +356,7 @@ public class LuceneIndex {
 				for (IndexableField indexedField : indexableFields) {
 					String[] parts = indexedField.stringValue().split(", ");//TODO: FieldType.CSV has no effect
 					for (String part : parts) {
-						if(part.toLowerCase().startsWith(value.toLowerCase())) {
+						if(part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
 							allValues.add(part);
 						}
 					}
@@ -365,8 +365,8 @@ public class LuceneIndex {
 		}
 		results.addAll(allValues);
 		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit));//restrict length to 'limit'
-			return new ArrayList<String>(resultList);
+			List<String> resultList = results.subList(0, Math.min(results.size(), limit)); //restrict length to 'limit'
+			return new ArrayList<>(resultList);
 		} else {
 			return results;
 		}
