@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -29,13 +30,14 @@ import ch.pledarigrond.mongodb.util.Validator;
 
 public class UpdateOperation extends BaseOperation implements IDBOperation {
 
-	private LexEntry entry;
-	private LemmaVersion newVersion;
+	private final LexEntry entry;
+	private final LemmaVersion newVersion;
 
-	public UpdateOperation(Language language, LexEntry oldEntry, LemmaVersion newEntry) {
+	public UpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry oldEntry, LemmaVersion newEntry) {
 		this.entry = oldEntry;
 		this.newVersion = newEntry;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
@@ -27,11 +28,12 @@ import ch.pledarigrond.mongodb.model.DictionaryStatistics;
 
 public class DeleteOperation extends BaseOperation implements IDBOperation {
 
-	private LexEntry entry;
+	private final LexEntry entry;
 
-	public DeleteOperation(Language language, LexEntry entry) {
+	public DeleteOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry) {
 		this.entry = entry;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

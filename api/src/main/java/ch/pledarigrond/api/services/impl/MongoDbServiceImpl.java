@@ -44,7 +44,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         String login = getUserLogin();
 
         addUserInfo(entry.getCurrent());
-        LexEntry modified = queue.push(new InsertOperation(language, entry).setLogin(login), language);
+        LexEntry modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login), language);
         luceneService.update(language, modified);
     }
 
@@ -55,7 +55,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         validateUserModification(entry.getCurrent(), entry.getMostRecent());
         String login = getUserLogin();
         addUserInfo(entry.getMostRecent());
-        LexEntry modified = queue.push(new InsertOperation(language, entry).setLogin(login).asSuggestion(), language);
+        LexEntry modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
 
@@ -68,7 +68,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         validateUserModification(oldEntry.getCurrent(), newEntry);
         String login = getUserLogin();
         addUserInfo(newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
+        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
 
@@ -78,14 +78,14 @@ public class MongoDbServiceImpl implements MongoDbService {
         if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
         String login = getUserLogin();
         addUserInfo(newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(language, oldEntry, newEntry).setLogin(login), language);
+        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login), language);
         luceneService.update(language, modified);
     }
 
     @Override
     public void delete(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
-        queue.push(new DeleteOperation(language, entry).setLogin(login), language);
+        queue.push(new DeleteOperation(pgEnvironment, language, entry).setLogin(login), language);
         luceneService.delete(language, entry);
     }
 
@@ -102,7 +102,7 @@ public class MongoDbServiceImpl implements MongoDbService {
     @Override
     public void accept(Language language, LexEntry entry, LemmaVersion version) throws Exception {
         String login = getUserLogin();
-        LexEntry modified = queue.push(new AcceptOperation(language, entry, version).setLogin(login), language);
+        LexEntry modified = queue.push(new AcceptOperation(pgEnvironment, language, entry, version).setLogin(login), language);
         luceneService.update(language, modified);
     }
 
@@ -110,28 +110,28 @@ public class MongoDbServiceImpl implements MongoDbService {
     public void reject(Language language, LexEntry entry, LemmaVersion version) throws Exception {
         String login = getUserLogin();
         addUserInfo(version);
-        LexEntry modified = queue.push(new RejectOperation(language, entry, version).setLogin(login), language);
+        LexEntry modified = queue.push(new RejectOperation(pgEnvironment, language, entry, version).setLogin(login), language);
         luceneService.update(language, modified);
     }
 
     @Override
     public void acceptAfterUpdate(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) throws Exception {
         String login = getUserLogin();
-        LexEntry mod = queue.push(new AcceptAfterUpdateOperation(language, entry, suggested, modified).setLogin(login), language);
+        LexEntry mod = queue.push(new AcceptAfterUpdateOperation(pgEnvironment, language, entry, suggested, modified).setLogin(login), language);
         luceneService.update(language, mod);
     }
 
     @Override
     public void dropOutdatedHistory(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
-        LexEntry modified = queue.push(new DropHistoryOperation(language, entry).setLogin(login), language);
+        LexEntry modified = queue.push(new DropHistoryOperation(pgEnvironment, language, entry).setLogin(login), language);
         luceneService.update(language, modified);
     }
 
     @Override
     public List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception {
         String login = getUserLogin();
-        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(language, dictionaryLanguage, ordered).setLogin(login), language);
+        List<LexEntry> modified = queue.pushMulti(new UpdateOrderOperation(pgEnvironment, language, dictionaryLanguage, ordered).setLogin(login), language);
         luceneService.updateAll(language, modified);
         return modified;
     }
@@ -179,6 +179,6 @@ public class MongoDbServiceImpl implements MongoDbService {
     private void addUserInfo(LemmaVersion lemma) {
         String ip = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
         lemma.setIP(ip);
-        //lemma.setCreatorRole(userService.getOrCreateCurrentUser().getRole()); // TODO(CGA): Add again
+        // lemma.setCreatorRole(userService.getCurrentUserOrDefaultUser().getRole()); // TODO(CGA): Add again
     }
 }

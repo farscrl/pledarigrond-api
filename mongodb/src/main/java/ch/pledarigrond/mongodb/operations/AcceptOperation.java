@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -29,10 +30,11 @@ public class AcceptOperation extends BaseOperation implements IDBOperation {
 	private final LexEntry entry;
 	private final LemmaVersion version;
 
-	public AcceptOperation(Language language, LexEntry entry, LemmaVersion version) {
+	public AcceptOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry, LemmaVersion version) {
 		this.entry = entry;
 		this.version = version;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

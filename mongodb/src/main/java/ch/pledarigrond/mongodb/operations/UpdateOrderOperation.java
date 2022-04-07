@@ -43,11 +43,12 @@ public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 	private final long timeStamp;
 	private final Language language;
 
-	public UpdateOrderOperation(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
+	public UpdateOrderOperation(PgEnvironment pgEnvironment, Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
 		this.items = ordered;
 		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
 		this.timeStamp = System.nanoTime();
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

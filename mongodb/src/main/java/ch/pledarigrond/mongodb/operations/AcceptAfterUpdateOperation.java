@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -31,11 +32,12 @@ public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOper
 	private final LemmaVersion modified;
 	private final LemmaVersion suggested;
 
-	public AcceptAfterUpdateOperation(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) {
+	public AcceptAfterUpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) {
 		this.entry = entry;
 		this.suggested = suggested;
 		this.modified = modified;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

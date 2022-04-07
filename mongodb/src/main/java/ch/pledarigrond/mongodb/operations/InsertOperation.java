@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -29,11 +30,12 @@ import ch.pledarigrond.mongodb.util.Validator;
 
 public class InsertOperation extends BaseOperation {
 
-	private LexEntry entry;
+	private final LexEntry entry;
 
-	public InsertOperation(Language language, LexEntry entry) {
+	public InsertOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry) {
 		this.entry = entry;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

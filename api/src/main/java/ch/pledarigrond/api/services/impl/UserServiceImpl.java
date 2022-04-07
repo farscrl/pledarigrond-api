@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private PgEnvironment pgEnvironment;
+    private final PgEnvironment pgEnvironment;
 
     public UserServiceImpl(PgEnvironment pgEnvironment) {
         this.pgEnvironment = pgEnvironment;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
         String name = "guest@pledarigrond.ch";
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             name = SecurityContextHolder.getContext().getAuthentication().getName();
+        } else {
+            name = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
         }
 
         try {

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package ch.pledarigrond.mongodb.operations;
 
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
@@ -27,13 +28,14 @@ import ch.pledarigrond.mongodb.model.DictionaryStatistics;
 
 public class RejectOperation extends BaseOperation implements IDBOperation {
 
-	private LexEntry entry;
-	private LemmaVersion version;
+	private final LexEntry entry;
+	private final LemmaVersion version;
 
-	public RejectOperation(Language language, LexEntry entry, LemmaVersion version) {
+	public RejectOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry, LemmaVersion version) {
 		this.entry = entry;
 		this.version = version;
 		this.language = language;
+		this.pgEnvironment = pgEnvironment;
 	}
 
 	@Override

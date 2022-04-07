@@ -22,11 +22,9 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.mongodb.IDBOperation;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseOperation implements IDBOperation {
 
-	@Autowired
 	PgEnvironment pgEnvironment;
 
 	private final long timeStamp;
