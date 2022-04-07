@@ -539,6 +539,16 @@ public class Database {
 		int counter = 0;
 		while (xsr.nextTag() == XMLStreamConstants.START_ELEMENT) {
 			LexEntry entry = (LexEntry) unmarshaller.unmarshal(xsr);
+			entry.getVersionHistory().forEach(lemmaVersion -> {
+				HashMap<String, String> values = lemmaVersion.getEntryValues();
+				String flexType = values.get(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
+				if (flexType != null) {
+					values.put(LemmaVersion.RM_FLEX_TYPE, flexType);
+				}
+				values.remove(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
+				values.remove(LemmaVersion.OVERLAY_LANG_DE__DEPRECATED);
+				lemmaVersion.setEntryValues(values);
+			});
 			toInsert.add(new Document(Converter.convertLexEntry(entry)));
 			counter++;
 			if (counter % 10000 == 0) {
