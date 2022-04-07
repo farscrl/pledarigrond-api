@@ -33,8 +33,7 @@ import java.util.List;
 
 public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 
-	@Autowired
-	private PgEnvironment pgEnvironment;
+	private final PgEnvironment pgEnvironment;
 
 	private final List<LemmaVersion> items;
 	private final String sortField;

@@ -52,13 +52,6 @@ public class ModifyController {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error.");
         }
-        LexEntry lexEntry = new LexEntry(newVersion);
-        try {
-            mongoDbService.suggestNewEntry(language, lexEntry);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid query.");
-        }
 
         try {
             BasicDBObject updated = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(id);

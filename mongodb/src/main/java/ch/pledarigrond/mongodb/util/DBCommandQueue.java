@@ -25,31 +25,29 @@ import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.*;
 
 public class DBCommandQueue {
-
 	private final ExecutorService executor;
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private static DBCommandQueue instance;
 
-	@Autowired
-	private PgEnvironment pgEnvironment;
+	private final PgEnvironment pgEnvironment;
 
-	public static synchronized DBCommandQueue getInstance() {
+	public static synchronized DBCommandQueue getInstance(PgEnvironment pgEnvironment) {
 		if(instance == null) {
-			instance = new DBCommandQueue();
+			instance = new DBCommandQueue(pgEnvironment);
 		}
 		return instance;
 	}
 	
-	private DBCommandQueue() {
+	private DBCommandQueue(PgEnvironment pgEnvironment) {
+		this.pgEnvironment = pgEnvironment;
 		ThreadFactory factory = new ThreadFactory() {
 			
 			@Override

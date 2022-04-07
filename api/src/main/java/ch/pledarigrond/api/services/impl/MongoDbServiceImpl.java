@@ -24,11 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
 public class MongoDbServiceImpl implements MongoDbService {
-    private DBCommandQueue queue = DBCommandQueue.getInstance();
+    private DBCommandQueue queue;
 
     @Autowired
     private UserService userService;
@@ -38,6 +39,11 @@ public class MongoDbServiceImpl implements MongoDbService {
 
     @Autowired
     private PgEnvironment pgEnvironment;
+
+    @PostConstruct
+    public void init() {
+        queue = DBCommandQueue.getInstance(pgEnvironment);
+    }
 
     @Override
     public void insert(Language language, LexEntry entry) throws Exception {
