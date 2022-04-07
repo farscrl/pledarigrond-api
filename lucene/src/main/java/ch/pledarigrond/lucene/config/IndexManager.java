@@ -320,11 +320,8 @@ public abstract class IndexManager {
         document.add(new StringField(LemmaVersion.LEXENTRY_ID, lexEntry.getId(), Field.Store.YES));
         document.add(new StringField(LemmaVersion.ID, version.getInternalId()+"", Field.Store.YES));
         document.add(new StringField(LemmaVersion.VERIFICATION, version.getVerification().toString(), Field.Store.YES));
-        if(version.getEntryValue(LemmaVersion.OVERLAY_LANG1) != null) {
-            document.add(new StringField(LemmaVersion.OVERLAY_LANG1, version.getEntryValue(LemmaVersion.OVERLAY_LANG1), Field.Store.YES));
-        }
-        if(version.getEntryValue(LemmaVersion.OVERLAY_LANG2) != null) {
-            document.add(new StringField(LemmaVersion.OVERLAY_LANG2, version.getEntryValue(LemmaVersion.OVERLAY_LANG2), Field.Store.YES));
+        if(version.getEntryValue(LemmaVersion.RM_FLEX_TYPE) != null) {
+            document.add(new StringField(LemmaVersion.RM_FLEX_TYPE, version.getEntryValue(LemmaVersion.RM_FLEX_TYPE), Field.Store.YES));
         }
     }
 
@@ -338,7 +335,6 @@ public abstract class IndexManager {
         lemmaVersion.putMaalrValue(LemmaVersion.LEXENTRY_ID, document.get(LemmaVersion.LEXENTRY_ID));
         lemmaVersion.putMaalrValue(LemmaVersion.ID, document.get(LemmaVersion.ID));
         lemmaVersion.putMaalrValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
-        lemmaVersion.putEntryValue(LemmaVersion.OVERLAY_LANG1, document.get(LemmaVersion.OVERLAY_LANG1));
-        lemmaVersion.putEntryValue(LemmaVersion.OVERLAY_LANG2, document.get(LemmaVersion.OVERLAY_LANG2));
+        lemmaVersion.putEntryValue(LemmaVersion.RM_FLEX_TYPE, document.get(LemmaVersion.RM_FLEX_TYPE));
     }
 }

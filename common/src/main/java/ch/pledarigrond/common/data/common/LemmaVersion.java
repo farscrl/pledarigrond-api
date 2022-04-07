@@ -88,8 +88,9 @@ public class LemmaVersion implements Serializable {
 
 	public static final String EMAIL = "maalr_email";
 
-	public static final String OVERLAY_LANG2 = "maalr_overlay_lang2";
-	public static final String OVERLAY_LANG1 = "maalr_overlay_lang1";
+	public static final String OVERLAY_LANG_RM__DEPRECATED = "maalr_overlay_lang2";
+	public static final String OVERLAY_LANG_DE__DEPRECATED = "maalr_overlay_lang1";
+	public static final String RM_FLEX_TYPE = "rm_flex_type";
 
 	static {
 		MAALR_KEYS = new HashSet<String>();

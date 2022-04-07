@@ -309,19 +309,12 @@ public class LuceneIndex {
 						} catch (Exception e) {
 							unknown++;
 						}
-						String overlayA = document.get(LemmaVersion.OVERLAY_LANG1);
-						if(overlayA != null) {
-							Integer old = byCategory.get(overlayA);
+						String flexType = document.get(LemmaVersion.RM_FLEX_TYPE);
+						if(flexType != null) {
+							Integer old = byCategory.get(flexType);
 							if(old == null) old = 0;
-							byCategory.put(overlayA, old+1);
+							byCategory.put(flexType, old+1);
 						}
-						String overlayB = document.get(LemmaVersion.OVERLAY_LANG2);
-						if(overlayB != null) {
-							Integer old = byCategory.get(overlayB);
-							if(old == null) old = 0;
-							byCategory.put(overlayB, old+1);
-						}
-						
 					}
 					statistics.setOverlayCount(byCategory);
 					statistics.setNumberOfEntries(all);
