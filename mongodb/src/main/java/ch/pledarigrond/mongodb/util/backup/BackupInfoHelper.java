@@ -32,9 +32,12 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 	public BackupInfos getBackupInfos(Language language) {
 		LOG.debug("backup infos called...");
 
+		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
 		List<FileInfo> list = new ArrayList<FileInfo>();
-		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation());
+		File backupFile = new File(pgEnvironment.getBackupLocation() + dbName + "/");
+		backupFile.mkdirs();
 
+		List<File> backupFiles = listBackupFilesAsc(backupFile.getAbsolutePath());
 		try {
 			for (File file : backupFiles) {
 				list.add(new FileInfo().setAbsolutePath(file.getAbsolutePath())
@@ -48,11 +51,7 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 			LOG.error("error occured: ", e);
 		}
 
-		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
 		String cronExpression = DbSelector.getDbCronByLanguage(pgEnvironment, language);
-
-		File backupFile = new File(pgEnvironment.getBackupLocation() + dbName + "/");
-		backupFile.mkdirs();
 
 		return new BackupInfos(list)
 				.setBackupLocation(backupFile.getPath())
