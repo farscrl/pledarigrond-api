@@ -97,6 +97,12 @@ public class PgEnvironment {
 	@Value( "${pg.backup.cron.vallader}")
 	private String backupValladerCron;
 
+	@Value( "${pg.export.location}")
+	private String exportLocation;
+
+	@Value( "${pg.export.cron}")
+	private String exportCron;
+
 	private LuceneConfiguration luceneConfigPuter;
 	private LuceneConfiguration luceneConfigRumantschgrischun;
 	private LuceneConfiguration luceneConfigSurmiran;
