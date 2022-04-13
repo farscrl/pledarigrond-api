@@ -195,7 +195,7 @@ public class Database {
 		if (entry == null || entry.getId() == null) {
 			throw new InvalidEntryException("Cannot delete entry without id!");
 		}
-		entryCollection.deleteOne(eq("_id", entry.getId()));
+		entryCollection.deleteOne(eq("_id", new ObjectId(entry.getId())));
 		logger.info("DELETED: {}/{}", toLogString(entry.getCurrent()), entry.getId());
 	}
 
