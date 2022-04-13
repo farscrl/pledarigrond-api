@@ -3,7 +3,8 @@ package ch.pledarigrond.common.data.common;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,12 +15,12 @@ public class LightLemmaVersion implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 3996120378520043526L;
 
-	private HashMap<String, String> fields;
+	private LinkedHashMap<String, String> fields;
 	
-	private static final HashSet<String> PUBLIC_KEYS;
+	private static final LinkedHashSet<String> PUBLIC_KEYS;
 	
 	static {
-		PUBLIC_KEYS = new HashSet<String>();
+		PUBLIC_KEYS = new LinkedHashSet<String>();
 		PUBLIC_KEYS.add("RStichwort");
 		PUBLIC_KEYS.add("DStichwort");
 		PUBLIC_KEYS.add("RGenus");
@@ -81,7 +82,7 @@ public class LightLemmaVersion implements Serializable {
 	
 	public LightLemmaVersion(LemmaVersion copy) {
 		HashMap<String, String> tmp = copy.getEntryValues();
-		fields = new HashMap<>();
+		fields = new LinkedHashMap<>();
 		for (String key : PUBLIC_KEYS) {
 			String value = tmp.get(key);
 			if(value != null)
@@ -90,7 +91,7 @@ public class LightLemmaVersion implements Serializable {
 	}
 	
 	@XmlElementWrapper(name="fields")
-	public HashMap<String, String> getEntryValues() {
+	public LinkedHashMap<String, String> getEntryValues() {
 		return fields;
 	}
 
