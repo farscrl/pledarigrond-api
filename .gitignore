@@ -2,6 +2,7 @@
 /data/demo
 /data/backup
 /data/lucene_index
+/data/export
 
 .DS_Store
 

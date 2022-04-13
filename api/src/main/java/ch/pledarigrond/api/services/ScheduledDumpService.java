@@ -29,6 +29,24 @@ public class ScheduledDumpService {
     @Autowired
     private PgEnvironment pgEnvironment;
 
+    public File getJsonExportFile(Language language) {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        File dir = new File(pgEnvironment.getExportLocation() + dbName + "/");
+        dir.mkdirs();
+
+        if (dir.listFiles().length > 0) {
+            File file = dir.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.getName().endsWith(".zip");
+                }
+            })[0];
+
+            return file;
+        }
+        return null;
+    }
+
     @Scheduled(cron = "${pg.export.cron}")
     private void exportJSON() throws IOException, NoDatabaseAvailableException, NoSuchAlgorithmException {
         // exportDataForLanguage(Language.PUTER);
@@ -44,8 +62,8 @@ public class ScheduledDumpService {
         File exportDir = new File(pgEnvironment.getExportLocation() + dbName + "/");
         exportDir.mkdirs();
 
-        String fileName = "pledarigrond_export_json.zip";
-        File file = new File(exportDir, fileName);
+        String fileName = getExportFileName(language);
+        File file = new File(exportDir, fileName + ".zip");
         FileOutputStream fos = new FileOutputStream(file, false);
         exportDataJson(fos, fileName, Database.getInstance(dbName).getAll());
     }
@@ -75,5 +93,9 @@ public class ScheduledDumpService {
 
         zipOutputStream.closeEntry();
         zipOutputStream.close();
+    }
+
+    private String getExportFileName(Language language) {
+        return  "pledarigrond_export_json_" + DbSelector.getDbNameByLanguage(pgEnvironment, language);
     }
 }
