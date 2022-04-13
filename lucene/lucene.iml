@@ -53,6 +53,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.16" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.16" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.16" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
   </component>
 </module>

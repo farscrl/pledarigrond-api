@@ -45,6 +45,10 @@ import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -133,7 +137,7 @@ public class LuceneIndex {
 
 
 	
-	public QueryResult query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
+	public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
 		validatePagination(pagination);
 
@@ -155,16 +159,16 @@ public class LuceneIndex {
 			fields[i+1] = new SortField(item, sortTypes.get(item));
 		}
 		sort.setSort(fields);
-		QueryResult result = null;
+		Page<LemmaVersion> result = null;
 
 		int pageSize = pagination.getPageSize();
 		int pageNr = pagination.getPage();
 		long e1 = System.nanoTime();
 		try {
 			long s2 = System.nanoTime();
-			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * pageNr, sort);
+			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
 			long e2 = System.nanoTime();
-			result = toQueryResult(docs, pageSize * (pageNr - 1), pageSize);
+			result = toLemmaVersionPagination(docs, pageNr, pageSize);
 			if(logger.isDebugEnabled()) {
 				logger.debug("Time to build query: " + (e1-s1)/1000000 + ", Time to execute query: " + ((e2-s2)/1000000));
 			}
@@ -194,27 +198,22 @@ public class LuceneIndex {
 		}
 	}
 	
-	private QueryResult toQueryResult(TopDocs docs, int startIndex, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
+	private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
 		final ArrayList<LemmaVersion> results = new ArrayList<LemmaVersion>(pageSize);
 		final ScoreDoc[] scoreDocs = docs.scoreDocs;
 		IndexSearcher searcher = luceneIndexRam.get(language).getSearcher();
-		for (int i = startIndex; i < scoreDocs.length
-				&& i < startIndex + pageSize; i++) {
+		for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
 			Document doc = searcher.doc(scoreDocs[i].doc);
 			LemmaVersion e = indexManager.getLemmaVersion(doc);
 			results.add(e);
 		}
 
-		int currentPage = 1;
-		if (startIndex != 0) {
-			currentPage = (startIndex / pageSize) + 1;
-		}
-
-		return new QueryResult(results, docs.totalHits, pageSize, currentPage);
+		Pageable pageable = PageRequest.of(page, pageSize);
+		return new PageImpl<>(results, pageable, docs.totalHits);
 	}
 
 	
-	public QueryResult queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+	public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		String sortField = null;
 		List<Query> queries = null;
 		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
@@ -235,7 +234,7 @@ public class LuceneIndex {
 			query = bc;
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
 
-			return toQueryResult(docs, 0, pageSize);
+			return toLemmaVersionPagination(docs, 0, pageSize);
 		} catch (IOException e) {
 			throw new BrokenIndexException("Broken index!", e);
 		} catch (InvalidTokenOffsetsException e) {
@@ -243,7 +242,7 @@ public class LuceneIndex {
 		}
 	}
 
-	public QueryResult getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+	public Page<LemmaVersion> getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		String field = null;
 		String sortField = null;
 		List<Query> queries = null;
@@ -274,7 +273,7 @@ public class LuceneIndex {
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
 					new DuplicateFilter(field), Integer.MAX_VALUE,
 					new Sort(new SortField(sortField, Type.STRING)));
-			return toQueryResult(docs, (page - 1) * pageSize, pageSize);
+			return toLemmaVersionPagination(docs, page, pageSize);
 		} catch (IOException e) {
 			throw new BrokenIndexException("Broken index!", e);
 		} catch (InvalidTokenOffsetsException e) {

@@ -17,6 +17,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,8 +43,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public QueryResult query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-        QueryResult result = luceneIndexMap.get(language).query(searchCriteria, pagination);
+    public Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+        Page<LemmaVersion> result = luceneIndexMap.get(language).query(searchCriteria, pagination);
         if (removeInternalData) {
             return clean(result);
         }
@@ -51,8 +52,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public QueryResult queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-        QueryResult result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
+    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+        Page<LemmaVersion> result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
         if (removeInternalData) {
             return clean(result);
         }
@@ -60,8 +61,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public QueryResult getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-        QueryResult result = luceneIndexMap.get(language).getAllStartingWith(searchDirection, prefix, page);
+    public Page<LemmaVersion> getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+        Page<LemmaVersion> result = luceneIndexMap.get(language).getAllStartingWith(searchDirection, prefix, page);
         return clean(result);
     }
 
@@ -112,8 +113,8 @@ public class LuceneServiceImpl implements LuceneService {
         return luceneIndexMap.get(language).getSuggestionsForFieldChoice(suggestionField, query, limit);
     }
 
-    private QueryResult clean(QueryResult result) {
-        List<LemmaVersion> entries = result.getEntries();
+    private Page<LemmaVersion> clean(Page<LemmaVersion> result) {
+        List<LemmaVersion> entries = result.getContent();
         for (LemmaVersion lemma : entries) {
             clean(lemma);
         }

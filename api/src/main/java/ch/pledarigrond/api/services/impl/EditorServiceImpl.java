@@ -102,7 +102,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public QueryResult search(Language language, SearchCriteria searchCriteria, Pagination pagination) throws Exception {
+    public Page<LemmaVersion> search(Language language, SearchCriteria searchCriteria, Pagination pagination) throws Exception {
         return index.query(language, searchCriteria, pagination, false);
     }
 
@@ -124,7 +124,7 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception {
-        return new ArrayList<LemmaVersion>(index.queryExact(language, lemma, dictionaryLanguage, false).getEntries());
+        return new ArrayList<LemmaVersion>(index.queryExact(language, lemma, dictionaryLanguage, false).getContent());
     }
 
     @Override
@@ -281,9 +281,9 @@ public class EditorServiceImpl implements EditorService {
         }
         writer.write("\n");
         while(true) {
-            QueryResult result = index.query(language, query, pagination, false);
-            if(result == null ||result.getEntries() == null || result.getEntries().size() == 0) break;
-            List<LemmaVersion> entries = result.getEntries();
+            Page<LemmaVersion> result = index.query(language, query, pagination, false);
+            if(result == null || result.getContent().size() == 0) break;
+            List<LemmaVersion> entries = result.getContent();
             for (LemmaVersion version : entries) {
                 write(writer, version, fields);
                 writer.write("\n");

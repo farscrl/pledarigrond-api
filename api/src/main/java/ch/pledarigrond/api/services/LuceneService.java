@@ -13,6 +13,7 @@ import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,14 +22,12 @@ import java.util.List;
 import java.util.Set;
 
 public interface LuceneService {
-    /**
-     * Queries the index and returns the result in form of a {@link QueryResult}.
-     */
-    QueryResult query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+    Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
-    QueryResult getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
+    Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
+
+    Page<LemmaVersion> getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
 
     IndexStatistics getIndexStatistics(Language language);
 

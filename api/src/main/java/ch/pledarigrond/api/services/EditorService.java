@@ -30,7 +30,7 @@ public interface EditorService {
 
     LexEntry dropOutdatedHistory(Language language, LexEntry entry) throws Exception;
 
-    QueryResult search(Language language, SearchCriteria maalrQuery, Pagination pagination) throws Exception;
+    Page<LemmaVersion> search(Language language, SearchCriteria maalrQuery, Pagination pagination) throws Exception;
 
     LexEntry getLexEntry(Language language, String entryId) throws Exception;
 
