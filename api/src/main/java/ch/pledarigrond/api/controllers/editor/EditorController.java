@@ -129,7 +129,7 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/search")
+    @GetMapping("/search")
     ResponseEntity<?> searchLexEntries(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
         try {
             return ResponseEntity.ok(editorService.search(language, searchCriteria, pagination));
