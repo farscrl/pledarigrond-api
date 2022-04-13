@@ -10,9 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +43,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries/{id}")
-    ResponseEntity<?> getLexEntry(@PathVariable("language") Language language, @PathVariable("id") String id) {
+    ResponseEntity<?> getLexEntry(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String id) {
         try {
             return ResponseEntity.ok(editorService.getLexEntry(language, id));
         } catch (Exception e) {
@@ -52,7 +54,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/lex_entries")
-    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, LexEntry lexEntry) {
+    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, @RequestBody LexEntry lexEntry) {
         try {
             return ResponseEntity.ok(editorService.insert(language, lexEntry));
 
@@ -63,9 +65,13 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/accept_version")
-    ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
+    @PostMapping("/lex_entries/{id}/accept_version")
+    ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion version) {
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(editorService.accept(language, entry, version));
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,9 +80,13 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/reject_version")
-    ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion version) {
+    @PostMapping("/lex_entries/{id}/reject_version")
+    ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion version) {
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(editorService.reject(language, entry, version));
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,9 +95,16 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/drop_entry")
-    ResponseEntity<?> dropEntry(@PathVariable("language") Language language, LexEntry entry) {
+    @DeleteMapping("/lex_entries/{id}")
+    ResponseEntity<?> dropEntry(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
+        if (lexEntryId == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(editorService.drop(language, entry));
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,9 +113,14 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/modify_and_accept_version")
-    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion baseVersion, LemmaVersion modifiedVersion) {
+    @PostMapping("/lex_entries/{id}/modify_and_accept_version")
+    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion modifiedVersion) {
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            LemmaVersion baseVersion = entry.getMostRecent();
             return ResponseEntity.ok(editorService.acceptAfterUpdate(language, entry, baseVersion, modifiedVersion));
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,9 +129,13 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/modify_version")
-    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, LexEntry entry, LemmaVersion modifiedVersion) {
+    @PostMapping("/lex_entries/{id}/modify_version")
+    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion modifiedVersion) {
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(editorService.update(language, entry, modifiedVersion));
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,9 +144,13 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/drop_outdated_history")
-    ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, LexEntry entry) {
+    @PostMapping("/lex_entries/{id}/drop_outdated_history")
+    ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
         try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(editorService.dropOutdatedHistory(language, entry));
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +171,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/update_order")
-    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) {
+    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @RequestBody List<LemmaVersion> ordered) {
         try {
             return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, ordered));
         } catch (Exception e) {
@@ -162,8 +192,8 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @GetMapping("/search_export")
-    public void exportBySearchQuery(@PathVariable("language") Language language, Set<String> fields, SearchCriteria query) {
+    @PostMapping("/search_export")
+    public void exportBySearchQuery(@PathVariable("language") Language language, SearchCriteria query, Set<String> fields) {
         try {
             editorService.export(language, fields, query);
         } catch (Exception e) {
