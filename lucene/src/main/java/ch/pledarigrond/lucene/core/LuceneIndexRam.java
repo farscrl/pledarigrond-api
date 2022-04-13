@@ -116,7 +116,10 @@ import java.util.Set;
 		}
 	}
 	
-	private IndexWriter initIndexWriter() throws IOException {
+	private IndexWriter initIndexWriter() throws IOException, NoIndexAvailableException {
+		if (ram == null) {
+			this.loadIndex();
+		}
 		IndexWriterConfig writerConfig = new IndexWriterConfig(LuceneHelper.CURRENT, LuceneHelper.newAnalyzer());
 		writerConfig.setOpenMode(OpenMode.APPEND);
 		writerConfig.setRAMBufferSizeMB(512.0);
@@ -124,7 +127,7 @@ import java.util.Set;
 		return writer;
 	}
 
-	void update(LexEntry entry) throws IOException {
+	void update(LexEntry entry) throws IOException, NoIndexAvailableException {
 		IndexWriter writer = initIndexWriter();
 		Term queryTerm = new Term(LexEntry.ID, entry.getId());
 		writer.deleteDocuments(queryTerm);
@@ -155,7 +158,7 @@ import java.util.Set;
 		return docs;
 	}
 
-	void delete(LexEntry entry) throws IOException {
+	void delete(LexEntry entry) throws IOException, NoIndexAvailableException {
 		IndexWriter writer = initIndexWriter();
 		Term queryTerm = new Term(LexEntry.ID, entry.getId());
 		writer.deleteDocuments(queryTerm);
