@@ -291,12 +291,10 @@ public class Database {
 		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime + ", " + Arrays.toString(states) + ", " + pageSize + ", " + page + ", " + orderField + ", " + ascending);
 		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, pageSize, page, orderField, ascending);
 		List<LexEntry> results = new ArrayList<LexEntry>();
-		int count = 0;
 		while (cursor.hasNext()) {
 			DBObject next = new BasicDBObject(cursor.next());
 			LexEntry entry = Converter.convertToLexEntry(next);
 			results.add(entry);
-			count += 1;
 		}
 		cursor.close();
 		Pageable pageable = PageRequest.of(page, pageSize);

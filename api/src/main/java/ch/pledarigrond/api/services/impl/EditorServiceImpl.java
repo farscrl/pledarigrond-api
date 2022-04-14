@@ -129,7 +129,7 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public String export(Language language, Set<String> fields, EditorQuery query) throws NoDatabaseAvailableException, IOException {
-        File dir = new File("exports");
+        File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
         Timer timer = new Timer();
@@ -148,9 +148,8 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public String export(Language language, Set<String> fields, SearchCriteria query)
-            throws Exception {
-        File dir = new File("exports");
+    public String export(Language language, Set<String> fields, SearchCriteria query) throws Exception {
+        File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
         Timer timer = new Timer();
@@ -170,7 +169,7 @@ public class EditorServiceImpl implements EditorService {
 
     @RequestMapping("/editor/download/{fileName}.html")
     public void export(Language language, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
-        File dir = new File("exports");
+        File dir = new File(pgEnvironment.getTempExportLocation());
         File file = new File(dir, fileName);
         ServletOutputStream out = response.getOutputStream();
         if(!file.exists()) {
@@ -238,7 +237,7 @@ public class EditorServiceImpl implements EditorService {
 
     private void export(Language language, Set<String> fields, EditorQuery query, File dest) throws NoDatabaseAvailableException, IOException {
         Pagination pagination = new Pagination();
-        pagination.setPage(1);
+        pagination.setPageSize(100);
         ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(dest));
         zout.putNextEntry(new ZipEntry("exported.tsv"));
         OutputStream out = new BufferedOutputStream(zout);
@@ -259,7 +258,7 @@ public class EditorServiceImpl implements EditorService {
                 write(writer, version, fields);
                 writer.write("\n");
             }
-            pagination.setPage(pagination.getPage() + pagination.getPageSize());
+            pagination.setPage(pagination.getPage() + 1);
         }
         writer.flush();
         zout.closeEntry();
@@ -268,8 +267,7 @@ public class EditorServiceImpl implements EditorService {
 
     public void export(Language language, Set<String> fields, SearchCriteria query, File dest) throws IOException, InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
         Pagination pagination = new Pagination();
-        pagination.setPage(0);
-        pagination.setPageSize(50);
+        pagination.setPageSize(100);
 
         ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(dest));
         zout.putNextEntry(new ZipEntry("exported.tsv"));

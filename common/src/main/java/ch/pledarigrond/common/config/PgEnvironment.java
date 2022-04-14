@@ -100,6 +100,9 @@ public class PgEnvironment {
 	@Value( "${pg.export.location}")
 	private String exportLocation;
 
+	@Value("${pg.export.temp}")
+	private String tempExportLocation;
+
 	@Value( "${pg.export.cron}")
 	private String exportCron;
 

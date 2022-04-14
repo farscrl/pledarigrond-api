@@ -1,10 +1,13 @@
 package ch.pledarigrond.api.controllers.editor;
 
+import ch.pledarigrond.api.dtos.FieldsList;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,9 +17,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("{language}/editor")
@@ -27,6 +34,9 @@ public class EditorController {
 
     @Autowired
     private LuceneService luceneService;
+
+    @Autowired
+    private PgEnvironment pgEnvironment;
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries")
@@ -193,21 +203,31 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/search_export")
-    public void exportBySearchQuery(@PathVariable("language") Language language, SearchCriteria query, Set<String> fields) {
+    void exportBySearchQuery(@PathVariable("language") Language language, SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
-            editorService.export(language, fields, query);
+            String fileName = editorService.export(language, fields.fields, query);
+            File export = new File(pgEnvironment.getTempExportLocation() + fileName);
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
+            stream(response, export);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @GetMapping("/lex_entries_export")
-    public void exportByEditorQuery(@PathVariable("language") Language language, Set<String> fields, EditorQuery query) {
+    @PostMapping("/lex_entries_export")
+    void exportByEditorQuery(@PathVariable("language") Language language, EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
-            editorService.export(language, fields, query);
+            String fileName = editorService.export(language, fields.fields, query);
+            File export = new File(pgEnvironment.getTempExportLocation() + fileName);
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
+            stream(response, export);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -234,5 +254,11 @@ public class EditorController {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
+
+    private void stream(HttpServletResponse response, File export) throws IOException {
+        InputStream is = new FileInputStream(export);
+        IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
     }
 }
