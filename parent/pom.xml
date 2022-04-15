@@ -23,6 +23,7 @@
         <module>../common</module>
         <module>../lucene</module>
         <module>../mongodb</module>
+        <module>../inflection</module>
     </modules>
 
     <profiles>

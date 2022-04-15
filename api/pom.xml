@@ -37,6 +37,11 @@
 			<artifactId>lucene</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ch.pledarigrond</groupId>
+			<artifactId>inflection</artifactId>
+			<version>${project.version}</version>
+		</dependency>
         <dependency>
             <groupId>ch.pledarigrond</groupId>
             <artifactId>mongodb</artifactId>

@@ -11,11 +11,13 @@
         <module name="api" />
         <module name="common" />
         <module name="mongodb" />
+        <module name="inflection" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="17" />
       <module name="common" target="17" />
+      <module name="inflection" target="17" />
       <module name="lucene" target="17" />
       <module name="monbo-db" target="17" />
       <module name="mongodb" target="17" />
