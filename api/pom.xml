@@ -72,7 +72,12 @@
 			<artifactId>json</artifactId>
 			<version>20220320</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
