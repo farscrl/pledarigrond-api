@@ -84,7 +84,7 @@ public class IndexManagerSurmiran extends IndexManager {
     @Override
     protected List<String> getEditorFields() {
         return Arrays.asList(
-            "DGrammatik", "DGenus", "DSubsemantik", "Bearbeitungshinweis",
+            "DGrammatik", "DGenus", "DSubsemantik", "categories",
             "RGrammatik", "RGenus", "RSubsemantik"
         );
     }
