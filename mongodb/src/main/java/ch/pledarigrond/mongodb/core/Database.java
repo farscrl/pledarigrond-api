@@ -544,6 +544,7 @@ public class Database {
 				// clean up tasks (can be disabled if migration is done)
 				replaceOverlayFieldNames(values);
 				replaceOldFieldNames(values);
+				replaceRedirects(values);
 
 				lemmaVersion.setLemmaValues(values);
 			});
@@ -693,5 +694,19 @@ public class Database {
 			values.put(LemmaVersion.CATEGORIES, categoryOld);
 		}
 		values.remove(LemmaVersion.CATEGORIES__DEPRECATED);
+	}
+
+	private void replaceRedirects(HashMap<String, String> values) {
+		String redirectDeOld = values.get(LemmaVersion.DE_REDIRECT__DEPRECATED);
+		if (redirectDeOld != null) {
+			values.put(LemmaVersion.DE_REDIRECT, redirectDeOld.replace("searchPhrase=", ""));
+		}
+		values.remove(LemmaVersion.DE_REDIRECT__DEPRECATED);
+
+		String redirectRmOld = values.get(LemmaVersion.RM_REDIRECT__DEPRECATED);
+		if (redirectRmOld != null) {
+			values.put(LemmaVersion.RM_REDIRECT, redirectRmOld.replace("searchPhrase=", ""));
+		}
+		values.remove(LemmaVersion.RM_REDIRECT__DEPRECATED);
 	}
 }
