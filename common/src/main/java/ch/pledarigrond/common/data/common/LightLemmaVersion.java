@@ -81,7 +81,7 @@ public class LightLemmaVersion implements Serializable {
 	}
 	
 	public LightLemmaVersion(LemmaVersion copy) {
-		HashMap<String, String> tmp = copy.getEntryValues();
+		HashMap<String, String> tmp = copy.getLemmaValues();
 		fields = new LinkedHashMap<>();
 		for (String key : PUBLIC_KEYS) {
 			String value = tmp.get(key);

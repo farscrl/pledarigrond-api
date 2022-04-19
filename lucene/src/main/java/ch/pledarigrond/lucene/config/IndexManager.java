@@ -181,7 +181,7 @@ public abstract class IndexManager {
 
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
         Document doc = new Document();
-        Set<Map.Entry<String, String>> entries = lemmaVersion.getEntryValues().entrySet();
+        Set<Map.Entry<String, String>> entries = lemmaVersion.getLemmaValues().entrySet();
         for (Map.Entry<String, String> entry : entries) {
             if(ignored.contains(entry.getKey())) continue;
             List<IndexableField> fields = toField(entry.getKey(), entry.getValue());
@@ -194,7 +194,7 @@ public abstract class IndexManager {
                 doc.add(field);
             }
         }
-        addMaalrFieldsToDocument(lexEntry, lemmaVersion, doc);
+        addPgFieldsToDocument(lexEntry, lemmaVersion, doc);
         return doc;
     }
 
@@ -212,7 +212,7 @@ public abstract class IndexManager {
             }
             lv.putEntryValue(fieldName, sb.toString());
         }
-        addMaalrFieldsToLemmaVersion(document, lv);
+        addPgFieldsToLemmaVersion(document, lv);
         return lv;
     }
 
@@ -310,31 +310,35 @@ public abstract class IndexManager {
     }
 
     /**
-     * Helper method to add the default maalr fields of a {@link LemmaVersion} to a lucene {@link Document}.
+     * Helper method to add the default pg fields of a {@link LemmaVersion} to a lucene {@link Document}.
      * @param lexEntry
      * @param version
      * @param document
      */
-    protected void addMaalrFieldsToDocument(LexEntry lexEntry, LemmaVersion version, Document document) {
+    protected void addPgFieldsToDocument(LexEntry lexEntry, LemmaVersion version, Document document) {
         document.add(new StringField(LexEntry.ID, lexEntry.getId(), Field.Store.YES));
         document.add(new StringField(LemmaVersion.LEXENTRY_ID, lexEntry.getId(), Field.Store.YES));
         document.add(new StringField(LemmaVersion.ID, version.getInternalId()+"", Field.Store.YES));
         document.add(new StringField(LemmaVersion.VERIFICATION, version.getVerification().toString(), Field.Store.YES));
-        if(version.getEntryValue(LemmaVersion.RM_FLEX_TYPE) != null) {
-            document.add(new StringField(LemmaVersion.RM_FLEX_TYPE, version.getEntryValue(LemmaVersion.RM_FLEX_TYPE), Field.Store.YES));
+        if(version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE) != null) {
+            document.add(new StringField(LemmaVersion.RM_INFLECTION_TYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE), Field.Store.YES));
+        }
+        if(version.getEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE) != null) {
+            document.add(new StringField(LemmaVersion.RM_INFLECTION_SUBTYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE), Field.Store.YES));
         }
     }
 
     /**
-     * Helper method to add default maalr fields from a lucene {@link Document} to a {@link LemmaVersion}.
+     * Helper method to add default PG fields from a lucene {@link Document} to a {@link LemmaVersion}.
      * @param document
      * @param lemmaVersion
      */
-    protected void addMaalrFieldsToLemmaVersion(Document document, LemmaVersion lemmaVersion) {
-        lemmaVersion.putMaalrValue(LexEntry.ID, document.get(LexEntry.ID));
-        lemmaVersion.putMaalrValue(LemmaVersion.LEXENTRY_ID, document.get(LemmaVersion.LEXENTRY_ID));
-        lemmaVersion.putMaalrValue(LemmaVersion.ID, document.get(LemmaVersion.ID));
-        lemmaVersion.putMaalrValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
-        lemmaVersion.putEntryValue(LemmaVersion.RM_FLEX_TYPE, document.get(LemmaVersion.RM_FLEX_TYPE));
+    protected void addPgFieldsToLemmaVersion(Document document, LemmaVersion lemmaVersion) {
+        lemmaVersion.putPgValue(LexEntry.ID, document.get(LexEntry.ID));
+        lemmaVersion.putPgValue(LemmaVersion.LEXENTRY_ID, document.get(LemmaVersion.LEXENTRY_ID));
+        lemmaVersion.putPgValue(LemmaVersion.ID, document.get(LemmaVersion.ID));
+        lemmaVersion.putPgValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
+        lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_TYPE, document.get(LemmaVersion.RM_INFLECTION_TYPE));
+        lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE, document.get(LemmaVersion.RM_INFLECTION_SUBTYPE));
     }
 }

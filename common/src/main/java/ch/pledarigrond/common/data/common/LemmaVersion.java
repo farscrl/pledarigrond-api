@@ -60,70 +60,80 @@ public class LemmaVersion implements Serializable {
 		}
 	}
 
-	public static final String TIMESTAMP = "maalr_timestamp";
+	public static final String TIMESTAMP = "pg_timestamp";
+	public static final String TIMESTAMP__DEPRECATED = "maalr_timestamp";
 
-	public static final String CREATOR = "maalr_creator";
+	public static final String CREATOR = "pg_creator";
+	public static final String CREATOR__DEPRECATED = "maalr_creator";
 
 	public static final String ID = "internal_id";
 
 	public static final String LEXENTRY_ID = "entry_id";
 
-	public static final String STATUS = "maalr_status";
+	public static final String STATUS = "pg_status";
+	public static final String STATUS__DEPRECATED = "maalr_status";
 
-	public static final String VERIFICATION = "maalr_verification";
+	public static final String VERIFICATION = "pg_verification";
+	public static final String VERIFICATION__DEPRECATED = "maalr_verification";
 
-	public static final String VERIFIER = "maalr_verifier";
+	public static final String VERIFIER = "pg_verifier";
+	public static final String VERIFIER__DEPRECATED = "maalr_verifier";
 
-	private static final String VOTER = "maalr_voter";
+	public static final Set<String> PG_KEYS;
 
-	public static final Set<String> MAALR_KEYS;
+	public static final String COMMENT = "user_comment";
+	public static final String COMMENT__DEPRECATED = "maalr_comment";
 
-	public static final String COMMENT = "maalr_comment";
+	public static final String IP_ADDRESS = "user_ip";
+	public static final String IP_ADDRESS__DEPRECATED = "maalr_ip";
 
-	public static final String IP_ADDRESS = "maalr_ip";
+	public static final String CREATOR_ROLE = "pg_creator_role";
+	public static final String CREATOR_ROLE__DEPRECATED = "maalr_creator_role";
 
-	public static final String CREATOR_ROLE = "maalr_creator_role";
+	public static final HashSet<String> PUBLIC_PG_KEYS;
 
-	public static final HashSet<String> PUBLIC_MAALR_KEYS;
-
-	public static final String EMAIL = "maalr_email";
+	public static final String EMAIL = "user_email";
+	public static final String EMAIL__DEPRECATED = "maalr_email";
 
 	public static final String OVERLAY_LANG_RM__DEPRECATED = "maalr_overlay_lang2";
 	public static final String OVERLAY_LANG_DE__DEPRECATED = "maalr_overlay_lang1";
-	public static final String RM_FLEX_TYPE = "rm_flex_type";
+	public static final String RM_INFLECTION_TYPE = "RInflectionType";
+	public static final String RM_INFLECTION_SUBTYPE = "RInflectionSubtype";
+
+	public static final String CATEGORIES = "categories";
+	public static final String CATEGORIES__DEPRECATED = "Bearbeitungshinweis";
 
 	static {
-		MAALR_KEYS = new HashSet<String>();
-		MAALR_KEYS.add(TIMESTAMP);
-		MAALR_KEYS.add(CREATOR);
-		MAALR_KEYS.add(ID);
-		MAALR_KEYS.add(STATUS);
-		MAALR_KEYS.add(VOTER);
-		MAALR_KEYS.add(IP_ADDRESS);
-		MAALR_KEYS.add(CREATOR_ROLE);
-		MAALR_KEYS.add(VERIFICATION);
-		MAALR_KEYS.add(VERIFIER);
-		MAALR_KEYS.add(LEXENTRY_ID);
-		PUBLIC_MAALR_KEYS = new HashSet<String>();
-		PUBLIC_MAALR_KEYS.add(ID);
-		PUBLIC_MAALR_KEYS.add(STATUS);
-		PUBLIC_MAALR_KEYS.add(VERIFICATION);
-		PUBLIC_MAALR_KEYS.add(LEXENTRY_ID);
+		PG_KEYS = new HashSet<>();
+		PG_KEYS.add(TIMESTAMP);
+		PG_KEYS.add(CREATOR);
+		PG_KEYS.add(ID);
+		PG_KEYS.add(STATUS);
+		PG_KEYS.add(IP_ADDRESS);
+		PG_KEYS.add(CREATOR_ROLE);
+		PG_KEYS.add(VERIFICATION);
+		PG_KEYS.add(VERIFIER);
+		PG_KEYS.add(LEXENTRY_ID);
+		PUBLIC_PG_KEYS = new HashSet<>();
+		PUBLIC_PG_KEYS.add(ID);
+		PUBLIC_PG_KEYS.add(STATUS);
+		PUBLIC_PG_KEYS.add(VERIFICATION);
+		PUBLIC_PG_KEYS.add(LEXENTRY_ID);
 	}
 
 	private LightUserInfo userInfo;
 
-	private HashMap<String, String> entryValues = new HashMap<String, String>();
-	private HashMap<String, String> maalrValues = new HashMap<String, String>();
+	private HashMap<String, String> lemmaValues = new HashMap<String, String>();
+	private HashMap<String, String> pgValues = new HashMap<String, String>();
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((entryValues == null) ? 0 : entryValues.hashCode());
+				+ ((lemmaValues == null) ? 0 : lemmaValues.hashCode());
 		result = prime * result
-				+ ((maalrValues == null) ? 0 : maalrValues.hashCode());
+				+ ((pgValues == null) ? 0 : pgValues.hashCode());
 		result = prime * result
 				+ ((userInfo == null) ? 0 : userInfo.hashCode());
 		return result;
@@ -138,15 +148,15 @@ public class LemmaVersion implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		LemmaVersion other = (LemmaVersion) obj;
-		if (entryValues == null) {
-			if (other.entryValues != null)
+		if (lemmaValues == null) {
+			if (other.lemmaValues != null)
 				return false;
-		} else if (!entryValues.equals(other.entryValues))
+		} else if (!lemmaValues.equals(other.lemmaValues))
 			return false;
-		if (maalrValues == null) {
-			if (other.maalrValues != null)
+		if (pgValues == null) {
+			if (other.pgValues != null)
 				return false;
-		} else if (!maalrValues.equals(other.maalrValues))
+		} else if (!pgValues.equals(other.pgValues))
 			return false;
 		if (userInfo == null) {
 			if (other.userInfo != null)
@@ -164,22 +174,22 @@ public class LemmaVersion implements Serializable {
 
 	@XmlAttribute
 	public Status getStatus() {
-		if(maalrValues.get(STATUS) == null) return null;
-		return Status.valueOf((String) maalrValues.get(STATUS));
+		if(pgValues.get(STATUS) == null) return null;
+		return Status.valueOf(pgValues.get(STATUS));
 	}
 
 	public void setStatus(Status status) {
-		maalrValues.put(STATUS, status.name());
+		pgValues.put(STATUS, status.name());
 	}
 
 	@XmlAttribute
 	public Verification getVerification() {
-		if(maalrValues.get(VERIFICATION) == null) return null;
-		return Verification.valueOf((String) maalrValues.get(VERIFICATION));
+		if(pgValues.get(VERIFICATION) == null) return null;
+		return Verification.valueOf(pgValues.get(VERIFICATION));
 	}
 
 	public void setVerification(Verification status) {
-		maalrValues.put(VERIFICATION, status.name());
+		pgValues.put(VERIFICATION, status.name());
 	}
 
 	@XmlElement(name="creator")
@@ -192,89 +202,89 @@ public class LemmaVersion implements Serializable {
 	}
 
 	@XmlElementWrapper(name="fields")
-	public HashMap<String, String> getEntryValues() {
-		return entryValues;
+	public HashMap<String, String> getLemmaValues() {
+		return lemmaValues;
 	}
 
 	@XmlTransient
-	public HashMap<String, String> getMaalrValues() {
-		return maalrValues;
+	public HashMap<String, String> getPgValues() {
+		return pgValues;
 	}
 
-	public void setEntryValues(HashMap<String, String> entryValues) {
-		this.entryValues = entryValues;
+	public void setLemmaValues(HashMap<String, String> lemmaValues) {
+		this.lemmaValues = lemmaValues;
 	}
 
 	@XmlAttribute(name="timeStamp")
 	public Long getTimestamp() {
-		if(maalrValues.get(TIMESTAMP) == null) return 0L;
-		return Long.parseLong(maalrValues.get(TIMESTAMP));
+		if(pgValues.get(TIMESTAMP) == null) return 0L;
+		return Long.parseLong(pgValues.get(TIMESTAMP));
 	}
 
 	public void setTimestamp(Long timestamp) {
-		maalrValues.put(TIMESTAMP, timestamp+"");
+		pgValues.put(TIMESTAMP, timestamp+"");
 	}
 
 	@XmlElement(name="userId")
 	public String getUserId() {
-		return (String) maalrValues.get(CREATOR);
+		return (String) pgValues.get(CREATOR);
 	}
 
 	public void setUserId(String userId) {
-		maalrValues.put(CREATOR, userId);
+		pgValues.put(CREATOR, userId);
 	}
 
 	public void setVerifierId(String verifierId) {
-		maalrValues.put(VERIFIER, verifierId);
+		pgValues.put(VERIFIER, verifierId);
 	}
 
 	@XmlElement(name="verifierId")
 	public String getVerifierId() {
-		return maalrValues.get(VERIFIER);
+		return pgValues.get(VERIFIER);
 	}
 
 	@XmlAttribute(name="id")
 	public Integer getInternalId() {
-		String idString = maalrValues.get(ID);
+		String idString = pgValues.get(ID);
 		if(idString == null) return null;
 		Integer id = Integer.parseInt(idString);
 		return id;
 	}
 
 	public void setInternalId(Integer id) {
-		maalrValues.put(ID, id+"");
+		pgValues.put(ID, id+"");
 	}
 
 	public boolean isApproved() {
-		String verification = (String) maalrValues.get(VERIFICATION);
+		String verification = pgValues.get(VERIFICATION);
 		if(verification == null) return false;
 		return Verification.ACCEPTED == Verification.valueOf(verification);
 	}
 
 	@XmlAttribute
 	public String getLexEntryId() {
-		return maalrValues.get(LEXENTRY_ID);
+		return pgValues.get(LEXENTRY_ID);
 	}
 
 	public void setIP(String ip) {
-		maalrValues.put(IP_ADDRESS, ip);
+		pgValues.put(IP_ADDRESS, ip);
 	}
 
 	public void setCreatorRole(EditorRole role) {
 		if(role == null) {
-			maalrValues.put(CREATOR_ROLE, null);
+			pgValues.put(CREATOR_ROLE, null);
 		} else {
-			maalrValues.put(CREATOR_ROLE, role.toString());
+			pgValues.put(CREATOR_ROLE, role.toString());
 		}
 	}
 
 	@XmlAttribute(name="creatorRole")
 	public EditorRole getCreatorRole() {
-		if(maalrValues.get(CREATOR_ROLE) == null) return EditorRole.GUEST;
+		if(pgValues.get(CREATOR_ROLE) == null) return EditorRole.GUEST;
 		try {
-			return EditorRole.valueOf(maalrValues.get(CREATOR_ROLE));
+			return EditorRole.valueOf(pgValues.get(CREATOR_ROLE));
 		} catch (Exception e) {
-			String role = maalrValues.get(CREATOR_ROLE);
+			String role = pgValues.get(CREATOR_ROLE);
 			if (role.equals("ADMIN_5")) { return EditorRole.ADMIN; }
 			if (role.equals("TRUSTED_IN_4")) { return EditorRole.EDITOR; }
 			if (role.equals("TRUSTED_EX_3")) { return EditorRole.GUEST; }
@@ -285,12 +295,12 @@ public class LemmaVersion implements Serializable {
 
 	@XmlAttribute(name="ip")
 	public String getIP() {
-		return maalrValues.get(IP_ADDRESS);
+		return pgValues.get(IP_ADDRESS);
 	}
 
 	public boolean equalData(LemmaVersion other) {
-		Map<String, String> myValues = getEntryValues();
-		Map<String, String> otherValues = other.getEntryValues();
+		Map<String, String> myValues = getLemmaValues();
+		Map<String, String> otherValues = other.getLemmaValues();
 		Set<String> all = new HashSet<String>();
 		all.addAll(myValues.keySet());
 		all.addAll(otherValues.keySet());
@@ -310,33 +320,33 @@ public class LemmaVersion implements Serializable {
 	}
 
 	public String getEntryValue(String key) {
-		return entryValues.get(key);
+		return lemmaValues.get(key);
 	}
 
 	public void putEntryValue(String key, String value) {
-		entryValues.put(key, value);
+		lemmaValues.put(key, value);
 	}
 
 	public void removeEntryValue(String key) {
-		entryValues.remove(key);
+		lemmaValues.remove(key);
 	}
 
-	public void putMaalrValue(String key, String value) {
-		maalrValues.put(key, value);
+	public void putPgValue(String key, String value) {
+		pgValues.put(key, value);
 	}
 
 	@Override
 	public String toString() {
-		return "LemmaVersion [entryValues=" + entryValues + ", maalrValues="
-				+ maalrValues + "]";
+		return "LemmaVersion [entryValues=" + lemmaValues + ", pgValues="
+				+ pgValues + "]";
 	}
 
-	public void setMaalrValues(HashMap<String, String> map) {
-		this.maalrValues = map;
+	public void setPgValues(HashMap<String, String> map) {
+		this.pgValues = map;
 	}
 
 	public void setValue(String key, String value) {
-		entryValues.put(key, value);
+		lemmaValues.put(key, value);
 	}
 
 }

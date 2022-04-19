@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * This query builder generates three lucene-queries from
- * a single {@link MaalrField}, to modify the sort order of
+ * a single field, to modify the sort order of
  * the results of a query: If a user searches for a term (for instance, 
  * 'car'), all exact translations should be listed before any
  * translation which contains the term among others ('car insurance', 

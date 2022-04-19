@@ -30,9 +30,8 @@ import java.util.Map;
 
 /**
  * Converts {@link LexEntry} and {@link LemmaVersion} objects to/from
- * {@link DBObject} objects. FIXME: Separate Maalr entries and user entries, to
- * allow non-string values for Maalr entries. Required for search...
- * 
+ * {@link DBObject} objects.
+ *
  * @return
  */
 public class Converter {
@@ -57,9 +56,9 @@ public class Converter {
 
 	private static BasicDBObject convertLemmaVersion(LemmaVersion lemmaVersion) {
 		BasicDBObject obj = new BasicDBObject();
-		Map<String, String> toStore = new HashMap<String, String>(lemmaVersion.getEntryValues());
-		toStore.keySet().removeAll(LemmaVersion.MAALR_KEYS);
-		toStore.putAll(lemmaVersion.getMaalrValues());
+		Map<String, String> toStore = new HashMap<String, String>(lemmaVersion.getLemmaValues());
+		toStore.keySet().removeAll(LemmaVersion.PG_KEYS);
+		toStore.putAll(lemmaVersion.getPgValues());
 		obj.putAll(toStore);
 		obj.put(LemmaVersion.TIMESTAMP, lemmaVersion.getTimestamp());
 		return obj;
@@ -69,14 +68,14 @@ public class Converter {
 		ArrayList<Document> versions = (ArrayList<Document>) obj.get(LexEntry.VERSIONS);
 		ArrayList<LemmaVersion> list = new ArrayList<LemmaVersion>();
 		for (Document doc : versions) {
-			Map<String, String> entryValues = new HashMap(doc);
-			entryValues.keySet().removeAll(LemmaVersion.MAALR_KEYS);
-			Map<String, String> maalrValues = new HashMap(doc);
-			maalrValues.keySet().retainAll(LemmaVersion.MAALR_KEYS);
+			Map<String, String> lemmaValues = new HashMap(doc);
+			lemmaValues.keySet().removeAll(LemmaVersion.PG_KEYS);
+			Map<String, String> pgValues = new HashMap(doc);
+			pgValues.keySet().retainAll(LemmaVersion.PG_KEYS);
 			Long timeStamp = (Long) doc.remove(LemmaVersion.TIMESTAMP);
 			LemmaVersion lemmaVersion = new LemmaVersion();
-			lemmaVersion.getEntryValues().putAll(entryValues);
-			lemmaVersion.getMaalrValues().putAll(maalrValues);
+			lemmaVersion.getLemmaValues().putAll(lemmaValues);
+			lemmaVersion.getPgValues().putAll(pgValues);
 			lemmaVersion.setTimestamp(timeStamp);
 			list.add(lemmaVersion);
 		}

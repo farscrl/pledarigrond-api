@@ -26,7 +26,6 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import com.mongodb.BasicDBObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +66,8 @@ public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 			System.out.println("Entry " + version.getEntryValue("DStichwort") + " <-> " + version.getEntryValue("RStichwort") + " had sortVal " + version.getEntryValue(sortField) + ", now is " + i + ", sortField is " + sortField);
 			version.setValue(sortField, i+"");
 			LemmaVersion newVersion = new LemmaVersion();
-			newVersion.getEntryValues().putAll(version.getEntryValues());
-			newVersion.getMaalrValues().putAll(version.getMaalrValues());
+			newVersion.getLemmaValues().putAll(version.getLemmaValues());
+			newVersion.getPgValues().putAll(version.getPgValues());
 			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).update(entry, version);
 			newVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
 			newVersion.setVerifierId(login);

@@ -53,13 +53,13 @@ public class TestLemmaVersion {
 	@Test
 	public void testValues() {
 		LemmaVersion l = new LemmaVersion();
-		Assert.assertNotNull(l.getEntryValues());
-		Assert.assertEquals(0, l.getEntryValues().size());
+		Assert.assertNotNull(l.getLemmaValues());
+		Assert.assertEquals(0, l.getLemmaValues().size());
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("a", "b");
 		map.put("c", "d");
-		l.setEntryValues(map);
-		Assert.assertEquals(map, l.getEntryValues());
+		l.setLemmaValues(map);
+		Assert.assertEquals(map, l.getLemmaValues());
 	}
 
 }

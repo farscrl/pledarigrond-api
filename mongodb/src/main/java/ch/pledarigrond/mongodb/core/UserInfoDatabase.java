@@ -180,7 +180,7 @@ public class UserInfoDatabase {
 	public List<PgUserInfo> getAllUsers(String text, String sortColumn, boolean sortAscending, int from, int length) {
 		BasicDBObject query = new BasicDBObject();
 		Pattern pattern = Pattern.compile(".*" + text + ".*", Pattern.CASE_INSENSITIVE);
-		// The value for the variable 'text' is set in 'maalr.gwt > ListFilter.java'
+
 		if(text != null && text.trim().length() > 0) {
 			BasicDBList attributes = new BasicDBList();
 			DBObject email = new BasicDBObject();

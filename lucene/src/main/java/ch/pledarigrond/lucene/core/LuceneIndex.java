@@ -55,7 +55,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 /**
- * This class is responsible for managing the lucene index used by maalr,
+ * This class is responsible for managing the lucene index used by PG,
  * and provides all required methods to perform CRUD-like operations on it.
  * Internally, two indices are managed: All read- and query-requests are
  * executed on an in-memory-index, whereas write-requests are executed on
@@ -308,7 +308,7 @@ public class LuceneIndex {
 						} catch (Exception e) {
 							unknown++;
 						}
-						String flexType = document.get(LemmaVersion.RM_FLEX_TYPE);
+						String flexType = document.get(LemmaVersion.RM_INFLECTION_TYPE);
 						if(flexType != null) {
 							Integer old = byCategory.get(flexType);
 							if(old == null) old = 0;
@@ -344,7 +344,7 @@ public class LuceneIndex {
 			for (int i = 0; i < scoreDocs.length; i++) {
 				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
-				// FIXME: Don't split always - instead, implement MaalrFieldType.CSV!
+				// FIXME: Don't split always - instead, implement FieldType.CSV!
 				for (IndexableField indexedField : indexableFields) {
 					String[] parts = indexedField.stringValue().split(", ");//TODO: FieldType.CSV has no effect
 					for (String part : parts) {
@@ -387,7 +387,7 @@ public class LuceneIndex {
 			for (int i = 0; i < scoreDocs.length; i++) {
 				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
-				// FIXME: Don't split always - instead, implement MaalrFieldType.CSV!
+				// FIXME: Don't split always - instead, implement FieldType.CSV!
 				for (IndexableField indexedField : indexableFields) {
 					String[] parts = indexedField.stringValue().split(", ");//TODO: FieldType.CSV has no effect
 					for (String part : parts) {

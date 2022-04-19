@@ -3,7 +3,6 @@ package ch.pledarigrond.api.services.impl;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.api.services.UserService;
-import ch.pledarigrond.common.config.Constants;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
@@ -18,7 +17,6 @@ import ch.pledarigrond.mongodb.model.PgUserInfo;
 import ch.pledarigrond.mongodb.operations.*;
 import ch.pledarigrond.mongodb.util.DBCommandQueue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -145,13 +143,13 @@ public class MongoDbServiceImpl implements MongoDbService {
     private void validateUserModification(LemmaVersion current, LemmaVersion version) throws PgException {
         // Server-Side validation of a user modification: Check that only fields which are allowed to modify are sent
         ArrayList<String> fields = new ArrayList<>(Arrays.asList("DStichwort", "RStichwort", LemmaVersion.EMAIL, LemmaVersion.COMMENT));
-        version.getEntryValues().keySet().retainAll(fields);
+        version.getLemmaValues().keySet().retainAll(fields);
         if(current != null) {
             // Add values of non-user-fields to the suggestion
-            Map<String, String> allowed = new HashMap<String, String>(version.getEntryValues());
-            version.getEntryValues().putAll(current.getEntryValues());
+            Map<String, String> allowed = new HashMap<String, String>(version.getLemmaValues());
+            version.getLemmaValues().putAll(current.getLemmaValues());
             // Overwrite user-fields with suggested entries
-            version.getEntryValues().putAll(allowed);
+            version.getLemmaValues().putAll(allowed);
         }
         // Check the length of each field: Normal entries must be less than 200 characters,
         // a comment must be less than 500 chars.

@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * A {@link FieldFactory} is responsible for converting an {@link IndexedColumn}
  * into one or more {@link IndexableField} objects, thus creating a lucene index
- * from a maalr search configuration. Depending on the {@link FieldType},
+ * from a search configuration. Depending on the {@link FieldType},
  * it generates either an {@link StringField}, {@link TextField}, or {@link IntField}
  * object. In case of {@link FieldType#CSV}, a list of {@link StringField}
  * is generated.

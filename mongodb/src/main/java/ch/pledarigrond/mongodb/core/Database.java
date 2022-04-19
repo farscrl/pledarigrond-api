@@ -60,6 +60,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.type;
 
 public class Database {
 
@@ -499,7 +500,7 @@ public class Database {
 				if (dropInternalKeys) {
 					ArrayList<LemmaVersion> versions = entry.getVersionHistory();
 					for (LemmaVersion version : versions) {
-						version.setMaalrValues(new HashMap<String, String>());
+						version.setPgValues(new HashMap<String, String>());
 					}
 				}
 				marshaller.marshal(entry, out);
@@ -509,7 +510,7 @@ public class Database {
 				LemmaVersion version = entry.getCurrent();
 				if (version != null) {
 					if (dropInternalKeys) {
-						version.setMaalrValues(new HashMap<String, String>());
+						version.setPgValues(new HashMap<String, String>());
 					}
 					marshaller.marshal(version, out);
 				}
@@ -538,14 +539,13 @@ public class Database {
 		while (xsr.nextTag() == XMLStreamConstants.START_ELEMENT) {
 			LexEntry entry = (LexEntry) unmarshaller.unmarshal(xsr);
 			entry.getVersionHistory().forEach(lemmaVersion -> {
-				HashMap<String, String> values = lemmaVersion.getEntryValues();
-				String flexType = values.get(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
-				if (flexType != null) {
-					values.put(LemmaVersion.RM_FLEX_TYPE, flexType);
-				}
-				values.remove(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
-				values.remove(LemmaVersion.OVERLAY_LANG_DE__DEPRECATED);
-				lemmaVersion.setEntryValues(values);
+				HashMap<String, String> values = lemmaVersion.getLemmaValues();
+
+				// clean up tasks (can be disabled if migration is done)
+				replaceOverlayFieldNames(values);
+				replaceOldFieldNames(values);
+
+				lemmaVersion.setLemmaValues(values);
 			});
 			toInsert.add(new Document(Converter.convertLexEntry(entry)));
 			counter++;
@@ -605,8 +605,7 @@ public class Database {
 		}
 	}
 
-	private XMLStreamReader getXMLStreamReader(InputStream input)
-			throws IOException, FactoryConfigurationError, XMLStreamException, UnsupportedEncodingException {
+	private XMLStreamReader getXMLStreamReader(InputStream input) throws IOException, FactoryConfigurationError, XMLStreamException {
 		ZipInputStream in = new ZipInputStream(input);
 		getNextEntry(in);
 		XMLInputFactory xif = XMLInputFactory.newInstance();
@@ -625,4 +624,74 @@ public class Database {
 		return entryCollection.find().iterator();
 	}
 
+	private void replaceOverlayFieldNames(HashMap<String, String> values) {
+		String flexType = values.get(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
+		if (flexType != null) {
+			values.put(LemmaVersion.RM_INFLECTION_TYPE, flexType);
+		}
+		values.remove(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
+		values.remove(LemmaVersion.OVERLAY_LANG_DE__DEPRECATED);
+
+		String flexSubtype = values.get("type");
+		if (flexSubtype != null) {
+			values.put(LemmaVersion.RM_INFLECTION_SUBTYPE, flexSubtype);
+		}
+		values.remove("type");
+	}
+
+	private void replaceOldFieldNames(HashMap<String, String> values) {
+		String timestampOld = values.get(LemmaVersion.TIMESTAMP__DEPRECATED);
+		if (timestampOld != null) {
+			values.put(LemmaVersion.TIMESTAMP, timestampOld);
+		}
+		values.remove(LemmaVersion.TIMESTAMP__DEPRECATED);
+
+		String creatorOld = values.get(LemmaVersion.CREATOR__DEPRECATED);
+		if (creatorOld != null) {
+			values.put(LemmaVersion.CREATOR, creatorOld);
+		}
+		values.remove(LemmaVersion.CREATOR__DEPRECATED);
+
+		String statusOld = values.get(LemmaVersion.STATUS__DEPRECATED);
+		if (statusOld != null) {
+			values.put(LemmaVersion.STATUS, statusOld);
+		}
+		values.remove(LemmaVersion.STATUS__DEPRECATED);
+
+		String verificationOld = values.get(LemmaVersion.VERIFICATION__DEPRECATED);
+		if (verificationOld != null) {
+			values.put(LemmaVersion.VERIFICATION, verificationOld);
+		}
+		values.remove(LemmaVersion.VERIFICATION__DEPRECATED);
+
+		String verifierOld = values.get(LemmaVersion.VERIFIER__DEPRECATED);
+		if (verifierOld != null) {
+			values.put(LemmaVersion.VERIFIER, verifierOld);
+		}
+		values.remove(LemmaVersion.VERIFIER__DEPRECATED);
+
+		String commentOld = values.get(LemmaVersion.COMMENT__DEPRECATED);
+		if (commentOld != null) {
+			values.put(LemmaVersion.COMMENT, commentOld);
+		}
+		values.remove(LemmaVersion.COMMENT__DEPRECATED);
+
+		String ipOld = values.get(LemmaVersion.IP_ADDRESS__DEPRECATED);
+		if (ipOld != null) {
+			values.put(LemmaVersion.IP_ADDRESS, ipOld);
+		}
+		values.remove(LemmaVersion.IP_ADDRESS__DEPRECATED);
+
+		String creatorRoleOld = values.get(LemmaVersion.CREATOR_ROLE__DEPRECATED);
+		if (creatorRoleOld != null) {
+			values.put(LemmaVersion.CREATOR_ROLE, creatorRoleOld);
+		}
+		values.remove(LemmaVersion.CREATOR_ROLE__DEPRECATED);
+
+		String categoryOld = values.get(LemmaVersion.CATEGORIES__DEPRECATED);
+		if (categoryOld != null) {
+			values.put(LemmaVersion.CATEGORIES, categoryOld);
+		}
+		values.remove(LemmaVersion.CATEGORIES__DEPRECATED);
+	}
 }

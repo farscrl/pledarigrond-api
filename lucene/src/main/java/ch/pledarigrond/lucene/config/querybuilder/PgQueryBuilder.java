@@ -17,6 +17,7 @@ package ch.pledarigrond.lucene.config.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
+import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
@@ -28,12 +29,11 @@ import java.util.*;
  * This is the base class of all query builders, which are responsible
  * to query the dictionary. Query builders are used in two different
  * phases: During startup, they are instantiated and configured for each
- * selectable combination of {@link QueryBuilderOption} and {@link ColumnSelectorOption}
- * defined in maalr's configuration. Each query builder defines a set of
+ * needed configuration. Each query builder defines a set of
  * lucene fields required to perform queries, so during startup these
  * fields are used to set up the lucene index. When performing queries,
  * the {@link IndexManager} will use the information provided in
- * a {@link MaalrQuery} to find the relevant {@link PgQueryBuilder},
+ * a {@link SearchCriteria } to find the relevant {@link PgQueryBuilder},
  * such that they can be used to build the lucene query string.
  * 
  * @author sschwieb

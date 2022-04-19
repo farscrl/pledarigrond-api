@@ -122,9 +122,13 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     private LemmaVersion clean(LemmaVersion lemma) {
-        lemma.getMaalrValues().keySet().retainAll(LemmaVersion.PUBLIC_MAALR_KEYS);
-        lemma.getEntryValues().remove(LemmaVersion.COMMENT);
-        lemma.getEntryValues().remove(LemmaVersion.EMAIL);
+        lemma.getPgValues().keySet().retainAll(LemmaVersion.PUBLIC_PG_KEYS);
+        lemma.getLemmaValues().remove(LemmaVersion.COMMENT);
+        lemma.getLemmaValues().remove(LemmaVersion.COMMENT__DEPRECATED);
+        lemma.getLemmaValues().remove(LemmaVersion.EMAIL);
+        lemma.getLemmaValues().remove(LemmaVersion.EMAIL__DEPRECATED);
+        lemma.getLemmaValues().remove(LemmaVersion.IP_ADDRESS);
+        lemma.getLemmaValues().remove(LemmaVersion.IP_ADDRESS__DEPRECATED);
         return lemma;
     }
 }
