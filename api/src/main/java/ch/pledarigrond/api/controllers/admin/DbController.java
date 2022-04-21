@@ -74,6 +74,7 @@ public class DbController {
             @RequestParam(value = "anonymizeData", defaultValue = "false") boolean anonymizeData,
             HttpServletResponse response
     ) {
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setContentType("application/zip");
         StringBuilder fileName = new StringBuilder();
         fileName
