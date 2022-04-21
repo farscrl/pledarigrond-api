@@ -293,7 +293,7 @@ public class LuceneIndex {
 					int approved = 0;
 					int unknown = 0;
 					IndexReader reader = luceneIndexRam.get(language).getSearcher().getIndexReader();
-					HashMap<String, Integer> byCategory = new HashMap<String, Integer>();
+					HashMap<String, Integer> byInflectionType = new HashMap<String, Integer>();
 					for (int i = 0; i < all; i++) {
 						Document document = reader.document(i);
 						String verification = document.get(LemmaVersion.VERIFICATION);
@@ -310,12 +310,12 @@ public class LuceneIndex {
 						}
 						String flexType = document.get(LemmaVersion.RM_INFLECTION_TYPE);
 						if(flexType != null) {
-							Integer old = byCategory.get(flexType);
+							Integer old = byInflectionType.get(flexType);
 							if(old == null) old = 0;
-							byCategory.put(flexType, old+1);
+							byInflectionType.put(flexType, old+1);
 						}
 					}
-					statistics.setOverlayCount(byCategory);
+					statistics.setInflectionCount(byInflectionType);
 					statistics.setNumberOfEntries(all);
 					statistics.setUnverifiedEntries(unverified);
 					statistics.setApprovedEntries(approved);

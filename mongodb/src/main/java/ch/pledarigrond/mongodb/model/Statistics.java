@@ -22,13 +22,13 @@ public class Statistics {
 	public int suggestionCounter;
 	public int entryCounter;
 	public long lastChange;
-	public HashMap<String, Integer> overlayCount;
+	public HashMap<String, Integer> inflectionCount;
 
 	public Statistics(Statistics toClone) {
 		this.suggestionCounter = toClone.suggestionCounter;
 		this.entryCounter = toClone.entryCounter;
 		this.lastChange = toClone.lastChange;
-		this.overlayCount = toClone.overlayCount;
+		this.inflectionCount = toClone.inflectionCount;
 	}
 	
 	public Statistics() {}

@@ -35,10 +35,10 @@ public class IndexStatistics implements Serializable {
 
 	private long lastUpdated;
 
-	private HashMap<String, Integer> overlayCount;
+	private HashMap<String, Integer> inflectionCount;
 	
-	public HashMap<String, Integer> getOverlayCount() {
-		return overlayCount;
+	public HashMap<String, Integer> getInflectionCount() {
+		return inflectionCount;
 	}
 
 	public int getUnknown() {
@@ -89,8 +89,8 @@ public class IndexStatistics implements Serializable {
 				+ unknown + ", lastUpdated=" + lastUpdated + "]";
 	}
 
-	public void setOverlayCount(HashMap<String, Integer> byCategory) {
-		this.overlayCount = byCategory;
+	public void setInflectionCount(HashMap<String, Integer> byCategory) {
+		this.inflectionCount = byCategory;
 	}
 
 }

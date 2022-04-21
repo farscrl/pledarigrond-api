@@ -61,11 +61,11 @@ public class DictionaryStatistics {
 		statistics.lastChange = System.currentTimeMillis();
 	}
 
-	public static void initialize(int suggestions, int entries, long lastChange, HashMap<String, Integer> overlayCount) {
+	public static void initialize(int suggestions, int entries, long lastChange, HashMap<String, Integer> inflectionCount) {
 		statistics.entryCounter = entries;
 		statistics.suggestionCounter = suggestions;
 		statistics.lastChange = lastChange;
-		statistics.overlayCount = new HashMap<String, Integer>(overlayCount);
+		statistics.inflectionCount = new HashMap<>(inflectionCount);
 	}
 
 }
