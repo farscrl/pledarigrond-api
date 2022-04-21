@@ -99,6 +99,15 @@ public class SurmiranConjugationStructure {
 		return values;
 	}
 
+	public HashMap<String, String> getAllFormValues() {
+		HashMap<String, String> returnValue = new HashMap<>();
+		for (String s : msi) {
+			returnValue.put(s, getValue(s));
+		}
+
+		return returnValue;
+	}
+
 	public void setValues(HashMap<String, String> values) {
 		this.values = values;
 

@@ -805,8 +805,8 @@ public class SurmiranConjugation extends LanguageConjugation {
             // Standard Verbs
             return addStandardPronouns(conjugation, subType);
         }
-
     }
+
     public HashMap<String, String> addReflexivePronouns(Map<String, String> conjugation, Map<String, String> pronouns, InflectionSubType subType) {
         cs = new SurmiranConjugationStructure();
         cs.setVerb(conjugation.get("verb"));
@@ -869,8 +869,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setFuturplural2(SurmiranPronouns.pron_2pp + conjugation.get(SurmiranConjugationStructure.futurplural2));
         cs.setFuturplural3(SurmiranPronouns.pron_3pp + conjugation.get(SurmiranConjugationStructure.futurplural3));
 
-        return cs.getValues();
-
+        return cs.getAllFormValues();
     }
 
     public HashMap<String, String> addStandardPronouns(Map<String, String> conjugation, InflectionSubType subType) {
@@ -937,7 +936,6 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setFuturplural2(SurmiranPronouns.pron_2pp + conjugation.get(SurmiranConjugationStructure.futurplural2));
         cs.setFuturplural3(SurmiranPronouns.pron_3pp + conjugation.get(SurmiranConjugationStructure.futurplural3));
 
-        return cs.getValues();
-
+        return cs.getAllFormValues();
     }
 }
