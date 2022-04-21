@@ -59,6 +59,12 @@ public class BackupInfoHelper extends AbstractBackupHelper {
 				.setBackupNums(pgEnvironment.getBackupNumber());
 	}
 
+	public File getBackupFile(Language language, String fileName) {
+		fileName = fileName.replace("/", "").replace("..", "");
+		String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+		return new File(pgEnvironment.getBackupLocation() + dbName + "/" + fileName);
+	}
+
 	private String getSize(File file) {
 		return new DecimalFormat("##.##").format((file.length() / 1024) / 1024);
 	}

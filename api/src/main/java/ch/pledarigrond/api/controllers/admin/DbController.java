@@ -7,6 +7,7 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -124,6 +128,15 @@ public class DbController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/download_backup/{file_name}")
+    void downloadBackupFile(@PathVariable("language")Language language, @PathVariable("file_name")String fileName, HttpServletResponse response) throws IOException {
+        File export = adminService.getBackupFile(language, fileName);
+        response.setContentType("application/json");
+        response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
+        stream(response, export);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/index_stats")
     ResponseEntity<?> getIndexStats(@PathVariable("language")Language language) {
         try {
@@ -149,5 +162,11 @@ public class DbController {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not avaliable.");
         }
+    }
+
+    private void stream(HttpServletResponse response, File export) throws IOException {
+        InputStream is = new FileInputStream(export);
+        IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
     }
 }

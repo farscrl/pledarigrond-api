@@ -115,8 +115,14 @@ public class AdminServiceImpl implements AdminService {
                 .exportData(allVersions, dropKeys, out, fileName);
     }
 
+    @Override
     public BackupInfos getBackupInfos(Language language) {
         return backupInfoHelper.getBackupInfos(language);
+    }
+
+    @Override
+    public File getBackupFile(Language language, String fileName) {
+        return backupInfoHelper.getBackupFile(language, fileName);
     }
 
     private File getDemoFileByLanguage(Language language) {

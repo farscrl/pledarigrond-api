@@ -14,6 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
@@ -36,4 +37,6 @@ public interface AdminService {
     void exportData(Language language, boolean allVersions, boolean dropKeys, ServletOutputStream out, String fileName) throws NoDatabaseAvailableException, NoSuchAlgorithmException, JAXBException, IOException;
 
     BackupInfos getBackupInfos(Language language);
+
+    File getBackupFile(Language language, String fileName);
 }
