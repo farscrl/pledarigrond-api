@@ -18,7 +18,7 @@ public class LightUserInfo implements Serializable {
 	@Email
 	private String email;
 
-	@Size(min = 6, max = 12, message = "Size between 6 and 12!")
+	@Size(min = 6, message = "Password must at least be 6 characters long")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
