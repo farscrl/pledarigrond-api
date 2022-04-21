@@ -10,15 +10,15 @@ public class SurmiranConjugationClasses {
 
     private static final List<InflectionSubType> conjugationClasses = new ArrayList<>(
             Arrays.asList(
-                    new InflectionSubType("1", "-ar", "Finiziun sin -ar"),
-                    new InflectionSubType("2", "-er", "Finiziun sin -er"),
-                    new InflectionSubType("3", "-ier", "Finiziun sin -ier"),
-                    new InflectionSubType("4", "-eir [è]", "Finiziun sin -eir [è]"),
-                    new InflectionSubType("5", "-er", "Finiziun sin -er"),
-                    new InflectionSubType("6", "-eir [é]", "Finiziun sin -eir [é]"),
-                    new InflectionSubType("7", "-eir [é](esch)", "Finiziun sin -eir [é](esch)"),
-                    new InflectionSubType("8", "-ar (esch)", "Finiziun sin -ar (esch)"),
-                    new InflectionSubType("9", "vokal", "Vokaländerung in der Wurzel")
+                    new InflectionSubType("1", "-ar", "Finiziun sin -ar (cantar)"),
+                    new InflectionSubType("2", "-er", "Finiziun sin -er (lascher)"),
+                    new InflectionSubType("3", "-ier", "Finiziun sin -ier (cuntschier)"),
+                    new InflectionSubType("4", "-eir", "Finiziun sin -eir (tigneir)"),
+                    new InflectionSubType("5", "-er", "Finiziun sin -er (tanscher)"),
+                    new InflectionSubType("6", "-eir", "Finiziun sin -eir (parteir)"),
+                    new InflectionSubType("7", "-eir (esch)", "Finiziun sin -eir cun infix esch (amplaneir)"),
+                    new InflectionSubType("8", "-ar (esch)", "Finiziun sin -ar cun infix esch (abitar)"),
+                    new InflectionSubType("9", "verbs alternont", "Midada dal vocal en il tschep")
             )
     );
 
