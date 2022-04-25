@@ -80,12 +80,16 @@ public class BuilderRegistry {
 
     public PgQueryBuilder getSubSemanticsBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("DSubsemantik_simple_prefix");
+            return builderMap.get("DSubsemantik_infix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("RSubsemantik_simple_prefix");
+            return builderMap.get("RSubsemantik_infix");
         }
         return null;
+    }
+
+    public PgQueryBuilder getCategoryBuilder() {
+        return builderMap.get("categories_infix");
     }
 
     public List<IndexedColumn> getAllRegisteredColumns() {
@@ -121,7 +125,10 @@ public class BuilderRegistry {
         builderMap.put("RGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RGrammatik"));
         
         // Search SubSemantics
-        builderMap.put("DSubsemantik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DSubsemantik"));
-        builderMap.put("RSubsemantik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RSubsemantik"));
+        builderMap.put("DSubsemantik_infix", new InfixQueryBuilder().setColumn("DSubsemantik"));
+        builderMap.put("RSubsemantik_infix", new InfixQueryBuilder().setColumn("RSubsemantik"));
+
+        // Category
+        builderMap.put("categories_infix", new InfixQueryBuilder().setColumn("categories"));
     }
 }

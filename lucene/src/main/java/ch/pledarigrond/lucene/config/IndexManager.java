@@ -164,6 +164,15 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
+        if (searchCriteria.getCategory() != null) {
+            List<Query> categoryQueries = builderRegistry.getCategoryBuilder().transform(searchCriteria.getCategory());
+            BooleanQuery part = new BooleanQuery(true);
+            for (Query tf : categoryQueries) {
+                part.add(tf, BooleanClause.Occur.SHOULD);
+            }
+            finalQuery.add(part, BooleanClause.Occur.MUST);
+        }
+
         // Unless a user wants to see unverified suggestions, each item returned must be verified.
         if (!searchCriteria.getSuggestions()) {
             BooleanQuery bc = new BooleanQuery();
