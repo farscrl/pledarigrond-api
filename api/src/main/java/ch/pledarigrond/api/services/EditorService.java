@@ -46,7 +46,5 @@ public interface EditorService {
 
     String export(Language language, Set<String> selected, SearchCriteria query) throws Exception;
 
-    // HashMap<String, String> getOverlayEditorPreset(Language language, String overlayId, String presetId, String base) throws GenerationFailedException;
-
     SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
 }
