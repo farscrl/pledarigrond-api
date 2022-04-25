@@ -67,9 +67,6 @@ public class IndexManagerSurmiran extends IndexManager {
             }
             factoriesBySource.add(factory);
         }
-        // Override the explicitly defined indexed columns in the configuration with the implicit ones detected above.
-        //Configuration.getInstance().getDictionaryConfig().getIndexedColumns().clear();
-        //Configuration.getInstance().getDictionaryConfig().getIndexedColumns().addAll(finalColumnSet);
 
         if(errors.size() > 0) {
             logger.error(errors.size() + " errors have been detected in the configuration:");

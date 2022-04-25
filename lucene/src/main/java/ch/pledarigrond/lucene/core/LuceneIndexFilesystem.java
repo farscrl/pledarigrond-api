@@ -142,8 +142,7 @@ class LuceneIndexFilesystem {
 		}
 	}
 
-	private int indexDocs(final IndexWriter writer,
-			final Iterator<LexEntry> iterator) throws IOException {
+	private int indexDocs(final IndexWriter writer, final Iterator<LexEntry> iterator) throws IOException {
 		int counter = 0;
 		NumberFormat nf = NumberFormat.getNumberInstance();
 		while(iterator.hasNext()) {
@@ -167,8 +166,8 @@ class LuceneIndexFilesystem {
 	}
 
 	private List<Document> createDocument(LexEntry lexEntry) {
-		List<Document> docs = new ArrayList<Document>();
-		Set<LemmaVersion> versions = new HashSet<LemmaVersion>();
+		List<Document> docs = new ArrayList<>();
+		Set<LemmaVersion> versions = new HashSet<>();
 		if(lexEntry.getCurrent() != null) {
 			versions.add(lexEntry.getCurrent());
 		}
@@ -178,10 +177,6 @@ class LuceneIndexFilesystem {
 			docs.add(doc);
 		}
 		return docs;
-	}
-
-	Analyzer getAnalyzer() {
-		return analyzer;
 	}
 
 	void dropIndex() throws IndexException {
