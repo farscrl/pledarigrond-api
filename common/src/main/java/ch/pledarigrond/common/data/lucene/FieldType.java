@@ -18,7 +18,7 @@ package ch.pledarigrond.common.data.lucene;
 /**
  * Defines the way an {@link IndexedColumn} is mapped onto Lucene fields.
  * TEXT, STRING and INTEGER correspond to TextField, StringField and 
- * IntField, whereas CSV is a customized option to generate multiple
+ * IntField, whereas SEMICOLON_SEPERATED is a customized option to generate multiple
  * StringFields.
  * 
  * @author sschwieb
@@ -43,7 +43,7 @@ public enum FieldType {
 	INTEGER, 
 	
 	/**
-	 * Multiple fields of type STRING, separated by commas.
+	 * Multiple fields of type STRING, separated by semicolons.
 	 */
-	CSV;
+	SEMICOLON_SEPERATED;
 }

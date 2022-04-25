@@ -38,7 +38,7 @@ public class LuceneHelper {
 		}
 	}
 
-	// For initial indexing (preserve special chars) to enable oracle search
+	// For initial indexing (preserve special chars) to enable suggestion search
 	public static Analyzer newWhitespaceAnalyzer() {
 		return new WhitespaceAnalyzer(CURRENT);
 	}

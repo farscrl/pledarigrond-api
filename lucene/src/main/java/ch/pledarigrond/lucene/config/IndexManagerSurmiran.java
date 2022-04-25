@@ -47,8 +47,8 @@ public class IndexManagerSurmiran extends IndexManager {
         finalColumnSet.addAll(getDictionaryItem(firstLanguageMain));
         finalColumnSet.addAll(getDictionaryItem(secondLanguageMain));
 
-        // Create fields required for oracles
-        autoGenerateOracleFields(finalColumnSet, getEditorFields());
+        // Create fields required for suggestions
+        autoGenerateSuggestionsFields(finalColumnSet, getSuggestionsFields());
 
         extractListOfAllColumns(finalColumnSet, firstLanguageMain, secondLanguageMain);
 
@@ -82,7 +82,7 @@ public class IndexManagerSurmiran extends IndexManager {
     }
 
     @Override
-    protected List<String> getEditorFields() {
+    protected List<String> getSuggestionsFields() {
         return Arrays.asList(
             "DGrammatik", "DGenus", "DSubsemantik", "categories",
             "RGrammatik", "RGenus", "RSubsemantik"

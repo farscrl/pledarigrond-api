@@ -26,7 +26,7 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("RFlex"),
                 new IndexedColumn("RInflectionType"),
                 new IndexedColumn("RInflectionSubtype"),
-                new IndexedColumn("categories", FieldType.CSV),
+                new IndexedColumn("categories", FieldType.SEMICOLON_SEPERATED),
                 new IndexedColumn("DRedirect"),
                 new IndexedColumn("RRedirect"),
                 new IndexedColumn("user_comment"),

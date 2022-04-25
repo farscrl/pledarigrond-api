@@ -34,7 +34,7 @@ import java.util.List;
  * into one or more {@link IndexableField} objects, thus creating a lucene index
  * from a search configuration. Depending on the {@link FieldType},
  * it generates either an {@link StringField}, {@link TextField}, or {@link IntField}
- * object. In case of {@link FieldType#CSV}, a list of {@link StringField}
+ * object. In case of {@link FieldType#SEMICOLON_SEPERATED}, a list of {@link StringField}
  * is generated.
  * 
  * @author sschwieb
@@ -55,7 +55,7 @@ public class FieldFactory {
 		lowercase = item.isLowerCase();
 		analyzed = item.isAnalyzed();
 		stored = item.isStored() ? Store.YES : Store.NO;
-		//workaround to enable special chars in search oracles (editor backend)
+		//workaround to enable special chars in search suggestions (editor backend)
 		analyzer = LuceneHelper.newAnalyzer();
 	}
 
@@ -72,14 +72,14 @@ public class FieldFactory {
 			case STRING: return List.of(new StringField(name, value, stored));
 			case TEXT: return List.of(new TextField(name, value, stored));
 			case INTEGER: return List.of(new IntField(name, Integer.parseInt(value), stored));
-			case CSV: return csvFields(name, value, stored);
+			case SEMICOLON_SEPERATED: return semicolonFields(name, value, stored);
 		}
 		throw new RuntimeException("Unsupported field type: " + value);
 	}
 
-	private List<IndexableField> csvFields(String name, String value, Store stored) {
+	private List<IndexableField> semicolonFields(String name, String value, Store stored) {
 		List<IndexableField> fields = new ArrayList<IndexableField>();
-		String[] splitted = value.split(",");
+		String[] splitted = value.split(";");
 		for (String part : splitted) {
 			if(part.trim().length() > 0) {
 				fields.add(new StringField(name, part.trim(), stored));

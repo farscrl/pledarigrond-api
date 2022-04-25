@@ -344,9 +344,9 @@ public class LuceneIndex {
 			for (int i = 0; i < scoreDocs.length; i++) {
 				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
-				// FIXME: Don't split always - instead, implement FieldType.CSV!
+
 				for (IndexableField indexedField : indexableFields) {
-					String[] parts = indexedField.stringValue().split(", ");//TODO: FieldType.CSV has no effect
+					String[] parts = indexedField.stringValue().split("(; ?)|(, ?)");
 					for (String part : parts) {
 						if(part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
 							allValues.add(part);
@@ -357,7 +357,7 @@ public class LuceneIndex {
 		}
 		results.addAll(allValues);
 		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit)); //restrict length to 'limit'
+			List<String> resultList = results.subList(0, Math.min(results.size(), limit));
 			return new ArrayList<>(resultList);
 		} else {
 			return results;
@@ -387,9 +387,9 @@ public class LuceneIndex {
 			for (int i = 0; i < scoreDocs.length; i++) {
 				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
 				IndexableField[] indexableFields = doc.getFields(field);
-				// FIXME: Don't split always - instead, implement FieldType.CSV!
+
 				for (IndexableField indexedField : indexableFields) {
-					String[] parts = indexedField.stringValue().split(", ");//TODO: FieldType.CSV has no effect
+					String[] parts = indexedField.stringValue().split("(; ?)|(, ?)");
 					for (String part : parts) {
 						if(part.toLowerCase().startsWith(value.toLowerCase())) {
 							allValues.add(part);
@@ -400,7 +400,7 @@ public class LuceneIndex {
 		}
 		ArrayList<String> results = new ArrayList<>(allValues);
 		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit)); //restrict length to 'limit'
+			List<String> resultList = results.subList(0, Math.min(results.size(), limit));
 			return new ArrayList<>(resultList);
 		} else {
 			return results;

@@ -51,9 +51,9 @@ public abstract class IndexManager {
 
     /**
      * A mapping from columns to {@link PgQueryBuilder} instances, used for
-     * oracle queries.
+     * suggestion queries.
      */
-    protected Map<String, PgQueryBuilder> oracleBuilder = new HashMap<>();
+    protected Map<String, PgQueryBuilder> suggestionsBuilders = new HashMap<>();
 
     /**
      * Contains all field names which are ignored when generating the index.
@@ -79,7 +79,7 @@ public abstract class IndexManager {
     }
 
     public Query getSuggestionsQuery(String fieldName, String value) {
-        PgQueryBuilder builder = oracleBuilder.get(fieldName);
+        PgQueryBuilder builder = suggestionsBuilders.get(fieldName);
         if(builder == null) {
             logger.warn("No query builder found for field " + fieldName);
             return null;
@@ -220,7 +220,7 @@ public abstract class IndexManager {
         return this.finalColumnSet;
     }
 
-    protected abstract List<String> getEditorFields();
+    protected abstract List<String> getSuggestionsFields();
 
     protected void setDefaultValues( List<IndexedColumn> databaseColumns, Set<IndexedColumn> finalColumnSet) {
         // Set default values for all defined columns - they are used to store the values
@@ -234,8 +234,8 @@ public abstract class IndexManager {
             if(item.getType() == null) {
                 item.setType(FieldType.TEXT);
             } else {
-                if(item.getType() != FieldType.CSV) {
-                    errors.add("Column '" + item.getColumnName() + "' should not explicitly define a 'type' unless it is 'CSV'.");
+                if(item.getType() != FieldType.SEMICOLON_SEPERATED) {
+                    errors.add("Column '" + item.getColumnName() + "' should not explicitly define a 'type' unless it is 'SEMICOLON_SEPERATED'.");
                 }
             }
             boolean added = finalColumnSet.add(item);
@@ -268,15 +268,15 @@ public abstract class IndexManager {
         return columns;
     }
 
-    protected void autoGenerateOracleFields(Set<IndexedColumn> indexedColumns, List<String> editorFields) {
-        logger.info("Auto-generating oracle fields...");
+    protected void autoGenerateSuggestionsFields(Set<IndexedColumn> indexedColumns, List<String> editorFields) {
+        logger.info("Auto-generating suggestion fields...");
 
         for (String column : editorFields) {
             DefaultQueryBuilder builder = new DefaultQueryBuilder();
             builder.setColumn(column);
-            oracleBuilder.put(column, builder);
+            suggestionsBuilders.put(column, builder);
             Set<IndexedColumn> entries = builder.getRegisteredColumns();
-            logger.info("Added fields for oracle " + column + ": " + entries);
+            logger.info("Added fields for suggestion " + column + ": " + entries);
             indexedColumns.addAll(entries);
         }
     }

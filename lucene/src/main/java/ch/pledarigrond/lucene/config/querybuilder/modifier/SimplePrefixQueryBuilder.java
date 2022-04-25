@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This query builder generates a basic PrefixQuery for use in field-oracles,
+ * This query builder generates a basic PrefixQuery for use in field-suggestions,
  * using Lucene's WhiteSpaceAnalyzer (preserving all special chars, e.g. brackets)
  * <br>
  * <strong>Note: The transformation of the field names is proprietary.</strong>
