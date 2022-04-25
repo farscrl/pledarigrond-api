@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.dtos.FieldsList;
+import ch.pledarigrond.api.dtos.LemmaVersionList;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
@@ -181,9 +182,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/update_order")
-    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @RequestBody List<LemmaVersion> ordered) {
+    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @RequestBody LemmaVersionList lemmaVersionList) {
         try {
-            return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, ordered));
+            return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, lemmaVersionList.lemmas));
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
