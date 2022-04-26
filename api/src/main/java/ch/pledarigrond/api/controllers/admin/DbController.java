@@ -131,6 +131,7 @@ public class DbController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/download_backup/{file_name}")
     void downloadBackupFile(@PathVariable("language")Language language, @PathVariable("file_name")String fileName, HttpServletResponse response) throws IOException {
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         File export = adminService.getBackupFile(language, fileName);
         response.setContentType("application/json");
         response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());

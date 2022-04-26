@@ -206,6 +206,7 @@ public class EditorController {
     @PostMapping("/search_export")
     void exportBySearchQuery(@PathVariable("language") Language language, SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             String fileName = editorService.export(language, fields.fields, query);
             File export = new File(pgEnvironment.getTempExportLocation() + fileName);
             response.setContentType("application/zip");
@@ -221,6 +222,7 @@ public class EditorController {
     @PostMapping("/lex_entries_export")
     void exportByEditorQuery(@PathVariable("language") Language language, EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             String fileName = editorService.export(language, fields.fields, query);
             File export = new File(pgEnvironment.getTempExportLocation() + fileName);
             response.setContentType("application/zip");
