@@ -83,7 +83,7 @@ public abstract class PgQueryBuilder {
 		item.setType(type);
 		item.setWhitespaceAnalyzer(whitespace);
 		item.setColumnName(column);
-		String destField = column + getFieldSuffix(analyzed, whitespace, lowercase, type);
+		String destField = column + getFieldSuffix(analyzed, lowercase, whitespace, type);
 		finalFieldNames.put(name, destField);
 		item.setIndexFieldName(destField);
 		columns.add(item);
