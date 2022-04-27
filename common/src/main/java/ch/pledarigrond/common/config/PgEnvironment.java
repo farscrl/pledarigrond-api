@@ -106,6 +106,18 @@ public class PgEnvironment {
 	@Value( "${pg.export.cron}")
 	private String exportCron;
 
+	@Value("${pg.s3.accessKey}")
+	private String s3AccessKey;
+
+	@Value("${pg.s3.secretKey}")
+	private String s3SecretKey;
+
+	@Value("${pg.s3.bucket}")
+	private String s3Bucket;
+
+	@Value("${pg.s3.endpoint}")
+	private String s3Endpoint;
+
 	private LuceneConfiguration luceneConfigPuter;
 	private LuceneConfiguration luceneConfigRumantschgrischun;
 	private LuceneConfiguration luceneConfigSurmiran;

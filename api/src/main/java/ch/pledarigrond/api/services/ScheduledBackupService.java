@@ -1,4 +1,4 @@
-package ch.pledarigrond.mongodb.util.backup;
+package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
@@ -7,6 +7,7 @@ import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.util.Validator;
+import ch.pledarigrond.mongodb.util.backup.AbstractBackupHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +18,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-@Service("scheduledBackupHelper")
-public class ScheduledBackupHelper extends AbstractBackupHelper {
+@Service()
+public class ScheduledBackupService extends AbstractBackupHelper {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ScheduledBackupHelper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduledBackupService.class);
 
 	@Autowired
 	private PgEnvironment pgEnvironment;
+
+	@Autowired
+	private S3BackupService s3BackupService;
 
 	@Scheduled(cron = "${pg.backup.cron.rumantschgrischun}")
 	public void backupRumantschgrischun() {
@@ -58,6 +60,9 @@ public class ScheduledBackupHelper extends AbstractBackupHelper {
 
 		if (valid(backupFile, dbName)) {
 			LOG.info("backup file valid");
+
+			s3BackupService.uploadFile(backupFile);
+
 			try {
 				cleanup();
 			} catch (ScheduledBackupException e) {
