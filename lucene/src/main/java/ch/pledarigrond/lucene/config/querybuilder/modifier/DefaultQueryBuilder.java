@@ -17,6 +17,7 @@ package ch.pledarigrond.lucene.config.querybuilder.modifier;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
+import ch.pledarigrond.lucene.util.LuceneHelper;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.PrefixQuery;
@@ -51,7 +52,7 @@ public class DefaultQueryBuilder extends PgQueryBuilder {
 
 	@Override
 	public List<Query> transform(String value) {
-		value = TokenizerHelper.tokenizeString(analyzer, value);
+		value = TokenizerHelper.tokenizeString(LuceneHelper.newWhitespaceAnalyzer(), value);
 		TermQuery first = new TermQuery(new Term(super.getFieldName("first"), value));
 		first.setBoost(1000f);
 		//match entries where searchphrase is followed by whitespace
