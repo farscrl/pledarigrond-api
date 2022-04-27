@@ -102,12 +102,21 @@ public abstract class IndexManager {
 
         if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().equals("")) {
             List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase());
-                case ROMANSH -> builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase());
-                case BOTH -> Stream.concat(
-                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()).stream(),
-                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()).stream()
-                ).collect(Collectors.toList());
+                case GERMAN -> Stream.of(
+                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        builderRegistry.getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
+                case ROMANSH -> Stream.of(
+                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
+
+                case BOTH -> Stream.of(
+                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        builderRegistry.getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);
             for (Query tf : searchPhraseQueries) {
@@ -120,10 +129,10 @@ public abstract class IndexManager {
             List<Query> genderQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN -> builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
                 case ROMANSH -> builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
-                case BOTH -> Stream.concat(
-                        builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()).stream(),
-                        builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender()).stream()
-                ).collect(Collectors.toList());
+                case BOTH -> Stream.of(
+                        builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()),
+                        builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);
             for (Query tf : genderQueries) {
@@ -136,10 +145,10 @@ public abstract class IndexManager {
             List<Query> grammarQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN -> builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
                 case ROMANSH -> builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
-                case BOTH -> Stream.concat(
-                        builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()).stream(),
-                        builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar()).stream()
-                ).collect(Collectors.toList());
+                case BOTH -> Stream.of(
+                        builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()),
+                        builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);
             for (Query tf : grammarQueries) {
@@ -152,10 +161,10 @@ public abstract class IndexManager {
             List<Query> subSemanticsQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN -> builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
                 case ROMANSH -> builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
-                case BOTH -> Stream.concat(
-                        builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()).stream(),
-                        builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics()).stream()
-                ).collect(Collectors.toList());
+                case BOTH -> Stream.of(
+                        builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()),
+                        builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
+                ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);
             for (Query tf : subSemanticsQueries) {

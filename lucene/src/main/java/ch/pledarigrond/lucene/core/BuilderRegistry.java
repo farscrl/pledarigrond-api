@@ -21,6 +21,7 @@ import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.*;
+import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,19 @@ public class BuilderRegistry {
             };
         }
         return null;
+    }
+
+    public List<Query> getTagQueries(SearchDirection direction, SearchMethod method, String field) {
+        if (method != SearchMethod.NORMAL && method != SearchMethod.INTERN) {
+            return new ArrayList<>();
+        }
+        if (direction == SearchDirection.ROMANSH) {
+            return builderMap.get("RTags_normal").transform(field);
+        }
+        if (direction == SearchDirection.GERMAN) {
+            return builderMap.get("DTags_normal").transform(field);
+        }
+        return new ArrayList<>();
     }
 
     public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
@@ -115,6 +129,10 @@ public class BuilderRegistry {
         builderMap.put("DStichwort_prefix", new PrefixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_suffix", new SuffixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_exact", new ExactMatchQueryBuilder().setColumn("DStichwort"));
+
+        // Search Tags
+        builderMap.put("RTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("RTags"));
+        builderMap.put("DTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("DTags"));
 
         // Search Gender
         builderMap.put("DGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGenus"));
