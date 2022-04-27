@@ -56,7 +56,7 @@ public class FieldFactory {
 		analyzed = item.isAnalyzed();
 		stored = item.isStored() ? Store.YES : Store.NO;
 		//workaround to enable special chars in search suggestions (editor backend)
-		analyzer = LuceneHelper.newAnalyzer();
+		analyzer = (item.isWhitespaceAnalyzer()) ? LuceneHelper.newWhitespaceAnalyzer() : LuceneHelper.newAnalyzer();
 	}
 
 	@SuppressWarnings("unchecked")
