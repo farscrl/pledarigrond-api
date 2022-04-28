@@ -183,7 +183,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         return cs.getValues();
     }
 
-    public void setPreschent(SurmiranConjugationStructure cs) {
+    private void setPreschent(SurmiranConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
 
@@ -315,7 +315,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     }
 
-    public void setImperfect(SurmiranConjugationStructure cs) {
+    private void setImperfect(SurmiranConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
 
@@ -391,7 +391,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     }
 
-    public void setConjunctiv(SurmiranConjugationStructure cs) {
+    private void setConjunctiv(SurmiranConjugationStructure cs) {
         switch (cs.getConjugationclass().id) {
 
             case "7":
@@ -442,7 +442,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public void setCundizional(SurmiranConjugationStructure cs) {
+    private void setCundizional(SurmiranConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
 
@@ -492,7 +492,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public void setParticipPerfect(SurmiranConjugationStructure cs) {
+    private void setParticipPerfect(SurmiranConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -561,7 +561,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public void setGerundium(SurmiranConjugationStructure cs) {
+    private void setGerundium(SurmiranConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "6":
@@ -591,7 +591,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     }
 
-    public void setImperativ(SurmiranConjugationStructure cs) {
+    private void setImperativ(SurmiranConjugationStructure cs) {
         switch (cs.getConjugationclass().id) {
             case "7":
             case "8":
@@ -631,7 +631,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public void setFutur(SurmiranConjugationStructure cs) {
+    private void setFutur(SurmiranConjugationStructure cs) {
         switch (getIsReflexive()) {
             case "true":
                 if (startsWithVocal(root)) {
@@ -786,7 +786,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public HashMap<String, String> addPronouns(HashMap<String, String> conjugation, InflectionSubType subType) {
+    private HashMap<String, String> addPronouns(HashMap<String, String> conjugation, InflectionSubType subType) {
         Map<String, String> pronouns;
 
         String verb = conjugation.get("verb");
@@ -807,7 +807,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    public HashMap<String, String> addReflexivePronouns(Map<String, String> conjugation, Map<String, String> pronouns, InflectionSubType subType) {
+    private HashMap<String, String> addReflexivePronouns(Map<String, String> conjugation, Map<String, String> pronouns, InflectionSubType subType) {
         cs = new SurmiranConjugationStructure();
         cs.setVerb(conjugation.get("verb"));
         cs.setInfinitiv(conjugation.get(SurmiranConjugationStructure.infinitiv));
@@ -872,7 +872,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         return cs.getAllFormValues();
     }
 
-    public HashMap<String, String> addStandardPronouns(Map<String, String> conjugation, InflectionSubType subType) {
+    private HashMap<String, String> addStandardPronouns(Map<String, String> conjugation, InflectionSubType subType) {
 
         SurmiranConjugationStructure cs = new SurmiranConjugationStructure();
 

@@ -86,7 +86,6 @@ public class SurmiranConjugationStructure {
 			participperfectms, participperfectfs, participperfectmp,
 			participperfectfp, imperativ1, imperativ2, gerundium, futursing1,
 			futursing2, futursing3, futurplural1, futurplural2, futurplural3
-
 	};
 
 	private HashMap<String, String> values;

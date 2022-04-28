@@ -158,7 +158,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         return cs.getValues();
     }
 
-    public void setPreschent(String root, SutsilvanConjugationStructure cs) {
+    private void setPreschent(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -209,7 +209,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setImperfect(String root, SutsilvanConjugationStructure cs) {
+    private void setImperfect(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -246,7 +246,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setConjunctiv(String root, SutsilvanConjugationStructure cs) {
+    private void setConjunctiv(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "5":
@@ -283,7 +283,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setCundizional(String root, SutsilvanConjugationStructure cs) {
+    private void setCundizional(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -312,7 +312,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setParticipPerfect(String root, SutsilvanConjugationStructure cs) {
+    private void setParticipPerfect(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -343,11 +343,11 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setGerundium(String root, SutsilvanConjugationStructure cs) {
+    private void setGerundium(String root, SutsilvanConjugationStructure cs) {
         cs.setGerundium(root + "ànd");
     }
 
-    public void setImperativ(String root, SutsilvanConjugationStructure cs) {
+    private void setImperativ(String root, SutsilvanConjugationStructure cs) {
 
         switch (cs.getConjugationclass().id) {
             case "1":
@@ -388,7 +388,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public void setFutur(String root, SutsilvanConjugationStructure cs) {
+    private void setFutur(String root, SutsilvanConjugationStructure cs) {
         char startChar = root.charAt(0);
         if (isVocal(startChar)) {
             cs.setFutursing1("vignt ad " + cs.getInfinitiv());
@@ -407,7 +407,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
     }
 
-    public HashMap<String, String> addPronouns(HashMap<String, String> conjugation, InflectionSubType inflectionSubType) {
+    private HashMap<String, String> addPronouns(HashMap<String, String> conjugation, InflectionSubType inflectionSubType) {
 
         SutsilvanConjugationStructure cs = new SutsilvanConjugationStructure();
 
