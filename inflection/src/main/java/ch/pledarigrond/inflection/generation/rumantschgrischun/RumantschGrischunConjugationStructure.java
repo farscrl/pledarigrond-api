@@ -85,7 +85,8 @@ public class RumantschGrischunConjugationStructure {
 			cundizionalplural1, cundizionalplural2, cundizionalplural3,
 			participperfectms, participperfectfs, participperfectmp,
 			participperfectfp, imperativ1, imperativ2, gerundium, futursing1,
-			futursing2, futursing3, futurplural1, futurplural2, futurplural3
+			futursing2, futursing3, futurplural1, futurplural2, futurplural3,
+			infinitiv
 	};
 
 	private HashMap<String, String> values;

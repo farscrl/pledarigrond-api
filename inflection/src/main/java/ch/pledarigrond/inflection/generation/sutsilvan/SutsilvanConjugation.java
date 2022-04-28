@@ -471,6 +471,6 @@ public class SutsilvanConjugation extends LanguageConjugation {
         cs.setFuturplural2(SutsilvanPronouns.pron_2pp + conjugation.get(SutsilvanConjugationStructure.futurplural2));
         cs.setFuturplural3(SutsilvanPronouns.pron_3pp + conjugation.get(SutsilvanConjugationStructure.futurplural3));
 
-        return cs.getValues();
+        return cs.getAllFormValues();
     }
 }
