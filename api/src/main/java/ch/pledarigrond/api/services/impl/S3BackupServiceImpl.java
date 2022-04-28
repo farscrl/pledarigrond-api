@@ -2,6 +2,7 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.S3BackupService;
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -44,8 +45,8 @@ public class S3BackupServiceImpl implements S3BackupService {
     }
 
     @Override
-    public void uploadFile(File file) {
-        PutObjectResult result = s3Client.putObject(pgEnvironment.getS3Bucket(), file.getName(), file);
+    public void uploadFile(String dbName, File file) {
+        PutObjectResult result = s3Client.putObject(pgEnvironment.getS3Bucket(), dbName + "/" +file.getName(), file);
         logger.info("Uploaded file to S3: " + file.getName());
     }
 }

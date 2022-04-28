@@ -61,7 +61,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		if (valid(backupFile, dbName)) {
 			LOG.info("backup file valid");
 
-			s3BackupService.uploadFile(backupFile);
+			s3BackupService.uploadFile(dbName, backupFile);
 
 			try {
 				cleanup();
