@@ -4,6 +4,7 @@ import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranInflection;
 import ch.pledarigrond.inflection.generation.generic.LanguageInflection;
+import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanInflection;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
@@ -31,6 +32,9 @@ public class InflectionServiceImpl implements InflectionService {
         switch (language) {
             case SURMIRAN:
                 inflection = new SurmiranInflection();
+                break;
+            case SUTSILVAN:
+                inflection = new SutsilvanInflection();
                 break;
             default:
                 inflection = null;
