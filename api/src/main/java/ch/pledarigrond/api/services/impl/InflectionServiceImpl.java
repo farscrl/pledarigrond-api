@@ -2,6 +2,7 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunInflection;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranInflection;
 import ch.pledarigrond.inflection.generation.generic.LanguageInflection;
 import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanInflection;
@@ -30,6 +31,9 @@ public class InflectionServiceImpl implements InflectionService {
 
         LanguageInflection inflection;
         switch (language) {
+            case RUMANTSCHGRISCHUN:
+                inflection = new RumantschGrischunInflection();
+                break;
             case SURMIRAN:
                 inflection = new SurmiranInflection();
                 break;
