@@ -18,7 +18,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("6", "-eir", "Finiziun sin -eir (parteir)"),
                     new InflectionSubType("7", "-eir (esch)", "Finiziun sin -eir cun infix esch (amplaneir)"),
                     new InflectionSubType("8", "-ar (esch)", "Finiziun sin -ar cun infix esch (abitar)"),
-                    new InflectionSubType("9", "verbs alternont", "Midada dal vocal en il tschep")
+                    new InflectionSubType("9", "verbs alternonts", "Midada dal vocal en il tschep")
             )
     );
 

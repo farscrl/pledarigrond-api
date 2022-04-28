@@ -29,7 +29,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         root = getRoot(infinitiv);
 
         if (conjugationClass.equals("9")) {
-            modRoot = changeVocalInRoot(root, conjugationClass);
+            modRoot = changeVocalInRoot(root);
 
             if (modRoot == null) {
                 throw new RuntimeException("For this conjugation you need to enter a verb with a vowel in its root!");
@@ -72,7 +72,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         return infinitiv;
     }
 
-    private String changeVocalInRoot(String root, String conjugationClass) {
+    private String changeVocalInRoot(String root) {
         StringBuilder builder = null;
 
         for (int i = root.length() - 1; i >= 0; i--) {
