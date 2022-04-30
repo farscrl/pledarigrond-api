@@ -166,7 +166,6 @@ public class Database {
 
 			@Override
 			public void remove() {
-				// TODO Auto-generated method stub
 			}
 		};
 		return entryIterator;
@@ -309,8 +308,7 @@ public class Database {
 			}
 
 		}
-		// TODO: This is inefficient! However, it should be ok for
-		// small queries, which is the expected usecase.
+		// This is inefficient! However, it should be ok for small queries, which is the expected usecase.
 
 		if (page >= 0 && pageSize > 0) {
 			found = found.skip(page * pageSize);
@@ -337,7 +335,6 @@ public class Database {
 	private Optional<BasicDBObject> getQuery(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
 											 long startTime, long endTime, LemmaVersion.Status[] states) {
 
-		// TODO: Add querying for 'current' state
 		BasicDBObject query = new BasicDBObject();
 		BasicDBObject attributes = new BasicDBObject();
 		if (loginOrIP != null && loginOrIP.trim().length() > 0) {
@@ -579,7 +576,6 @@ public class Database {
 
 			@Override
 			public void remove() {
-				// TODO Auto-generated method stub
 			}
 		};
 		return allEntries;

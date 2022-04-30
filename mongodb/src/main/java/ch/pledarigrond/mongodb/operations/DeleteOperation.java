@@ -38,8 +38,7 @@ public class DeleteOperation extends BaseOperation implements IDBOperation {
 
 	@Override
 	public void execute() throws InvalidEntryException, OperationRejectedException {
-		// TODO: re-add or delete
-		//Validator.validatePostInsert(entry);
+
 		try {
 			boolean approved = entry.getCurrent().isApproved();
 			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).delete(entry);

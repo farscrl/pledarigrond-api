@@ -231,7 +231,7 @@ public class PgUserInfo extends BasicDBObject {
 		if (getAdmin()) {
 			return EditorRole.ADMIN;
 		}
-		
+
 		return switch (language) {
 			case PUTER -> getPuterRole();
 			case RUMANTSCHGRISCHUN -> getRumantschgrischunRole();
