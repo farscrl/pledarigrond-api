@@ -1,7 +1,6 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.AdminService;
-import ch.pledarigrond.api.services.DumpLoaderService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
@@ -43,9 +42,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private LuceneService luceneService;
-
-    @Autowired
-    private DumpLoaderService dumpLoaderService;
 
     @Qualifier("backupInfoHelper")
     @Autowired
