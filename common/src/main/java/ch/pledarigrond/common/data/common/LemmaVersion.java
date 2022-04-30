@@ -60,40 +60,36 @@ public class LemmaVersion implements Serializable {
 		}
 	}
 
-	public static final String TIMESTAMP = "pg_timestamp";
-	public static final String TIMESTAMP__DEPRECATED = "maalr_timestamp";
+	public static final String TIMESTAMP = "timestamp";
 
-	public static final String CREATOR = "pg_creator";
-	public static final String CREATOR__DEPRECATED = "maalr_creator";
+	// this is the e-mail address of the creator of a lemma. If there is no user logged in, this value is PgUserInfo.DEFAULT_USER_NAME
+	public static final String CREATOR = "creator";
+
+	public static final String CREATOR_ROLE = "creator_role";
 
 	public static final String ID = "internal_id";
 
 	public static final String LEXENTRY_ID = "entry_id";
 
-	public static final String STATUS = "pg_status";
-	public static final String STATUS__DEPRECATED = "maalr_status";
+	public static final String STATUS = "status";
 
-	public static final String VERIFICATION = "pg_verification";
-	public static final String VERIFICATION__DEPRECATED = "maalr_verification";
+	public static final String VERIFICATION = "verification";
 
-	public static final String VERIFIER = "pg_verifier";
-	public static final String VERIFIER__DEPRECATED = "maalr_verifier";
+	public static final String VERIFIER = "verifier";
 
 	public static final Set<String> PG_KEYS;
 
-	public static final String COMMENT = "user_comment";
+	public static final String COMMENT = "contact_comment";
 	public static final String COMMENT__DEPRECATED = "maalr_comment";
+
+	// this is the e-mail address indicated as contact when making a suggestion. As this is a freetext field, it has no connection to the user.
+	public static final String EMAIL = "contact_email";
+	public static final String EMAIL__DEPRECATED = "maalr_email";
 
 	public static final String IP_ADDRESS = "user_ip";
 	public static final String IP_ADDRESS__DEPRECATED = "maalr_ip";
 
-	public static final String CREATOR_ROLE = "pg_creator_role";
-	public static final String CREATOR_ROLE__DEPRECATED = "maalr_creator_role";
-
 	public static final HashSet<String> PUBLIC_PG_KEYS;
-
-	public static final String EMAIL = "user_email";
-	public static final String EMAIL__DEPRECATED = "maalr_email";
 
 	public static final String OVERLAY_LANG_RM__DEPRECATED = "maalr_overlay_lang2";
 	public static final String OVERLAY_LANG_DE__DEPRECATED = "maalr_overlay_lang1";
@@ -128,8 +124,8 @@ public class LemmaVersion implements Serializable {
 
 	private LightUserInfo userInfo;
 
-	private HashMap<String, String> lemmaValues = new HashMap<String, String>();
-	private HashMap<String, String> pgValues = new HashMap<String, String>();
+	private HashMap<String, String> lemmaValues = new HashMap<>();
+	private HashMap<String, String> pgValues = new HashMap<>();
 
 	@Override
 	public int hashCode() {

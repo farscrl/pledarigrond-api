@@ -23,6 +23,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DatabaseStatistics;
+import ch.pledarigrond.mongodb.model.PgUserInfo;
 import ch.pledarigrond.mongodb.util.MongoHelper;
 import ch.pledarigrond.mongodb.util.Validator;
 import com.mongodb.BasicDBList;
@@ -524,14 +525,21 @@ public class Database {
 		while (xsr.nextTag() == XMLStreamConstants.START_ELEMENT) {
 			LexEntry entry = (LexEntry) unmarshaller.unmarshal(xsr);
 			entry.getVersionHistory().forEach(lemmaVersion -> {
-				HashMap<String, String> values = lemmaVersion.getLemmaValues();
+				HashMap<String, String> lemmaValues = lemmaVersion.getLemmaValues();
 
 				// clean up tasks (can be disabled if migration is done)
-				replaceOverlayFieldNames(values);
-				replaceOldFieldNames(values);
-				replaceRedirects(values);
+				replaceOverlayFieldNames(lemmaValues);
+				replaceOldFieldNames(lemmaValues);
+				replaceRedirects(lemmaValues);
 
-				lemmaVersion.setLemmaValues(values);
+				lemmaVersion.setLemmaValues(lemmaValues);
+
+				HashMap<String, String> pgValues = lemmaVersion.getPgValues();
+
+				// clean up tasks (can be disabled if migration is done)
+				replaceOldFieldNames(pgValues);
+
+				lemmaVersion.setPgValues(pgValues);
 			});
 			toInsert.add(new Document(Converter.convertLexEntry(entry)));
 			counter++;
@@ -625,35 +633,6 @@ public class Database {
 	}
 
 	private void replaceOldFieldNames(HashMap<String, String> values) {
-		String timestampOld = values.get(LemmaVersion.TIMESTAMP__DEPRECATED);
-		if (timestampOld != null) {
-			values.put(LemmaVersion.TIMESTAMP, timestampOld);
-		}
-		values.remove(LemmaVersion.TIMESTAMP__DEPRECATED);
-
-		String creatorOld = values.get(LemmaVersion.CREATOR__DEPRECATED);
-		if (creatorOld != null) {
-			values.put(LemmaVersion.CREATOR, creatorOld);
-		}
-		values.remove(LemmaVersion.CREATOR__DEPRECATED);
-
-		String statusOld = values.get(LemmaVersion.STATUS__DEPRECATED);
-		if (statusOld != null) {
-			values.put(LemmaVersion.STATUS, statusOld);
-		}
-		values.remove(LemmaVersion.STATUS__DEPRECATED);
-
-		String verificationOld = values.get(LemmaVersion.VERIFICATION__DEPRECATED);
-		if (verificationOld != null) {
-			values.put(LemmaVersion.VERIFICATION, verificationOld);
-		}
-		values.remove(LemmaVersion.VERIFICATION__DEPRECATED);
-
-		String verifierOld = values.get(LemmaVersion.VERIFIER__DEPRECATED);
-		if (verifierOld != null) {
-			values.put(LemmaVersion.VERIFIER, verifierOld);
-		}
-		values.remove(LemmaVersion.VERIFIER__DEPRECATED);
 
 		String commentOld = values.get(LemmaVersion.COMMENT__DEPRECATED);
 		if (commentOld != null) {
@@ -661,23 +640,17 @@ public class Database {
 		}
 		values.remove(LemmaVersion.COMMENT__DEPRECATED);
 
-		String ipOld = values.get(LemmaVersion.IP_ADDRESS__DEPRECATED);
-		if (ipOld != null) {
-			values.put(LemmaVersion.IP_ADDRESS, ipOld);
-		}
-		values.remove(LemmaVersion.IP_ADDRESS__DEPRECATED);
-
-		String creatorRoleOld = values.get(LemmaVersion.CREATOR_ROLE__DEPRECATED);
-		if (creatorRoleOld != null) {
-			values.put(LemmaVersion.CREATOR_ROLE, creatorRoleOld);
-		}
-		values.remove(LemmaVersion.CREATOR_ROLE__DEPRECATED);
-
 		String categoryOld = values.get(LemmaVersion.CATEGORIES__DEPRECATED);
 		if (categoryOld != null) {
 			values.put(LemmaVersion.CATEGORIES, categoryOld);
 		}
 		values.remove(LemmaVersion.CATEGORIES__DEPRECATED);
+
+		String emailOld = values.get(LemmaVersion.EMAIL__DEPRECATED);
+		if (emailOld != null) {
+			values.put(LemmaVersion.EMAIL, emailOld);
+		}
+		values.remove(LemmaVersion.EMAIL__DEPRECATED);
 	}
 
 	private void replaceRedirects(HashMap<String, String> values) {
