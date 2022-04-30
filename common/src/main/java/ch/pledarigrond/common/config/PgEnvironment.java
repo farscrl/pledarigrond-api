@@ -64,9 +64,6 @@ public class PgEnvironment {
 	@Value( "${pg.lucene.baseFolder}")
 	private String luceneBaseFolder;
 
-	@Value( "${pg.demoData.surmiran}")
-	private String demoDataSurmiran;
-
 	@Value( "${pg.admin.user}")
 	private String adminUsername;
 
@@ -140,10 +137,6 @@ public class PgEnvironment {
 		logger.info("**********************************************************************************");
 		logger.info("Initializing " + name + " (" + version + ")");
 		logger.info("**********************************************************************************");
-	}
-
-	public File getDemoDataSurmiranFile() {
-		return new File(this.getDemoDataSurmiran());
 	}
 
 	public String getMongoDbClientUrl() {

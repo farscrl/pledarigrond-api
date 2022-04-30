@@ -54,24 +54,12 @@ public class AdminServiceImpl implements AdminService {
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     @Override
-    public void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException {
-        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), -1);
-        rebuildIndex(language);
-    }
-
-    @Override
     public void dropDatabase(Language language) throws DatabaseException {
         Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).deleteAllEntries();
         boolean empty = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).isEmpty();
         if (!empty) {
             throw new DatabaseException("The database has been dropped but is still not empty, which is weird.");
         }
-    }
-
-    @Override
-    public void reloadDemoDatabase(Language language) throws DatabaseException, IndexException, IOException {
-        dropDatabase(language);
-        dumpLoaderService.createFromSQLDump(language, getDemoFileByLanguage(language), -1);
     }
 
     @Override
@@ -123,10 +111,5 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public File getBackupFile(Language language, String fileName) {
         return backupInfoHelper.getBackupFile(language, fileName);
-    }
-
-    private File getDemoFileByLanguage(Language language) {
-        // TODO: implement, if more demo-files are available
-        return pgEnvironment.getDemoDataSurmiranFile();
     }
 }

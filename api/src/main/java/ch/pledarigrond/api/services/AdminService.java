@@ -20,11 +20,7 @@ import java.security.NoSuchAlgorithmException;
 
 public interface AdminService {
 
-    void importDemoDatabase(Language language) throws NoDatabaseAvailableException, IndexException, InvalidEntryException, IOException;
-
     void dropDatabase(Language language) throws DatabaseException;
-
-    void reloadDemoDatabase(Language language) throws DatabaseException, IndexException, IOException;
 
     void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException;
 

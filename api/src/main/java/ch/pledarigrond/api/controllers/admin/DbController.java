@@ -36,12 +36,6 @@ public class DbController {
     private AdminService adminService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/import_demo_db")
-    void importDemoDb(@PathVariable("language")Language language) throws IndexException, InvalidEntryException, NoDatabaseAvailableException, IOException {
-        adminService.importDemoDatabase(language);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/drop_db")
     void dropDb(@PathVariable("language")Language language) {
         try {
