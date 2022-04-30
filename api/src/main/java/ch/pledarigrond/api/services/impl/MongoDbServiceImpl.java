@@ -44,11 +44,16 @@ public class MongoDbServiceImpl implements MongoDbService {
     }
 
     @Override
-    public void insert(Language language, LexEntry entry) throws Exception {
+    public void insert(Language language, LexEntry entry, boolean asSuggestion) throws Exception {
         String login = getUserLogin();
 
         addUserInfo(language, entry.getCurrent());
-        LexEntry modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login), language);
+        LexEntry modified;
+        if (asSuggestion) {
+            modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login).asSuggestion(), language);
+        } else {
+            modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login), language);
+        }
         luceneService.update(language, modified);
     }
 
@@ -82,7 +87,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
         String login = getUserLogin();
         addUserInfo(language, newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login), language);
+        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
 

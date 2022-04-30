@@ -50,6 +50,9 @@ public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOper
 				approved = current.isApproved();
 				current.setVerification(LemmaVersion.Verification.OUTDATED);
 			}
+			entry.getUnapprovedVersions().forEach(version -> {
+				version.setVerification(LemmaVersion.Verification.OUTDATED);
+			});
 			suggested.setVerifierId(getUserId());
 			modified.setVerification(LemmaVersion.Verification.ACCEPTED);
 			modified.setVerifierId(getUserId());

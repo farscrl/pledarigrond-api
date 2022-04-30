@@ -33,9 +33,9 @@ public class UpdateOperation extends BaseOperation implements IDBOperation {
 	private final LexEntry entry;
 	private final LemmaVersion newVersion;
 
-	public UpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry oldEntry, LemmaVersion newEntry) {
-		this.entry = oldEntry;
-		this.newVersion = newEntry;
+	public UpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry lexEntry, LemmaVersion newLemmaVersion) {
+		this.entry = lexEntry;
+		this.newVersion = newLemmaVersion;
 		this.language = language;
 		this.pgEnvironment = pgEnvironment;
 	}

@@ -113,7 +113,13 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public LexEntry insert(Language language, LexEntry entry) throws Exception {
-        db.insert(language, entry);
+        db.insert(language, entry, false);
+        return entry;
+    }
+
+    @Override
+    public LexEntry insertSuggestion(Language language, LexEntry entry) throws Exception {
+        db.insert(language, entry, true);
         return entry;
     }
 

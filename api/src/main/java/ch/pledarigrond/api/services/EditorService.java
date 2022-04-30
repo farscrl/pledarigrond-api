@@ -36,6 +36,8 @@ public interface EditorService {
 
     LexEntry insert(Language language, LexEntry entry) throws Exception;
 
+    LexEntry insertSuggestion(Language language, LexEntry entry) throws Exception;
+
     LexEntry update(Language language, LexEntry entry, LemmaVersion fromEditor) throws Exception;
 
     List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception;

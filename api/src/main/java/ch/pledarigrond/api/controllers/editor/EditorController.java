@@ -65,8 +65,12 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/lex_entries")
-    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, @RequestBody LexEntry lexEntry) {
+    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, @RequestBody LexEntry lexEntry, boolean asSuggestion) {
         try {
+            if (asSuggestion) {
+                return ResponseEntity.ok(editorService.insertSuggestion(language, lexEntry));
+            }
+
             return ResponseEntity.ok(editorService.insert(language, lexEntry));
 
         } catch (Exception e) {

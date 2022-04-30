@@ -8,7 +8,7 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import java.util.List;
 
 public interface MongoDbService {
-    void insert(Language language, LexEntry entry) throws Exception;
+    void insert(Language language, LexEntry entry, boolean asSuggestion) throws Exception;
 
     void suggestNewEntry(Language language, LexEntry entry) throws Exception;
 
