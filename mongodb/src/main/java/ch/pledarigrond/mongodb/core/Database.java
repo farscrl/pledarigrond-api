@@ -122,19 +122,7 @@ public class Database {
 	}
 
 	private String toLogString(LemmaVersion lemma) {
-		// TODO: re-implement
-		/*
-		String first = description.toUnescapedString(lemma, UseCase.RESULT_LIST, true);
-		String second = description.toUnescapedString(lemma, UseCase.RESULT_LIST, false);
-		if (first.length() > 15) {
-			first = first.substring(0, 15) + "...";
-		}
-		if (second.length() > 15) {
-			second = second.substring(0, 15) + "...";
-		}
-		return first + " ⇔ " + second;
-		*/
-		return "TODO";
+		return lemma.getLemmaValues().get("DStichwort") + " ⇔ " + lemma.getLemmaValues().get("RStichwort");
 	}
 
 	public void insert(final LexEntry entry) throws InvalidEntryException {
