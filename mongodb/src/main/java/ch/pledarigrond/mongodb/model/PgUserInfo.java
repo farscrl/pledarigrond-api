@@ -226,6 +226,21 @@ public class PgUserInfo extends BasicDBObject {
 
 		return roles;
 	}
+
+	public EditorRole getRoleByLanguage(Language language) {
+		if (getAdmin()) {
+			return EditorRole.ADMIN;
+		}
+		
+		return switch (language) {
+			case PUTER -> getPuterRole();
+			case RUMANTSCHGRISCHUN -> getRumantschgrischunRole();
+			case SURMIRAN -> getSurmiranRole();
+			case SURSILVAN -> getSursilvanRole();
+			case SUTSILVAN -> getSutsilvanRole();
+			case VALLADER -> getValladerRole();
+		};
+	}
 	
 	@Override
 	public int hashCode() {

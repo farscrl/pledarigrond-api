@@ -47,7 +47,7 @@ public class MongoDbServiceImpl implements MongoDbService {
     public void insert(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
 
-        addUserInfo(entry.getCurrent());
+        addUserInfo(language, entry.getCurrent());
         LexEntry modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login), language);
         luceneService.update(language, modified);
     }
@@ -58,7 +58,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         if(entry.getVersionHistory() == null || entry.getVersionHistory().size() != 1) throw new InvalidEntryException("Invalid suggestion!");
         validateUserModification(entry.getCurrent(), entry.getMostRecent());
         String login = getUserLogin();
-        addUserInfo(entry.getMostRecent());
+        addUserInfo(language, entry.getMostRecent());
         LexEntry modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
@@ -71,7 +71,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         if(oldEntry == null) throw new InvalidEntryException("Entry not found!");
         validateUserModification(oldEntry.getCurrent(), newEntry);
         String login = getUserLogin();
-        addUserInfo(newEntry);
+        addUserInfo(language, newEntry);
         LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
@@ -81,7 +81,7 @@ public class MongoDbServiceImpl implements MongoDbService {
         if(newEntry == null) throw new InvalidEntryException("Lemma must not be null!");
         if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
         String login = getUserLogin();
-        addUserInfo(newEntry);
+        addUserInfo(language, newEntry);
         LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login), language);
         luceneService.update(language, modified);
     }
@@ -95,10 +95,8 @@ public class MongoDbServiceImpl implements MongoDbService {
 
     @Override
     public void restore(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception {
-//		if(valid == null) throw new InvalidEntryException("Lemma must not be null!");
-//		if(invalid == null) throw new InvalidEntryException("Lemma must not be null!");
         String login = getUserLogin();
-        addUserInfo(valid);
+        addUserInfo(language, valid);
         LexEntry modified = queue.push(new RestoreOperation(invalid, valid).setLogin(login), language);
         luceneService.update(language, modified);
     }
@@ -113,7 +111,7 @@ public class MongoDbServiceImpl implements MongoDbService {
     @Override
     public void reject(Language language, LexEntry entry, LemmaVersion version) throws Exception {
         String login = getUserLogin();
-        addUserInfo(version);
+        addUserInfo(language, version);
         LexEntry modified = queue.push(new RejectOperation(pgEnvironment, language, entry, version).setLogin(login), language);
         luceneService.update(language, modified);
     }
@@ -180,9 +178,9 @@ public class MongoDbServiceImpl implements MongoDbService {
         }
     }
 
-    private void addUserInfo(LemmaVersion lemma) {
+    private void addUserInfo(Language language, LemmaVersion lemma) {
         String ip = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
         lemma.setIP(ip);
-        // lemma.setCreatorRole(userService.getCurrentUserOrDefaultUser().getRole()); // TODO(CGA): Add again
+        lemma.setCreatorRole(userService.getCurrentUserOrDefaultUser().getRoleByLanguage(language));
     }
 }
