@@ -634,6 +634,14 @@ public class Database {
 
 	private void replaceOldFieldNames(HashMap<String, String> values) {
 
+		String creatorOld = values.get(LemmaVersion.CREATOR);
+		if (creatorOld != null) {
+			if (creatorOld.equals("anonymousUser")) {
+				creatorOld = PgUserInfo.DEFAULT_USER_NAME;
+			}
+			values.put(LemmaVersion.CREATOR, creatorOld);
+		}
+
 		String commentOld = values.get(LemmaVersion.COMMENT__DEPRECATED);
 		if (commentOld != null) {
 			values.put(LemmaVersion.COMMENT, commentOld);

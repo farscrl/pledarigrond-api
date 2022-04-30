@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     public PgUserInfo getCurrentUserOrDefaultUser() {
 
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
-        String name = "guest@pledarigrond.ch";
+        String name = PgUserInfo.DEFAULT_USER_NAME;
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             name = SecurityContextHolder.getContext().getAuthentication().getName();
         } else {

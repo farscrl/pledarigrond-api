@@ -31,6 +31,8 @@ public class PgUserInfo extends BasicDBObject {
 
 	private static final long serialVersionUID = 1188500902567455955L;
 
+	final public static String DEFAULT_USER_NAME = "guest@pledarigrond.ch";
+
 	final String ROLE_PREFIX = "ROLE_";
 
 	public PgUserInfo() {
