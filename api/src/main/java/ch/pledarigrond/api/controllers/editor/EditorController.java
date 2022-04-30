@@ -173,7 +173,6 @@ public class EditorController {
     @GetMapping("/search")
     ResponseEntity<?> searchLexEntries(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
         try {
-            searchCriteria.setSuggestions(true);
             return ResponseEntity.ok(editorService.search(language, searchCriteria, pagination));
         } catch (Exception e) {
             e.printStackTrace();
