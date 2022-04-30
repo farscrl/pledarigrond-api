@@ -94,7 +94,7 @@ public class MongoDbServiceImpl implements MongoDbService {
     }
 
     @Override
-    public void restore(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception {
+    public void restoreOldVersion(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception {
         String login = getUserLogin();
         addUserInfo(language, valid);
         LexEntry modified = queue.push(new RestoreOperation(invalid, valid).setLogin(login), language);

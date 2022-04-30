@@ -18,7 +18,7 @@ public interface MongoDbService {
 
     void delete(Language language, LexEntry entry) throws Exception;
 
-    void restore(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception;
+    void restoreOldVersion(Language language, LemmaVersion invalid, LemmaVersion valid) throws Exception;
 
     void accept(Language language, LexEntry entry, LemmaVersion version) throws Exception;
 
