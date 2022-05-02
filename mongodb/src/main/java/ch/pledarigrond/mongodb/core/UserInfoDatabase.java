@@ -38,17 +38,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.*;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static com.mongodb.client.model.Filters.eq;
 
 @Component
 public class UserInfoDatabase {
 
-	private PgEnvironment pgEnvironment;
+	private final PgEnvironment pgEnvironment;
 
 	private MongoCollection<Document> userCollection;
 	private static final Logger logger = LoggerFactory.getLogger(UserInfoDatabase.class);
@@ -220,4 +228,39 @@ public class UserInfoDatabase {
 		return deleteOne.getDeletedCount() == 1;
 	}
 
+	public void exportData(OutputStream output, String fileName) throws JAXBException, IOException, NoSuchAlgorithmException {
+		MongoCursor<Document> cursor = userCollection.find().iterator();
+		JAXBContext context = JAXBContext.newInstance(PgUser.class);
+		ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(output));
+		zout.putNextEntry(new ZipEntry(fileName + ".xml"));
+		MD5OutputStream md5 = new MD5OutputStream(zout);
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(md5, StandardCharsets.UTF_8));
+		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		out.write("\n<users>\n");
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+		int entryCounter = 0;
+		int versionCounter = 0;
+		while (cursor.hasNext()) {
+			DBObject object = new BasicDBObject(cursor.next());
+			PgUser user = new PgUser(object);
+			marshaller.marshal(user, out);
+			out.write("\n");
+			entryCounter++;
+
+		}
+		out.write("\n</users>\n");
+		out.flush();
+		zout.closeEntry();
+		zout.putNextEntry(new ZipEntry("About.txt"));
+		out = new BufferedWriter(new OutputStreamWriter(zout, StandardCharsets.UTF_8));
+		out.write("MD5:\t" + md5.getHash() + "\n");
+		out.write("Entries:\t" + entryCounter + "\n");
+		out.write("Versions:\t" + versionCounter + "\n");
+		out.flush();
+		zout.closeEntry();
+		zout.close();
+	}
 }

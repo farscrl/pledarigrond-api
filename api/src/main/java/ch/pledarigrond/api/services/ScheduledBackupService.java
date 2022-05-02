@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import javax.xml.bind.JAXBException;
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,6 +31,9 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 	@Autowired
 	private S3BackupService s3BackupService;
 
+	@Autowired
+	private UserService userService;
+
 	@Scheduled(cron = "${pg.backup.cron.rumantschgrischun}")
 	public void backupRumantschgrischun() {
 		backup(Language.RUMANTSCHGRISCHUN);
@@ -44,6 +47,11 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 	@Scheduled(cron = "${pg.backup.cron.sutsilvan}")
 	public void backupSutsilvan() {
 		backup(Language.SUTSILVAN);
+	}
+
+	@Scheduled(cron = "${pg.backup.cron.users}")
+	public void backupUsers() throws JAXBException, IOException, NoSuchAlgorithmException {
+		backupUserDb();
 	}
 
 	private void backup(Language language) {
@@ -71,6 +79,24 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		} else {
 			LOG.error("back up file is not valid.");
 		}
+
+		LOG.info("finished scheduled backup");
+	}
+
+	private void backupUserDb() throws IOException, JAXBException, NoSuchAlgorithmException {
+		LOG.info("started backup for users table");
+		String backupFileName = buildName("users");
+		LOG.info("backup file name created: {}", backupFileName);
+
+
+		File backupDir = new File(pgEnvironment.getBackupLocation());
+		backupDir.mkdirs();
+		File backupFile = new File(backupDir, backupFileName);
+		userService.exportData(new FileOutputStream(backupFile), backupFileName);
+
+		LOG.info("user backup created: {}", backupFile.getAbsolutePath());
+
+		s3BackupService.uploadFile("users", backupFile);
 
 		LOG.info("finished scheduled backup");
 	}

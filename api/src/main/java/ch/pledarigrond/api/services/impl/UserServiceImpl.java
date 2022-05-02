@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.xml.bind.JAXBException;
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
@@ -99,5 +102,11 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(LightUserInfo user) {
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.deleteUser(user);
+    }
+
+    @Override
+    public void exportData(OutputStream output, String fileName) throws JAXBException, IOException, NoSuchAlgorithmException {
+        UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
+        userInfoDatabase.exportData(output, fileName);
     }
 }

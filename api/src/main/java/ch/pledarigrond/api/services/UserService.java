@@ -5,6 +5,10 @@ import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.mongodb.model.PgUser;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface UserService {
@@ -90,4 +94,6 @@ public interface UserService {
      * Deletes a user. <br>
      */
     boolean deleteUser(LightUserInfo user);
+
+    public void exportData(OutputStream output, String fileName) throws JAXBException, IOException, NoSuchAlgorithmException;
 }
