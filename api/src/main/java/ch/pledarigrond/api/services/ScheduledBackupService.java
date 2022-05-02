@@ -72,7 +72,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 			s3BackupService.uploadFile(dbName, backupFile);
 
 			try {
-				cleanup();
+				cleanup(dbName);
 			} catch (ScheduledBackupException e) {
 				LOG.error("back up file is not valid.");
 			}
@@ -98,6 +98,12 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 
 		s3BackupService.uploadFile("users", backupFile);
 
+		try {
+			cleanup("users");
+		} catch (ScheduledBackupException e) {
+			LOG.error("back up file is not valid.");
+		}
+
 		LOG.info("finished scheduled backup");
 	}
 
@@ -113,15 +119,14 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		return backupFile;
 	}
 
-	private void cleanup() throws ScheduledBackupException {
-		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation());
-		if (backupFiles.size() >= Integer.parseInt(pgEnvironment.getBackupNumber())) {
-			boolean delete = backupFiles.get(0).delete();
+	private void cleanup(String dbName) throws ScheduledBackupException {
+		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
+		while (backupFiles.size() > Integer.parseInt(pgEnvironment.getBackupNumber())) {
+			boolean delete = backupFiles.get(backupFiles.size() - 1).delete();
 			if (!delete) {
-				throw new ScheduledBackupException(String.format(
-						"could not delete obsolete backup file: %s",
-						backupFiles.get(0).getAbsolutePath()));
+				throw new ScheduledBackupException(String.format("could not delete obsolete backup file: %s", backupFiles.get(0).getAbsolutePath()));
 			}
+			backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
 		}
 
 		LOG.info("list of backupFiles...");
