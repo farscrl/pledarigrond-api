@@ -6,7 +6,7 @@ import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.mongodb.core.UserInfoDatabase;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,10 +27,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PgUserInfo getCurrentUserOrDefaultUser() {
+    public PgUser getCurrentUserOrDefaultUser() {
 
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
-        String name = PgUserInfo.DEFAULT_USER_NAME;
+        String name = PgUser.DEFAULT_USER_NAME;
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             name = SecurityContextHolder.getContext().getAuthentication().getName();
         } else {
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PgUserInfo updateUser(PgUserInfo updated) throws InvalidUserException {
+    public PgUser updateUser(PgUser updated) throws InvalidUserException {
         logger.info("Updating user data:" + updated + "");
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.updateUser(updated);
@@ -66,25 +66,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PgUserInfo getByEmail(String email) {
+    public PgUser getByEmail(String email) {
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.getByEmail(email);
     }
 
     @Override
-    public PgUserInfo insert(PgUserInfo user) throws InvalidUserException {
+    public PgUser insert(PgUser user) throws InvalidUserException {
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.insert(user);
     }
 
     @Override
-    public List<PgUserInfo> getAllUsers(EditorRole role, String text, String sortColumn, boolean sortAscending, int from, int length) {
+    public List<PgUser> getAllUsers(EditorRole role, String text, String sortColumn, boolean sortAscending, int from, int length) {
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.getAllUsers(text, sortColumn, sortAscending, from, length);
     }
 
     @Override
-    public List<PgUserInfo> getAllUsers(int from, int length, String sortColumn, boolean sortAscending) {
+    public List<PgUser> getAllUsers(int from, int length, String sortColumn, boolean sortAscending) {
         UserInfoDatabase userInfoDatabase = UserInfoDatabase.getInstance(pgEnvironment);
         return userInfoDatabase.getAllUsers(from, length, sortColumn, sortAscending);
     }

@@ -13,7 +13,7 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import ch.pledarigrond.mongodb.operations.*;
 import ch.pledarigrond.mongodb.util.DBCommandQueue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,7 +175,7 @@ public class MongoDbServiceImpl implements MongoDbService {
 
     private String getUserLogin() {
         try {
-            PgUserInfo user = userService.getCurrentUserOrDefaultUser();
+            PgUser user = userService.getCurrentUserOrDefaultUser();
             return user.getEmail();
 
         } catch (Exception e) {

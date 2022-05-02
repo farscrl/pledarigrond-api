@@ -23,7 +23,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DatabaseStatistics;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import ch.pledarigrond.mongodb.util.MongoHelper;
 import ch.pledarigrond.mongodb.util.Validator;
 import com.mongodb.BasicDBList;
@@ -637,7 +637,7 @@ public class Database {
 		String creatorOld = values.get(LemmaVersion.CREATOR);
 		if (creatorOld != null) {
 			if (creatorOld.equals("anonymousUser")) {
-				creatorOld = PgUserInfo.DEFAULT_USER_NAME;
+				creatorOld = PgUser.DEFAULT_USER_NAME;
 			}
 			values.put(LemmaVersion.CREATOR, creatorOld);
 		}

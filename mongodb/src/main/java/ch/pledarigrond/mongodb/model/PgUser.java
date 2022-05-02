@@ -23,11 +23,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
-public class PgUserInfo extends BasicDBObject {
+@XmlRootElement
+public class PgUser extends BasicDBObject {
 
 	private static final long serialVersionUID = 1188500902567455955L;
 
@@ -35,18 +36,18 @@ public class PgUserInfo extends BasicDBObject {
 
 	final String ROLE_PREFIX = "ROLE_";
 
-	public PgUserInfo() {
+	public PgUser() {
 	}
 
-	public PgUserInfo(DBObject obj) {
+	public PgUser(DBObject obj) {
 		super.putAll(obj);
 	}
 
-	public PgUserInfo(String email) {
+	public PgUser(String email) {
 		setEmail(email);
 	}
 
-	public PgUserInfo(final String email, final String password) {
+	public PgUser(final String email, final String password) {
 		setEmail(email);
 		setPassword(password);
 	}
@@ -55,6 +56,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.EMAIL, email);
 	}
 
+	@XmlElement
 	public String getEmail() {
 		return super.getString(Constants.Users.EMAIL);
 	}
@@ -66,6 +68,12 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt()));
 	}
 
+	@XmlElement
+	public String getPassword() {
+		return super.getString(Constants.Users.PASSWORD);
+	}
+
+	@XmlElement
 	public boolean getAdmin() {
 		return super.getBoolean(Constants.Users.IS_ADMIN);
 	}
@@ -74,6 +82,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.IS_ADMIN, isAdmin);
 	}
 
+	@XmlElement
 	public EditorRole getPuterRole() {
 		String role = super.getString(Constants.Users.ROLE_PUTER);
 		if (role == null) {
@@ -86,6 +95,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_PUTER, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getRumantschgrischunRole() {
 		String role = super.getString(Constants.Users.ROLE_RUMANTSCHGRISCHUN);
 		if (role == null) {
@@ -98,6 +108,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_RUMANTSCHGRISCHUN, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getSurmiranRole() {
 		String role = super.getString(Constants.Users.ROLE_SURMIRAN);
 		if (role == null) {
@@ -110,6 +121,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_SURMIRAN, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getSursilvanRole() {
 		String role = super.getString(Constants.Users.ROLE_SURSILVAN);
 		if (role == null) {
@@ -122,6 +134,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_SURSILVAN, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getSutsilvanRole() {
 		String role = super.getString(Constants.Users.ROLE_SUTSILVAN);
 		if (role == null) {
@@ -134,6 +147,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_SUTSILVAN, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getValladerRole() {
 		String role = super.getString(Constants.Users.ROLE_VALLADER);
 		if (role == null) {
@@ -146,6 +160,7 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_VALLADER, role.toString());
 	}
 
+	@XmlElement
 	public EditorRole getNamesRole() {
 		String role = super.getString(Constants.Users.ROLE_NAMES);
 		if (role == null) {
@@ -158,10 +173,6 @@ public class PgUserInfo extends BasicDBObject {
 		super.put(Constants.Users.ROLE_NAMES, role.toString());
 	}
 
-	public String getPassword() {
-		return super.getString(Constants.Users.PASSWORD);
-	}
-	
 	public LightUserInfo toLightUser() {
 		RolesObject roles = new RolesObject();
 		roles.setPuterRole(getPuterRole());
@@ -184,7 +195,8 @@ public class PgUserInfo extends BasicDBObject {
 	public void setCreationDate(long currentTimeMillis) {
 		super.put(Constants.Users.CREATION_DATE, currentTimeMillis);
 	}
-	
+
+	@XmlElement
 	public long getCreationDate() {
 		return super.getLong(Constants.Users.CREATION_DATE);
 	}
@@ -192,7 +204,8 @@ public class PgUserInfo extends BasicDBObject {
 	public void setLastModificationDate(long currentTimeMillis) {
 		super.put(Constants.Users.LAST_MODIFICATION, currentTimeMillis);
 	}
-	
+
+	@XmlElement
 	public long getLastModificationDate() {
 		return super.getLong(Constants.Users.LAST_MODIFICATION);
 	}

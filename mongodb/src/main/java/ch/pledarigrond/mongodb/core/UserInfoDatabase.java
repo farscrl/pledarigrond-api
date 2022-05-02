@@ -20,7 +20,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import ch.pledarigrond.mongodb.util.MongoHelper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -106,7 +106,7 @@ public class UserInfoDatabase {
 		userCollection.drop();
 	}
 
-	public PgUserInfo insert(PgUserInfo user) throws InvalidUserException {
+	public PgUser insert(PgUser user) throws InvalidUserException {
 		if(userExists(user.getEmail())) throw new InvalidUserException("User already exists!");
 		long now = System.currentTimeMillis();
 		user.setCreationDate(now);
@@ -116,36 +116,36 @@ public class UserInfoDatabase {
 		return user;
 	}
 	
-	public PgUserInfo getByEmail(String email) {
+	public PgUser getByEmail(String email) {
 		BasicDBObject obj = new BasicDBObject();
 		obj.put(Constants.Users.EMAIL, email);
 		return findByDbObject(obj);
 	}
 
-	private PgUserInfo findByDbObject(BasicDBObject obj) {
+	private PgUser findByDbObject(BasicDBObject obj) {
 		MongoCursor<Document> cursor = userCollection.find(obj).iterator();
 		if(!cursor.hasNext()) return null;
-		PgUserInfo toReturn = new PgUserInfo(new BasicDBObject(cursor.next()));
+		PgUser toReturn = new PgUser(new BasicDBObject(cursor.next()));
 		cursor.close();
 		return toReturn;
 	}
 
-	public PgUserInfo getOrCreate(String email) throws InvalidUserException {
+	public PgUser getOrCreate(String email) throws InvalidUserException {
 		if(userExists(email)) {
 			return getByEmail(email);
 		} else {
-			return insert(new PgUserInfo(email));
+			return insert(new PgUser(email));
 		}
 	}
 
-	public PgUserInfo updateUser(PgUserInfo user) throws InvalidUserException {
+	public PgUser updateUser(PgUser user) throws InvalidUserException {
 		if(!userExists(user.getEmail())) {
 			throw new InvalidUserException("User does not exist");
 		}
 		return update(user);
 	}
 
-	private PgUserInfo update(PgUserInfo user) {
+	private PgUser update(PgUser user) {
 		Document document = new Document(user);
 		// userCollection.updateOne(Filters.eq("_id", new ObjectId(user.getString("_id"))), document);
 		userCollection.replaceOne(eq("_id", new ObjectId(user.getString("_id"))), document, new ReplaceOptions());
@@ -153,7 +153,7 @@ public class UserInfoDatabase {
 		return user;
 	}
 	
-	public List<PgUserInfo> getAllUsers(int from, int length, String sortColumn, boolean sortAscending) {
+	public List<PgUser> getAllUsers(int from, int length, String sortColumn, boolean sortAscending) {
 		
 		FindIterable<Document> find = userCollection.find();
 		
@@ -165,19 +165,19 @@ public class UserInfoDatabase {
 		
 		find = find.skip(from).limit(length);
 		
-		List<PgUserInfo> all = new ArrayList<PgUserInfo>();
+		List<PgUser> all = new ArrayList<PgUser>();
 		MongoCursor<Document> cursor = find.iterator();
 		
 		while(cursor.hasNext()) {
 			DBObject o = new BasicDBObject(cursor.next());
-			PgUserInfo user = new PgUserInfo(o);
+			PgUser user = new PgUser(o);
 			all.add(user);
 		}
 		cursor.close();
 		return all;
 	}
 	
-	public List<PgUserInfo> getAllUsers(String text, String sortColumn, boolean sortAscending, int from, int length) {
+	public List<PgUser> getAllUsers(String text, String sortColumn, boolean sortAscending, int from, int length) {
 		BasicDBObject query = new BasicDBObject();
 		Pattern pattern = Pattern.compile(".*" + text + ".*", Pattern.CASE_INSENSITIVE);
 
@@ -196,12 +196,12 @@ public class UserInfoDatabase {
 		}
 		
 		find = find.skip(from).limit(length);
-		List<PgUserInfo> all = new ArrayList<PgUserInfo>();
+		List<PgUser> all = new ArrayList<PgUser>();
 		
 		MongoCursor<Document> cursor = find.iterator();
 		while(cursor.hasNext()) {
 			DBObject o = new BasicDBObject(cursor.next());
-			PgUserInfo user = new PgUserInfo(o);
+			PgUser user = new PgUser(o);
 			if(!all.contains(user)) 
 				all.add(user);
 		}

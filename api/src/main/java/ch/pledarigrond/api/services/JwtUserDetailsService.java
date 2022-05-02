@@ -1,6 +1,6 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        PgUserInfo userInfo = userService.getByEmail(email);
+        PgUser userInfo = userService.getByEmail(email);
 
         if (userInfo == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);

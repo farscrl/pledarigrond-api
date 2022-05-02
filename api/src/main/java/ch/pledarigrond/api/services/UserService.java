@@ -3,7 +3,7 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface UserService {
      * Returns the user infos of the user currently logged in. If the user
      * is not logged in, a default user is returned <br>
      */
-    PgUserInfo getCurrentUserOrDefaultUser();
+    PgUser getCurrentUserOrDefaultUser();
 
     /**
      * Modifies personal information of the user. Everyone with a unique user
@@ -24,7 +24,7 @@ public interface UserService {
      *            The updated user
      * @throws InvalidUserException
      */
-    PgUserInfo updateUser(PgUserInfo updated) throws InvalidUserException;
+    PgUser updateUser(PgUser updated) throws InvalidUserException;
 
     /**
      * For tests only! This method deletes all users in the database. <br>
@@ -46,7 +46,7 @@ public interface UserService {
      * @param email
      * @return
      */
-    PgUserInfo getByEmail(String email);
+    PgUser getByEmail(String email);
 
     /**
      * Inserts a new user into the database. <br>
@@ -54,7 +54,7 @@ public interface UserService {
      * @param user
      * @throws InvalidUserException
      */
-    PgUserInfo insert(PgUserInfo user) throws InvalidUserException;
+    PgUser insert(PgUser user) throws InvalidUserException;
 
     /**
      * Returns the list of all users. <br>
@@ -75,9 +75,9 @@ public interface UserService {
      *            the number of elements to return
      * @return
      */
-    List<PgUserInfo> getAllUsers(EditorRole role, String text, String sortColumn, boolean sortAscending, int from, int length);
+    List<PgUser> getAllUsers(EditorRole role, String text, String sortColumn, boolean sortAscending, int from, int length);
 
-    List<PgUserInfo> getAllUsers(int from, int length, String sortColumn, boolean sortAscending);
+    List<PgUser> getAllUsers(int from, int length, String sortColumn, boolean sortAscending);
 
     /**
      * Returns the number of users in the database. <br>

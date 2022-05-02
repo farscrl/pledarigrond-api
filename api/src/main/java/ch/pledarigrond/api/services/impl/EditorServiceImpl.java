@@ -16,7 +16,7 @@ import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
@@ -235,7 +235,7 @@ public class EditorServiceImpl implements EditorService {
 
     private void addUserInfo(LemmaVersion lemma) {
         String userId = lemma.getUserId();
-        PgUserInfo userInfo = userInfos.getByEmail(userId);
+        PgUser userInfo = userInfos.getByEmail(userId);
         if(userInfo != null) {
             lemma.setUserInfo(userInfo.toLightUser());
         }

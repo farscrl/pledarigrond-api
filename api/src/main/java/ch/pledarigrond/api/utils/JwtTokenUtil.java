@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +49,7 @@ public class JwtTokenUtil {
     }
 
     //generate token for user
-    public String generateToken(PgUserInfo userInfo) {
+    public String generateToken(PgUser userInfo) {
         Map<String, Object> claims = new HashMap<>();
 
         // add roles

@@ -1,27 +1,27 @@
 package ch.pledarigrond.api.transformers;
 
 import ch.pledarigrond.common.data.common.LightUserInfo;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 
 public class LightUserToPgUserTransformer {
 
-    public static PgUserInfo toPgUserInfo(LightUserInfo lightUser) {
-        PgUserInfo pgUserInfo = new PgUserInfo();
-        return updatePgUserInfo(pgUserInfo, lightUser);
+    public static PgUser toPgUserInfo(LightUserInfo lightUser) {
+        PgUser pgUser = new PgUser();
+        return updatePgUserInfo(pgUser, lightUser);
     }
 
-    public static PgUserInfo updatePgUserInfo(PgUserInfo pgUserInfo, LightUserInfo lightUser) {
-        pgUserInfo.setEmail(lightUser.getEmail());
-        pgUserInfo.setPassword(lightUser.getPassword());
-        pgUserInfo.setAdmin(lightUser.isAdmin());
-        pgUserInfo.setPuterRole(lightUser.getRoles().getPuterRole());
-        pgUserInfo.setRumantschgrischunRole(lightUser.getRoles().getRumantschgrischunRole());
-        pgUserInfo.setSurmiranRole(lightUser.getRoles().getSurmiranRole());
-        pgUserInfo.setSursilvanRole(lightUser.getRoles().getSursilvanRole());
-        pgUserInfo.setSutsilvanRole(lightUser.getRoles().getSutsilvanRole());
-        pgUserInfo.setValladerRole(lightUser.getRoles().getValladerRole());
-        pgUserInfo.setNamesRole(lightUser.getRoles().getNamesRole());
+    public static PgUser updatePgUserInfo(PgUser pgUser, LightUserInfo lightUser) {
+        pgUser.setEmail(lightUser.getEmail());
+        pgUser.setPassword(lightUser.getPassword());
+        pgUser.setAdmin(lightUser.isAdmin());
+        pgUser.setPuterRole(lightUser.getRoles().getPuterRole());
+        pgUser.setRumantschgrischunRole(lightUser.getRoles().getRumantschgrischunRole());
+        pgUser.setSurmiranRole(lightUser.getRoles().getSurmiranRole());
+        pgUser.setSursilvanRole(lightUser.getRoles().getSursilvanRole());
+        pgUser.setSutsilvanRole(lightUser.getRoles().getSutsilvanRole());
+        pgUser.setValladerRole(lightUser.getRoles().getValladerRole());
+        pgUser.setNamesRole(lightUser.getRoles().getNamesRole());
 
-        return pgUserInfo;
+        return pgUser;
     }
 }

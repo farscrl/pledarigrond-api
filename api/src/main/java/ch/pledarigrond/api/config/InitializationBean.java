@@ -3,7 +3,7 @@ package ch.pledarigrond.api.config;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,10 +35,10 @@ public class InitializationBean implements InitializingBean {
                 return;
             }
 
-            PgUserInfo pgUserInfo = new PgUserInfo(pgEnvironment.getAdminUsername(), pgEnvironment.getAdminPassword());
-            pgUserInfo.setAdmin(true);
+            PgUser pgUser = new PgUser(pgEnvironment.getAdminUsername(), pgEnvironment.getAdminPassword());
+            pgUser.setAdmin(true);
 
-            userService.insert(pgUserInfo);
+            userService.insert(pgUser);
         }
     }
 }

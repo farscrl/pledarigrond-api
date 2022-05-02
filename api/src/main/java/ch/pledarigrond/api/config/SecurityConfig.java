@@ -1,6 +1,6 @@
 package ch.pledarigrond.api.config;
 
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // We don't need CSRF for this example
         httpSecurity
-                .anonymous().principal(PgUserInfo.DEFAULT_USER_NAME).and()
+                .anonymous().principal(PgUser.DEFAULT_USER_NAME).and()
 
                 .cors().and()
                 .csrf().disable()

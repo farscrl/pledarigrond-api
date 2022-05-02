@@ -4,7 +4,7 @@ import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.api.transformers.LightUserToPgUserTransformer;
 import ch.pledarigrond.common.data.common.LightUserInfo;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUserInfo;
+import ch.pledarigrond.mongodb.model.PgUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +29,7 @@ public class UsersController {
     ResponseEntity<?> list() {
         Pageable pageable = PageRequest.of(0, 10000);
         List<LightUserInfo> users = new ArrayList<>();
-        for(PgUserInfo user : userService.getAllUsers(0, 10000, null, true)) {
+        for(PgUser user : userService.getAllUsers(0, 10000, null, true)) {
             users.add(user.toLightUser());
         }
         return ResponseEntity.ok(new PageImpl<>(users, pageable, users.size()));
@@ -38,15 +38,15 @@ public class UsersController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     ResponseEntity<?> create(@Validated @RequestBody LightUserInfo user) throws InvalidUserException {
-        PgUserInfo pgUserInfo = LightUserToPgUserTransformer.toPgUserInfo(user);
+        PgUser pgUser = LightUserToPgUserTransformer.toPgUserInfo(user);
 
-        return ResponseEntity.ok(userService.insert(pgUserInfo).toLightUser());
+        return ResponseEntity.ok(userService.insert(pgUser).toLightUser());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{email}")
     ResponseEntity<?> getOne(@PathVariable("email")String email) {
-        PgUserInfo user = userService.getByEmail(email);
+        PgUser user = userService.getByEmail(email);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -61,15 +61,15 @@ public class UsersController {
             throw new InvalidUserException("emails are not equal");
         }
 
-        PgUserInfo currentUser = userService.getByEmail(email);
-        PgUserInfo pgUserInfo = LightUserToPgUserTransformer.updatePgUserInfo(currentUser, user);
-        return ResponseEntity.ok(userService.updateUser(pgUserInfo));
+        PgUser currentUser = userService.getByEmail(email);
+        PgUser pgUser = LightUserToPgUserTransformer.updatePgUserInfo(currentUser, user);
+        return ResponseEntity.ok(userService.updateUser(pgUser));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{email}")
     ResponseEntity<?> delete(@PathVariable("email")String email) {
-        PgUserInfo user = userService.getByEmail(email);
+        PgUser user = userService.getByEmail(email);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
