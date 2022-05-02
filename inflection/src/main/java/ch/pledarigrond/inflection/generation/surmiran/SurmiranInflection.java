@@ -15,6 +15,8 @@ public class SurmiranInflection implements LanguageInflection {
         switch (inflectionType) {
             case VERB:
                 return SurmiranConjugationClasses.getVerbInflectionSubtypes();
+            case NOUN:
+                return SurmiranNounClasses.getNounInflectionSubtypes();
         }
 
         return null;
@@ -32,6 +34,10 @@ public class SurmiranInflection implements LanguageInflection {
             case VERB:
                 SurmiranConjugation conjugation = new SurmiranConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
+
+            case NOUN:
+                SurmiranNounGenerator nounGenerator = new SurmiranNounGenerator();
+                return nounGenerator.generateForms(subTypeId, baseForm);
         }
         return null;
     }

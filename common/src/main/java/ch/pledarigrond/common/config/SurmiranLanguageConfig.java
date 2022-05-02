@@ -34,6 +34,7 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("user_comment"),
                 new IndexedColumn("user_email"),
 
+                // verbs
                 new IndexedColumn("irregular"),
                 new IndexedColumn("infinitiv"),
                 new IndexedColumn("preschentsing1"),
@@ -72,7 +73,14 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("futursing3"),
                 new IndexedColumn("futurplural1"),
                 new IndexedColumn("futurplural2"),
-                new IndexedColumn("futurplural3")
+                new IndexedColumn("futurplural3"),
+
+                // nouns
+                new IndexedColumn("mSingular"),
+                new IndexedColumn("fSingular"),
+                new IndexedColumn("mPlural"),
+                new IndexedColumn("fPlural"),
+                new IndexedColumn("pluralCollectiv")
         );
     }
 }
