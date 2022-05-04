@@ -146,6 +146,7 @@ public class SurmiranNounGeneratorTest {
         forms = generator.generateForms("3", "Argoves");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "Argoves");
         Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "Argovesa");
+        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "Argoves");
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "Argovesas");
     }
 }

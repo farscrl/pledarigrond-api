@@ -55,7 +55,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private String getRoot(String infinitiv) {
         if (infinitiv != null) {
-            infinitiv = removeWhitespaces(infinitiv);
+            infinitiv = normalizeString(infinitiv);
             setInfinitiv(infinitiv);
             if (infinitiv.equals("ir") || infinitiv.equals("er")) {
                 setVerb(infinitiv);

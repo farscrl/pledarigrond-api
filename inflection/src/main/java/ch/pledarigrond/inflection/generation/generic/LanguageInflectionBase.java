@@ -9,8 +9,7 @@ public abstract class LanguageInflectionBase {
         };
     }
 
-    protected String removeWhitespaces(String query) {
-        query = query.toLowerCase();
+    protected String normalizeString(String query) {
         query = query.replaceAll("^\\s+|\\s+$", "");
         return query;
     }

@@ -48,7 +48,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
-        baseForm = removeWhitespaces(baseForm);
+        baseForm = normalizeString(baseForm);
         int length = baseForm.length();
         if (length < 3) {
             return null;

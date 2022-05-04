@@ -43,7 +43,7 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
 
     private String getRoot(String infinitiv) {
         if (infinitiv != null) {
-            infinitiv = removeWhitespaces(infinitiv);
+            infinitiv = normalizeString(infinitiv);
             if (infinitiv.equals("ir")) {
                 setVerb(infinitiv);
                 setEnding(infinitiv);

@@ -55,7 +55,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     private String getRoot(String infinitiv) {
         if (infinitiv != null) {
-            infinitiv = removeWhitespaces(infinitiv);
+            infinitiv = normalizeString(infinitiv);
 
             if (infinitiv.equals("eir")) {
                 setVerb(infinitiv);
