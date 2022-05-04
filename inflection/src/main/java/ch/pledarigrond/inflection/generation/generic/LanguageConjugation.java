@@ -22,14 +22,6 @@ public abstract class LanguageConjugation extends LanguageInflectionBase {
 
     public abstract InflectionResponse generateConjugation(String conjugationClass, String infinitiv);
 
-    protected String removeWhitespaces(String query) {
-        query = query.toLowerCase();
-        query = query.replaceAll("^\\s+|\\s+$", "");
-        return query;
-    }
-
-
-
     public boolean endsWithDoubleConsonant(String root) {
         return root.charAt(root.length() - 1) == root.charAt(root.length() - 2);
     }

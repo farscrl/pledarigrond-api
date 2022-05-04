@@ -131,4 +131,16 @@ public class SurmiranNounGuessingTest {
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "paleis");
     }
 
+    @Test
+    public void testBaseFormWithWhitespace() {
+        forms = generator.guessInflection("isch tga", null, null);
+        Assert.assertEquals(forms, null);
+    }
+
+    @Test
+    public void testNormalizeBaseForm() {
+        forms = generator.guessInflection("  minoren         ", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "12");
+        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "minoren");
+    }
 }

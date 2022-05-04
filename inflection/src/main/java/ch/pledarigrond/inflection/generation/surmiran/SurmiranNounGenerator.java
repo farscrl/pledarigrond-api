@@ -44,12 +44,16 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        baseForm = removeWhitespaces(baseForm);
         int length = baseForm.length();
         if (length < 3) {
             return null;
         }
-        char secondToTheLastCharacter = baseForm.charAt(length-2);
-        char lastCharacter = baseForm.charAt(length-1);
+
+        // do not generate forms if word contains whitespaces
+        if (baseForm.matches(".*\\s+.*")) {
+            return null;
+        }
 
         // last 4 characters
         if (length > 4) {
@@ -82,6 +86,8 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         if (lastTwoCharacters.equals("ea")) {
             return generateForms("11", baseForm);
         }
+        char secondToTheLastCharacter = baseForm.charAt(length-2);
+        char lastCharacter = baseForm.charAt(length-1);
         if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
             return generateForms("12", baseForm);
         }
