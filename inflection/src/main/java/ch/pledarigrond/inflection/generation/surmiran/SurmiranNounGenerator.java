@@ -49,12 +49,9 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return null;
         }
         char secondToTheLastCharacter = baseForm.charAt(length-2);
-        char lastCharacter = baseForm.charAt(length-2);
+        char lastCharacter = baseForm.charAt(length-1);
 
-        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
-            return generateForms("12", baseForm);
-        }
-
+        // last 4 characters
         if (length > 4) {
             String lastFourCharacters = baseForm.substring(length - 4);
             if (lastFourCharacters.equals("cher")) {
@@ -62,6 +59,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             }
         }
 
+        // last 3 characters
         String lastThreeCharacters = baseForm.substring(length - 3);
         if (lastThreeCharacters.equals("der")) {
             return generateForms("4", baseForm);
@@ -76,6 +74,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return generateForms("8", baseForm);
         }
 
+        // last 2 characters
         String lastTwoCharacters = baseForm.substring(length - 2);
         if (lastTwoCharacters.equals("ia")) {
             return generateForms("9", baseForm);
@@ -83,10 +82,16 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         if (lastTwoCharacters.equals("ea")) {
             return generateForms("11", baseForm);
         }
+        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
+            return generateForms("12", baseForm);
+        }
+
+        // last characters
         if (baseForm.substring(length - 1).equals("o")) {
             return generateForms("10", baseForm);
         }
 
+        // default, case genus is f
         if (genus != null && genus.equals("f")) {
             return generateForms("2", baseForm);
         }
