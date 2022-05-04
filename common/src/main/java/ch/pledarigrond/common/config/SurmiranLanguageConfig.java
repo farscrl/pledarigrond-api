@@ -1,5 +1,6 @@
 package ch.pledarigrond.common.config;
 
+import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 
@@ -80,7 +81,14 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("fSingular"),
                 new IndexedColumn("mPlural"),
                 new IndexedColumn("fPlural"),
-                new IndexedColumn("pluralCollectiv")
+                new IndexedColumn("pluralCollectiv"),
+
+                // automatic generation of forms
+                new IndexedColumn(LemmaVersion.AUTOMATIC_CHANGE),
+
+                // contains all field-names of the current entry. This is used to search for non-existing fields:
+                // https://kuzminva.wordpress.com/2017/04/04/lucene-field-does-not-exist/
+                new IndexedColumn(LemmaVersion.FIELD_NAMES)
         );
     }
 }

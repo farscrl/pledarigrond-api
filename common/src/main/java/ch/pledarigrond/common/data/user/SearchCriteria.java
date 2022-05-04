@@ -15,4 +15,6 @@ public class SearchCriteria {
     private String grammar = null;
     private String subSemantics = null;
     private String category = null;
+    private Boolean onlyAutomaticChanged = false;
+    private Boolean excludeAutomaticChanged = false;
 }

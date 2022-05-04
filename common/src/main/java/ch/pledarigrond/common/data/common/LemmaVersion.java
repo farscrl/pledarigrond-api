@@ -104,6 +104,10 @@ public class LemmaVersion implements Serializable {
 	public static final String DE_REDIRECT = "DRedirect";
 	public static final String DE_REDIRECT__DEPRECATED = "redirect_a";
 
+	public static final String AUTOMATIC_CHANGE = "automatic_change";
+
+	public static final String FIELD_NAMES = "field_names";
+
 	static {
 		PG_KEYS = new HashSet<>();
 		PG_KEYS.add(TIMESTAMP);

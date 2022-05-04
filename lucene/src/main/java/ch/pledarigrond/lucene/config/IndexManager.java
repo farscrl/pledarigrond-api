@@ -12,15 +12,19 @@ import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.DefaultQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
 import ch.pledarigrond.lucene.core.BuilderRegistry;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,6 +186,22 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
+        if (searchCriteria.getOnlyAutomaticChanged()) {
+            BooleanQuery bc = new BooleanQuery(true);
+            bc.add(new TermQuery(new Term(LemmaVersion.AUTOMATIC_CHANGE, "[* TO *]")), BooleanClause.Occur.MUST);
+            finalQuery.add(bc, BooleanClause.Occur.MUST);
+        }
+
+        if (searchCriteria.getExcludeAutomaticChanged()) {
+            try {
+                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.FIELD_NAMES, new StandardAnalyzer(Version.LUCENE_46));
+                queryParser.setAllowLeadingWildcard(true);
+                finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         // Unless a user wants to see unverified suggestions, each item returned must be verified.
         if (!searchCriteria.getSuggestions()) {
             BooleanQuery bc = new BooleanQuery();
@@ -200,6 +220,7 @@ public abstract class IndexManager {
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
         Document doc = new Document();
         Set<Map.Entry<String, String>> entries = lemmaVersion.getLemmaValues().entrySet();
+        StringBuilder allFieldsList = new StringBuilder();
         for (Map.Entry<String, String> entry : entries) {
             if(ignored.contains(entry.getKey())) continue;
             List<IndexableField> fields = toField(entry.getKey(), entry.getValue());
@@ -211,6 +232,12 @@ public abstract class IndexManager {
             for (IndexableField field : fields) {
                 doc.add(field);
             }
+            allFieldsList.append(entry.getKey());
+            allFieldsList.append(' ');
+        }
+        List<IndexableField> fields = toField(LemmaVersion.FIELD_NAMES, allFieldsList.toString());
+        for (IndexableField field : fields) {
+            doc.add(field);
         }
         addPgFieldsToDocument(lexEntry, lemmaVersion, doc);
         return doc;

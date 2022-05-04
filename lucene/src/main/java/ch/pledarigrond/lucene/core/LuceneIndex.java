@@ -49,6 +49,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -139,7 +141,11 @@ public class LuceneIndex {
 	
 	public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
-		validatePagination(pagination);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean hasAdminRole = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
+		validatePagination(pagination, hasAdminRole);
 
 		long s1 = System.nanoTime();
 		Query query = indexManager.buildQuery(searchCriteria);
@@ -186,12 +192,14 @@ public class LuceneIndex {
 		return result;
 	}
 
-	private void validatePagination(Pagination pagination) {
+	private void validatePagination(Pagination pagination, boolean hasAdminRole) {
 		if (pagination.getPage() < 0) {
 			pagination.setPage(0);
 		}
-		if (pagination.getPageSize() > 200) {
-			pagination.setPageSize(200);
+		if (!hasAdminRole) {
+			if (pagination.getPageSize() > 200) {
+				pagination.setPageSize(200);
+			}
 		}
 		if (pagination.getPageSize() < 1) {
 			pagination.setPageSize(1);
