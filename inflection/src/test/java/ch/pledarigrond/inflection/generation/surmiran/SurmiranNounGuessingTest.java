@@ -143,4 +143,58 @@ public class SurmiranNounGuessingTest {
         Assert.assertEquals(forms.getInflectionSubType().id, "12");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "minoren");
     }
+
+    @Test
+    public void testWithEndingIndicationA() {
+        forms = generator.guessInflection("client, -a", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "3");
+    }
+
+    @Test
+    public void testWithEndingIndicationDra() {
+        forms = generator.guessInflection("cumprader, -dra", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "4");
+    }
+
+    @Test
+    public void testWithEndingIndicationBla() {
+        forms = generator.guessInflection("responsabel, -bla", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "5");
+    }
+
+    @Test
+    public void testWithEndingIndicationCra() {
+        forms = generator.guessInflection("scepticher, -cra", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "6");
+    }
+
+    @Test
+    public void testWithEndingIndicationVla() {
+        forms = generator.guessInflection("raschunevel, -vla", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "7");
+    }
+
+    @Test
+    public void testWithEndingIndicationVna() {
+        forms = generator.guessInflection("gioven, -vna", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "8");
+    }
+
+    @Test
+    public void testWithEndingIndicationEida() {
+        forms = generator.guessInflection("crucifitgia, -eida", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "9");
+    }
+
+    @Test
+    public void testWithEndingIndicationAda() {
+        forms = generator.guessInflection("scienzio, -ada", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "10");
+    }
+
+    @Test
+    public void testWithEndingIndicationEda() {
+        forms = generator.guessInflection("donnagea, -eda", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "11");
+    }
 }

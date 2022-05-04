@@ -5,6 +5,8 @@ import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +18,8 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SurmiranNounGenerator extends LanguageNounGeneration {
+
+    private static final Logger logger = LoggerFactory.getLogger(SurmiranNounGenerator.class);
 
     private SurmiranNounStructure ns;
 
@@ -48,6 +52,35 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         int length = baseForm.length();
         if (length < 3) {
             return null;
+        }
+
+        if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eida|eda)$")) {
+            String[] parts = baseForm.split(", -");
+            baseForm = parts[0];
+
+            switch (parts[1]) {
+                case "a":
+                    return generateForms("3", baseForm);
+                case "dra":
+                    return generateForms("4", baseForm);
+                case "bla":
+                    return generateForms("5", baseForm);
+                case "cra":
+                    return generateForms("6", baseForm);
+                case "vla":
+                    return generateForms("7", baseForm);
+                case "vna":
+                    return generateForms("8", baseForm);
+                case "eida":
+                    return generateForms("9", baseForm);
+                case "ada":
+                    return generateForms("10", baseForm);
+                case "eda":
+                    return generateForms("11", baseForm);
+                default:
+                    logger.error("unknown ending: {}", parts[1]);
+                    return null;
+            }
         }
 
         // do not generate forms if word contains whitespaces
