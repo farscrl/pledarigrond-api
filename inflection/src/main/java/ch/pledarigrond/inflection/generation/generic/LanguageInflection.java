@@ -10,7 +10,7 @@ import java.util.List;
 public interface LanguageInflection {
     List<InflectionSubType> getInflectionSubtypes(InflectionType inflectionType);
 
-    InflectionSubType guessInflectionSubtype(InflectionType inflectionType, String baseForm);
+    InflectionResponse guessInflectionSubtype(InflectionType inflectionType, String baseForm, String genus, String flex);
 
     InflectionResponse generateInflection(InflectionType inflectionType, String subTypeId, String baseForm);
 }

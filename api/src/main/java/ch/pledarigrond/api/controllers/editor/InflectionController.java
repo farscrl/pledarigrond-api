@@ -29,9 +29,14 @@ public class InflectionController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/{inflectionType}/subtypes/{baseForm}")
-    ResponseEntity<?> guessSubtypeAndGenerateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("baseForm") String baseForm) {
-        // TODO: implement me
-        return null;
+    ResponseEntity<?> guessSubtypeAndGenerateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("baseForm") String baseForm, String genus, String flex) {
+        if (inflectionType == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (baseForm == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(inflectionService.guessInflection(language, inflectionType, baseForm, genus, flex));
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")

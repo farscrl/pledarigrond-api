@@ -48,6 +48,11 @@ public class SutsilvanConjugation extends LanguageConjugation {
         return new InflectionResponse(subType, addPronouns(conjugation, subType));
     }
 
+    public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        // TODO: implement me
+        return null;
+    }
+
     private String getRoot(String infinitiv) {
         if (infinitiv != null) {
             infinitiv = removeWhitespaces(infinitiv);

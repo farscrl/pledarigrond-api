@@ -19,7 +19,7 @@ public class RumantschGrischunInflection  implements LanguageInflection {
     }
 
     @Override
-    public InflectionSubType guessInflectionSubtype(InflectionType inflectionType, String baseForm) {
+    public InflectionResponse guessInflectionSubtype(InflectionType inflectionType, String baseForm, String genus, String flex) {
         return null;
     }
 

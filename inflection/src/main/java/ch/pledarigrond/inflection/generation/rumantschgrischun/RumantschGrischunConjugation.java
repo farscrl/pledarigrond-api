@@ -86,6 +86,11 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
         return infinitiv;
     }
 
+    public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        // TODO: implement me
+        return null;
+    }
+
     private String checkReflexiveness(String infinitiv) {
         if (infinitiv.startsWith("sa ")) {
             setVerb(infinitiv);

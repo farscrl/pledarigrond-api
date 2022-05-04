@@ -23,8 +23,16 @@ public class SurmiranInflection implements LanguageInflection {
     }
 
     @Override
-    public InflectionSubType guessInflectionSubtype(InflectionType inflectionType, String baseForm) {
-        // TODO: implement me
+    public InflectionResponse guessInflectionSubtype(InflectionType inflectionType, String baseForm, String genus, String flex) {
+        switch (inflectionType) {
+            case VERB:
+                SurmiranConjugation conjugation = new SurmiranConjugation();
+                return conjugation.guessInflection(baseForm, genus, flex);
+
+            case NOUN:
+                SurmiranNounGenerator nounGenerator = new SurmiranNounGenerator();
+                return nounGenerator.guessInflection(baseForm, genus, flex);
+        }
         return null;
     }
 

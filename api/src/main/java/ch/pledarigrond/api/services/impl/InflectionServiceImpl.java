@@ -24,6 +24,16 @@ public class InflectionServiceImpl implements InflectionService {
         return inflection.getInflectionSubtypes(inflectionType);
     }
 
+    public InflectionResponse guessInflection(Language language, InflectionType inflectionType, String baseForm, String genus, String flex) {
+        LanguageInflection inflection = getLanguageInflection(language);
+        return inflection.guessInflectionSubtype(inflectionType, baseForm, genus, flex);
+    }
+
+    public InflectionResponse generateInflection(Language language, InflectionType inflectionType, String subTypeId, String baseForm) {
+        LanguageInflection inflection = getLanguageInflection(language);
+        return inflection.generateInflection(inflectionType, subTypeId, baseForm);
+    }
+
     private LanguageInflection getLanguageInflection(Language language) {
         if (inflectionMap.containsKey(language)) {
             return inflectionMap.get(language);
@@ -46,10 +56,5 @@ public class InflectionServiceImpl implements InflectionService {
 
         inflectionMap.put(language, inflection);
         return inflection;
-    }
-
-    public InflectionResponse generateInflection(Language language, InflectionType inflectionType, String subTypeId, String baseForm) {
-        LanguageInflection inflection = getLanguageInflection(language);
-        return inflection.generateInflection(inflectionType, subTypeId, baseForm);
     }
 }

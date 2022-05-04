@@ -11,5 +11,7 @@ public interface InflectionService {
 
     List<InflectionSubType> getInflectionTypes(Language language, InflectionType inflectionType);
 
+    InflectionResponse guessInflection(Language language, InflectionType inflectionType, String baseForm, String genus, String flex);
+
     InflectionResponse generateInflection(Language language, InflectionType inflectionType, String subTypeId, String baseForm);
 }

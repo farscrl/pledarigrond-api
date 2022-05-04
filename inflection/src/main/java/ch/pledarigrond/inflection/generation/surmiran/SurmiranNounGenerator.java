@@ -43,6 +43,58 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         return new InflectionResponse(subType, buildForms(root, subType));
     }
 
+    public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        int length = baseForm.length();
+        if (length < 3) {
+            return null;
+        }
+        char secondToTheLastCharacter = baseForm.charAt(length-2);
+        char lastCharacter = baseForm.charAt(length-2);
+
+        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
+            return generateForms("12", baseForm);
+        }
+
+        if (length > 4) {
+            String lastFourCharacters = baseForm.substring(length - 4);
+            if (lastFourCharacters.equals("cher")) {
+                return generateForms("6", baseForm);
+            }
+        }
+
+        String lastThreeCharacters = baseForm.substring(length - 3);
+        if (lastThreeCharacters.equals("der")) {
+            return generateForms("4", baseForm);
+        }
+        if (lastThreeCharacters.equals("bel")) {
+            return generateForms("5", baseForm);
+        }
+        if (lastThreeCharacters.equals("vel")) {
+            return generateForms("7", baseForm);
+        }
+        if (lastThreeCharacters.equals("ven")) {
+            return generateForms("8", baseForm);
+        }
+
+        String lastTwoCharacters = baseForm.substring(length - 2);
+        if (lastTwoCharacters.equals("ia")) {
+            return generateForms("9", baseForm);
+        }
+        if (lastTwoCharacters.equals("ea")) {
+            return generateForms("11", baseForm);
+        }
+        if (baseForm.substring(length - 1).equals("o")) {
+            return generateForms("10", baseForm);
+        }
+
+        if (genus != null && genus.equals("f")) {
+            return generateForms("2", baseForm);
+        }
+
+        // TODO: check if 3 or 1 should be default
+        return generateForms("3", baseForm);
+    }
+
     public String getRoot(String maleSingularForm, String nounClass) {
         if (maleSingularForm == null) {
             return maleSingularForm;
@@ -304,4 +356,10 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         return file;
     }
 
+    private boolean isDuplicatedConsonant(char ch) {
+        return switch (ch) {
+            case 'c', 'f', 'm', 'n', 'p', 'r', 't', 'z' -> true;
+            default -> false;
+        };
+    }
 }

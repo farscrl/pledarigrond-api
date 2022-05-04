@@ -2,11 +2,13 @@ package ch.pledarigrond.inflection.generation.generic;
 
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class LanguageConjugation {
+public abstract class LanguageConjugation extends LanguageInflectionBase {
 
     // the root of a verb
     protected String root;
@@ -16,6 +18,8 @@ public abstract class LanguageConjugation {
     // a modified root
     protected String modRoot;
 
+    public abstract InflectionResponse guessInflection(String baseForm, String genus, String flex);
+
     public abstract InflectionResponse generateConjugation(String conjugationClass, String infinitiv);
 
     protected String removeWhitespaces(String query) {
@@ -24,12 +28,7 @@ public abstract class LanguageConjugation {
         return query;
     }
 
-    protected boolean isVocal(char ch) {
-        return switch (ch) {
-            case 'a', 'e', 'i', 'o', 'u', 'ä', 'ö', 'ü' -> true;
-            default -> false;
-        };
-    }
+
 
     public boolean endsWithDoubleConsonant(String root) {
         return root.charAt(root.length() - 1) == root.charAt(root.length() - 2);
