@@ -119,6 +119,7 @@ public class LemmaVersion implements Serializable {
 		PG_KEYS.add(VERIFICATION);
 		PG_KEYS.add(VERIFIER);
 		PG_KEYS.add(LEXENTRY_ID);
+		PG_KEYS.add(AUTOMATIC_CHANGE);
 		PUBLIC_PG_KEYS = new HashSet<>();
 		PUBLIC_PG_KEYS.add(ID);
 		PUBLIC_PG_KEYS.add(STATUS);

@@ -135,8 +135,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return generateForms("2", baseForm);
         }
 
-        // TODO: check if 3 or 1 should be default
-        return generateForms("3", baseForm);
+        return generateForms("1", baseForm);
     }
 
     public String getRoot(String maleSingularForm, String nounClass) {

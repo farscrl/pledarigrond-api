@@ -132,7 +132,7 @@ import java.util.Set;
 		Term queryTerm = new Term(LexEntry.ID, entry.getId());
 		writer.deleteDocuments(queryTerm);
 		if(entry.getCurrent() != null) {
-			List<Document> docs = createDocument(new HashSet<String>(), entry);
+			List<Document> docs = createDocument(entry);
 			for (Document document : docs) {
 				writer.addDocument(document);
 			}
@@ -144,7 +144,7 @@ import java.util.Set;
 		searcher = new IndexSearcher(reader);
 	}
 	
-	private List<Document> createDocument(Set<String> keys, LexEntry lexEntry) {
+	private List<Document> createDocument(LexEntry lexEntry) {
 		List<Document> docs = new ArrayList<Document>();
 		Set<LemmaVersion> versions = new HashSet<LemmaVersion>();
 		if(lexEntry.getCurrent() != null) {

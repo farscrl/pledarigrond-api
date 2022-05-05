@@ -3,10 +3,12 @@ package ch.pledarigrond.api.services.impl;
 import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.InflectionService;
+import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
@@ -43,6 +45,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     @Autowired
     private PgEnvironment pgEnvironment;
 
+    @Autowired
+    private MongoDbService mongoDbService;
+
     public boolean generateNounForms(Language language) {
         StopWatch watch = new StopWatch();
         watch.start();
@@ -63,9 +68,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     private boolean searchNounByGender(Language language, String gender, String version) {
         SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setGender("m");
+        searchCriteria.setGender(gender);
         searchCriteria.setExcludeAutomaticChanged(true);
         searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
@@ -100,19 +106,30 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 return false;
             }
 
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+
             LemmaVersion newVersion = new LemmaVersion();
             newVersion.getLemmaValues().putAll(lemma.getLemmaValues());
             newVersion.getPgValues().putAll(lemma.getPgValues());
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
                 newVersion.getLemmaValues().put(el.getKey(), el.getValue());
             }
             newVersion.getLemmaValues().put("RGrammatik", "subst");
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, version);
+            newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
 
             try {
-                Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).update(entry, newVersion);
-            } catch (InvalidEntryException | NoDatabaseAvailableException e) {
+                mongoDbService.update(language, entry, newVersion);
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
