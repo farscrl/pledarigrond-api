@@ -187,9 +187,13 @@ public abstract class IndexManager {
         }
 
         if (searchCriteria.getOnlyAutomaticChanged()) {
-            BooleanQuery bc = new BooleanQuery(true);
-            bc.add(new TermQuery(new Term(LemmaVersion.AUTOMATIC_CHANGE, "[* TO *]")), BooleanClause.Occur.MUST);
-            finalQuery.add(bc, BooleanClause.Occur.MUST);
+            try {
+                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+                queryParser.setAllowLeadingWildcard(true);
+                finalQuery.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         if (searchCriteria.getExcludeAutomaticChanged()) {
