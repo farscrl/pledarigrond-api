@@ -190,7 +190,11 @@ public class Database {
 
 	public void accept(LexEntry entry, LemmaVersion version) throws InvalidEntryException {
 		Validator.validate(entry);
-		version.setVerification(LemmaVersion.Verification.ACCEPTED);
+		for (LemmaVersion v : entry.getVersionHistory()) {
+			if (v.getInternalId().equals(version.getInternalId())) {
+				v.setVerification(LemmaVersion.Verification.ACCEPTED);
+			}
+		}
 		entry.setCurrent(version);
 		BasicDBObject object = Converter.convertLexEntry(entry);
 		save(entryCollection, new Document(object));
@@ -216,10 +220,14 @@ public class Database {
 
 	public void reject(LexEntry entry, LemmaVersion version) throws InvalidEntryException {
 		Validator.validate(entry);
-		if (version.equals(entry.getCurrent())) {
+		if (version.getInternalId().equals(entry.getCurrent().getInternalId())) {
 			throw new InvalidEntryException("Please choose a new current version before rejecting!");
 		}
-		version.setVerification(LemmaVersion.Verification.REJECTED);
+		for (LemmaVersion v : entry.getVersionHistory()) {
+			if (v.getInternalId().equals(version.getInternalId())) {
+				v.setVerification(LemmaVersion.Verification.REJECTED);
+			}
+		}
 		BasicDBObject object = Converter.convertLexEntry(entry);
 		save(entryCollection, new Document(object));
 		logger.info("REJECTED: {}/{}", toLogString(entry.getCurrent()), entry.getId());
