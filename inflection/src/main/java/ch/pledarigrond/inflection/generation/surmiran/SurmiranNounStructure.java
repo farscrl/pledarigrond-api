@@ -1,5 +1,8 @@
 package ch.pledarigrond.inflection.generation.surmiran;
 
+import ch.pledarigrond.inflection.model.InflectionSubType;
+import ch.pledarigrond.inflection.model.InflectionType;
+
 import java.util.HashMap;
 
 public class SurmiranNounStructure {
@@ -22,6 +25,8 @@ public class SurmiranNounStructure {
 
     private HashMap<String, String> values;
 
+    private InflectionSubType inflectionSubType;
+
     public HashMap<String, String> getValues() {
         return values;
     }
@@ -31,6 +36,9 @@ public class SurmiranNounStructure {
         for (String s : msi) {
             returnValue.put(s, getValue(s));
         }
+        returnValue.put("RInflectionSubtype", inflectionSubType.id);
+        returnValue.put("RInflectionType", InflectionType.NOUN.toString());
+        returnValue.put("RRegularInflection", "true");
 
         return returnValue;
     }
@@ -118,6 +126,13 @@ public class SurmiranNounStructure {
         values.put(pluralCollectiv, coll);
     }
 
+    public InflectionSubType getInflectionSubType() {
+        return inflectionSubType;
+    }
+
+    public void setInflectionSubType(InflectionSubType inflectionSubType) {
+        this.inflectionSubType = inflectionSubType;
+    }
 
     public String getValue(String key) {
         switch (key) {

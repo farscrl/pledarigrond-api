@@ -18,6 +18,7 @@ package ch.pledarigrond.inflection.generation.sutsilvan;
 
 
 import ch.pledarigrond.inflection.model.InflectionSubType;
+import ch.pledarigrond.inflection.model.InflectionType;
 
 import java.util.HashMap;
 
@@ -91,7 +92,7 @@ public class SutsilvanConjugationStructure {
 
 	private HashMap<String, String> values;
 
-	private InflectionSubType conjugationclass;
+	private InflectionSubType conjugationClass;
 
 	private String isReflexive;
 
@@ -104,6 +105,9 @@ public class SutsilvanConjugationStructure {
 		for (String s : msi) {
 			returnValue.put(s, getValue(s));
 		}
+		returnValue.put("RInflectionSubtype", conjugationClass.id);
+		returnValue.put("RInflectionType", InflectionType.VERB.toString());
+		returnValue.put("RRegularInflection", "true");
 
 		return returnValue;
 	}
@@ -136,8 +140,8 @@ public class SutsilvanConjugationStructure {
 		return values.get(reflexive);
 	}
 
-	public InflectionSubType getConjugationclass() {
-		return conjugationclass;
+	public InflectionSubType getConjugationClass() {
+		return conjugationClass;
 	}
 
 	public String getPreschentsing1() {
@@ -309,7 +313,7 @@ public class SutsilvanConjugationStructure {
 	}
 
 	public void setConjugationClass(InflectionSubType inflectionSubType) {
-		conjugationclass = inflectionSubType;
+		conjugationClass = inflectionSubType;
 	}
 
 	public void setPreschentsing1(String ps1) {

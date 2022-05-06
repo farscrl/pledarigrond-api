@@ -17,6 +17,7 @@ package ch.pledarigrond.inflection.generation.surmiran;
  ******************************************************************************/
 
 import ch.pledarigrond.inflection.model.InflectionSubType;
+import ch.pledarigrond.inflection.model.InflectionType;
 
 import java.util.HashMap;
 
@@ -104,6 +105,9 @@ public class SurmiranConjugationStructure {
 		for (String s : msi) {
 			returnValue.put(s, getValue(s));
 		}
+		returnValue.put("RInflectionSubtype", conjugationClass.id);
+		returnValue.put("RInflectionType", InflectionType.VERB.toString());
+		returnValue.put("RRegularInflection", "true");
 
 		return returnValue;
 	}
@@ -136,7 +140,6 @@ public class SurmiranConjugationStructure {
 
 	public String getReflexive() {
 		return values.get(reflexive);
-
 	}
 
 	public InflectionSubType getConjugationclass() {

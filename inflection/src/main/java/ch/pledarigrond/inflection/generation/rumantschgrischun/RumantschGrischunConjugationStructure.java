@@ -18,6 +18,7 @@ package ch.pledarigrond.inflection.generation.rumantschgrischun;
 
 
 import ch.pledarigrond.inflection.model.InflectionSubType;
+import ch.pledarigrond.inflection.model.InflectionType;
 
 import java.util.HashMap;
 
@@ -104,6 +105,9 @@ public class RumantschGrischunConjugationStructure {
 		for (String s : msi) {
 			returnValue.put(s, getValue(s));
 		}
+		returnValue.put("RInflectionSubtype", conjugationClass.id);
+		returnValue.put("RInflectionType", InflectionType.VERB.toString());
+		returnValue.put("RRegularInflection", "true");
 
 		return returnValue;
 	}

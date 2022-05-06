@@ -165,7 +165,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setPreschent(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "1":
             case "2":
             case "3":
@@ -175,9 +175,9 @@ public class SutsilvanConjugation extends LanguageConjugation {
                 cs.setPreschentsing3(root + "a");
                 cs.setPreschentplural1(root + "agn");
                 // 2pp
-                if (cs.getConjugationclass().id.equals("1")) {
+                if (cs.getConjugationClass().id.equals("1")) {
                     cs.setPreschentplural2(root + "az");
-                } else if (cs.getConjugationclass().id.equals("2")) {
+                } else if (cs.getConjugationClass().id.equals("2")) {
                     cs.setPreschentplural2(root + "eaz");
                 } else {
                     cs.setPreschentplural2(root + "ez");
@@ -193,9 +193,9 @@ public class SutsilvanConjugation extends LanguageConjugation {
                 cs.setPreschentsing3(root + "escha");
                 cs.setPreschentplural1(root + "agn");
                 // 2pp
-                if (cs.getConjugationclass().id.equals("5")) {
+                if (cs.getConjugationClass().id.equals("5")) {
                     cs.setPreschentplural2(root + "az");
-                } else if (cs.getConjugationclass().id.equals("6")) {
+                } else if (cs.getConjugationClass().id.equals("6")) {
                     cs.setPreschentplural2(root + "eaz");
                 } else {
                     cs.setPreschentplural2(root + "ez");
@@ -216,7 +216,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setImperfect(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "1":
             case "5":
             case "8":
@@ -253,7 +253,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setConjunctiv(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "5":
             case "6":
             case "7":
@@ -290,7 +290,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setCundizional(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "1":
             case "5":
             case "8":
@@ -319,7 +319,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setParticipPerfect(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "1":
             case "5":
             case "8":
@@ -354,7 +354,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     private void setImperativ(String root, SutsilvanConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationClass().id) {
             case "1":
                 cs.setImperativ1(root + "a!");
                 cs.setImperativ2(root + "ad!");
