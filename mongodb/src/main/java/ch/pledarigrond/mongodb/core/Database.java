@@ -61,7 +61,6 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.type;
 
 public class Database {
 
