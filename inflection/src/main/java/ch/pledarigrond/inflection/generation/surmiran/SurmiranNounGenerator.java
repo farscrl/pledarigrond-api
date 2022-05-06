@@ -54,6 +54,11 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
+        // default, case genus is f
+        if (genus != null && genus.equals("f")) {
+            return generateForms("2", baseForm);
+        }
+
         if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eida|eda)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
@@ -130,11 +135,6 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return generateForms("10", baseForm);
         }
 
-        // default, case genus is f
-        if (genus != null && genus.equals("f")) {
-            return generateForms("2", baseForm);
-        }
-
         return generateForms("1", baseForm);
     }
 
@@ -198,6 +198,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
 
         ns = new SurmiranNounStructure();
+        ns.setInflectionSubType(nounClass);
 
         ns.setBase(getBase());
         ns.setRoot(root);
