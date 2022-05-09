@@ -18,7 +18,7 @@ public class AutomaticGenerationController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_noun_forms")
-    ResponseEntity<?> dropDb(@PathVariable("language")Language language) {
+    ResponseEntity<?> generateNounForms(@PathVariable("language")Language language) {
         boolean success = automaticGenerationService.generateNounForms(language);
 
         if (!success) {
@@ -28,4 +28,15 @@ public class AutomaticGenerationController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/generate_adjective_forms")
+    ResponseEntity<?> generateAdjectiveForms(@PathVariable("language")Language language) {
+        boolean success = automaticGenerationService.generateAdjectiveForms(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during form generation");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
