@@ -1,5 +1,6 @@
 package ch.pledarigrond.common.data.user;
 
+import ch.pledarigrond.common.data.common.AutomaticChangesType;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
@@ -19,4 +20,5 @@ public class SearchCriteria {
     private Boolean onlyAutomaticChanged = false;
     private Boolean excludeAutomaticChanged = false;
     private LemmaVersion.Verification verification = null;
+    private AutomaticChangesType automaticChangesType = AutomaticChangesType.ALL;
 }

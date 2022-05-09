@@ -1,9 +1,6 @@
 package ch.pledarigrond.lucene.config;
 
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.SearchCriteria;
@@ -212,6 +209,16 @@ public abstract class IndexManager {
                 QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.FIELD_NAMES, new StandardAnalyzer(Version.LUCENE_46));
                 queryParser.setAllowLeadingWildcard(true);
                 finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (searchCriteria.getAutomaticChangesType() != null && searchCriteria.getAutomaticChangesType() != AutomaticChangesType.ALL) {
+            try {
+                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+                queryParser.setAllowLeadingWildcard(true);
+                finalQuery.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
