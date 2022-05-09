@@ -142,8 +142,11 @@ public class LuceneIndex {
 	public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
 
+		boolean hasAdminRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		boolean hasAdminRole = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+		if (authentication != null) {
+			hasAdminRole = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+		}
 
 		validatePagination(pagination, hasAdminRole);
 
