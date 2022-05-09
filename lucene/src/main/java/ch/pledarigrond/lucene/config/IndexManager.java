@@ -16,6 +16,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -186,6 +187,16 @@ public abstract class IndexManager {
             finalQuery.add(part, BooleanClause.Occur.MUST);
         }
 
+        if (searchCriteria.getVerification() != null) {
+            try {
+                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer(Version.LUCENE_46));
+                queryParser.setAllowLeadingWildcard(true);
+                finalQuery.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (searchCriteria.getOnlyAutomaticChanged()) {
             try {
                 QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
@@ -218,6 +229,7 @@ public abstract class IndexManager {
         if(logger.isDebugEnabled()) {
             logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
         }
+
         return finalQuery;
     }
 
@@ -369,6 +381,7 @@ public abstract class IndexManager {
         document.add(new StringField(LemmaVersion.LEXENTRY_ID, lexEntry.getId(), Field.Store.YES));
         document.add(new StringField(LemmaVersion.ID, version.getInternalId()+"", Field.Store.YES));
         document.add(new StringField(LemmaVersion.VERIFICATION, version.getVerification().toString(), Field.Store.YES));
+        document.add(new TextField(LemmaVersion.VERIFICATION + "_analyzed", version.getVerification().toString().toLowerCase(), Field.Store.NO));
         if(version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE) != null) {
             document.add(new StringField(LemmaVersion.RM_INFLECTION_TYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE), Field.Store.YES));
         }

@@ -1,5 +1,6 @@
 package ch.pledarigrond.common.data.user;
 
+import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class SearchCriteria {
     private String category = null;
     private Boolean onlyAutomaticChanged = false;
     private Boolean excludeAutomaticChanged = false;
+    private LemmaVersion.Verification verification = null;
 }
