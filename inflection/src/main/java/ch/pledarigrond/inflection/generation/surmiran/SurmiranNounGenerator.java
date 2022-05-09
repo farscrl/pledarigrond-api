@@ -133,7 +133,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return generateForms("10", baseForm);
         }
 
-        return generateForms("1", baseForm);
+        return generateForms("3", baseForm);
     }
 
     public String getRoot(String maleSingularForm, String nounClass) {
