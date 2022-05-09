@@ -396,7 +396,7 @@ public abstract class IndexManager {
             document.add(new StringField(LemmaVersion.RM_INFLECTION_SUBTYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE), Field.Store.YES));
         }
         if (version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
-            document.add(new StringField(LemmaVersion.AUTOMATIC_CHANGE, version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE), Field.Store.YES));
+            document.add(new StringField(LemmaVersion.AUTOMATIC_CHANGE, version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE).toLowerCase(), Field.Store.YES));
         }
     }
 
