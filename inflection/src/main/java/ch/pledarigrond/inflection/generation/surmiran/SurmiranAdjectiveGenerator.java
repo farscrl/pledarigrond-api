@@ -197,6 +197,7 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
         setSingular();
         setPlural();
+        setAdverbialForm();
 
         return as.getAllFormValues();
 
@@ -280,6 +281,16 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
     public void setPlural() {
         as.setMPlural(buildPlural(as.getMSingular()));
         as.setFPlural(buildPlural(as.getFSingular()));
+    }
+
+    public void setAdverbialForm() {
+        String ending  =as.getMSingular().substring(as.getMSingular().length() - 2);
+        if (ending.equals("al") || ending.equals("ar")) {
+            as.setAdverbialForm(as.getMSingular() + "maintg");
+            return;
+        }
+
+        as.setAdverbialForm(as.getFSingular() + "maintg");
     }
 
 

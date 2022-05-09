@@ -15,11 +15,12 @@ public class SurmiranAdjectiveStructure {
     public static final String fSingular = "fSingular";
     public static final String mPlural = "mPlural";
     public static final String fPlural = "fPlural";
+    public static final String adverbialForm = "adverbialForm";
 
 
     public String[] msi = new String[] {
             mSingular, fSingular,
-            mPlural, fPlural
+            mPlural, fPlural, adverbialForm
     };
 
     private HashMap<String, String> values;
@@ -84,6 +85,10 @@ public class SurmiranAdjectiveStructure {
         return values.get(fPlural);
     }
 
+    public String getAdverbialForm() {
+        return values.get(adverbialForm);
+    }
+
     public void setBase(String b) {
         values.put(base, b);
     }
@@ -117,6 +122,10 @@ public class SurmiranAdjectiveStructure {
         values.put(fPlural, fp);
     }
 
+    public void setAdverbialForm(String fp) {
+        values.put(adverbialForm, fp);
+    }
+
     public InflectionSubType getInflectionSubType() {
         return inflectionSubType;
     }
@@ -143,6 +152,8 @@ public class SurmiranAdjectiveStructure {
                 return getMPlural();
             case fPlural:
                 return getFPlural();
+            case adverbialForm:
+                return getAdverbialForm();
 
             default:
                 break;
