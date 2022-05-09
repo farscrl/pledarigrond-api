@@ -9,7 +9,7 @@ public class SurmiranAdjectiveStructure {
     public static final String base = "base";
     public static final String root = "root";
     public static final String ending = "ending";
-    public static final String nounClass = "nounClass";
+    public static final String adjectiveClass = "adjectiveClass";
 
     public static final String mSingular = "mSingular";
     public static final String fSingular = "fSingular";
@@ -36,7 +36,7 @@ public class SurmiranAdjectiveStructure {
             returnValue.put(s, getValue(s));
         }
         returnValue.put("RInflectionSubtype", inflectionSubType.id);
-        returnValue.put("RInflectionType", InflectionType.NOUN.toString());
+        returnValue.put("RInflectionType", InflectionType.ADJECTIVE.toString());
         returnValue.put("RRegularInflection", "true");
 
         return returnValue;
@@ -64,8 +64,8 @@ public class SurmiranAdjectiveStructure {
         return values.get(ending);
     }
 
-    public String getNounClass() {
-        return values.get(nounClass);
+    public String getAdjectiveClass() {
+        return values.get(adjectiveClass);
     }
 
     public String getMSingular() {
@@ -97,8 +97,8 @@ public class SurmiranAdjectiveStructure {
     }
 
 
-    public void setNounClass(String nc) {
-        values.put(nounClass, nc);
+    public void setAdjectiveClass(String nc) {
+        values.put(adjectiveClass, nc);
     }
 
     public void setMSingular(String ms) {
@@ -133,8 +133,8 @@ public class SurmiranAdjectiveStructure {
                 return getRoot();
             case ending:
                 return getEnding();
-            case nounClass:
-                return getNounClass();
+            case adjectiveClass:
+                return getAdjectiveClass();
             case mSingular:
                 return getMSingular();
             case fSingular:

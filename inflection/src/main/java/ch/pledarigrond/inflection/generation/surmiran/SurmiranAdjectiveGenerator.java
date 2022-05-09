@@ -1,6 +1,6 @@
 package ch.pledarigrond.inflection.generation.surmiran;
 
-import ch.pledarigrond.inflection.generation.generic.LanguageNounGeneration;
+import ch.pledarigrond.inflection.generation.generic.LanguageAdjectiveGeneration;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
+public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
     private static final Logger logger = LoggerFactory.getLogger(SurmiranAdjectiveGenerator.class);
 
@@ -31,13 +31,13 @@ public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
 
     private HashMap<String, String> forms;
 
-    public InflectionResponse generateForms(String nounClass, String baseForm) {
+    public InflectionResponse generateForms(String adjectiveClass, String baseForm) {
 
-        root = getRoot(baseForm, nounClass);
+        root = getRoot(baseForm, adjectiveClass);
 
-        InflectionSubType subType = SurmiranNounClasses.getNounInflectionClass(nounClass);
+        InflectionSubType subType = SurmiranAdjectiveClasses.getAdjectiveInflectionClass(adjectiveClass);
         if (subType == null) {
-            throw new RuntimeException(nounClass + " is not a valid conjugation class.");
+            throw new RuntimeException(adjectiveClass + " is not a valid conjugation class.");
         } else if (getEnding() == null) {
             throw new RuntimeException(baseForm + " is not a valid male singular form. Please enter a valid form.");
         }
@@ -131,7 +131,7 @@ public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
         return generateForms("1", baseForm);
     }
 
-    public String getRoot(String maleSingularForm, String nounClass) {
+    public String getRoot(String maleSingularForm, String adjectiveClass) {
         if (maleSingularForm == null) {
             return maleSingularForm;
         }
@@ -142,11 +142,11 @@ public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
             throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
         }
 
-        return extractRoot(maleSingularForm, nounClass);
+        return extractRoot(maleSingularForm, adjectiveClass);
     }
 
-    public String extractRoot(String maleSingularForm, String nounClass) {
-        switch (nounClass) {
+    public String extractRoot(String maleSingularForm, String adjectiveClass) {
+        switch (adjectiveClass) {
 
             case "4":
                 if (maleSingularForm.length() < 4) {
@@ -186,14 +186,14 @@ public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
         }
     }
 
-    public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
+    public HashMap<String, String> buildForms(String root, InflectionSubType adjectiveClass) {
 
         as = new SurmiranAdjectiveStructure();
-        as.setInflectionSubType(nounClass);
+        as.setInflectionSubType(adjectiveClass);
 
         as.setRoot(root);
         as.setEnding(getEnding());
-        as.setNounClass(nounClass.id);
+        as.setAdjectiveClass(adjectiveClass.id);
 
         setSingular();
         setPlural();
@@ -295,7 +295,7 @@ public class SurmiranAdjectiveGenerator extends LanguageNounGeneration {
 
         out.append(forms.get("root"));
         out.append("\n");
-        out.append(forms.get("nounClass"));
+        out.append(forms.get("adjectiveClass"));
         out.append("\n");
         out.append("\n");
 
