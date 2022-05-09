@@ -17,6 +17,8 @@ public class SurmiranInflection implements LanguageInflection {
                 return SurmiranConjugationClasses.getVerbInflectionSubtypes();
             case NOUN:
                 return SurmiranNounClasses.getNounInflectionSubtypes();
+            case ADJECTIVE:
+                return SurmiranAdjectiveClasses.getAdjectiveInflectionSubtypes();
         }
 
         return null;
@@ -28,10 +30,12 @@ public class SurmiranInflection implements LanguageInflection {
             case VERB:
                 SurmiranConjugation conjugation = new SurmiranConjugation();
                 return conjugation.guessInflection(baseForm, genus, flex);
-
             case NOUN:
                 SurmiranNounGenerator nounGenerator = new SurmiranNounGenerator();
                 return nounGenerator.guessInflection(baseForm, genus, flex);
+            case ADJECTIVE:
+                SurmiranAdjectiveGenerator adjectiveGenerator = new SurmiranAdjectiveGenerator();
+                return adjectiveGenerator.guessInflection(baseForm, genus, flex);
         }
         return null;
     }
@@ -42,10 +46,12 @@ public class SurmiranInflection implements LanguageInflection {
             case VERB:
                 SurmiranConjugation conjugation = new SurmiranConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
-
             case NOUN:
                 SurmiranNounGenerator nounGenerator = new SurmiranNounGenerator();
                 return nounGenerator.generateForms(subTypeId, baseForm);
+            case ADJECTIVE:
+                SurmiranAdjectiveGenerator adjectiveGenerator = new SurmiranAdjectiveGenerator();
+                return adjectiveGenerator.generateForms(subTypeId, baseForm);
         }
         return null;
     }
