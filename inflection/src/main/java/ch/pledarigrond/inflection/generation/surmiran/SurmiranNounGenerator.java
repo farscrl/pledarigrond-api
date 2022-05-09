@@ -23,8 +23,6 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
     private SurmiranNounStructure ns;
 
-    private String base;
-
     private String root;
 
     private String ending;
@@ -200,7 +198,6 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         ns = new SurmiranNounStructure();
         ns.setInflectionSubType(nounClass);
 
-        ns.setBase(getBase());
         ns.setRoot(root);
         ns.setEnding(getEnding());
         ns.setNounClass(nounClass.id);
@@ -249,6 +246,10 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
                 if (ns.getNounClass().equals("3")) {
                     ns.setMSingular(root);
                     ns.setFSingular(root + "a");
+                }
+                if (ns.getNounClass().equals("13")) {
+                    ns.setMSingular(root);
+                    ns.setFSingular(null);
                 }
                 break;
 
@@ -306,11 +307,19 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     }
 
     public void setPlural() {
+        // collectiv
+        if (ns.getNounClass().equals("13")) {
+            ns.setMPlural(buildPlural(ns.getMSingular()));
+            ns.setPluralCollectiv(ns.getMSingular() + "a");
+            return;
+        }
+
         if (!ns.getNounClass().equals("2")) {
             ns.setMPlural(buildPlural(ns.getMSingular()));
         } else {
             ns.setMPlural(null);
         }
+
         if (!ns.getNounClass().equals("1")) {
             ns.setFPlural(buildPlural(ns.getFSingular()));
         } else {

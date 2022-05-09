@@ -114,6 +114,16 @@ public class SurmiranNounGeneratorTest {
     }
 
     @Test
+    public void testRule13() {
+        forms = generator.generateForms("13", "peir");
+        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "peir");
+        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), null);
+        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "peirs");
+        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), null);
+        Assert.assertEquals(forms.getInflectionValues().get("pluralCollectiv"), "peira");
+    }
+
+    @Test
     public void testPluralRule2() {
         forms = generator.generateForms("1", "cass");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "cass");

@@ -20,8 +20,8 @@ public class SurmiranNounClasses {
                     new InflectionSubType("9", "ia -> eida", "p.ex. ampluia – amplueida"),
                     new InflectionSubType("10", "o -> ada", "p.ex. anvido – anvidada"),
                     new InflectionSubType("11", "ea -> eda", "p.ex. relaschea – relascheda"),
-                    new InflectionSubType("12", "(vocal))(c/f/m/n/p/r/t/z)", "p.ex. minoren - minorenna")
-
+                    new InflectionSubType("12", "(vocal))(c/f/m/n/p/r/t/z)", "p.ex. minoren - minorenna"),
+                    new InflectionSubType("13", "plural coll", "p.ex. peir - peirs - peira")
             )
     );
 
