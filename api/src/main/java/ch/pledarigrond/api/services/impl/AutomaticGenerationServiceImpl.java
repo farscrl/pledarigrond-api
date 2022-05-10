@@ -69,6 +69,22 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean generateVerbForms(Language language) {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        List<String> grammarValuesForVerbs = getGrammarValuesForVerbs();
+        for (String grammarValue : grammarValuesForVerbs) {
+            boolean success = searchLemmaByGrammar(language, grammarValue, AutomaticChangesType.VERBS, InflectionType.VERB);
+            if (!success) {
+                return false;
+            }
+        }
+
+        watch.stop();
+        logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+        return true;
+    }
 
     private boolean searchNounByGender(Language language, String gender, AutomaticChangesType automaticChangesType) {
         SearchCriteria searchCriteria = new SearchCriteria();
@@ -255,6 +271,26 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 "adj/numeral",
                 "adj/pronom indefinit",
                 "adj/pronom interrogativ"
+        ).collect(Collectors.toList());
+    }
+
+    public static List<String> getGrammarValuesForVerbs() {
+        return Stream.of(
+                "II. Verb modal",
+                "II. tr indirect",
+                "int",
+                "int/impersunal",
+                "int/reflexiv",
+                "int/tr",
+                "int/unpersönlich",
+                "refl",
+                "tr",
+                "tr indirect/int",
+                "tr/impersunal",
+                "tr/int",
+                "tr/int/Verb modal",
+                "tr/tr indirect",
+                "tr/verb modal"
         ).collect(Collectors.toList());
     }
 }

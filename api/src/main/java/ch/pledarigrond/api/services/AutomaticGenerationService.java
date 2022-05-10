@@ -8,4 +8,5 @@ public interface AutomaticGenerationService {
 
     boolean generateAdjectiveForms(Language language);
 
+    boolean generateVerbForms(Language language);
 }

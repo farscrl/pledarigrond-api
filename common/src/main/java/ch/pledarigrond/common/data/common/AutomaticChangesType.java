@@ -3,6 +3,7 @@ package ch.pledarigrond.common.data.common;
 public enum AutomaticChangesType {
     NOUNS("NOUNS"),
     ADJECTIVES("ADJECTIVES"),
+    VERBS("VERBS"),
     ALL("ALL");
 
     private String type;

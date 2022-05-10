@@ -39,4 +39,16 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/generate_verb_forms")
+    ResponseEntity<?> generateVerbForms(@PathVariable("language")Language language) {
+        boolean success = automaticGenerationService.generateVerbForms(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during form generation");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
