@@ -23,6 +23,8 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
     private SurmiranAdjectiveStructure as;
 
+    private String baseForm;
+
     private String root;
 
     private String ending;
@@ -137,6 +139,7 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
         }
 
         maleSingularForm = normalizeString(maleSingularForm);
+        baseForm = maleSingularForm;
 
         if (maleSingularForm.length() < 2) {
             throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
@@ -189,7 +192,7 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
     public HashMap<String, String> buildForms(String root, InflectionSubType adjectiveClass) {
 
         as = new SurmiranAdjectiveStructure();
-        as.setBaseForm(root);
+        as.setBaseForm(baseForm);
         as.setInflectionSubType(adjectiveClass);
 
         as.setRoot(root);

@@ -23,6 +23,8 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
     private SurmiranNounStructure ns;
 
+    private String baseForm;
+
     private String root;
 
     private String ending;
@@ -142,6 +144,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         }
 
         maleSingularForm = normalizeString(maleSingularForm);
+        baseForm = maleSingularForm;
 
         if (maleSingularForm.length() < 2) {
             throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
@@ -196,7 +199,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
 
         ns = new SurmiranNounStructure();
-        ns.setBaseForm(root);
+        ns.setBaseForm(baseForm);
         ns.setInflectionSubType(nounClass);
 
         ns.setRoot(root);
