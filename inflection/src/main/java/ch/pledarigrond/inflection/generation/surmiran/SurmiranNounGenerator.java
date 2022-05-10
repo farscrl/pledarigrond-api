@@ -196,6 +196,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
 
         ns = new SurmiranNounStructure();
+        ns.setBaseForm(root);
         ns.setInflectionSubType(nounClass);
 
         ns.setRoot(root);

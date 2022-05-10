@@ -189,6 +189,7 @@ public class SurmiranAdjectiveGenerator extends LanguageAdjectiveGeneration {
     public HashMap<String, String> buildForms(String root, InflectionSubType adjectiveClass) {
 
         as = new SurmiranAdjectiveStructure();
+        as.setBaseForm(root);
         as.setInflectionSubType(adjectiveClass);
 
         as.setRoot(root);

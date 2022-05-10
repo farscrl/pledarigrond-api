@@ -6,7 +6,7 @@ import ch.pledarigrond.inflection.model.InflectionType;
 import java.util.HashMap;
 
 public class SurmiranAdjectiveStructure {
-    public static final String base = "base";
+    public static final String baseForm = "baseForm";
     public static final String root = "root";
     public static final String ending = "ending";
     public static final String adjectiveClass = "adjectiveClass";
@@ -19,7 +19,7 @@ public class SurmiranAdjectiveStructure {
 
 
     public String[] msi = new String[] {
-            mSingular, fSingular,
+            baseForm, mSingular, fSingular,
             mPlural, fPlural, adverbialForm
     };
 
@@ -53,8 +53,8 @@ public class SurmiranAdjectiveStructure {
 
     }
 
-    public String getBase() {
-        return values.get(base);
+    public String getBaseForm() {
+        return values.get(baseForm);
     }
 
     public String getRoot() {
@@ -89,8 +89,8 @@ public class SurmiranAdjectiveStructure {
         return values.get(adverbialForm);
     }
 
-    public void setBase(String b) {
-        values.put(base, b);
+    public void setBaseForm(String b) {
+        values.put(baseForm, b);
     }
 
     public void setRoot(String r) {
@@ -136,8 +136,8 @@ public class SurmiranAdjectiveStructure {
 
     public String getValue(String key) {
         switch (key) {
-            case base:
-                return getBase();
+            case baseForm:
+                return getBaseForm();
             case root:
                 return getRoot();
             case ending:
@@ -165,7 +165,7 @@ public class SurmiranAdjectiveStructure {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append(values.get(base));
+        buffer.append(values.get(baseForm));
         buffer.append("\n");
 
         buffer.append(values.get(mSingular));
