@@ -28,12 +28,144 @@ public class SurmiranConjugation extends LanguageConjugation {
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
         root = getRoot(infinitiv);
 
-        if (conjugationClass.equals("9")) {
-            modRoot = changeVocalInRoot(root);
-
-            if (modRoot == null) {
-                throw new RuntimeException("For this conjugation you need to enter a verb with a vowel in its root!");
+        switch (conjugationClass) {
+            case "1a" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
+            case "1b" -> {
+                int start = root.lastIndexOf("i");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "1c" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "ai" + root.substring(start + 1); // TODO: should be "ei"
+            }
+            case "1d" -> {
+                int start = root.lastIndexOf("i");
+                modRoot = root.substring(0, start) + "ei" + root.substring(start + 1);
+            }
+            case "1e" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
+            }
+            case "1f" -> {
+                int start = root.lastIndexOf("i");
+                modRoot = root.substring(0, start) + "ie" + root.substring(start + 1);
+            }
+            case "1g" -> {
+                int start = root.lastIndexOf("u");
+                modRoot = root.substring(0, start) + "ov" + root.substring(start + 1);
+            }
+            case "1h" -> {
+                int start = root.lastIndexOf("ar");
+                modRoot = root.substring(0, start) + "rei" + root.substring(start + 2);
+            }
+            case "1i" -> {
+                int start = root.lastIndexOf("ar");
+                modRoot = root.substring(0, start) + "ro" + root.substring(start + 2);
+            }
+            case "1j" -> {
+                int start = root.lastIndexOf("an");
+                modRoot = root.substring(0, start) + "ang" + root.substring(start + 2);
+            }
+            case "1k" -> {
+                int start = root.lastIndexOf("un");
+                modRoot = root.substring(0, start) + "ung" + root.substring(start + 2);
+            }
+            case "1l" -> {
+                int start = root.lastIndexOf("an");
+                modRoot = root.substring(0, start) + "agn" + root.substring(start + 2);
+            }
+            case "1m" -> {
+                int start = root.lastIndexOf("in");
+                modRoot = root.substring(0, start) + "egn" + root.substring(start + 2);
+            }
+            case "1n" -> {
+                int start = root.lastIndexOf("in");
+                modRoot = root.substring(0, start) + "ign" + root.substring(start + 2);
+            }
+            case "1o" -> {
+                int start = root.lastIndexOf("ga");
+                modRoot = root.substring(0, start) + "gio" + root.substring(start + 2);
+            }
+            case "1p" -> {
+                int start = root.lastIndexOf("ca");
+                modRoot = root.substring(0, start) + "tgo" + root.substring(start + 2);
+            }
+            case "1q" -> {
+                int indexA = root.lastIndexOf("a");
+                int indexU = root.lastIndexOf("u");
+                modRoot = root.substring(0, indexU) + "a" + root.substring(indexU + 1, indexA) + "u" + root.substring(indexA + 1);
+            }
+            case "1r" -> {
+                int indexE = root.lastIndexOf("e");
+                int indexA = root.lastIndexOf("a");
+                modRoot = root.substring(0, indexE) + "a" + root.substring(indexE + 1, indexA) + "e" + root.substring(indexA + 1);
+            }
+            case "2a" -> { // TODO: correct?
+                int start = root.lastIndexOf("ag");
+                modRoot = root.substring(0, start) + "eg" + root.substring(start + 2);
+            }
+            case "2b" -> { // TODO: correct?
+                int start = root.lastIndexOf("cag");
+                modRoot = root.substring(0, start) + "cheg" + root.substring(start + 3);
+            }
+            case "3a" -> {
+                int start = root.lastIndexOf("i");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "3b" -> {
+                int start = root.lastIndexOf("u");
+                modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
+            }
+            case "3c" -> {
+                int start = root.lastIndexOf("u");
+                modRoot = root.substring(0, start) + "ou" + root.substring(start + 1);
+            }
+            case "4a" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "5a" -> {
+                int start = root.lastIndexOf("e");
+                modRoot = root.substring(0, start) + "a" + root.substring(start + 1);
+            }
+            case "5b" -> {
+                int start = root.lastIndexOf("o");
+                modRoot = root.substring(0, start) + "u" + root.substring(start + 1);
+            }
+            case "5c" -> {
+                int start = root.lastIndexOf("ei");
+                modRoot = root.substring(0, start) + "i" + root.substring(start + 2);
+            }
+            case "6a" -> {
+                int start = root.lastIndexOf("ar");
+                modRoot = root.substring(0, start) + "ra" + root.substring(start + 2);
+            }
+            case "6b" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "6c" -> {
+                int start = root.lastIndexOf("i");
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "6d" -> {
+                int start = root.lastIndexOf("ugl");
+                modRoot = root.substring(0, start) + "ogl" + root.substring(start + 3);
+            }
+            case "6e" -> {
+                int start = root.lastIndexOf("a");
+                modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
+            }
+            case "9" -> {
+                modRoot = changeVocalInRoot(root);
+                if (modRoot == null) {
+                    throw new RuntimeException("For this conjugation you need to enter a verb with a vowel in its root!");
+                }
+            }
+            default -> modRoot = root;
         }
 
         InflectionSubType subType = SurmiranConjugationClasses.getConjugationClass(conjugationClass);
@@ -215,7 +347,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                 cs.setPreschentsing2(root + "as");
                 cs.setPreschentsing3(root + "a");
 
-                if (cs.getConjugationclass().id.equals("6")) {
+                if (cs.getConjugationclass().id.charAt(0) == '6') {
                     // 1pp
                     cs.setPreschentplural1(root + "ign");
                     // 2pp
@@ -231,6 +363,72 @@ public class SurmiranConjugation extends LanguageConjugation {
                 cs.setPreschentplural3(root + "an");
                 break;
 
+            case "1a":
+            case "1b":
+            case "1c":
+            case "1d":
+            case "1e":
+            case "1f":
+            case "1g":
+            case "1h":
+            case "1i":
+            case "1j":
+            case "1k":
+            case "1l":
+            case "1m":
+            case "1n":
+            case "1o":
+            case "1p":
+            case "1q":
+            case "1r":
+            case "3a":
+            case "3b":
+            case "3c":
+            case "4a":
+            case "6a":
+            case "6b":
+            case "6c":
+            case "6d":
+            case "6e":
+                if (ending.equals("ar") && !getInfinitiv().equals("mussar") && endsWithDoubleConsonant(modRoot)) {
+                    String firstSingular = modRoot.substring(0, modRoot.length() - 1);
+                    cs.setPreschentsing1(firstSingular);
+                } else {
+                    cs.setPreschentsing1(modRoot);
+                }
+                cs.setPreschentsing2(modRoot + "as");
+                cs.setPreschentsing3(modRoot + "a");
+                if (cs.getConjugationclass().id.charAt(0) == '6') {
+                    // 1pp
+                    cs.setPreschentplural1(root + "ign");
+                    // 2pp
+                    cs.setPreschentplural2(root + "iz");
+                } else {
+
+                    // 1pp
+                    cs.setPreschentplural1(root + "agn");
+                    // 2pp
+                    cs.setPreschentplural2(root + "ez");
+                }
+                cs.setPreschentplural3(modRoot + "an");
+                break;
+
+            case "2a":
+            case "2b":
+                break;
+
+
+            case "5a":
+            case "5b":
+            case "5c":
+                cs.setPreschentsing1(root);
+                cs.setPreschentsing2(root + "as");
+                cs.setPreschentsing3(root + "a");
+                cs.setPreschentplural1(modRoot + "agn");
+                cs.setPreschentplural2(modRoot + "ez");
+                cs.setPreschentplural3(root + "an");
+                break;
+
             case "7":
             case "8":
 
@@ -242,7 +440,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                 // 3ps
                 cs.setPreschentsing3(root + "escha");
 
-                if (cs.getConjugationclass().id.equals("7")) {
+                if (cs.getConjugationclass().id.charAt(0) == '7') {
                     // 1pp
                     cs.setPreschentplural1(root + "ign");
                     // 2pp
@@ -322,7 +520,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     private void setImperfect(SurmiranConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationclass().id.substring(0, 1)) {
 
             case "1":
             case "8":
@@ -348,6 +546,15 @@ public class SurmiranConjugation extends LanguageConjugation {
             case "2":
             case "4":
             case "5":
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setImperfectsing1(modRoot + "eva");
+                    cs.setImperfectsing2(modRoot + "evas");
+                    cs.setImperfectsing3(modRoot + "eva");
+                    cs.setImperfectplural1(modRoot + "evan");
+                    cs.setImperfectplural2(modRoot + "evas");
+                    cs.setImperfectplural3(modRoot + "evan");
+                    break;
+                }
                 cs.setImperfectsing1(root + "eva");
                 cs.setImperfectsing2(root + "evas");
                 cs.setImperfectsing3(root + "eva");
@@ -437,19 +644,29 @@ public class SurmiranConjugation extends LanguageConjugation {
                 break;
 
             default:
-                cs.setConjunctivsing1(root + "a");
-                cs.setConjunctivsing2(root + "as");
-                cs.setConjunctivsing3(root + "a");
-                cs.setConjunctivplural1(root + "an");
-                cs.setConjunctivplural2(root + "as");
-                cs.setConjunctivplural3(root + "an");
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setConjunctivsing1(root + "a");
+                    cs.setConjunctivsing2(root + "as");
+                    cs.setConjunctivsing3(root + "a");
+                    cs.setConjunctivplural1(root + "an");
+                    cs.setConjunctivplural2(root + "as");
+                    cs.setConjunctivplural3(root + "an");
+                    break;
+                }
+
+                cs.setConjunctivsing1(modRoot + "a");
+                cs.setConjunctivsing2(modRoot + "as");
+                cs.setConjunctivsing3(modRoot + "a");
+                cs.setConjunctivplural1(modRoot + "an");
+                cs.setConjunctivplural2(modRoot + "as");
+                cs.setConjunctivplural3(modRoot + "an");
                 break;
         }
     }
 
     private void setCundizional(SurmiranConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationclass().id.substring(0, 1)) {
 
             case "6":
             case "7":
@@ -487,6 +704,15 @@ public class SurmiranConjugation extends LanguageConjugation {
                 break;
 
             default:
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setCundizionalsing1(modRoot + "ess");
+                    cs.setCundizionalsing2(modRoot + "essas");
+                    cs.setCundizionalsing3(modRoot + "ess");
+                    cs.setCundizionalplural1(modRoot + "essan");
+                    cs.setCundizionalplural2(modRoot + "essas");
+                    cs.setCundizionalplural3(modRoot + "essan");
+                    break;
+                }
                 cs.setCundizionalsing1(root + "ess");
                 cs.setCundizionalsing2(root + "essas");
                 cs.setCundizionalsing3(root + "ess");
@@ -499,7 +725,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     private void setParticipPerfect(SurmiranConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationclass().id.substring(0, 1)) {
             case "1":
             case "8":
                 cs.setParticipperfectms(root + "o");
@@ -558,6 +784,14 @@ public class SurmiranConjugation extends LanguageConjugation {
                 break;
 
             default:
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setParticipperfectms(modRoot + "ia");
+                    cs.setParticipperfectmp(modRoot + "ias");
+                    cs.setParticipperfectfs(modRoot + "eida");
+                    cs.setParticipperfectfp(modRoot + "eidas");
+                    break;
+                }
+
                 cs.setParticipperfectms(root + "ia");
                 cs.setParticipperfectmp(root + "ias");
                 cs.setParticipperfectfs(root + "eida");
@@ -568,7 +802,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     private void setGerundium(SurmiranConjugationStructure cs) {
 
-        switch (cs.getConjugationclass().id) {
+        switch (cs.getConjugationclass().id.substring(0, 1)) {
             case "6":
             case "7":
                 cs.setGerundium(root + "ond" + "/" + root + "end");
@@ -590,6 +824,10 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
                 break;
             default:
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setGerundium(modRoot + "ond");
+                    break;
+                }
                 cs.setGerundium(root + "ond");
                 break;
         }
@@ -602,7 +840,7 @@ public class SurmiranConjugation extends LanguageConjugation {
             case "8":
                 cs.setImperativ1(root + "escha!");
 
-                if (cs.getConjugationclass().id.equals("7")) {
+                if (cs.getConjugationclass().id.charAt(0) == '7') {
                     cs.setImperativ2(root + "i!");
                 } else {
                     cs.setImperativ2(root + "e!");
@@ -625,9 +863,15 @@ public class SurmiranConjugation extends LanguageConjugation {
                         break;
                 }
                 break;
+
             default:
-                cs.setImperativ1(root + "a!");
-                if (cs.getConjugationclass().id.equals("6")) {
+                if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                    cs.setImperativ1(root + "a!");
+                    cs.setImperativ2(modRoot + "e!");
+                    break;
+                }
+                cs.setImperativ1(modRoot + "a!");
+                if (cs.getConjugationclass().id.charAt(0) == '6') {
                     cs.setImperativ2(root + "i!");
                 } else {
                     cs.setImperativ2(root + "e!");
@@ -640,7 +884,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         switch (getIsReflexive()) {
             case "true":
                 if (startsWithVocal(root)) {
-                    switch (cs.getConjugationclass().id) {
+                    switch (cs.getConjugationclass().id.substring(0, 1)) {
                         case "6":
                         case "7":
                             cs.setFutursing1(SurmiranPronouns.pron_r_v_1ps + root + "iro");
@@ -687,7 +931,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                     }
 
                 } else {
-                    switch (cs.getConjugationclass().id) {
+                    switch (cs.getConjugationclass().id.substring(0, 1)) {
                         case "6":
                         case "7":
                             cs.setFutursing1(SurmiranPronouns.pron_r_1ps + root + "iro");
@@ -725,6 +969,15 @@ public class SurmiranConjugation extends LanguageConjugation {
                             break;
 
                         default:
+                            if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                                cs.setFutursing1(SurmiranPronouns.pron_r_1ps + modRoot + "aro");
+                                cs.setFutursing2(SurmiranPronouns.pron_r_2ps + modRoot + "arossas");
+                                cs.setFutursing3(SurmiranPronouns.pron_r_3ps + modRoot + "aro");
+                                cs.setFuturplural1(SurmiranPronouns.pron_r_1pp + modRoot + "aron");
+                                cs.setFuturplural2(SurmiranPronouns.pron_r_2pp + modRoot + "arossas");
+                                cs.setFuturplural3(SurmiranPronouns.pron_r_3pp + modRoot + "aron");
+                                break;
+                            }
                             cs.setFutursing1(SurmiranPronouns.pron_r_1ps + root + "aro");
                             cs.setFutursing2(SurmiranPronouns.pron_r_2ps + root + "arossas");
                             cs.setFutursing3(SurmiranPronouns.pron_r_3ps + root + "aro");
@@ -741,7 +994,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
             case "false":
 
-                switch (cs.getConjugationclass().id) {
+                switch (cs.getConjugationclass().id.substring(0, 1)) {
                     case "6":
                     case "7":
                         cs.setFutursing1(root + "iro");
@@ -779,6 +1032,15 @@ public class SurmiranConjugation extends LanguageConjugation {
                         break;
 
                     default:
+                        if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
+                            cs.setFutursing1(modRoot + "aro");
+                            cs.setFutursing2(modRoot + "arossas");
+                            cs.setFutursing3(modRoot + "aro");
+                            cs.setFuturplural1(modRoot + "aron");
+                            cs.setFuturplural2(modRoot + "arossas");
+                            cs.setFuturplural3(modRoot + "aron");
+                            break;
+                        }
                         cs.setFutursing1(root + "aro");
                         cs.setFutursing2(root + "arossas");
                         cs.setFutursing3(root + "aro");
