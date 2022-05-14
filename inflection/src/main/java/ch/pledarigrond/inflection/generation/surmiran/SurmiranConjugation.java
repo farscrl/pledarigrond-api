@@ -1314,6 +1314,9 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
 
                 String form = response.getInflectionValues().get(key);
+                // remove pronoun
+                String[] formSplit = form.split(" ");
+                form = formSplit[formSplit.length-1];
                 if (form.equals(flexValue)) {
                     isEqual = true;
                     break;
