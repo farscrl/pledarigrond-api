@@ -1060,7 +1060,6 @@ public class SurmiranConjugationTest {
     }
 
     @Test
-    @Ignore
     public void testRule2a() {
         forms =  generator.generateConjugation("2a", "manager");
 
@@ -1113,7 +1112,6 @@ public class SurmiranConjugationTest {
     }
 
     @Test
-    @Ignore
     public void testRule2b() {
         forms =  generator.generateConjugation("2b", "macager");
 
@@ -1154,15 +1152,15 @@ public class SurmiranConjugationTest {
         Assert.assertEquals("vous macagiarossas", forms.getInflectionValues().get("futurplural2"));
         Assert.assertEquals("els/ellas macagiaron", forms.getInflectionValues().get("futurplural3"));
 
-        Assert.assertEquals(" macagea", forms.getInflectionValues().get("participperfectms"));
-        Assert.assertEquals(" macageda", forms.getInflectionValues().get("participperfectfs"));
-        Assert.assertEquals(" macageas", forms.getInflectionValues().get("participperfectmp"));
-        Assert.assertEquals(" macagedas", forms.getInflectionValues().get("participperfectfp"));
+        Assert.assertEquals("macagea", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("macageda", forms.getInflectionValues().get("participperfectfs"));
+        Assert.assertEquals("macageas", forms.getInflectionValues().get("participperfectmp"));
+        Assert.assertEquals("macagedas", forms.getInflectionValues().get("participperfectfp"));
 
-        Assert.assertEquals(" machegia", forms.getInflectionValues().get("imperativ1"));
-        Assert.assertEquals(" macage", forms.getInflectionValues().get("imperativ2"));
+        Assert.assertEquals("machegia!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("macage!", forms.getInflectionValues().get("imperativ2"));
 
-        Assert.assertEquals(" macagiond", forms.getInflectionValues().get("gerundium"));
+        Assert.assertEquals("macagiond", forms.getInflectionValues().get("gerundium"));
     }
 
     @Test

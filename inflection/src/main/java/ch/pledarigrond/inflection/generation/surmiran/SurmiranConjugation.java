@@ -103,13 +103,13 @@ public class SurmiranConjugation extends LanguageConjugation {
                 int indexA = root.lastIndexOf("a");
                 modRoot = root.substring(0, indexE) + "a" + root.substring(indexE + 1, indexA) + "e" + root.substring(indexA + 1);
             }
-            case "2a" -> { // TODO: correct?
+            case "2a" -> {
                 int start = root.lastIndexOf("ag");
-                modRoot = root.substring(0, start) + "eg" + root.substring(start + 2);
+                modRoot = root.substring(0, start) + "eg" + root.substring(start + 2) + "i";
             }
-            case "2b" -> { // TODO: correct?
+            case "2b" -> {
                 int start = root.lastIndexOf("cag");
-                modRoot = root.substring(0, start) + "cheg" + root.substring(start + 3);
+                modRoot = root.substring(0, start) + "cheg" + root.substring(start + 3) + "i";
             }
             case "3a" -> {
                 int start = root.lastIndexOf("i");
@@ -485,6 +485,12 @@ public class SurmiranConjugation extends LanguageConjugation {
 
             case "2a":
             case "2b":
+                cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 2) + "tg");
+                cs.setPreschentsing2(modRoot + "as");
+                cs.setPreschentsing3(modRoot + "a");
+                cs.setPreschentplural1(root + "iagn");
+                cs.setPreschentplural2(root + "ez");
+                cs.setPreschentplural3(modRoot + "an");
                 break;
 
 
@@ -894,6 +900,10 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
                 break;
             default:
+                if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b")) {
+                    cs.setGerundium(root + "iond");
+                    break;
+                }
                 if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
                     cs.setGerundium(modRoot + "ond");
                     break;
@@ -1102,6 +1112,15 @@ public class SurmiranConjugation extends LanguageConjugation {
                         break;
 
                     default:
+                        if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b")) {
+                            cs.setFutursing1(root + "iaro");
+                            cs.setFutursing2(root + "iarossas");
+                            cs.setFutursing3(root + "iaro");
+                            cs.setFuturplural1(root + "iaron");
+                            cs.setFuturplural2(root + "iarossas");
+                            cs.setFuturplural3(root + "iaron");
+                            break;
+                        }
                         if (cs.getConjugationclass().id.equals("5a") || cs.getConjugationclass().id.equals("5b") || cs.getConjugationclass().id.equals("5c")) {
                             cs.setFutursing1(modRoot + "aro");
                             cs.setFutursing2(modRoot + "arossas");
