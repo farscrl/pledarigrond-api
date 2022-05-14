@@ -181,7 +181,77 @@ public class SurmiranConjugation extends LanguageConjugation {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
-        // TODO: implement me
+        if (baseForm.length() < 3) {
+            return null;
+        }
+
+        String lastTwo = baseForm.substring(baseForm.length() - 2);
+        String lastThree = baseForm.substring(baseForm.length() - 3);
+
+        if (lastThree.equals("ier")) {
+            String[] subForms = new String[] { "3a", "3b", "3c" };
+            for (String subForm : subForms) {
+                InflectionResponse r = generateConjugation(subForm, baseForm);
+                if (doesFormContainAllValues(r, flex)) {
+                    return r;
+                }
+            }
+
+            return generateConjugation("3", baseForm);
+        }
+
+        if (lastThree.equals("eir")) {
+            if (flex != null && flex.equals("-escha")) {
+                return generateConjugation("7", baseForm);
+            }
+
+            String[] subForms = new String[] { "4", "4a", "6a", "6b", "6c", "6d", "6e" };
+            for (String subForm : subForms) {
+                InflectionResponse r = generateConjugation(subForm, baseForm);
+                if (doesFormContainAllValues(r, flex)) {
+                    return r;
+                }
+            }
+
+            return generateConjugation("6", baseForm);
+        }
+
+        if (lastTwo.equals("ar")) {
+            if (flex != null && flex.equals("-escha")) {
+                return generateConjugation("8", baseForm);
+            }
+
+            String[] subForms = new String[] {"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1q", "1r" };
+            for (String subForm : subForms) {
+                InflectionResponse r = generateConjugation(subForm, baseForm);
+                if (doesFormContainAllValues(r, flex)) {
+                    return r;
+                }
+            }
+
+            return generateConjugation("1", baseForm);
+        }
+
+        if (lastTwo.equals("er")) {
+            if (baseForm.endsWith("cager")) {
+                return generateConjugation("2b", baseForm);
+            }
+
+            if (lastThree.equals("ger")) {
+                return generateConjugation("2a", baseForm);
+            }
+
+            String[] subForms = new String[] {"5", "5a", "5b", "5c" };
+            for (String subForm : subForms) {
+                InflectionResponse r = generateConjugation(subForm, baseForm);
+                if (doesFormContainAllValues(r, flex)) {
+                    return r;
+                }
+            }
+
+            return generateConjugation("2", baseForm);
+        }
+
         return null;
     }
 
@@ -1204,5 +1274,37 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setFuturplural3(SurmiranPronouns.pron_3pp + conjugation.get(SurmiranConjugationStructure.futurplural3));
 
         return cs.getAllFormValues();
+    }
+
+    private boolean doesFormContainAllValues(InflectionResponse response, String flex) {
+        if (flex == null) {
+            return false;
+        }
+        String[] flexValues = flex.split("; ");
+
+        for (String value : flexValues) {
+            String flexValue = value;
+            if (flexValue.startsWith("particip perfect: ")) {
+                flexValue = flexValue.substring("particip perfect: ".length());
+            }
+
+            boolean isEqual = false;
+            for (String key : response.getInflectionValues().keySet()) {
+                if (key.equals("RInflectionSubtype") || key.equals("RInflectionType") || key.equals("RRegularInflection") || key.equals("infinitiv")) {
+                    continue;
+                }
+
+                String form = response.getInflectionValues().get(key);
+                if (form.equals(flexValue)) {
+                    isEqual = true;
+                    break;
+                }
+            }
+            if (!isEqual) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
