@@ -39,7 +39,7 @@ public class SurmiranConjugation extends LanguageConjugation {
             }
             case "1c" -> {
                 int start = root.lastIndexOf("a");
-                modRoot = root.substring(0, start) + "ai" + root.substring(start + 1); // TODO: should be "ei"
+                modRoot = root.substring(0, start) + "ei" + root.substring(start + 1);
             }
             case "1d" -> {
                 int start = root.lastIndexOf("i");

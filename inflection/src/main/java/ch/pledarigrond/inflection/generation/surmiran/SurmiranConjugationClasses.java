@@ -13,7 +13,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("1", "-ar", "Finiziun sin -ar (p.ex. cantar)"),
                     new InflectionSubType("1a", "a -> e", " (p.ex. tadlar)", true),
                     new InflectionSubType("1b", "i -> e", " (p.ex. fimar)", true),
-                    new InflectionSubType("1c", "a -> ai", " (p.ex. pasar)", true),
+                    new InflectionSubType("1c", "a -> ei", " (p.ex. pasar)", true),
                     new InflectionSubType("1d", "i -> ei", " (p.ex. midar)", true),
                     new InflectionSubType("1e", "a -> ai ", " (p.ex. passantar)", true),
                     new InflectionSubType("1f", "i -> ie", " (p.ex. irtar)", true),
@@ -26,7 +26,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("1m", "-in- -> -egn", " (p.ex. pinar)", true),
                     new InflectionSubType("1n", "-in- -> -ign", " (p.ex. schinar)", true),
                     new InflectionSubType("1o", "-ga- -> -gio", " (p.ex. anganar)", true),
-                    new InflectionSubType("1p", "-ca- -> -stgo-", " (p.ex. scanar)", true),
+                    new InflectionSubType("1p", "-ca- -> -tgo-", " (p.ex. scanar)", true),
                     new InflectionSubType("1q", "u-a -> a-u", " (p.ex. ruschanar)", true),
                     new InflectionSubType("1r", "e-a -> a-e", " (p.ex. declarar)", true),
 
