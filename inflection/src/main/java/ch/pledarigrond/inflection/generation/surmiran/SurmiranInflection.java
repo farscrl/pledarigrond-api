@@ -5,7 +5,6 @@ import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class SurmiranInflection implements LanguageInflection {
@@ -13,7 +12,7 @@ public class SurmiranInflection implements LanguageInflection {
     @Override
     public List<InflectionSubType> getInflectionSubtypes(InflectionType inflectionType) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 return SurmiranConjugationClasses.getVerbInflectionSubtypes();
             case NOUN:
                 return SurmiranNounClasses.getNounInflectionSubtypes();
@@ -27,7 +26,7 @@ public class SurmiranInflection implements LanguageInflection {
     @Override
     public InflectionResponse guessInflectionSubtype(InflectionType inflectionType, String baseForm, String genus, String flex) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 SurmiranConjugation conjugation = new SurmiranConjugation();
                 return conjugation.guessInflection(baseForm, genus, flex);
             case NOUN:
@@ -43,7 +42,7 @@ public class SurmiranInflection implements LanguageInflection {
     @Override
     public InflectionResponse generateInflection(InflectionType inflectionType, String subTypeId, String baseForm) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 SurmiranConjugation conjugation = new SurmiranConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
             case NOUN:

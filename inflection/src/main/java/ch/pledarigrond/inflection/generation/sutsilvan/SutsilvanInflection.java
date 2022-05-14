@@ -11,7 +11,7 @@ public class SutsilvanInflection  implements LanguageInflection {
     @Override
     public List<InflectionSubType> getInflectionSubtypes(InflectionType inflectionType) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 return SutsilvanConjugationClasses.getVerbInflectionSubtypes();
         }
 
@@ -26,7 +26,7 @@ public class SutsilvanInflection  implements LanguageInflection {
     @Override
     public InflectionResponse generateInflection(InflectionType inflectionType, String subTypeId, String baseForm) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 SutsilvanConjugation conjugation = new SutsilvanConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
         }

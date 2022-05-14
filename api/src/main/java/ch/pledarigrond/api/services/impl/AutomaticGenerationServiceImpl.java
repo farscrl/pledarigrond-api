@@ -75,7 +75,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         List<String> grammarValuesForVerbs = getGrammarValuesForVerbs();
         for (String grammarValue : grammarValuesForVerbs) {
-            boolean success = searchLemmaByGrammar(language, grammarValue, AutomaticChangesType.VERBS, InflectionType.VERB);
+            boolean success = searchLemmaByGrammar(language, grammarValue, AutomaticChangesType.VERBS, InflectionType.V);
             if (!success) {
                 return false;
             }

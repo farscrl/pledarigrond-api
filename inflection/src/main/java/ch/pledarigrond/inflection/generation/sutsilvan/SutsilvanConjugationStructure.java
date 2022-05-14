@@ -106,7 +106,7 @@ public class SutsilvanConjugationStructure {
 			returnValue.put(s, getValue(s));
 		}
 		returnValue.put("RInflectionSubtype", conjugationClass.id);
-		returnValue.put("RInflectionType", InflectionType.VERB.toString());
+		returnValue.put("RInflectionType", InflectionType.V.toString());
 		returnValue.put("RRegularInflection", "true");
 
 		return returnValue;

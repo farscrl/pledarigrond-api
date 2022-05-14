@@ -11,7 +11,7 @@ public class RumantschGrischunInflection  implements LanguageInflection {
     @Override
     public List<InflectionSubType> getInflectionSubtypes(InflectionType inflectionType) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 return RumantschGrischunConjugationClasses.getVerbInflectionSubtypes();
         }
 
@@ -26,7 +26,7 @@ public class RumantschGrischunInflection  implements LanguageInflection {
     @Override
     public InflectionResponse generateInflection(InflectionType inflectionType, String subTypeId, String baseForm) {
         switch (inflectionType) {
-            case VERB:
+            case V:
                 RumantschGrischunConjugation conjugation = new RumantschGrischunConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
         }

@@ -1,7 +1,7 @@
 package ch.pledarigrond.inflection.model;
 
 public enum InflectionType {
-    VERB("v"),
+    V("v"), // verb
     NOUN("noun"),
     ADJECTIVE("adjective")
     ;
