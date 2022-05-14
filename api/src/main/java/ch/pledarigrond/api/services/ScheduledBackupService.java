@@ -92,6 +92,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		File backupDir = new File(pgEnvironment.getBackupLocation());
 		backupDir.mkdirs();
 		File backupFile = new File(backupDir, backupFileName);
+		backupFile.getParentFile().mkdirs();
 		userService.exportData(new FileOutputStream(backupFile), backupFileName);
 
 		LOG.info("user backup created: {}", backupFile.getAbsolutePath());
