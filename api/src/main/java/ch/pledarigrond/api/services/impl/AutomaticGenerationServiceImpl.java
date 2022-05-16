@@ -75,7 +75,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         List<String> grammarValuesForVerbs = getGrammarValuesForVerbs();
         for (String grammarValue : grammarValuesForVerbs) {
-            boolean success = searchLemmaByGrammar(language, grammarValue, AutomaticChangesType.VERBS, InflectionType.V);
+            boolean success = searchLemmaByGrammarVerb(language, grammarValue, AutomaticChangesType.VERBS, InflectionType.V);
             if (!success) {
                 return false;
             }
@@ -214,6 +214,99 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
                 newVersion.getLemmaValues().put(el.getKey(), el.getValue());
+            }
+
+            newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
+            newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
+
+            try {
+                mongoDbService.update(language, entry, newVersion);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean searchLemmaByGrammarVerb(Language language, String grammarValue, AutomaticChangesType automaticChangesType, InflectionType type) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setGrammar(grammarValue);
+        searchCriteria.setExcludeAutomaticChanged(true);
+        searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<LemmaVersion> lemmas;
+        try {
+            lemmas = editorService.search(language, searchCriteria, pagination);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < lemmas.getContent().size(); i++) {
+            LemmaVersion lemma = lemmas.getContent().get(i);
+            logger.debug(lemma.toString());
+
+            InflectionResponse inflectionResponse = null;
+            try {
+                inflectionResponse = inflectionService.guessInflection(language, type, lemma.getLemmaValues().get("RStichwort"), lemma.getLemmaValues().get("RGenus"), lemma.getLemmaValues().get("RFlex"));
+            } catch (StringIndexOutOfBoundsException ex) {
+                continue;
+            }
+            if (inflectionResponse == null) {
+                continue;
+            }
+
+            LexEntry entry = null;
+            try {
+                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+
+            LemmaVersion newVersion = new LemmaVersion();
+            newVersion.getLemmaValues().putAll(lemma.getLemmaValues());
+            newVersion.getPgValues().putAll(lemma.getPgValues());
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
+
+            // check if verb has already conjugations
+            boolean overwriteValues = true;
+            if (entry.getCurrent().getLemmaValues().get("preschentsing3") != null && !entry.getCurrent().getLemmaValues().get("preschentsing3").equals("")) {
+                for (String key : inflectionResponse.getInflectionValues().keySet()) {
+                    if (key.equals("infinitiv") || key.equals("RInflectionSubtype") || key.equals("RInflectionType") || key.equals("RRegularInflection")) {
+                        continue;
+                    }
+
+                    if (!inflectionResponse.getInflectionValues().get(key).equals(entry.getCurrent().getLemmaValues().get(key))) {
+                        overwriteValues = false;
+                    }
+                }
+            }
+
+            if (overwriteValues) {
+                for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+                    newVersion.getLemmaValues().put(el.getKey(), el.getValue());
+                }
+            } else {
+                newVersion.getLemmaValues().put("infinitiv", inflectionResponse.getInflectionValues().get("infinitiv"));
+                newVersion.getLemmaValues().put("RInflectionSubtype", inflectionResponse.getInflectionValues().get("RInflectionSubtype"));
+                newVersion.getLemmaValues().put("RInflectionType", inflectionResponse.getInflectionValues().get("RInflectionType"));
+                newVersion.getLemmaValues().put("RRegularInflection", "false");
             }
 
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
