@@ -75,6 +75,7 @@ public class Database {
 	private static final String QUERY_VERSION_TIMESTAMP = LemmaVersion.TIMESTAMP;
 	private static final String QUERY_VERSION_STATE = LemmaVersion.STATUS;
 	private static final String QUERY_VERSION_VERIFIER = LemmaVersion.VERIFIER;
+	private static final String QUERY_VERSION_AUTOMATIC_CHANGE = LemmaVersion.AUTOMATIC_CHANGE;
 
 	private static final Map<String, Database> instances = new HashMap<>();
 
@@ -283,9 +284,9 @@ public class Database {
 
 	public Page<LexEntry> queryForLexEntries(String login, EditorRole role, LemmaVersion.Verification verification, String verifier,
 											 long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
-											 boolean ascending) {
+											 boolean ascending, boolean excludeAutomaticChanges) {
 		logger.info("Query Params: " + login + ", " + role + ", " + verification + ", " + startTime + ", " + endTime + ", " + Arrays.toString(states) + ", " + pageSize + ", " + page + ", " + orderField + ", " + ascending);
-		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, pageSize, page, orderField, ascending);
+		MongoCursor<Document> cursor = query(login, role, verification, verifier, startTime, endTime, states, pageSize, page, orderField, ascending, excludeAutomaticChanges);
 		List<LexEntry> results = new ArrayList<LexEntry>();
 		while (cursor.hasNext()) {
 			DBObject next = new BasicDBObject(cursor.next());
@@ -294,13 +295,13 @@ public class Database {
 		}
 		cursor.close();
 		Pageable pageable = PageRequest.of(page, pageSize);
-		return new PageImpl<>(results, pageable, getTotalResults(login, role, verification, verifier, startTime, endTime, states));
+		return new PageImpl<>(results, pageable, getTotalResults(login, role, verification, verifier, startTime, endTime, states, excludeAutomaticChanges));
 	}
 
 	private MongoCursor<Document> query(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
 										long startTime, long endTime, LemmaVersion.Status[] states, int pageSize, int page, String orderField,
-										boolean ascending) {
-		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
+										boolean ascending, boolean excludeAutomaticChanges) {
+		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states, excludeAutomaticChanges);
 
 		FindIterable<Document> found;
 		if (queryOptional.isPresent()) {
@@ -330,8 +331,8 @@ public class Database {
 	}
 
 	private long getTotalResults(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
-								 long startTime, long endTime, LemmaVersion.Status[] states) {
-		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states);
+								 long startTime, long endTime, LemmaVersion.Status[] states, boolean excludeAutomaticChanges) {
+		Optional<BasicDBObject> queryOptional = getQuery(loginOrIP, role, verification, verifier, startTime, endTime, states, excludeAutomaticChanges);
 
 		if (queryOptional.isPresent()) {
 			return entryCollection.countDocuments(queryOptional.get());
@@ -341,7 +342,7 @@ public class Database {
 	}
 
 	private Optional<BasicDBObject> getQuery(String loginOrIP, EditorRole role, LemmaVersion.Verification verification, String verifier,
-											 long startTime, long endTime, LemmaVersion.Status[] states) {
+											 long startTime, long endTime, LemmaVersion.Status[] states, boolean excludeAutomaticChanges) {
 
 		BasicDBObject query = new BasicDBObject();
 		BasicDBObject attributes = new BasicDBObject();
@@ -383,6 +384,9 @@ public class Database {
 			DBObject obj = new BasicDBObject("$lt", endTime);
 			obj.put("$gt", startTime);
 			attributes.put(QUERY_VERSION_TIMESTAMP, obj);
+		}
+		if (excludeAutomaticChanges) {
+			attributes.put(QUERY_VERSION_AUTOMATIC_CHANGE, new BasicDBObject("$exists", false));
 		}
 		if (attributes.size() > 0) {
 			BasicDBObject elemMatch = new BasicDBObject("$elemMatch", attributes);

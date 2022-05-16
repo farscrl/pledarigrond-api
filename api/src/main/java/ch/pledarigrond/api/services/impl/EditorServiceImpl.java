@@ -58,7 +58,7 @@ public class EditorServiceImpl implements EditorService {
     public Page<LexEntry> getLexEntries(Language language, EditorQuery query, Pagination pagination) throws Exception {
         Page<LexEntry> result = Database
                 .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
-                .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
+                .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending(), excludeAutomaticChangesForLanguage(language));
         for (LexEntry lexEntry : result.getContent()) {
             addUserInfos(lexEntry);
         }
@@ -256,7 +256,7 @@ public class EditorServiceImpl implements EditorService {
         while(true) {
             Page<LexEntry> result = Database
                     .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
-                    .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending());
+                    .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending(), excludeAutomaticChangesForLanguage(language));
             if(result == null || result.getContent().size() == 0) break;
             for (LexEntry lexEntry : result.getContent()) {
                 addUserInfos(lexEntry);
@@ -306,5 +306,9 @@ public class EditorServiceImpl implements EditorService {
             if(value != null) writer.write(value.trim());
             writer.write("\t");
         }
+    }
+
+    private boolean excludeAutomaticChangesForLanguage(Language language) {
+        return language == Language.SURMIRAN;
     }
 }
