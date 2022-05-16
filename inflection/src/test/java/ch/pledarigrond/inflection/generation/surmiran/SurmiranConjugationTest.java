@@ -1216,56 +1216,55 @@ public class SurmiranConjugationTest {
     }
 
     @Test
-    @Ignore
     public void testRule3a() {
-        forms =  generator.generateConjugation("3a", "piglier");
+        forms =  generator.generateConjugation("3a", "assignier");
 
-        Assert.assertEquals("piglier", forms.getInflectionValues().get("infinitiv"));
+        Assert.assertEquals("assignier", forms.getInflectionValues().get("infinitiv"));
 
-        Assert.assertEquals("ia pegl", forms.getInflectionValues().get("preschentsing1"));
-        Assert.assertEquals("te peglias", forms.getInflectionValues().get("preschentsing2"));
-        Assert.assertEquals("el/ella peglia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nous pigliagn", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vous piglez", forms.getInflectionValues().get("preschentplural2"));
-        Assert.assertEquals("els/ellas peglian", forms.getInflectionValues().get("preschentplural3"));
+        Assert.assertEquals("ia assegn", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("te assegnas", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella assegna", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nous assignagn", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vous assignez", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas assegnan", forms.getInflectionValues().get("preschentplural3"));
 
-        Assert.assertEquals("ia pigliva", forms.getInflectionValues().get("imperfectsing1"));
-        Assert.assertEquals("te piglivas", forms.getInflectionValues().get("imperfectsing2"));
-        Assert.assertEquals("el/ella pigliva", forms.getInflectionValues().get("imperfectsing3"));
-        Assert.assertEquals("nous piglivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vous piglivas", forms.getInflectionValues().get("imperfectplural2"));
-        Assert.assertEquals("els/ellas piglivan", forms.getInflectionValues().get("imperfectplural3"));
+        Assert.assertEquals("ia assigniva", forms.getInflectionValues().get("imperfectsing1"));
+        Assert.assertEquals("te assignivas", forms.getInflectionValues().get("imperfectsing2"));
+        Assert.assertEquals("el/ella assigniva", forms.getInflectionValues().get("imperfectsing3"));
+        Assert.assertEquals("nous assignivan", forms.getInflectionValues().get("imperfectplural1"));
+        Assert.assertEquals("vous assignivas", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("els/ellas assignivan", forms.getInflectionValues().get("imperfectplural3"));
 
-        Assert.assertEquals("tg'ia peglia", forms.getInflectionValues().get("conjunctivsing1"));
-        Assert.assertEquals("tgi te peglias", forms.getInflectionValues().get("conjunctivsing2"));
-        Assert.assertEquals("tg'el/ella peglia", forms.getInflectionValues().get("conjunctivsing3"));
-        Assert.assertEquals("tgi nous peglian", forms.getInflectionValues().get("conjunctivplural1"));
-        Assert.assertEquals("tgi vous peglias", forms.getInflectionValues().get("conjunctivplural2"));
-        Assert.assertEquals("tg'els/ellas peglian", forms.getInflectionValues().get("conjunctivplural3"));
+        Assert.assertEquals("tg'ia assegna", forms.getInflectionValues().get("conjunctivsing1"));
+        Assert.assertEquals("tgi te assegnas", forms.getInflectionValues().get("conjunctivsing2"));
+        Assert.assertEquals("tg'el/ella assegna", forms.getInflectionValues().get("conjunctivsing3"));
+        Assert.assertEquals("tgi nous assegnan", forms.getInflectionValues().get("conjunctivplural1"));
+        Assert.assertEquals("tgi vous assegnas", forms.getInflectionValues().get("conjunctivplural2"));
+        Assert.assertEquals("tg'els/ellas assegnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ia pigless", forms.getInflectionValues().get("cundizionalsing1"));
-        Assert.assertEquals("te piglessas", forms.getInflectionValues().get("cundizionalsing2"));
-        Assert.assertEquals("el/ella pigless", forms.getInflectionValues().get("cundizionalsing3"));
-        Assert.assertEquals("nous piglessan", forms.getInflectionValues().get("cundizionalplural1"));
-        Assert.assertEquals("vous piglessas", forms.getInflectionValues().get("cundizionalplural2"));
-        Assert.assertEquals("els/ellas piglessan", forms.getInflectionValues().get("cundizionalplural3"));
+        Assert.assertEquals("ia assigness", forms.getInflectionValues().get("cundizionalsing1"));
+        Assert.assertEquals("te assignessas", forms.getInflectionValues().get("cundizionalsing2"));
+        Assert.assertEquals("el/ella assigness", forms.getInflectionValues().get("cundizionalsing3"));
+        Assert.assertEquals("nous assignessan", forms.getInflectionValues().get("cundizionalplural1"));
+        Assert.assertEquals("vous assignessas", forms.getInflectionValues().get("cundizionalplural2"));
+        Assert.assertEquals("els/ellas assignessan", forms.getInflectionValues().get("cundizionalplural3"));
 
-        Assert.assertEquals("ia pigliaro", forms.getInflectionValues().get("futursing1"));
-        Assert.assertEquals("te pigliarossas", forms.getInflectionValues().get("futursing2"));
-        Assert.assertEquals("el/ella pigliaro", forms.getInflectionValues().get("futursing3"));
-        Assert.assertEquals("nous pigliaron", forms.getInflectionValues().get("futurplural1"));
-        Assert.assertEquals("vous pigliarossas", forms.getInflectionValues().get("futurplural2"));
-        Assert.assertEquals("els/ellas pigliaron", forms.getInflectionValues().get("futurplural3"));
+        Assert.assertEquals("ia assignaro", forms.getInflectionValues().get("futursing1"));
+        Assert.assertEquals("te assignarossas", forms.getInflectionValues().get("futursing2"));
+        Assert.assertEquals("el/ella assignaro", forms.getInflectionValues().get("futursing3"));
+        Assert.assertEquals("nous assignaron", forms.getInflectionValues().get("futurplural1"));
+        Assert.assertEquals("vous assignarossas", forms.getInflectionValues().get("futurplural2"));
+        Assert.assertEquals("els/ellas assignaron", forms.getInflectionValues().get("futurplural3"));
 
-        Assert.assertEquals("piglia", forms.getInflectionValues().get("participperfectms"));
-        Assert.assertEquals("pigleida", forms.getInflectionValues().get("participperfectfs"));
-        Assert.assertEquals("piglias", forms.getInflectionValues().get("participperfectmp"));
-        Assert.assertEquals("pigleidas", forms.getInflectionValues().get("participperfectfp"));
+        Assert.assertEquals("assignia", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("assigneida", forms.getInflectionValues().get("participperfectfs"));
+        Assert.assertEquals("assignias", forms.getInflectionValues().get("participperfectmp"));
+        Assert.assertEquals("assigneidas", forms.getInflectionValues().get("participperfectfp"));
 
-        Assert.assertEquals("peglia!", forms.getInflectionValues().get("imperativ1"));
-        Assert.assertEquals("pigle!", forms.getInflectionValues().get("imperativ2"));
+        Assert.assertEquals("assegna!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("assigne!", forms.getInflectionValues().get("imperativ2"));
 
-        Assert.assertEquals("pigliond", forms.getInflectionValues().get("gerundium"));
+        Assert.assertEquals("assignond", forms.getInflectionValues().get("gerundium"));
     }
 
     @Test
