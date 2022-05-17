@@ -8,6 +8,7 @@ import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.inflection.model.InflectionResponse;
+import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,6 +253,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             LemmaVersion lemma = lemmas.getContent().get(i);
             logger.debug(lemma.toString());
 
+            InflectionResponse alreadyExistingInflection = null;
+            if (lemma.getLemmaValues().get("preschentsing3") != null && !lemma.getLemmaValues().get("preschentsing3").equals("")) {
+                alreadyExistingInflection = iterateOverAllInflectionsAndCompareValues(language, lemma);
+            }
+
             InflectionResponse inflectionResponse = null;
             try {
                 inflectionResponse = inflectionService.guessInflection(language, type, lemma.getLemmaValues().get("RStichwort"), lemma.getLemmaValues().get("RGenus"), lemma.getLemmaValues().get("RFlex"));
@@ -287,18 +293,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             // check if verb has already conjugations
             boolean overwriteValues = true;
             if (entry.getCurrent().getLemmaValues().get("preschentsing3") != null && !entry.getCurrent().getLemmaValues().get("preschentsing3").equals("")) {
-                for (String key : inflectionResponse.getInflectionValues().keySet()) {
-                    if (key.equals("infinitiv") || key.equals("RInflectionSubtype") || key.equals("RInflectionType") || key.equals("RRegularInflection")) {
-                        continue;
-                    }
-
-                    if (!inflectionResponse.getInflectionValues().get(key).equals(entry.getCurrent().getLemmaValues().get(key))) {
-                        overwriteValues = false;
-                    }
-                }
+                overwriteValues = areConjugationFormsEqual(inflectionResponse, lemma);
             }
 
-            if (overwriteValues) {
+            if (alreadyExistingInflection != null) {
+                for(Map.Entry<String, String> el : alreadyExistingInflection.getInflectionValues().entrySet()) {
+                    newVersion.getLemmaValues().put(el.getKey(), el.getValue());
+                }
+            } else if (overwriteValues) {
                 for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
                     newVersion.getLemmaValues().put(el.getKey(), el.getValue());
                 }
@@ -385,5 +387,34 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 "tr/tr indirect",
                 "tr/verb modal"
         ).collect(Collectors.toList());
+    }
+
+    private InflectionResponse iterateOverAllInflectionsAndCompareValues(Language language, LemmaVersion lemma) {
+        List<InflectionSubType> inflections = inflectionService.getInflectionTypes(language, InflectionType.V);
+
+        for (InflectionSubType i : inflections) {
+            try {
+                InflectionResponse r = inflectionService.generateInflection(language, InflectionType.V, i.id, lemma.getLemmaValues().get("RStichwort"));
+                if (areConjugationFormsEqual(r, lemma)) {
+                    return r;
+                }
+            } catch (RuntimeException ignored) {
+            }
+        }
+
+        return null;
+    }
+
+    private boolean areConjugationFormsEqual(InflectionResponse inflectionResponse, LemmaVersion lemma) {
+        for (String key : inflectionResponse.getInflectionValues().keySet()) {
+            if (key.equals("infinitiv") || key.equals("RInflectionSubtype") || key.equals("RInflectionType") || key.equals("RRegularInflection")) {
+                continue;
+            }
+
+            if (!inflectionResponse.getInflectionValues().get(key).equals(lemma.getLemmaValues().get(key))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
