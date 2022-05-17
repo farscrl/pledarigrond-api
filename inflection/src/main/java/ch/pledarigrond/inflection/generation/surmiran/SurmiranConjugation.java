@@ -31,132 +31,164 @@ public class SurmiranConjugation extends LanguageConjugation {
         switch (conjugationClass) {
             case "1a" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "1b" -> {
                 int start = root.lastIndexOf("i");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "1c" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ei" + root.substring(start + 1);
             }
             case "1d" -> {
                 int start = root.lastIndexOf("i");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ei" + root.substring(start + 1);
             }
             case "1e" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
             }
             case "1f" -> {
                 int start = root.lastIndexOf("i");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ie" + root.substring(start + 1);
             }
             case "1g" -> {
                 int start = root.lastIndexOf("u");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ov" + root.substring(start + 1);
             }
             case "1h" -> {
                 int start = root.lastIndexOf("ar");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "rei" + root.substring(start + 2);
             }
             case "1i" -> {
                 int start = root.lastIndexOf("ar");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ro" + root.substring(start + 2);
             }
             case "1j" -> {
                 int start = root.lastIndexOf("an");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ang" + root.substring(start + 2);
             }
             case "1k" -> {
                 int start = root.lastIndexOf("un");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ung" + root.substring(start + 2);
             }
             case "1l" -> {
                 int start = root.lastIndexOf("an");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "agn" + root.substring(start + 2);
             }
             case "1m" -> {
                 int start = root.lastIndexOf("in");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "egn" + root.substring(start + 2);
             }
             case "1n" -> {
                 int start = root.lastIndexOf("in");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ign" + root.substring(start + 2);
             }
             case "1o" -> {
                 int start = root.lastIndexOf("ga");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "gio" + root.substring(start + 2);
             }
             case "1p" -> {
                 int start = root.lastIndexOf("ca");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "tgo" + root.substring(start + 2);
             }
             case "1q" -> {
                 int indexA = root.lastIndexOf("a");
                 int indexU = root.lastIndexOf("u");
+                if (indexA == -1 || indexU == -1) break;
                 modRoot = root.substring(0, indexU) + "a" + root.substring(indexU + 1, indexA) + "u" + root.substring(indexA + 1);
             }
             case "1r" -> {
                 int indexE = root.lastIndexOf("e");
                 int indexA = root.lastIndexOf("a");
+                if (indexA == -1 || indexE == -1) break;
                 modRoot = root.substring(0, indexE) + "a" + root.substring(indexE + 1, indexA) + "e" + root.substring(indexA + 1);
             }
             case "2a" -> {
                 int start = root.lastIndexOf("ag");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "eg" + root.substring(start + 2) + "i";
             }
             case "2b" -> {
                 int start = root.lastIndexOf("cag");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "cheg" + root.substring(start + 3) + "i";
             }
             case "3a" -> {
                 int start = root.lastIndexOf("i");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "3b" -> {
                 int start = root.lastIndexOf("u");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
             }
             case "3c" -> {
                 int start = root.lastIndexOf("u");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ou" + root.substring(start + 1);
             }
             case "4a" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "5a" -> {
                 int start = root.lastIndexOf("e");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "a" + root.substring(start + 1);
             }
             case "5b" -> {
                 int start = root.lastIndexOf("o");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "u" + root.substring(start + 1);
             }
             case "5c" -> {
                 int start = root.lastIndexOf("ei");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "i" + root.substring(start + 2);
             }
             case "6a" -> {
                 int start = root.lastIndexOf("ar");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ra" + root.substring(start + 2);
             }
             case "6b" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "6c" -> {
                 int start = root.lastIndexOf("i");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
             }
             case "6d" -> {
                 int start = root.lastIndexOf("ugl");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ogl" + root.substring(start + 3);
             }
             case "6e" -> {
                 int start = root.lastIndexOf("a");
+                if (start == -1) break;
                 modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
             }
             case "9" -> {
@@ -189,13 +221,16 @@ public class SurmiranConjugation extends LanguageConjugation {
         String lastThree = baseForm.substring(baseForm.length() - 3);
 
         if (lastThree.equals("ier")) {
-            String[] subForms = new String[] { "3a", "3b", "3c" };
-            for (String subForm : subForms) {
-                InflectionResponse r = generateConjugation(subForm, baseForm);
-                if (doesFormContainAllValues(r, flex)) {
-                    return r;
+            if (flex != null && !flex.equals("")) {
+                String[] subForms = new String[] { "3a", "3b", "3c" };
+                for (String subForm : subForms) {
+                    InflectionResponse r = generateConjugation(subForm, baseForm);
+                    if (doesFormContainAllValues(r, flex)) {
+                        return r;
+                    }
                 }
             }
+
 
             return generateConjugation("3", baseForm);
         }
@@ -205,11 +240,13 @@ public class SurmiranConjugation extends LanguageConjugation {
                 return generateConjugation("7", baseForm);
             }
 
-            String[] subForms = new String[] { "4", "4a", "6a", "6b", "6c", "6d", "6e" };
-            for (String subForm : subForms) {
-                InflectionResponse r = generateConjugation(subForm, baseForm);
-                if (doesFormContainAllValues(r, flex)) {
-                    return r;
+            if (flex != null && !flex.equals("")) {
+                String[] subForms = new String[]{"4", "4a", "6a", "6b", "6c", "6d", "6e"};
+                for (String subForm : subForms) {
+                    InflectionResponse r = generateConjugation(subForm, baseForm);
+                    if (doesFormContainAllValues(r, flex)) {
+                        return r;
+                    }
                 }
             }
 
@@ -221,11 +258,13 @@ public class SurmiranConjugation extends LanguageConjugation {
                 return generateConjugation("8", baseForm);
             }
 
-            String[] subForms = new String[] {"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1q", "1r" };
-            for (String subForm : subForms) {
-                InflectionResponse r = generateConjugation(subForm, baseForm);
-                if (doesFormContainAllValues(r, flex)) {
-                    return r;
+            if (flex != null && !flex.equals("")) {
+                String[] subForms = new String[]{"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1q", "1r"};
+                for (String subForm : subForms) {
+                    InflectionResponse r = generateConjugation(subForm, baseForm);
+                    if (doesFormContainAllValues(r, flex)) {
+                        return r;
+                    }
                 }
             }
 
@@ -241,11 +280,13 @@ public class SurmiranConjugation extends LanguageConjugation {
                 return generateConjugation("2a", baseForm);
             }
 
-            String[] subForms = new String[] {"5", "5a", "5b", "5c" };
-            for (String subForm : subForms) {
-                InflectionResponse r = generateConjugation(subForm, baseForm);
-                if (doesFormContainAllValues(r, flex)) {
-                    return r;
+            if (flex != null && !flex.equals("")) {
+                String[] subForms = new String[]{"5", "5a", "5b", "5c"};
+                for (String subForm : subForms) {
+                    InflectionResponse r = generateConjugation(subForm, baseForm);
+                    if (doesFormContainAllValues(r, flex)) {
+                        return r;
+                    }
                 }
             }
 
