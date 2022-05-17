@@ -258,8 +258,18 @@ public class SurmiranConjugation extends LanguageConjugation {
                 return generateConjugation("8", baseForm);
             }
 
+            if (baseForm.endsWith("anar")) {
+                String possibleRoot = baseForm.replaceFirst(".{2}$", "");
+                int indexU = possibleRoot.lastIndexOf("u");
+                int indexA = possibleRoot.lastIndexOf("a");
+
+                if (indexU != -1 && indexA != -1 && indexU <= indexA - 2) {
+                    return generateConjugation("1q", baseForm);
+                }
+            }
+
             if (flex != null && !flex.equals("")) {
-                String[] subForms = new String[]{"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1q", "1r"};
+                String[] subForms = new String[]{"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1r"};
                 for (String subForm : subForms) {
                     InflectionResponse r = generateConjugation(subForm, baseForm);
                     if (doesFormContainAllValues(r, flex)) {
