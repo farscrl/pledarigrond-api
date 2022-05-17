@@ -200,6 +200,10 @@ public class SurmiranConjugation extends LanguageConjugation {
             default -> modRoot = root;
         }
 
+        if (modRoot == null) {
+            modRoot = root;
+        }
+
         InflectionSubType subType = SurmiranConjugationClasses.getConjugationClass(conjugationClass);
         if (subType == null) {
             throw new RuntimeException(conjugationClass + " is not a valid conjugation class.");
