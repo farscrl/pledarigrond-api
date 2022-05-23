@@ -338,7 +338,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 "f (pl Banken)",
                 "f (pl Bänke)",
                 "f(pl)",
-                "f.pl",
                 "fcoll",
                 "fm",
                 "m",
