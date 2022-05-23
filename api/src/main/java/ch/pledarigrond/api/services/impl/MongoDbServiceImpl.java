@@ -92,6 +92,16 @@ public class MongoDbServiceImpl implements MongoDbService {
     }
 
     @Override
+    public void reviewLater(Language language, LexEntry lexEntry) throws  Exception {
+        if(lexEntry == null) throw new InvalidEntryException("Lemma must not be null!");
+        if (lexEntry.getMostRecent().getPgValues().get(LemmaVersion.REVIEW_LATER) != null) {
+            lexEntry.getMostRecent().getPgValues().replace(LemmaVersion.REVIEW_LATER, "true");
+        }
+        LexEntry modified = queue.push(new ReviewLaterOperation(pgEnvironment, language, lexEntry).asSuggestion(), language);
+        luceneService.update(language, modified);
+    }
+
+    @Override
     public void delete(Language language, LexEntry entry) throws Exception {
         String login = getUserLogin();
         queue.push(new DeleteOperation(pgEnvironment, language, entry).setLogin(login), language);

@@ -96,6 +96,12 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
+    public LexEntry reviewLater(Language language, LexEntry entry) throws Exception {
+        db.reviewLater(language, entry);
+        return entry;
+    }
+
+    @Override
     public LexEntry dropOutdatedHistory(Language language, LexEntry entry) throws Exception {
         db.dropOutdatedHistory(language, entry);
         return entry;

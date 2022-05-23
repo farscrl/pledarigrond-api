@@ -146,6 +146,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
             newVersion.getLemmaValues().put("RGrammatik", "subst");
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
 
             try {
@@ -218,6 +219,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
 
             try {
@@ -312,6 +314,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
 
             try {

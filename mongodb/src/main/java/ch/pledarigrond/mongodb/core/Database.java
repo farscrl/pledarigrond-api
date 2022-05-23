@@ -258,6 +258,13 @@ public class Database {
 		}
 	}
 
+	public void reviewLater(LexEntry entry) {
+		BasicDBObject object = Converter.convertLexEntry(entry);
+		save(entryCollection, new Document(object));
+
+		logger.info("REVIEW LATER: {}/{}", toLogString(entry.getCurrent()), entry.getId());
+	}
+
 	/**
 	 * <strong>For unit tests only!</strong> This method drops the entire collection
 	 * of entries and creates a new one.

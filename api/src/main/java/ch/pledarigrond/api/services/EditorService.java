@@ -40,6 +40,8 @@ public interface EditorService {
 
     LexEntry update(Language language, LexEntry entry, LemmaVersion fromEditor) throws Exception;
 
+    LexEntry reviewLater(Language language, LexEntry entry) throws Exception;
+
     List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception;
 
     ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception;

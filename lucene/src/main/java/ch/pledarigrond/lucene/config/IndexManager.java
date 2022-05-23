@@ -194,6 +194,15 @@ public abstract class IndexManager {
             }
         }
 
+        if (searchCriteria.getShowReviewLater() != null) {
+            try {
+                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.REVIEW_LATER, new StandardAnalyzer(Version.LUCENE_46));
+                finalQuery.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (searchCriteria.getOnlyAutomaticChanged()) {
             try {
                 QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
@@ -397,6 +406,9 @@ public abstract class IndexManager {
         }
         if (version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
             document.add(new StringField(LemmaVersion.AUTOMATIC_CHANGE, version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE).toLowerCase(), Field.Store.YES));
+        }
+        if (version.getPgValues().get(LemmaVersion.REVIEW_LATER) != null) {
+            document.add(new StringField(LemmaVersion.REVIEW_LATER, version.getPgValues().get(LemmaVersion.REVIEW_LATER).toLowerCase(), Field.Store.YES));
         }
     }
 

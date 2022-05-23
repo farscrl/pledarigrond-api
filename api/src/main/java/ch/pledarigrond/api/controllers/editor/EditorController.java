@@ -158,6 +158,21 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
+    @PostMapping("/lex_entries/{id}/review_later_version")
+    ResponseEntity<?> reviewLaterVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
+        try {
+            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
+            if (entry == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity.ok(editorService.reviewLater(language, entry));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/lex_entries/{id}/drop_outdated_history")
     ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
         try {

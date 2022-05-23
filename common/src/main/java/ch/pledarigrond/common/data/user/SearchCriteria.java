@@ -21,4 +21,5 @@ public class SearchCriteria {
     private Boolean excludeAutomaticChanged = false;
     private LemmaVersion.Verification verification = null;
     private AutomaticChangesType automaticChangesType = AutomaticChangesType.ALL;
+    private Boolean showReviewLater = null;
 }

@@ -105,6 +105,7 @@ public class LemmaVersion implements Serializable {
 	public static final String DE_REDIRECT__DEPRECATED = "redirect_a";
 
 	public static final String AUTOMATIC_CHANGE = "automatic_change";
+	public static final String REVIEW_LATER = "review_later";
 
 	public static final String FIELD_NAMES = "field_names";
 
@@ -120,6 +121,7 @@ public class LemmaVersion implements Serializable {
 		PG_KEYS.add(VERIFIER);
 		PG_KEYS.add(LEXENTRY_ID);
 		PG_KEYS.add(AUTOMATIC_CHANGE);
+		PG_KEYS.add(REVIEW_LATER);
 		PUBLIC_PG_KEYS = new HashSet<>();
 		PUBLIC_PG_KEYS.add(ID);
 		PUBLIC_PG_KEYS.add(STATUS);
