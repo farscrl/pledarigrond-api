@@ -121,6 +121,21 @@ public class SurmiranConjugation extends LanguageConjugation {
                 if (indexA == -1 || indexE == -1) break;
                 modRoot = root.substring(0, indexE) + "a" + root.substring(indexE + 1, indexA) + "e" + root.substring(indexA + 1);
             }
+            case "1s" -> {
+                int start = root.lastIndexOf("e");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
+            }
+            case "1t" -> {
+                int start = root.lastIndexOf("a");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
+            }
+            case "1u" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
+            }
             case "2a" -> {
                 int start = root.lastIndexOf("ag");
                 if (start == -1) break;
@@ -145,6 +160,11 @@ public class SurmiranConjugation extends LanguageConjugation {
                 int start = root.lastIndexOf("u");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "ou" + root.substring(start + 1);
+            }
+            case "3d" -> {
+                int start = root.lastIndexOf("tg");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "tgesch";
             }
             case "4a" -> {
                 int start = root.lastIndexOf("a");
@@ -225,6 +245,9 @@ public class SurmiranConjugation extends LanguageConjugation {
         String lastThree = baseForm.substring(baseForm.length() - 3);
 
         if (lastThree.equals("ier")) {
+            if (baseForm.endsWith("tgier")) {
+                return generateConjugation("3d", baseForm);
+            }
             if (flex != null && !flex.equals("")) {
                 String[] subForms = new String[] { "3a", "3b", "3c" };
                 for (String subForm : subForms) {
@@ -272,8 +295,12 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
             }
 
+            if (baseForm.endsWith("entar")) {
+                return generateConjugation("1s", baseForm);
+            }
+
             if (flex != null && !flex.equals("")) {
-                String[] subForms = new String[]{"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1r"};
+                String[] subForms = new String[]{"1a", "1b", "1c", "1d", "1e", "1f", "1g", "1h", "1i", "1k", "1l", "1m", "1n", "1o", "1p", "1r", "1t", "1u"};
                 for (String subForm : subForms) {
                     InflectionResponse r = generateConjugation(subForm, baseForm);
                     if (doesFormContainAllValues(r, flex)) {
@@ -506,9 +533,13 @@ public class SurmiranConjugation extends LanguageConjugation {
             case "1p":
             case "1q":
             case "1r":
+            case "1s":
+            case "1t":
+            case "1u":
             case "3a":
             case "3b":
             case "3c":
+            case "3d":
             case "4a":
             case "6a":
             case "6b":

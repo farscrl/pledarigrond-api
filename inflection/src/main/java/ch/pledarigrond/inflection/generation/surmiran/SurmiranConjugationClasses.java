@@ -30,6 +30,9 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("1p", "-ca- -> -tgo-", " (p.ex. scanar)", true),
                     new InflectionSubType("1q", "u-a -> a-u", " (p.ex. ruschanar)", true),
                     new InflectionSubType("1r", "e-a -> a-e", " (p.ex. declarar)", true),
+                    new InflectionSubType("1s", "-entar: e -> ai", " (p.ex. preschentar)", true),
+                    new InflectionSubType("1t", "a -> o", " (p.ex. clamar)", true),
+                    new InflectionSubType("1u", "u -> o", " (p.ex. crudar)", true),
 
                     new InflectionSubType("2", "-er", "Finiziun sin -er, accent sin finiziun (p.ex. lascher)"),
                     new InflectionSubType("2a", "-ag- -> eg", " (p.ex. manager)", true),
@@ -44,6 +47,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("3a", "i -> e", " (p.ex. piglier)", true),
                     new InflectionSubType("3b", "u -> o", " (p.ex. tutgier)", true),
                     new InflectionSubType("3c", "u -> ou", " (p.ex. truschier)", true),
+                    new InflectionSubType("3d", "-tgier; -esch", " (p.ex. modifitgier)", true),
 
                     new InflectionSubType("4", "-eir", "Finiziun sin -eir, accent sin finiziun (p.ex. tigneir)"),
                     new InflectionSubType("4a", "a -> e", " (p.ex. tameir)", true),
@@ -56,7 +60,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("6d", "ugl -> ogl", " (p.ex. buglier)", true),
                     new InflectionSubType("6e", "a -> ai", " (p.ex. santier)", true),
 
-                    new InflectionSubType("9", "verbs alternonts", "Midada dal vocal en il tschep")
+                    new InflectionSubType("9", "regla veglia", "Betg pli utilisar")
             )
     );
 
