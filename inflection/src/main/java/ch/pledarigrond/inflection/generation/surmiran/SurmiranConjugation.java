@@ -146,20 +146,38 @@ public class SurmiranConjugation extends LanguageConjugation {
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "cheg" + root.substring(start + 3) + "i";
             }
+            case "3" -> {
+                if(infinitiv.endsWith("glier")) {
+                    modRoot = root;
+                    modRoot = modRoot + "i";
+                }
+            }
             case "3a" -> {
                 int start = root.lastIndexOf("i");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("glier")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "3b" -> {
                 int start = root.lastIndexOf("u");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("glier")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "3c" -> {
                 int start = root.lastIndexOf("u");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "ou" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("glier")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "3d" -> {
                 int start = root.lastIndexOf("tg");
@@ -186,30 +204,56 @@ public class SurmiranConjugation extends LanguageConjugation {
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "i" + root.substring(start + 2);
             }
+            case "6" -> {
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = root;
+                    modRoot = modRoot + "i";
+                }
+            }
             case "6a" -> {
                 int start = root.lastIndexOf("ar");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "ra" + root.substring(start + 2);
+
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "6b" -> {
                 int start = root.lastIndexOf("a");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "6c" -> {
                 int start = root.lastIndexOf("i");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "6d" -> {
                 int start = root.lastIndexOf("ugl");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "ogl" + root.substring(start + 3);
+
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "6e" -> {
                 int start = root.lastIndexOf("a");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "ai" + root.substring(start + 1);
+
+                if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
             }
             case "9" -> {
                 modRoot = changeVocalInRoot(root);
@@ -549,6 +593,8 @@ public class SurmiranConjugation extends LanguageConjugation {
                 if (ending.equals("ar") && !getInfinitiv().equals("mussar") && endsWithDoubleConsonant(modRoot)) {
                     String firstSingular = modRoot.substring(0, modRoot.length() - 1);
                     cs.setPreschentsing1(firstSingular);
+                } else if(endsOnGl(cs)) {
+                    cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 1));
                 } else {
                     cs.setPreschentsing1(modRoot);
                 }
@@ -560,9 +606,13 @@ public class SurmiranConjugation extends LanguageConjugation {
                     // 2pp
                     cs.setPreschentplural2(root + "iz");
                 } else {
-
                     // 1pp
-                    cs.setPreschentplural1(root + "agn");
+                    if(endsOnGl(cs)) {
+                        cs.setPreschentplural1(root + "iagn");
+                    } else {
+                        cs.setPreschentplural1(root + "agn");
+                    }
+
                     // 2pp
                     cs.setPreschentplural2(root + "ez");
                 }
@@ -986,7 +1036,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
                 break;
             default:
-                if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b")) {
+                if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b") || endsOnGl(cs)) {
                     cs.setGerundium(root + "iond");
                     break;
                 }
@@ -1198,7 +1248,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                         break;
 
                     default:
-                        if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b")) {
+                        if (cs.getConjugationclass().id.equals("2a") || cs.getConjugationclass().id.equals("2b") || endsOnGl(cs)) {
                             cs.setFutursing1(root + "iaro");
                             cs.setFutursing2(root + "iarossas");
                             cs.setFutursing3(root + "iaro");
@@ -1414,5 +1464,12 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
 
         return true;
+    }
+
+    private boolean endsOnGl(SurmiranConjugationStructure cs) {
+        return
+                (cs.getConjugationclass().id.charAt(0) == '3' && getInfinitiv().endsWith("glier"))
+                ||
+                (cs.getConjugationclass().id.charAt(0) == '6' && getInfinitiv().endsWith("gleir"));
     }
 }
