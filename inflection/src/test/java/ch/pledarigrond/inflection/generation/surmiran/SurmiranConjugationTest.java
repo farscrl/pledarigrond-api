@@ -1214,6 +1214,58 @@ public class SurmiranConjugationTest {
     }
 
     @Test
+    public void testRule2Gl() {
+        forms =  generator.generateConjugation("2", "magler");
+
+        Assert.assertEquals("magler", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("ia magl", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("te maglias", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella maglia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nous magliagn", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vous maglez", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas maglian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("ia magleva", forms.getInflectionValues().get("imperfectsing1"));
+        Assert.assertEquals("te maglevas", forms.getInflectionValues().get("imperfectsing2"));
+        Assert.assertEquals("el/ella magleva", forms.getInflectionValues().get("imperfectsing3"));
+        Assert.assertEquals("nous maglevan", forms.getInflectionValues().get("imperfectplural1"));
+        Assert.assertEquals("vous maglevas", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("els/ellas maglevan", forms.getInflectionValues().get("imperfectplural3"));
+
+        Assert.assertEquals("tg'ia maglia", forms.getInflectionValues().get("conjunctivsing1"));
+        Assert.assertEquals("tgi te maglias", forms.getInflectionValues().get("conjunctivsing2"));
+        Assert.assertEquals("tg'el/ella maglia", forms.getInflectionValues().get("conjunctivsing3"));
+        Assert.assertEquals("tgi nous maglian", forms.getInflectionValues().get("conjunctivplural1"));
+        Assert.assertEquals("tgi vous maglias", forms.getInflectionValues().get("conjunctivplural2"));
+        Assert.assertEquals("tg'els/ellas maglian", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ia magless", forms.getInflectionValues().get("cundizionalsing1"));
+        Assert.assertEquals("te maglessas", forms.getInflectionValues().get("cundizionalsing2"));
+        Assert.assertEquals("el/ella magless", forms.getInflectionValues().get("cundizionalsing3"));
+        Assert.assertEquals("nous maglessan", forms.getInflectionValues().get("cundizionalplural1"));
+        Assert.assertEquals("vous maglessas", forms.getInflectionValues().get("cundizionalplural2"));
+        Assert.assertEquals("els/ellas maglessan", forms.getInflectionValues().get("cundizionalplural3"));
+
+        Assert.assertEquals("ia magliaro", forms.getInflectionValues().get("futursing1"));
+        Assert.assertEquals("te magliarossas", forms.getInflectionValues().get("futursing2"));
+        Assert.assertEquals("el/ella magliaro", forms.getInflectionValues().get("futursing3"));
+        Assert.assertEquals("nous magliaron", forms.getInflectionValues().get("futurplural1"));
+        Assert.assertEquals("vous magliarossas", forms.getInflectionValues().get("futurplural2"));
+        Assert.assertEquals("els/ellas magliaron", forms.getInflectionValues().get("futurplural3"));
+
+        Assert.assertEquals("maglea", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("magleda", forms.getInflectionValues().get("participperfectfs"));
+        Assert.assertEquals("magleas", forms.getInflectionValues().get("participperfectmp"));
+        Assert.assertEquals("magledas", forms.getInflectionValues().get("participperfectfp"));
+
+        Assert.assertEquals("maglia!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("magle!", forms.getInflectionValues().get("imperativ2"));
+
+        Assert.assertEquals("magliond", forms.getInflectionValues().get("gerundium"));
+    }
+
+    @Test
     public void testRule2a() {
         forms =  generator.generateConjugation("2a", "manager");
 
