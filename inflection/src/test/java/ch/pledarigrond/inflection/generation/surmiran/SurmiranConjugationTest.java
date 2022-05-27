@@ -3,7 +3,6 @@ package ch.pledarigrond.inflection.generation.surmiran;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SurmiranConjugationTest {
@@ -2049,13 +2048,12 @@ public class SurmiranConjugationTest {
     }
 
     @Test
-    @Ignore
     public void testRule6a() {
         forms =  generator.generateConjugation("6a", "bargeir");
 
         Assert.assertEquals("bargeir", forms.getInflectionValues().get("infinitiv"));
 
-        //Assert.assertEquals("ia bratg", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("ia bratg", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("te bragias", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella bragia", forms.getInflectionValues().get("preschentsing3"));
         Assert.assertEquals("nous bargign", forms.getInflectionValues().get("preschentplural1"));
@@ -2204,7 +2202,7 @@ public class SurmiranConjugationTest {
         Assert.assertEquals("sgregna!", forms.getInflectionValues().get("imperativ1"));
         Assert.assertEquals("sgrigni!", forms.getInflectionValues().get("imperativ2"));
 
-        Assert.assertEquals("sgrignond/sgrignend", forms.getInflectionValues().get("gerundium")); // TODO: mo "sgrignond"?
+        Assert.assertEquals("sgrignond/sgrignend", forms.getInflectionValues().get("gerundium"));
     }
 
     @Test

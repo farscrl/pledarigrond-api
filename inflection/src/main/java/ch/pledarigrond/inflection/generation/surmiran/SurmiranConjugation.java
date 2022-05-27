@@ -27,6 +27,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
         resetValues();
+
         root = getRoot(infinitiv);
 
         switch (conjugationClass) {
@@ -217,6 +218,9 @@ public class SurmiranConjugation extends LanguageConjugation {
                 modRoot = root.substring(0, start) + "ra" + root.substring(start + 2);
 
                 if(infinitiv.endsWith("gleir")) {
+                    modRoot = modRoot + "i";
+                }
+                if(infinitiv.endsWith("geir")) {
                     modRoot = modRoot + "i";
                 }
             }
@@ -596,6 +600,8 @@ public class SurmiranConjugation extends LanguageConjugation {
                     cs.setPreschentsing1(firstSingular);
                 } else if(endsOnGl(cs)) {
                     cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 1));
+                } else if (endsOnGeir(cs)){
+                    cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 2) + "tg");
                 } else {
                     cs.setPreschentsing1(modRoot);
                 }
@@ -1018,6 +1024,10 @@ public class SurmiranConjugation extends LanguageConjugation {
         switch (cs.getConjugationclass().id.substring(0, 1)) {
             case "6":
             case "7":
+                if (endsOnGeir(cs)) {
+                    cs.setGerundium(root + "iond" + "/" + root + "end");
+                    break;
+                }
                 cs.setGerundium(root + "ond" + "/" + root + "end");
                 break;
 
@@ -1472,6 +1482,11 @@ public class SurmiranConjugation extends LanguageConjugation {
                 (cs.getConjugationclass().id.charAt(0) == '3' && getInfinitiv().endsWith("glier"))
                 ||
                 (cs.getConjugationclass().id.charAt(0) == '6' && getInfinitiv().endsWith("gleir"));
+    }
+
+    private boolean endsOnGeir(SurmiranConjugationStructure cs) {
+        return
+                (cs.getConjugationclass().id.equals("6a") && getInfinitiv().endsWith("geir"));
     }
 
     private void resetValues() {
