@@ -901,7 +901,6 @@ public class SurmiranConjugationTest {
     }
 
     @Test
-    @Ignore
     public void testRule1q() {
         forms =  generator.generateConjugation("1q", "ruschanar");
 

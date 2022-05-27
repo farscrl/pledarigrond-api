@@ -113,7 +113,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                 int indexA = root.lastIndexOf("a");
                 int indexU = root.lastIndexOf("u");
                 if (indexA == -1 || indexU == -1) break;
-                modRoot = root.substring(0, indexU) + "a" + root.substring(indexU + 1, indexA) + "u" + root.substring(indexA + 1);
+                modRoot = root.substring(0, indexU) + "a" + root.substring(indexU + 1, indexA) + "u" + root.substring(indexA + 1) + "g";
             }
             case "1r" -> {
                 int indexE = root.lastIndexOf("e");
