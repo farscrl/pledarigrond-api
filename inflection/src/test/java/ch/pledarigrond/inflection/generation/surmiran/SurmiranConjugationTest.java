@@ -1,15 +1,18 @@
 package ch.pledarigrond.inflection.generation.surmiran;
 
 import ch.pledarigrond.inflection.model.InflectionResponse;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class SurmiranConjugationTest {
 
     private static SurmiranConjugation generator;
     private InflectionResponse forms;
 
-    @Before
-    public void initialize() {
+    @BeforeClass
+    public static void initialize() {
         generator = new SurmiranConjugation();
     }
 

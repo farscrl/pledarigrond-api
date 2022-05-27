@@ -27,6 +27,8 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
 
     @Override
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
+        resetValues();
+
         String root = getRoot(infinitiv);
 
         InflectionSubType subType = RumantschGrischunConjugationClasses.getConjugationClass(conjugationClass);
@@ -648,5 +650,18 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
         cs.setFuturplural3(RumantschGrischunPronouns.pron_3pp + conjugation.get(RumantschGrischunConjugationStructure.futurplural3));
 
         return cs.getAllFormValues();
+    }
+
+    private void resetValues() {
+        cs = null;
+        infinitiv = null;
+        verb = null;
+        lastTwo = null;
+        lastThree = null;
+        conjugation = null;
+        isReflexive = null;
+        root = null;
+        ending = null;
+        modRoot = null;
     }
 }

@@ -26,6 +26,7 @@ public class SurmiranConjugation extends LanguageConjugation {
     private HashMap<String, String> conjugation;
 
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
+        resetValues();
         root = getRoot(infinitiv);
 
         switch (conjugationClass) {
@@ -1471,5 +1472,17 @@ public class SurmiranConjugation extends LanguageConjugation {
                 (cs.getConjugationclass().id.charAt(0) == '3' && getInfinitiv().endsWith("glier"))
                 ||
                 (cs.getConjugationclass().id.charAt(0) == '6' && getInfinitiv().endsWith("gleir"));
+    }
+
+    private void resetValues() {
+        cs = null;
+        infinitiv = null;
+        verb = null;
+        lastTwo = null;
+        lastThree = null;
+        conjugation = null;
+        root = null;
+        ending = null;
+        modRoot = null;
     }
 }

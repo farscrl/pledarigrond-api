@@ -27,6 +27,8 @@ public class SutsilvanConjugation extends LanguageConjugation {
 
     @Override
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
+        resetValues();
+
         root = getRoot(infinitiv);
 
         if (conjugationClass.equals("8")) {
@@ -477,5 +479,17 @@ public class SutsilvanConjugation extends LanguageConjugation {
         cs.setFuturplural3(SutsilvanPronouns.pron_3pp + conjugation.get(SutsilvanConjugationStructure.futurplural3));
 
         return cs.getAllFormValues();
+    }
+
+    private void resetValues() {
+        cs = null;
+        infinitiv = null;
+        verb = null;
+        lastTwo = null;
+        lastThree = null;
+        conjugation = null;
+        root = null;
+        ending = null;
+        modRoot = null;
     }
 }
