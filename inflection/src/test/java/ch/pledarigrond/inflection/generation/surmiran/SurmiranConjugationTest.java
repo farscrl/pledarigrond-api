@@ -1370,6 +1370,58 @@ public class SurmiranConjugationTest {
     }
 
     @Test
+    public void testRule2c() {
+        forms =  generator.generateConjugation("2c", "arranscher");
+
+        Assert.assertEquals("arranscher", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("ia arranschesch", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("te arranscheschas", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella arranschescha", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nous arranschagn", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vous arranschez", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas arranscheschan", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("ia arranscheva", forms.getInflectionValues().get("imperfectsing1"));
+        Assert.assertEquals("te arranschevas", forms.getInflectionValues().get("imperfectsing2"));
+        Assert.assertEquals("el/ella arranscheva", forms.getInflectionValues().get("imperfectsing3"));
+        Assert.assertEquals("nous arranschevan", forms.getInflectionValues().get("imperfectplural1"));
+        Assert.assertEquals("vous arranschevas", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("els/ellas arranschevan", forms.getInflectionValues().get("imperfectplural3"));
+
+        Assert.assertEquals("tg'ia arranschescha", forms.getInflectionValues().get("conjunctivsing1"));
+        Assert.assertEquals("tgi te arranscheschas", forms.getInflectionValues().get("conjunctivsing2"));
+        Assert.assertEquals("tg'el/ella arranschescha", forms.getInflectionValues().get("conjunctivsing3"));
+        Assert.assertEquals("tgi nous arranscheschan", forms.getInflectionValues().get("conjunctivplural1"));
+        Assert.assertEquals("tgi vous arranscheschas", forms.getInflectionValues().get("conjunctivplural2"));
+        Assert.assertEquals("tg'els/ellas arranscheschan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ia arranschess", forms.getInflectionValues().get("cundizionalsing1"));
+        Assert.assertEquals("te arranschessas", forms.getInflectionValues().get("cundizionalsing2"));
+        Assert.assertEquals("el/ella arranschess", forms.getInflectionValues().get("cundizionalsing3"));
+        Assert.assertEquals("nous arranschessan", forms.getInflectionValues().get("cundizionalplural1"));
+        Assert.assertEquals("vous arranschessas", forms.getInflectionValues().get("cundizionalplural2"));
+        Assert.assertEquals("els/ellas arranschessan", forms.getInflectionValues().get("cundizionalplural3"));
+
+        Assert.assertEquals("ia arranscharo", forms.getInflectionValues().get("futursing1"));
+        Assert.assertEquals("te arranscharossas", forms.getInflectionValues().get("futursing2"));
+        Assert.assertEquals("el/ella arranscharo", forms.getInflectionValues().get("futursing3"));
+        Assert.assertEquals("nous arranscharon", forms.getInflectionValues().get("futurplural1"));
+        Assert.assertEquals("vous arranscharossas", forms.getInflectionValues().get("futurplural2"));
+        Assert.assertEquals("els/ellas arranscharon", forms.getInflectionValues().get("futurplural3"));
+
+        Assert.assertEquals("arranschea", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("arranscheda", forms.getInflectionValues().get("participperfectfs"));
+        Assert.assertEquals("arranscheas", forms.getInflectionValues().get("participperfectmp"));
+        Assert.assertEquals("arranschedas", forms.getInflectionValues().get("participperfectfp"));
+
+        Assert.assertEquals("arranschescha!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("arransche!", forms.getInflectionValues().get("imperativ2"));
+
+        Assert.assertEquals("arranschond", forms.getInflectionValues().get("gerundium"));
+    }
+
+    @Test
     public void testRule3() {
         forms =  generator.generateConjugation("3", "cuntschier");
 

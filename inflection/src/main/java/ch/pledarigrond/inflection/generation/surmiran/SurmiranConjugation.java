@@ -160,6 +160,9 @@ public class SurmiranConjugation extends LanguageConjugation {
                     modRoot = modRoot + "i";
                 }
             }
+            case "2c" -> {
+                modRoot = root + "esch";
+            }
             case "3" -> {
                 if(infinitiv.endsWith("glier")) {
                     modRoot = root;
@@ -586,6 +589,7 @@ public class SurmiranConjugation extends LanguageConjugation {
             case "1t":
             case "1u":
             case "2":
+            case "2c":
             case "3":
             case "3a":
             case "3b":

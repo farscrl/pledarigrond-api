@@ -35,6 +35,7 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("1u", "u -> o", " (p.ex. crudar)", true),
 
                     new InflectionSubType("2", "-er", "Finiziun sin -er, accent sin finiziun (p.ex. lascher)"),
+                    new InflectionSubType("2c", "-er (esch)", "Finiziun sin -er cun infix esch, accent sin finiziun (p.ex. avantager)", true),
                     new InflectionSubType("2a", "-ag- -> eg", " (p.ex. manager)", true),
                     new InflectionSubType("2b", "-cag- -> cheg", " (p.ex. macager)", true),
 
