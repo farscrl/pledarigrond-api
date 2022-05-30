@@ -194,9 +194,7 @@ public class SurmiranConjugation extends LanguageConjugation {
                 }
             }
             case "3d" -> {
-                int start = root.lastIndexOf("tg");
-                if (start == -1) break;
-                modRoot = root.substring(0, start) + "tgesch";
+                modRoot = root + "esch";
             }
             case "4" -> {
                 if(infinitiv.endsWith("gleir")) {
@@ -334,7 +332,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         String lastThree = baseForm.substring(baseForm.length() - 3);
 
         if (lastThree.equals("ier")) {
-            if (baseForm.endsWith("tgier")) {
+            if ((flex != null && flex.equals("-escha")) || baseForm.endsWith("tgier")) {
                 return generateConjugation("3d", baseForm);
             }
             if (flex != null && !flex.equals("")) {
@@ -1488,7 +1486,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         return
                 (cs.getConjugationclass().id.charAt(0) == '2' && getInfinitiv().endsWith("gler"))
                 ||
-                (cs.getConjugationclass().id.charAt(0) == '3' && getInfinitiv().endsWith("glier"))
+                (cs.getConjugationclass().id.charAt(0) == '3' && getInfinitiv().endsWith("glier") && !cs.getConjugationclass().id.equals("3d"))
                 ||
                 (cs.getConjugationclass().id.charAt(0) == '5' && getInfinitiv().endsWith("gler"))
                 ||

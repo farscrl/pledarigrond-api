@@ -44,10 +44,10 @@ public class SurmiranConjugationClasses {
                     new InflectionSubType("5c", "ei -> i [midada 1. pl.]", " (p.ex. veiver)", true),
 
                     new InflectionSubType("3", "-ier", "Finiziun sin -ier (p.ex. cuntschier)"),
+                    new InflectionSubType("3d", "-ier (-esch)", "Finiziun sin -ier cun infix esch (p.ex. cudischier, modifitgier)", true),
                     new InflectionSubType("3a", "i -> e", " (p.ex. piglier)", true),
                     new InflectionSubType("3b", "u -> o", " (p.ex. tutgier)", true),
                     new InflectionSubType("3c", "u -> ou", " (p.ex. truschier)", true),
-                    new InflectionSubType("3d", "-tgier; -esch", " (p.ex. modifitgier)", true),
 
                     new InflectionSubType("4", "-eir", "Finiziun sin -eir, accent sin finiziun (p.ex. tigneir)"),
                     new InflectionSubType("4a", "a -> e", " (p.ex. tameir)", true),
