@@ -45,6 +45,9 @@ public class AcceptOperation extends BaseOperation implements IDBOperation {
 			if(current != null) {
 				current.setVerification(LemmaVersion.Verification.OUTDATED);
 			}
+			entry.getUnapprovedVersions().forEach(v -> {
+				v.setVerification(LemmaVersion.Verification.OUTDATED);
+			});
 			version.setVerification(LemmaVersion.Verification.ACCEPTED);
 			version.setVerifierId(getUserId());
 			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).accept(entry, version);
