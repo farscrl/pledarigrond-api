@@ -4,12 +4,25 @@ import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.api.services.MongoDbService;
+import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.common.exception.DatabaseException;
+import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
+import ch.pledarigrond.mongodb.core.Converter;
+import ch.pledarigrond.mongodb.core.Database;
+import ch.pledarigrond.mongodb.util.MongoHelper;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.ReplaceOptions;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +30,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @Service
 public class AutomaticGenerationServiceImpl implements AutomaticGenerationService {
@@ -35,6 +51,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Autowired
     private MongoDbService mongoDbService;
+
+    @Autowired
+    private PgEnvironment pgEnvironment;
 
     public boolean generateNounForms(Language language) {
         StopWatch watch = new StopWatch();
@@ -84,6 +103,35 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         watch.stop();
         logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+        return true;
+    }
+
+    public boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            boolean didChange = false;
+
+            for (LemmaVersion lemmaVersion : entry.getVersionHistory()) {
+                if(lemmaVersion.getLexEntryId() == null) {
+                    lemmaVersion.setLexEntryId(entry.getId());
+                    didChange = true;
+                    //System.out.println(lemmaVersion.toString());
+                }
+            }
+
+            if (didChange) {
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+
+            }
+        }
+
         return true;
     }
 
