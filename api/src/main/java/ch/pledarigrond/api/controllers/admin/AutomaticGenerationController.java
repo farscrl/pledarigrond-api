@@ -89,4 +89,16 @@ public class AutomaticGenerationController {
         }
         return ResponseEntity.ok(returnValue);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_entries_with_wrong_state")
+    ResponseEntity<?> fixEntriesWithWrongState(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        boolean success = automaticGenerationService.fixEntriesWithWrongState(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during status fix");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

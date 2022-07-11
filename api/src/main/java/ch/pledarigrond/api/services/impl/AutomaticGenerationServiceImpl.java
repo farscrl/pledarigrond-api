@@ -173,6 +173,32 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return wrong;
     }
 
+    public boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getVersionHistory().get(0).getVerification() == LemmaVersion.Verification.OUTDATED) {
+                for (LemmaVersion lemmaVersion : entry.getVersionHistory()) {
+                    if (lemmaVersion.getVerification() == LemmaVersion.Verification.ACCEPTED) {
+                        lemmaVersion.setVerification(LemmaVersion.Verification.OUTDATED);
+                    }
+                }
+                entry.getVersionHistory().get(0).setVerification(LemmaVersion.Verification.ACCEPTED);
+                entry.setCurrent(entry.getVersionHistory().get(0));
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        return true;
+    }
+
     private boolean searchNounByGender(Language language, String gender, AutomaticChangesType automaticChangesType) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
