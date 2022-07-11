@@ -164,10 +164,10 @@ public class LexEntry implements Serializable {
 		});
 	}
 
-	public void addLemma(final LemmaVersion entry) {
+	public void addLemma(final LemmaVersion lemmaVersion) {
 		loadVersions();
-		entry.setInternalId(nextId++);
-		versionHistory.add(0,entry);
+		lemmaVersion.setInternalId(nextId++);
+		versionHistory.add(0,lemmaVersion);
 	}
 
 	public LemmaVersion getCurrent() {
