@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +149,24 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             if (entry.getNextInternalId() != entry.getVersionHistory().size()) {
                 wrong.put(entry.getId(), entry.getNextInternalId()+"");
+            }
+        }
+
+        return wrong;
+    }
+
+    public List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException {
+        List<LexEntry> wrong = new ArrayList<>();
+
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getVersionHistory().get(0).getVerification() == LemmaVersion.Verification.OUTDATED) {
+                wrong.add(entry);
             }
         }
 

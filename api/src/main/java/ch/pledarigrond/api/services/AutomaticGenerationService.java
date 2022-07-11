@@ -1,11 +1,13 @@
 package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 
 public interface AutomaticGenerationService {
 
@@ -18,4 +20,6 @@ public interface AutomaticGenerationService {
     boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException;
 
     HashMap<String, String> listWrongNextIds(Language language) throws DatabaseException;
+
+    List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException;
 }

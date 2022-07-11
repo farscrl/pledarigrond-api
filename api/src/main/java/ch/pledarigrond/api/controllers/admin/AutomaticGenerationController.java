@@ -2,6 +2,7 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("{language}/admin/generation")
@@ -72,5 +75,18 @@ public class AutomaticGenerationController {
     @PostMapping("/list_wrong_next_ids")
     ResponseEntity<?> listWrongNextIds(@PathVariable("language")Language language) throws DatabaseException {
         return ResponseEntity.ok(automaticGenerationService.listWrongNextIds(language));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/find_entries_with_wrong_state")
+    ResponseEntity<?> findEntriesWithWrongState(@PathVariable("language")Language language) throws NoDatabaseAvailableException {
+        List<LexEntry> entries = automaticGenerationService.findEntriesWithWrongState(language);
+
+
+        List<String> returnValue = new ArrayList<>();
+        for(LexEntry lexEntry: entries) {
+            returnValue.add(lexEntry.getMostRecent().getEntryValue("DStichwort") + " <-> " + lexEntry.getMostRecent().getEntryValue("RStichwort"));
+        }
+        return ResponseEntity.ok(returnValue);
     }
 }
