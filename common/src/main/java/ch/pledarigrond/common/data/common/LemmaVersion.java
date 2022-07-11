@@ -274,6 +274,10 @@ public class LemmaVersion implements Serializable {
 		return pgValues.get(LEXENTRY_ID);
 	}
 
+	public void setLexEntryId(String id) {
+		pgValues.put(LEXENTRY_ID, id);
+	}
+
 	public void setIP(String ip) {
 		pgValues.put(IP_ADDRESS, ip);
 	}
