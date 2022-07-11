@@ -67,4 +67,10 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/list_wrong_next_ids")
+    ResponseEntity<?> listWrongNextIds(@PathVariable("language")Language language) throws DatabaseException {
+        return ResponseEntity.ok(automaticGenerationService.listWrongNextIds(language));
+    }
 }

@@ -5,6 +5,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 public interface AutomaticGenerationService {
 
@@ -15,4 +16,6 @@ public interface AutomaticGenerationService {
     boolean generateVerbForms(Language language);
 
     boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException;
+
+    HashMap<String, String> listWrongNextIds(Language language) throws DatabaseException;
 }

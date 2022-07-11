@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -133,6 +134,24 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         return true;
+    }
+
+    public HashMap<String, String> listWrongNextIds(Language language) throws DatabaseException {
+        HashMap<String, String> wrong = new HashMap<>();
+
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getNextInternalId() != entry.getVersionHistory().size()) {
+                wrong.put(entry.getId(), entry.getNextInternalId()+"");
+            }
+        }
+
+        return wrong;
     }
 
     private boolean searchNounByGender(Language language, String gender, AutomaticChangesType automaticChangesType) {
