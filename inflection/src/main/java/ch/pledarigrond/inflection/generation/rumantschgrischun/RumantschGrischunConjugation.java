@@ -260,6 +260,7 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
     private void setConjunctiv(String root, RumantschGrischunConjugationStructure cs) {
         switch (cs.getConjugationclass().id) {
             case "5":
+            case "6":
                 cs.setConjunctivsing1(root + "eschia");
                 cs.setConjunctivsing2(root + "eschias");
                 cs.setConjunctivsing3(root + "eschia");
