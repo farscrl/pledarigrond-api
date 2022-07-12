@@ -110,6 +110,8 @@ public class LemmaVersion implements Serializable {
 	public static final String FIELD_NAMES = "field_names";
 
 	static {
+		// attention: pg_key fields are not automatically exported when making backups.
+		// if you need that field in backups, add a getter/setter with the XML-attribute annotation.
 		PG_KEYS = new HashSet<>();
 		PG_KEYS.add(TIMESTAMP);
 		PG_KEYS.add(CREATOR);
