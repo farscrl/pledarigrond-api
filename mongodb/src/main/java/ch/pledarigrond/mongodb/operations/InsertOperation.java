@@ -53,6 +53,7 @@ public class InsertOperation extends BaseOperation {
 		current.setUserId(getUserId());
 		current.setTimestamp(System.currentTimeMillis());
 		entry.setCurrent(current);
+		entry.setNextInternalId(entry.getVersionHistory().size());
 		try {
 			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).insert(entry);
 			if(isSuggestion()) {
