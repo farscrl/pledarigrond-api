@@ -21,6 +21,8 @@ public interface AutomaticGenerationService {
 
     HashMap<String, String> listWrongNextIds(Language language) throws DatabaseException;
 
+    boolean fixWrongNextIds(Language language) throws DatabaseException, UnknownHostException;
+
     List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException;
 
     boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException;

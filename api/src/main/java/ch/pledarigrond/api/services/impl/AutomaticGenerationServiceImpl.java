@@ -155,6 +155,42 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return wrong;
     }
 
+    public boolean fixWrongNextIds(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getNextInternalId() != entry.getVersionHistory().size()) {
+                entry.setNextInternalId(entry.getVersionHistory().size());
+                int index = entry.getVersionHistory().size() - 1;
+                for (LemmaVersion lemmaVersion: entry.getVersionHistory()) {
+                    if (lemmaVersion.getInternalId() != index) {
+                        lemmaVersion.setInternalId(index);
+                    }
+                    if (lemmaVersion.getVerification() == LemmaVersion.Verification.ACCEPTED) {
+                        entry.setCurrent(lemmaVersion);
+                    }
+
+                    index--;
+                }
+
+                if (index != -1) {
+                    throw new RuntimeException("Index not on -1");
+                }
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+
+        }
+
+        return true;
+    }
+
     public List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException {
         List<LexEntry> wrong = new ArrayList<>();
 

@@ -78,6 +78,18 @@ public class AutomaticGenerationController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_wrong_next_ids")
+    ResponseEntity<?> fixWrongNextIds(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        boolean success = automaticGenerationService.fixWrongNextIds(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during next ID fix");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/find_entries_with_wrong_state")
     ResponseEntity<?> findEntriesWithWrongState(@PathVariable("language")Language language) throws NoDatabaseAvailableException {
         List<LexEntry> entries = automaticGenerationService.findEntriesWithWrongState(language);
