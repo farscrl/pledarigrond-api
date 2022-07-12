@@ -65,14 +65,7 @@ public class UpdateOrderOperation implements IDBOperation<List<LexEntry>> {
 			LexEntry entry = Converter.convertToLexEntry(object);
 			System.out.println("Entry " + version.getEntryValue("DStichwort") + " <-> " + version.getEntryValue("RStichwort") + " had sortVal " + version.getEntryValue(sortField) + ", now is " + i + ", sortField is " + sortField);
 			version.setValue(sortField, i+"");
-			LemmaVersion newVersion = new LemmaVersion();
-			newVersion.getLemmaValues().putAll(version.getLemmaValues());
-			newVersion.getPgValues().putAll(version.getPgValues());
 			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).update(entry, version);
-			newVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
-			newVersion.setVerifierId(login);
-			newVersion.setUserId(login);
-			newVersion.setTimestamp(System.currentTimeMillis());
 			entries.add(entry);
 		}
 	}
