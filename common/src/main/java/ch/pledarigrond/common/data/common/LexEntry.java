@@ -181,8 +181,8 @@ public class LexEntry implements Serializable {
 		return null;
 	}
 
-	public void setCurrent(final LemmaVersion entry) {
-		currentId = entry.getInternalId();
+	public void setCurrent(final LemmaVersion lemmaVersion) {
+		currentId = lemmaVersion.getInternalId();
 	}
 
 	public LemmaVersion.Status getStatus() {
