@@ -233,6 +233,24 @@ public class LemmaVersion implements Serializable {
 		pgValues.put(TIMESTAMP, timestamp+"");
 	}
 
+	@XmlAttribute(name="automaticChange")
+	public String getAutomaticChange() {
+		return pgValues.get(AUTOMATIC_CHANGE);
+	}
+
+	public void setAutomaticChange(String automaticChange) {
+		pgValues.put(AUTOMATIC_CHANGE, automaticChange);
+	}
+
+	@XmlAttribute(name="reviewLater")
+	public String getReviewLater() {
+		return pgValues.get(REVIEW_LATER);
+	}
+
+	public void setReviewLater(String reviewLater) {
+		pgValues.put(REVIEW_LATER, reviewLater);
+	}
+
 	@XmlElement(name="userId")
 	public String getUserId() {
 		return (String) pgValues.get(CREATOR);
