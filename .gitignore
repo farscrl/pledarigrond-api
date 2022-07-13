@@ -3,6 +3,7 @@
 /data/backup
 /data/lucene_index
 /data/export
+/data/export_tmp
 
 # macOS
 .DS_Store
