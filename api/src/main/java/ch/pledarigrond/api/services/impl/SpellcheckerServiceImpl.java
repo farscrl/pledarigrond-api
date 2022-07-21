@@ -17,6 +17,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -60,8 +61,13 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         File dicFile = new File(dir, "rm-" + language.getName() + ".dic");
         writeSetTo(dicFile, words, true);
 
+        // load aff file
+        ClassPathResource resource = new ClassPathResource("spellchecker/" + language.getName() + "/rm-" + language.getName() + ".aff");
+        File aff = resource.getFile();
+
         // write Zip
         List<File> files = new ArrayList<>();
+        files.add(aff);
         files.add(dicFile);
         File zipFile = new File(dir, "hunspell_" + language + "_" + UUID.randomUUID() + ".zip");
         //zipFile.createNewFile();
