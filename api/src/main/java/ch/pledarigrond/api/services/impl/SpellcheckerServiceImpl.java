@@ -156,6 +156,8 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
             }
         }
 
+        removeWordsFromBlocklist(language, words);
+
         return words;
     }
 
@@ -287,6 +289,20 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
             if (!line.startsWith("#")) {
                 words.add(line);
+            }
+        }
+    }
+
+    private void removeWordsFromBlocklist(Language language, Set<String> words) throws IOException {
+        ClassPathResource resource = new ClassPathResource("spellchecker/" + language.getName() + "/words_to_ignore.txt");
+        InputStream is = resource.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        while(reader.ready()) {
+            String line = reader.readLine();
+
+            if (!line.startsWith("#")) {
+                words.remove(line);
             }
         }
     }
