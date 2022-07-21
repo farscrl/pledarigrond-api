@@ -118,7 +118,10 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     }
 
     private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException {
-        Set<String> words = new TreeSet<>();
+        Set<String> words = new TreeSet<>((a, b) -> {
+            int insensitive = String.CASE_INSENSITIVE_ORDER.compare(a, b);
+            return insensitive==0 ? a.compareTo(b) : insensitive;
+        });
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
