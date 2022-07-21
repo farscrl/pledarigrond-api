@@ -128,10 +128,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     }
 
     private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException, IOException {
-        Set<String> words = new TreeSet<>((a, b) -> {
-            int insensitive = String.CASE_INSENSITIVE_ORDER.compare(a, b);
-            return insensitive==0 ? a.compareTo(b) : insensitive;
-        });
+        Set<String> words = new TreeSet<>();
         loadWordsToAdd(language, words);
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
