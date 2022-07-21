@@ -14,6 +14,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import java.util.zip.ZipOutputStream;
 
 @Service
 public class SpellcheckerServiceImpl implements SpellcheckerService {
+
+    Logger logger = LoggerFactory.getLogger(SpellcheckerServiceImpl.class);
 
     @Autowired
     private PgEnvironment pgEnvironment;
@@ -47,7 +51,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         return zipFile;
     }
 
-    public File exportHunspell(Language language) throws NoDatabaseAvailableException {
+    public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
 
@@ -117,11 +121,12 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         }
     }
 
-    private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException {
+    private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException, IOException {
         Set<String> words = new TreeSet<>((a, b) -> {
             int insensitive = String.CASE_INSENSITIVE_ORDER.compare(a, b);
             return insensitive==0 ? a.compareTo(b) : insensitive;
         });
+        loadWordsToAdd(language, words);
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -263,6 +268,20 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     private void addIfNotNull(Set<String> words, String value) {
         if (value != null) {
             words.add(value);
+        }
+    }
+
+    private void loadWordsToAdd(Language language, Set<String> words) throws IOException {
+        ClassPathResource resource = new ClassPathResource("spellchecker/" + language.getName() + "/missing_words.txt");
+        InputStream is = resource.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        while(reader.ready()) {
+            String line = reader.readLine();
+
+            if (!line.startsWith("#")) {
+                words.add(line);
+            }
         }
     }
 }
