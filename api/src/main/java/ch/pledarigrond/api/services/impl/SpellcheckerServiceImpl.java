@@ -277,7 +277,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
         for(String p: prefixes) {
             if (value.startsWith(p)) {
-                return value.substring(p.length());
+                value =  value.substring(p.length());
             }
         }
         return value;
