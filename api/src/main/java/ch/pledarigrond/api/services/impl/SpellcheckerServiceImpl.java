@@ -40,7 +40,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         // create wordlist
         Set<String> words = getAllValidWords(language);
         File wordlist = new File(dir, "wordlist_" + language + ".txt");
-        writeSetTo(wordlist, words, false);
+        writeSetTo(wordlist, words);
 
         // write Zip
         List<File> files = new ArrayList<>();
@@ -59,7 +59,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         // create dicFile
         Set<String> words = getAllValidWords(language);
         File dicFile = new File(dir, "rm-" + language.getName() + ".dic");
-        writeSetTo(dicFile, words, true);
+        writeSetToHunspell(dicFile, words);
 
         // load aff file
         ClassPathResource resource = new ClassPathResource("spellchecker/" + language.getName() + "/rm-" + language.getName() + ".aff");
@@ -108,16 +108,29 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         }
     }
 
-    private void writeSetTo(File wordListFile, Set<String> set, boolean addNumberOfEntries) {
+    private void writeSetTo(File wordListFile, Set<String> set) {
         try (BufferedWriter bf = new BufferedWriter(new FileWriter(wordListFile))) {
-            if (addNumberOfEntries) {
-                bf.write(String.valueOf(set.size() + 1));
+            for (String value : set) {
+                if (value == null) continue;
+                bf.write(value);
                 bf.newLine();
             }
+
+            bf.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeSetToHunspell(File wordListFile, Set<String> set) {
+        try (BufferedWriter bf = new BufferedWriter(new FileWriter(wordListFile))) {
+            bf.write(String.valueOf(set.size() + 1));
+            bf.newLine();
 
             for (String value : set) {
                 if (value == null) continue;
                 bf.write(value);
+                bf.write("/T"); // rule for apostrophe words
                 bf.newLine();
             }
 
