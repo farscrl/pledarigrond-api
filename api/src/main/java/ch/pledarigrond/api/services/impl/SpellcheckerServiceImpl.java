@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.SpellcheckerService;
+import ch.pledarigrond.api.utils.freemarker.FreemarkerConfigSpellchecker;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
@@ -13,6 +14,10 @@ import ch.pledarigrond.mongodb.core.Database;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.Version;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +26,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -56,6 +62,10 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
 
+
+
+
+
         // create dicFile
         Set<String> words = getAllValidWords(language);
         File dicFile = new File(dir, "rm-" + language.getName() + ".dic");
@@ -65,10 +75,48 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         ClassPathResource resource = new ClassPathResource("spellchecker/" + language.getName() + "/rm-" + language.getName() + ".aff");
         File aff = resource.getFile();
 
+        // create version file
+        File versionFile = new File(dir, "version.txt");
+        try {
+            SimpleDateFormat buildDateFormat = new SimpleDateFormat("yyMMdd.HHmmss");
+            Date now = new Date();
+
+            Map<String, Object> versionTemplateData = new HashMap<>();
+            versionTemplateData.put("build", buildDateFormat.format(now));
+            Writer versionFileWriter = new FileWriter(versionFile);
+            Template versionTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("version.ftlh");
+            versionTemplate.process(versionTemplateData, versionFileWriter);
+            versionFileWriter.flush();
+            versionFileWriter.close();
+        } catch (TemplateException e) {
+            throw new RuntimeException(e);
+        }
+
+        // create licence file
+        File licenceFile = new File(dir, "LICENSE.txt");
+        try {
+            SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
+            Date now = new Date();
+
+            Map<String, Object> licenceTemplateData = new HashMap<>();
+            licenceTemplateData.put("year", yearDateFormat.format(now));
+            licenceTemplateData.put("publisher", "Lia Rumantscha");
+            licenceTemplateData.put("publisher_url", "www.liarumantscha.ch");
+            Writer licenceFileWriter = new FileWriter(licenceFile);
+            Template licenceTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("licence.ftlh");
+            licenceTemplate.process(licenceTemplateData, licenceFileWriter);
+            licenceFileWriter.flush();
+            licenceFileWriter.close();
+        } catch (TemplateException e) {
+            throw new RuntimeException(e);
+        }
+
         // write Zip
         List<File> files = new ArrayList<>();
         files.add(aff);
         files.add(dicFile);
+        files.add(versionFile);
+        files.add(licenceFile);
         File zipFile = new File(dir, "hunspell_" + language + "_" + UUID.randomUUID() + ".zip");
         //zipFile.createNewFile();
         writeFilesToZip(zipFile, files);
