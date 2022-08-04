@@ -26,6 +26,7 @@
         <module>../mongodb</module>
         <module>../inflection</module>
         <module>../names</module>
+        <module>../spellchecker</module>
     </modules>
 
     <profiles>

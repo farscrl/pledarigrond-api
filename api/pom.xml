@@ -55,6 +55,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>ch.pledarigrond</groupId>
+			<artifactId>spellchecker</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<scope>compile</scope>
