@@ -5,6 +5,8 @@ la
 las
 en
 ena
+
+# numerals
 egn
 egna
 
