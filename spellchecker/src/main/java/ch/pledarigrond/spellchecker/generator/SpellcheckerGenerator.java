@@ -8,6 +8,7 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
+import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -22,6 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import static ch.pledarigrond.spellchecker.model.SpellcheckerRules.SURMIRAN_PLEDS_APOSTROFAI;
+import static ch.pledarigrond.spellchecker.model.SpellcheckerRules.SURMIRAN_PRONOM_CONGIUNT_IMPERATIV;
 
 public class SpellcheckerGenerator {
 
@@ -169,7 +173,6 @@ public class SpellcheckerGenerator {
             for (String value : set) {
                 if (value == null) continue;
                 bf.write(value);
-                bf.write("/T"); // rule for apostrophe words
                 bf.newLine();
             }
 
@@ -180,8 +183,8 @@ public class SpellcheckerGenerator {
     }
 
     private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException, IOException {
-        Set<String> words = new TreeSet<>();
-        loadWordsToAdd(language, words);
+        HunspellList hunspellList = new HunspellList();
+        loadWordsToAdd(language, hunspellList);
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -193,105 +196,148 @@ public class SpellcheckerGenerator {
             LemmaVersion current = entry.getCurrent();
             String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
             if (inflectionType == null) {
-                extractDefault(words, current);
+                extractDefault(hunspellList, current);
             } else if (inflectionType.equals("V")) {
-                extractVerbs(language, words, current);
+                extractVerbs(language, hunspellList, current);
             } else if (inflectionType.equals("NOUN")) {
-                extractNouns(words, current);
+                extractNouns(hunspellList, current);
             } else if (inflectionType.equals("ADJECTIVE")) {
-                extractAdjectives(words, current);
+                extractAdjectives(hunspellList, current);
             } else {
                 throw new RuntimeException("Unexpected inflection type: " + inflectionType);
             }
         }
 
-        removeWordsFromBlocklist(language, words);
+        removeWordsFromBlocklist(language, hunspellList);
 
-        return words;
+        return hunspellList.getListAsSet();
     }
 
-    protected void extractNouns(Set<String> words, LemmaVersion lemmaVersion) {
-        addIfNotNull(words, lemmaVersion.getEntryValue("baseForm"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("mSingular"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("fSingular"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("mPlural"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("fPlural"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("pluralCollectiv"));
+    protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
-    protected void extractAdjectives(Set<String> words, LemmaVersion lemmaVersion) {
-        addIfNotNull(words, lemmaVersion.getEntryValue("baseForm"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("mSingular"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("fSingular"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("mPlural"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("fPlural"));
-        addIfNotNull(words, lemmaVersion.getEntryValue("adverbialForm"));
+    protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion) {
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("adverbialForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
-    protected void extractVerbs(Language language, Set<String> words, LemmaVersion lemmaVersion) {
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("infinitiv")));
+    protected void extractVerbs(Language language, HunspellList list, LemmaVersion lemmaVersion) {
+        String infinitiv = lemmaVersion.getEntryValue("infinitiv");
+        if (infinitiv == null || infinitiv.equals("")) {
+            infinitiv = lemmaVersion.getEntryValue("RStichwort");
+        }
+        list.addWord(removePronouns(language, infinitiv), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentsing1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentsing2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentsing3")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentplural1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentplural2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("preschentplural3")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectsing1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectsing2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectsing3")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectplural1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectplural2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperfectplural3")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing3")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural3")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivsing3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("conjunctivplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing3")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural3")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("participperfectms")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("participperfectfs")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("participperfectmp")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("participperfectfp")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("participperfectms")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("participperfectfs")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("participperfectmp")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("participperfectfp")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperativ1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("imperativ2")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperativ1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperativ2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("gerundium")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("gerundium")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
 
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futursing1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futursing2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futursing3")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futurplural1")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futurplural2")));
-        addIfNotNull(words, removePronouns(language, lemmaVersion.getEntryValue("futurplural3")));
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
-    protected void extractDefault(Set<String> words, LemmaVersion lemmaVersion) {
-        addIfNotNull(words, lemmaVersion.getEntryValue("RStichwort"));
+    protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
+        String candidate = lemmaVersion.getEntryValue("RStichwort");
+
+        if (candidate == null) {
+            return;
+        }
+
+        // Ignore cf.
+        if (candidate.startsWith("cf. ")) {
+            return;
+        }
+
+        if (candidate.endsWith(" da")) {
+            candidate = candidate.substring(0, candidate.length() - 3);
+        }
+        if (candidate.endsWith(" a")) {
+            candidate = candidate.substring(0, candidate.length() - 2);
+        }
+        if (candidate.endsWith("!")) {
+            candidate = candidate.substring(0, candidate.length() - 1);
+        }
+        if (candidate.startsWith("far ")) {
+            candidate = candidate.substring(4);
+        }
+        if (candidate.startsWith("l'")) {
+            candidate = candidate.substring(2);
+        }
+        if (candidate.startsWith("la ")) {
+            candidate = candidate.substring(3);
+        }
+        if (candidate.startsWith("en ")) {
+            candidate = candidate.substring(3);
+        }
+        if (candidate.startsWith("en'")) {
+            candidate = candidate.substring(3);
+        }
+        if (candidate.startsWith("ena ")) {
+            candidate = candidate.substring(4);
+        }
+        if (candidate.startsWith("egn ")) {
+            candidate = candidate.substring(4);
+        }
+        if (candidate.startsWith("egna ")) {
+            candidate = candidate.substring(5);
+        }
+
+        list.addWord(candidate, new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
     protected String removePronouns(Language language, String value) {
         return value;
     }
 
-    private void addIfNotNull(Set<String> words, String value) {
-        if (value != null) {
-            words.add(value);
-        }
-    }
-
-    private void loadWordsToAdd(Language language, Set<String> words) throws IOException {
+    private void loadWordsToAdd(Language language, HunspellList list) throws IOException {
         ClassPathResource resource = new ClassPathResource(language.getName() + "/missing_words.txt");
         InputStream is = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -300,22 +346,23 @@ public class SpellcheckerGenerator {
             String line = reader.readLine();
 
             if (!line.startsWith("#")) {
-                words.add(line);
+                list.addWord(line, new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
             }
         }
     }
 
-    private void removeWordsFromBlocklist(Language language, Set<String> words) throws IOException {
+    private void removeWordsFromBlocklist(Language language, HunspellList list) throws IOException {
         ClassPathResource resource = new ClassPathResource(language.getName() + "/words_to_ignore.txt");
         InputStream is = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
         while(reader.ready()) {
             String line = reader.readLine();
-
-            if (!line.startsWith("#")) {
-                words.remove(line);
+            if (line.startsWith("#")) {
+                continue;
             }
+
+            list.removeWord(line);
         }
     }
 
