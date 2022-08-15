@@ -91,8 +91,7 @@ public class SpellcheckerGenerator {
 
             Map<String, Object> licenceTemplateData = new HashMap<>();
             licenceTemplateData.put("year", yearDateFormat.format(now));
-            licenceTemplateData.put("publisher", "Lia Rumantscha");
-            licenceTemplateData.put("publisher_url", "www.liarumantscha.ch");
+            licenceTemplateData.put("publisher", "Lia Rumantscha (www.liarumantscha.ch) / Pro Svizra Rumantscha (www.rumantsch.ch)");
             Writer licenceFileWriter = new FileWriter(licenceFile);
             Template licenceTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("licence.ftlh");
             licenceTemplate.process(licenceTemplateData, licenceFileWriter);
