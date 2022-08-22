@@ -20,7 +20,7 @@ ICONV ’ '
 OCONV 1
 OCONV ' ’
 
-PFX T Y 154
+PFX T Y 153
 PFX T 0 l' [aeiouAEIOU]
 PFX T a l'a a
 PFX T e l'e e
