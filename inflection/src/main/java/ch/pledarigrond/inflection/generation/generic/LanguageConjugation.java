@@ -23,6 +23,9 @@ public abstract class LanguageConjugation extends LanguageInflectionBase {
     public abstract InflectionResponse generateConjugation(String conjugationClass, String infinitiv);
 
     public boolean endsWithDoubleConsonant(String root) {
+        if (root.length() == 1) {
+            return false;
+        }
         return root.charAt(root.length() - 1) == root.charAt(root.length() - 2);
     }
 

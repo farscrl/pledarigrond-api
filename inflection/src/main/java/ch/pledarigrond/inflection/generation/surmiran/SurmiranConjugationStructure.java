@@ -76,6 +76,38 @@ public class SurmiranConjugationStructure {
 	public static final String futurplural2 = "futurplural2";
 	public static final String futurplural3 = "futurplural3";
 
+	public static final String preschentsing1enclitic = "preschentsing1enclitic";
+	public static final String preschentsing2enclitic = "preschentsing2enclitic";
+	public static final String preschentsing3encliticm = "preschentsing3encliticm";
+	public static final String preschentsing3encliticf = "preschentsing3encliticf";
+	public static final String preschentplural1enclitic = "preschentplural1enclitic";
+	public static final String preschentplural2enclitic = "preschentplural2enclitic";
+	public static final String preschentplural3enclitic = "preschentplural3enclitic";
+
+	public static final String imperfectsing1enclitic = "imperfectsing1enclitic";
+	public static final String imperfectsing2enclitic = "imperfectsing2enclitic";
+	public static final String imperfectsing3encliticm = "imperfectsing3encliticm";
+	public static final String imperfectsing3encliticf = "imperfectsing3encliticf";
+	public static final String imperfectplural1enclitic = "imperfectplural1enclitic";
+	public static final String imperfectplural2enclitic = "imperfectplural2enclitic";
+	public static final String imperfectplural3enclitic = "imperfectplural3enclitic";
+
+	public static final String cundizionalsing1enclitic = "cundizionalsing1enclitic";
+	public static final String cundizionalsing2enclitic = "cundizionalsing2enclitic";
+	public static final String cundizionalsing3encliticm = "cundizionalsing3encliticm";
+	public static final String cundizionalsing3encliticf = "cundizionalsing3encliticf";
+	public static final String cundizionalplural1enclitic = "cundizionalplural1enclitic";
+	public static final String cundizionalplural2enclitic = "cundizionalplural2enclitic";
+	public static final String cundizionalplural3enclitic = "cundizionalplural3enclitic";
+
+	public static final String futursing1enclitic = "futursing1enclitic";
+	public static final String futursing2enclitic = "futursing2enclitic";
+	public static final String futursing3encliticm = "futursing3encliticm";
+	public static final String futursing3encliticf = "futursing3encliticf";
+	public static final String futurplural1enclitic = "futurplural1enclitic";
+	public static final String futurplural2enclitic = "futurplural2enclitic";
+	public static final String futurplural3enclitic = "futurplural3enclitic";
+
 	public String[] msi = new String[] { preschentsing1, preschentsing2,
 			preschentsing3, preschentplural1, preschentplural2,
 			preschentplural3, imperfectsing1, imperfectsing2, imperfectsing3,
@@ -87,7 +119,15 @@ public class SurmiranConjugationStructure {
 			participperfectms, participperfectfs, participperfectmp,
 			participperfectfp, imperativ1, imperativ2, gerundium, futursing1,
 			futursing2, futursing3, futurplural1, futurplural2, futurplural3,
-			infinitiv
+			infinitiv, preschentsing1enclitic, preschentsing2enclitic, preschentsing3encliticm,
+			preschentsing3encliticf, preschentplural1enclitic, preschentplural2enclitic,
+			preschentplural3enclitic, imperfectsing1enclitic, imperfectsing2enclitic,
+			imperfectsing3encliticm, imperfectsing3encliticf, imperfectplural1enclitic,
+			imperfectplural2enclitic, imperfectplural3enclitic, cundizionalsing1enclitic,
+			cundizionalsing2enclitic, cundizionalsing3encliticm, cundizionalsing3encliticf,
+			cundizionalplural1enclitic, cundizionalplural2enclitic, cundizionalplural3enclitic,
+			futursing1enclitic, futursing2enclitic, futursing3encliticm, futursing3encliticf,
+			futurplural1enclitic, futurplural2enclitic, futurplural3enclitic
 	};
 
 	private HashMap<String, String> values;
@@ -294,6 +334,118 @@ public class SurmiranConjugationStructure {
 		return values.get(futurplural3);
 	}
 
+	public String getPreschentsing1Enclitic() {
+		return values.get(preschentsing1enclitic);
+	}
+
+	public String getPreschentsing2Enclitic() {
+		return values.get(preschentsing2enclitic);
+	}
+
+	public String getPreschentsing3EncliticM() {
+		return values.get(preschentsing3encliticm);
+	}
+
+	public String getPreschentsing3EncliticF() {
+		return values.get(preschentsing3encliticf);
+	}
+
+	public String getPreschentplural1Enclitic() {
+		return values.get(preschentplural1enclitic);
+	}
+
+	public String getPreschentplural2Enclitic() {
+		return values.get(preschentplural2enclitic);
+	}
+
+	public String getPreschentplural3Enclitic() {
+		return values.get(preschentplural3enclitic);
+	}
+
+	public String getImperfectsing1Enclitic() {
+		return values.get(imperfectsing1enclitic);
+	}
+
+	public String getImperfectsing2Enclitic() {
+		return values.get(imperfectsing2enclitic);
+	}
+
+	public String getImperfectsing3EncliticM() {
+		return values.get(imperfectsing3encliticm);
+	}
+
+	public String getImperfectsing3EncliticF() {
+		return values.get(imperfectsing3encliticf);
+	}
+
+	public String getImperfectplural1Enclitic() {
+		return values.get(imperfectplural1enclitic);
+	}
+
+	public String getImperfectplural2Enclitic() {
+		return values.get(imperfectplural2enclitic);
+	}
+
+	public String getImperfectplural3Enclitic() {
+		return values.get(imperfectplural3enclitic);
+	}
+
+	public String getCundizionalsing1Enclitic() {
+		return values.get(cundizionalsing1enclitic);
+	}
+
+	public String getCundizionalsing2Enclitic() {
+		return values.get(cundizionalsing2enclitic);
+	}
+
+	public String getCundizionalsing3EncliticM() {
+		return values.get(cundizionalsing3encliticm);
+	}
+
+	public String getCundizionalsing3EncliticF() {
+		return values.get(cundizionalsing3encliticf);
+	}
+
+	public String getCundizionalplural1Enclitic() {
+		return values.get(cundizionalplural1enclitic);
+	}
+
+	public String getCundizionalplural2Enclitic() {
+		return values.get(cundizionalplural2enclitic);
+	}
+
+	public String getCundizionalplural3Enclitic() {
+		return values.get(cundizionalplural3enclitic);
+	}
+
+	public String getFutursing1Enclitic() {
+		return values.get(futursing1enclitic);
+	}
+
+	public String getFutursing2Enclitic() {
+		return values.get(futursing2enclitic);
+	}
+
+	public String getFutursing3EncliticM() {
+		return values.get(futursing3encliticm);
+	}
+
+	public String getFutursing3EncliticF() {
+		return values.get(futursing3encliticf);
+	}
+
+	public String getFuturplural1Enclitic() {
+		return values.get(futurplural1enclitic);
+	}
+
+	public String getFuturplural2Enclitic() {
+		return values.get(futurplural2enclitic);
+	}
+
+	public String getFuturplural3Enclitic() {
+		return values.get(futurplural3enclitic);
+	}
+
 	public void setVerb(String v) {
 		values.put(verb, v);
 	}
@@ -466,6 +618,119 @@ public class SurmiranConjugationStructure {
 		values.put(futurplural3, futp3);
 	}
 
+
+	public void setPreschentsing1Enclitic(String ps1) {
+		values.put(preschentsing1enclitic, ps1);
+	}
+
+	public void setPreschentsing2Enclitic(String ps2) {
+		values.put(preschentsing2enclitic, ps2);
+	}
+
+	public void setPreschentsing3EncliticM(String ps3) {
+		values.put(preschentsing3encliticm, ps3);
+	}
+
+	public void setPreschentsing3EncliticF(String ps3) {
+		values.put(preschentsing3encliticf, ps3);
+	}
+
+	public void setPreschentplural1Enclitic(String pp1) {
+		values.put(preschentplural1enclitic, pp1);
+	}
+
+	public void setPreschentplural2Enclitic(String pp2) {
+		values.put(preschentplural2enclitic, pp2);
+	}
+
+	public void setPreschentplural3Enclitic(String pp3) {
+		values.put(preschentplural3enclitic, pp3);
+	}
+
+	public void setImperfectsing1Enclitic(String is1) {
+		values.put(imperfectsing1enclitic, is1);
+	}
+
+	public void setImperfectsing2Enclitic(String is2) {
+		values.put(imperfectsing2enclitic, is2);
+	}
+
+	public void setImperfectsing3EncliticM(String is3) {
+		values.put(imperfectsing3encliticm, is3);
+	}
+
+	public void setImperfectsing3EncliticF(String is3) {
+		values.put(imperfectsing3encliticf, is3);
+	}
+
+	public void setImperfectplural1Enclitic(String ip1) {
+		values.put(imperfectplural1enclitic, ip1);
+	}
+
+	public void setImperfectplural2Enclitic(String ip2) {
+		values.put(imperfectplural2enclitic, ip2);
+	}
+
+	public void setImperfectplural3Enclitic(String ip3) {
+		values.put(imperfectplural3enclitic, ip3);
+	}
+
+	public void setCundizionalsing1Enclitic(String cus1) {
+		values.put(cundizionalsing1enclitic, cus1);
+	}
+
+	public void setCundizionalsing2Enclitic(String cus2) {
+		values.put(cundizionalsing2enclitic, cus2);
+	}
+
+	public void setCundizionalsing3EncliticM(String cus3) {
+		values.put(cundizionalsing3encliticm, cus3);
+	}
+
+	public void setCundizionalsing3EncliticF(String cus3) {
+		values.put(cundizionalsing3encliticf, cus3);
+	}
+
+	public void setCundizionalplural1Enclitic(String cup1) {
+		values.put(cundizionalplural1enclitic, cup1);
+	}
+
+	public void setCundizionalplural2Enclitic(String cup2) {
+		values.put(cundizionalplural2enclitic, cup2);
+	}
+
+	public void setCundizionalplural3Enclitic(String cup3) {
+		values.put(cundizionalplural3enclitic, cup3);
+	}
+
+	public void setFutursing1Enclitic(String futs1) {
+		values.put(futursing1enclitic, futs1);
+	}
+
+	public void setFutursing2Enclitic(String futs2) {
+		values.put(futursing2enclitic, futs2);
+	}
+
+	public void setFutursing3EncliticM(String futs3) {
+		values.put(futursing3encliticm, futs3);
+	}
+
+	public void setFutursing3EncliticF(String futs3) {
+		values.put(futursing3encliticf, futs3);
+	}
+
+	public void setFuturplural1Enclitic(String futp1) {
+		values.put(futurplural1enclitic, futp1);
+	}
+
+	public void setFuturplural2Enclitic(String futp2) {
+		values.put(futurplural2enclitic, futp2);
+	}
+
+	public void setFuturplural3Enclitic(String futp3) {
+		values.put(futurplural3enclitic, futp3);
+	}
+
 	public String getIsReflexive() {
 		return isReflexive;
 	}
@@ -571,8 +836,64 @@ public class SurmiranConjugationStructure {
 			return getFuturplural2();
 		case futurplural3:
 			return getFuturplural3();
+		case preschentsing1enclitic:
+			return getPreschentsing1Enclitic();
+		case preschentsing2enclitic:
+			return getPreschentsing2Enclitic();
+		case preschentsing3encliticm:
+			return getPreschentsing3EncliticM();
+		case preschentsing3encliticf:
+			return getPreschentsing3EncliticF();
+		case preschentplural1enclitic:
+			return getPreschentplural1Enclitic();
+		case preschentplural2enclitic:
+			return getPreschentplural2Enclitic();
+		case preschentplural3enclitic:
+			return getPreschentplural3Enclitic();
+		case imperfectsing1enclitic:
+			return getImperfectsing1Enclitic();
+		case imperfectsing2enclitic:
+			return getImperfectsing2Enclitic();
+		case imperfectsing3encliticm:
+			return getImperfectsing3EncliticM();
+		case imperfectsing3encliticf:
+			return getImperfectsing3EncliticF();
+		case imperfectplural1enclitic:
+			return getImperfectplural1Enclitic();
+		case imperfectplural2enclitic:
+			return getImperfectplural2Enclitic();
+		case imperfectplural3enclitic:
+			return getImperfectplural3Enclitic();
+		case cundizionalsing1enclitic:
+			return getCundizionalsing1Enclitic();
+		case cundizionalsing2enclitic:
+			return getCundizionalsing2Enclitic();
+		case cundizionalsing3encliticm:
+			return getCundizionalsing3EncliticM();
+		case cundizionalsing3encliticf:
+			return getCundizionalsing3EncliticF();
+		case cundizionalplural1enclitic:
+			return getCundizionalplural1Enclitic();
+		case cundizionalplural2enclitic:
+			return getCundizionalplural2Enclitic();
+		case cundizionalplural3enclitic:
+			return getCundizionalplural3Enclitic();
+		case futursing1enclitic:
+			return getFutursing1Enclitic();
+		case futursing2enclitic:
+			return getFutursing2Enclitic();
+		case futursing3encliticm:
+			return getFutursing3EncliticM();
+		case futursing3encliticf:
+			return getFutursing3EncliticF();
+		case futurplural1enclitic:
+			return getFuturplural1Enclitic();
+		case futurplural2enclitic:
+			return getFuturplural2Enclitic();
+		case futurplural3enclitic:
+			return getFuturplural3Enclitic();
 
-		default:
+			default:
 			break;
 		}
 		return values.get(key);
