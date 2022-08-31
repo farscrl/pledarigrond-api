@@ -26,4 +26,6 @@ public interface AutomaticGenerationService {
     List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException;
 
     boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException;
 }

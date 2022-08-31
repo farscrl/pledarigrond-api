@@ -2,7 +2,7 @@ package ch.pledarigrond.inflection.generation.generic;
 
 public abstract class LanguageInflectionBase {
 
-    protected boolean isVocal(char ch) {
+    protected static boolean isVocal(char ch) {
         return switch (ch) {
             case 'a', 'e', 'i', 'o', 'u', 'ä', 'ö', 'ü' -> true;
             default -> false;
@@ -14,7 +14,7 @@ public abstract class LanguageInflectionBase {
         return query;
     }
 
-    public boolean isSingleSyllable(String word) {
+    public static boolean isSingleSyllable(String word) {
         int numberVowels = 0;
         int lastVowelPosition = -1;
 

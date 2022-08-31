@@ -5,9 +5,7 @@ import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -427,6 +425,15 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
 
         return null;
+    }
+
+    public static SurmiranConjugationStructure addEncliticForms(SurmiranConjugationStructure cs) {
+        SurmiranConjugation.setPreschentEnclitic(cs);
+        SurmiranConjugation.setImperfectEnclitic(cs);
+        SurmiranConjugation.setCundizionalEnclitic(cs);
+        SurmiranConjugation.setFuturEnclitic(cs);
+
+        return cs;
     }
 
     private String getRoot(String infinitiv) {
@@ -1305,7 +1312,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         }
     }
 
-    private void setPreschentEnclitic(SurmiranConjugationStructure cs) {
+    private static void setPreschentEnclitic(SurmiranConjugationStructure cs) {
         if(cs.getPreschentsing1().endsWith("gl")) {
             cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
         } else if (cs.getPreschentsing1().endsWith("tg")) {
@@ -1317,7 +1324,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setPreschentsing2Enclitic(cs.getPreschentsing2() + "t");
 
 
-        if (isSingleSyllable(cs.getPreschentsing3()) && endsOnConsonantOrDiftong(cs.getPreschentsing3())) {
+        if (SurmiranConjugation.isSingleSyllable(cs.getPreschentsing3()) && SurmiranConjugation.endsOnConsonantOrDiftong(cs.getPreschentsing3())) {
             cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "el");
         } else {
             cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
@@ -1345,7 +1352,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
     }
 
-    private void setImperfectEnclitic(SurmiranConjugationStructure cs) {
+    private static void setImperfectEnclitic(SurmiranConjugationStructure cs) {
         cs.setImperfectsing1Enclitic(cs.getImperfectsing1());
         cs.setImperfectsing2Enclitic(cs.getImperfectsing2() + "t");
         cs.setImperfectsing3EncliticM(cs.getImperfectsing3() + "'l");
@@ -1355,7 +1362,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setImperfectplural3Enclitic(cs.getImperfectplural3().substring(0, cs.getImperfectplural3().length() - 2) + "igl");
     }
 
-    private void setCundizionalEnclitic(SurmiranConjugationStructure cs) {
+    private static void setCundizionalEnclitic(SurmiranConjugationStructure cs) {
         cs.setCundizionalsing1Enclitic(cs.getCundizionalsing1() + "a");
         cs.setCundizionalsing2Enclitic(cs.getCundizionalsing2() + "t");
         cs.setCundizionalsing3EncliticM(cs.getCundizionalsing3() + "a'l");
@@ -1365,7 +1372,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setCundizionalplural3Enclitic(cs.getCundizionalplural3().substring(0, cs.getCundizionalplural3().length() - 2) + "igl");
     }
 
-    private void setFuturEnclitic(SurmiranConjugationStructure cs) {
+    private static void setFuturEnclitic(SurmiranConjugationStructure cs) {
         cs.setFutursing1Enclitic(cs.getFutursing1() + "ia");
         cs.setFutursing2Enclitic(cs.getFutursing2() + "t");
         cs.setFutursing3EncliticM(cs.getFutursing3() + "'l");
@@ -1629,7 +1636,7 @@ public class SurmiranConjugation extends LanguageConjugation {
         modRoot = null;
     }
 
-    private boolean endsOnConsonantOrDiftong(String word) {
+    private static boolean endsOnConsonantOrDiftong(String word) {
         if (!isVocal(word.charAt(word.length() - 1))) {
             return true;
         }
