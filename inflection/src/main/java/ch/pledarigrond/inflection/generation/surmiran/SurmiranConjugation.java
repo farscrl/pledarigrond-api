@@ -1332,6 +1332,8 @@ public class SurmiranConjugation extends LanguageConjugation {
 
         if (cs.getPreschentsing3().endsWith("gia")) {
             cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 3) + "tg'la");
+        } else if (cs.getPreschentsing3().endsWith("glia")) {
+            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
         } else {
             cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 1) + "'la");
         }
@@ -1344,7 +1346,7 @@ public class SurmiranConjugation extends LanguageConjugation {
 
         cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
 
-        if (cs.getPreschentplural3().endsWith("gian")) {
+        if (cs.getPreschentplural3().endsWith("ian")) {
             cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 3) + "igl");
         } else {
             cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 2) + "igl");
