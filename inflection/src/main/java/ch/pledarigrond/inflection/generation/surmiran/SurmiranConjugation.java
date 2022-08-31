@@ -1406,7 +1406,7 @@ public class SurmiranConjugation extends LanguageConjugation {
     private HashMap<String, String> addReflexivePronouns(Map<String, String> conjugation, Map<String, String> pronouns, InflectionSubType subType) {
         cs = new SurmiranConjugationStructure();
         cs.setVerb(conjugation.get("verb"));
-        cs.setInfinitiv(conjugation.get(SurmiranConjugationStructure.infinitiv));
+        cs.setInfinitiv(pronouns.get(SurmiranPronouns.pp_2) + conjugation.get(SurmiranConjugationStructure.infinitiv));
         cs.setRoot(conjugation.get(SurmiranConjugationStructure.root));
         cs.setEnding(conjugation.get(SurmiranConjugationStructure.ending));
         cs.setReflexive(conjugation.get(SurmiranConjugationStructure.reflexive));
