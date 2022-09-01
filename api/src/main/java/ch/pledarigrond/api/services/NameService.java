@@ -6,9 +6,18 @@ import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Optional;
 
 public interface NameService {
     Page<Name> getAllNames(Pagination pagination);
+
+    Name insert(Name name);
+
+    Optional<Name> getById(String id);
+
+    Name updateName(Name name);
+
+    boolean deleteName(Name name);
 
     File exportAllNames();
 

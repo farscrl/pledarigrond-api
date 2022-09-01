@@ -36,6 +36,9 @@ public class Name {
     @Indexed
     private String nameVallader;
 
+    public Name() {
+    }
+
     public Name(String id, String nameRumantschGrischun, String nameGerman, Category category, String nameSursilvan, String nameSutsilvan, String nameSurmiran, String namePuter, String nameVallader) {
         this.id = id;
         this.nameRumantschGrischun = nameRumantschGrischun;

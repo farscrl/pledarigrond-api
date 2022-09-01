@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Optional;
 
 @Service
 public class NameServiceImpl implements NameService {
@@ -27,6 +28,28 @@ public class NameServiceImpl implements NameService {
     public Page<Name> getAllNames(Pagination pagination) {
         Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getPageSize());
         return nameRepository.findAll(pageable);
+    }
+
+
+    @Override
+    public Name insert(Name name) {
+        return nameRepository.insert(name);
+    }
+
+    @Override
+    public Optional<Name> getById(String id) {
+        return nameRepository.findById(id);
+    }
+
+    @Override
+    public Name updateName(Name name) {
+        return nameRepository.save(name);
+    }
+
+    @Override
+    public boolean deleteName(Name name) {
+        nameRepository.delete(name);
+        return true;
     }
 
     @Override

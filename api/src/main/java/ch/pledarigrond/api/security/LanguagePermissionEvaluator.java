@@ -10,6 +10,18 @@ import java.io.Serializable;
 public class LanguagePermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        if (targetDomainObject.equals("names")) {
+            return hasNamesPermission(authentication, targetDomainObject, permission);
+        }
+        return hasLanguagePermission(authentication, targetDomainObject, permission);
+    }
+
+    @Override
+    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        return false;
+    }
+
+    private boolean hasLanguagePermission(Authentication authentication, Object targetDomainObject, Object permission) {
         Language language = (Language) targetDomainObject;
         for (GrantedAuthority grantedAuth : authentication.getAuthorities()) {
             if (grantedAuth.getAuthority().equals("ROLE_ADMIN")) {
@@ -22,8 +34,15 @@ public class LanguagePermissionEvaluator implements PermissionEvaluator {
         return false;
     }
 
-    @Override
-    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+    private boolean hasNamesPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        for (GrantedAuthority grantedAuth : authentication.getAuthorities()) {
+            if (grantedAuth.getAuthority().equals("ROLE_ADMIN")) {
+                return true;
+            }
+            if (grantedAuth.getAuthority().startsWith("ROLE_") && grantedAuth.getAuthority().contains("NAMES")) {
+                return true;
+            }
+        }
         return false;
     }
 }
