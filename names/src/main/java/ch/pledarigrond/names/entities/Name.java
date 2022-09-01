@@ -35,4 +35,21 @@ public class Name {
 
     @Indexed
     private String nameVallader;
+
+    public Name(String id, String nameRumantschGrischun, String nameGerman, Category category, String nameSursilvan, String nameSutsilvan, String nameSurmiran, String namePuter, String nameVallader) {
+        this.id = id;
+        this.nameRumantschGrischun = nameRumantschGrischun;
+        this.nameGerman = nameGerman;
+        this.category = category;
+        this.nameSursilvan = nameSursilvan;
+        this.nameSutsilvan = nameSutsilvan;
+        this.nameSurmiran = nameSurmiran;
+        this.namePuter = namePuter;
+        this.nameVallader = nameVallader;
+    }
+
+    @Override
+    public String toString() {
+        return nameRumantschGrischun + " (" + category + ")";
+    }
 }
