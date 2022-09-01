@@ -3,12 +3,12 @@ package ch.pledarigrond.names.entities;
 import java.util.Arrays;
 
 public enum Category {
-    GEOGRAPHY("geography"),
-    FIRSTNAME("firstname"),
-    SURNAME("surname"),
-    COMPANY("company"),
-    ABBREVIATION("abbreviation"),
-    OTHER("other");
+    GEOGRAPHY("GEOGRAPHY"),
+    FIRSTNAME("FIRSTNAME"),
+    SURNAME("SURNAME"),
+    COMPANY("COMPANY"),
+    ABBREVIATION("ABBREVIATION"),
+    OTHER("OTHER");
 
     private final String value;
 

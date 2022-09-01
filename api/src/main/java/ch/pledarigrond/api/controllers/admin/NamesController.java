@@ -1,12 +1,11 @@
 package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.NameService;
+import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.names.entities.Name;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +27,8 @@ public class NamesController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("")
-    ResponseEntity<?> list() {
-        Pageable pageable = PageRequest.of(0, 10000);
-        Page<Name> names = nameService.getAllNames();
+    ResponseEntity<?> list(Pagination pagination) {
+        Page<Name> names = nameService.getAllNames(pagination);
         return ResponseEntity.ok(names);
     }
 
