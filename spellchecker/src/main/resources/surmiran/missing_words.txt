@@ -6,6 +6,12 @@ las
 en
 ena
 
+# pronom
+el
+ella
+els
+ellas
+
 # numerals
 egn
 egna
