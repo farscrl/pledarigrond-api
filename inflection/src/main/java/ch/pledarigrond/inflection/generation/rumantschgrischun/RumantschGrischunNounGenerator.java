@@ -1,4 +1,4 @@
-package ch.pledarigrond.inflection.generation.surmiran;
+package ch.pledarigrond.inflection.generation.rumantschgrischun;
 
 import ch.pledarigrond.inflection.generation.generic.LanguageNounGeneration;
 import ch.pledarigrond.inflection.model.InflectionResponse;
@@ -17,11 +17,11 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SurmiranNounGenerator extends LanguageNounGeneration {
+public class RumantschGrischunNounGenerator extends LanguageNounGeneration {
 
-    private static final Logger logger = LoggerFactory.getLogger(SurmiranNounGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(RumantschGrischunNounGenerator.class);
 
-    private SurmiranNounStructure ns;
+    private RumantschGrischunNounStructure ns;
 
     private String baseForm;
 
@@ -37,7 +37,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
         root = getRoot(baseForm, nounClass);
 
-        InflectionSubType subType = SurmiranNounClasses.getNounInflectionClass(nounClass);
+        InflectionSubType subType = RumantschGrischunNounClasses.getNounInflectionClass(nounClass);
         if (subType == null) {
             throw new RuntimeException(nounClass + " is not a valid inflection class.");
         } else if (getEnding() == null) {
@@ -54,7 +54,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
-        if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eida|eda)$")) {
+        if (baseForm.matches(".*, -(a|ada|dra|bla|cra)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
 
@@ -67,16 +67,8 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
                     return generateForms("5", baseForm);
                 case "cra":
                     return generateForms("6", baseForm);
-                case "vla":
-                    return generateForms("7", baseForm);
-                case "vna":
-                    return generateForms("8", baseForm);
-                case "eida":
-                    return generateForms("9", baseForm);
                 case "ada":
-                    return generateForms("10", baseForm);
-                case "eda":
-                    return generateForms("11", baseForm);
+                    return generateForms("7", baseForm);
                 default:
                     logger.error("unknown ending: {}", parts[1]);
                     return null;
@@ -109,30 +101,18 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         if (lastThreeCharacters.equals("bel")) {
             return generateForms("5", baseForm);
         }
-        if (lastThreeCharacters.equals("vel")) {
-            return generateForms("7", baseForm);
-        }
-        if (lastThreeCharacters.equals("ven")) {
-            return generateForms("8", baseForm);
-        }
 
         // last 2 characters
         String lastTwoCharacters = baseForm.substring(length - 2);
-        if (lastTwoCharacters.equals("ia")) {
-            return generateForms("9", baseForm);
-        }
-        if (lastTwoCharacters.equals("ea")) {
-            return generateForms("11", baseForm);
-        }
         char secondToTheLastCharacter = baseForm.charAt(length-2);
         char lastCharacter = baseForm.charAt(length-1);
-        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
-            return generateForms("12", baseForm);
+        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter) && isSingleSyllable(baseForm)) {
+            return generateForms("8", baseForm);
         }
 
         // last characters
-        if (baseForm.substring(length - 1).equals("o")) {
-            return generateForms("10", baseForm);
+        if (baseForm.substring(length - 1).equals("à")) {
+            return generateForms("7", baseForm);
         }
 
         return generateForms("3", baseForm);
@@ -165,25 +145,19 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
             case "4":
             case "5":
-            case "7":
-            case "8":
                 if (maleSingularForm.length() < 3) {
                     throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
                 }
                 ending = maleSingularForm.substring(maleSingularForm.length() - 3);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 3);
 
-            case "9":
-            case "11":
-                ending = maleSingularForm.substring(maleSingularForm.length() - 2);
-                return maleSingularForm.substring(0, maleSingularForm.length() - 2);
 
-            case "10":
 
+            case "7":
                 ending = maleSingularForm.substring(maleSingularForm.length() - 1);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 1);
 
-            case "12":
+            case "8":
                 ending = maleSingularForm.substring(maleSingularForm.length() - 1);
                 return maleSingularForm;
 
@@ -198,7 +172,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
     public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
 
-        ns = new SurmiranNounStructure();
+        ns = new RumantschGrischunNounStructure();
         ns.setBaseForm(baseForm);
         ns.setInflectionSubType(nounClass);
 
@@ -217,13 +191,6 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
         String l1 = base.substring(base.length() - 1);
         String l2 = base.substring(base.length() - 2);
 
-        if (l2.equals("le") || l2.equals("re")) {
-            // ignore words like "hardware" or "software"
-            if (!base.substring(base.length() - 4).equals("ware")) {
-                return base + "is";
-            }
-        }
-
         if (base.contains("-")) {
             String[] s = base.split("-", 2);
             return  buildPlural(s[0]) + "-" + s[1];
@@ -231,6 +198,18 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
         if (l1.equals("s")) {
             return base;
+        }
+
+        if (l1.equals("à")) {
+            return base.substring(0, base.length() - 1) + "ads";
+        }
+
+        if (l1.equals("è")) {
+            return base.substring(0, base.length() - 1) + "els";
+        }
+
+        if (l1.equals("ì")) {
+            return base.substring(0, base.length() - 1) + "ids";
         }
 
         return base + "s";
@@ -251,7 +230,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
                     ns.setMSingular(root);
                     ns.setFSingular(root + "a");
                 }
-                if (ns.getNounClass().equals("13")) {
+                if (ns.getNounClass().equals("9")) { // collectiv
                     ns.setMSingular(root);
                     ns.setFSingular(null);
                 }
@@ -272,29 +251,9 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
                 ns.setFSingular(root + "cra");
                 break;
 
-            case "vel":
-                ns.setMSingular(root + "vel");
-                ns.setFSingular(root + "vla");
-                break;
-
-            case "ven":
-                ns.setMSingular(root + "ven");
-                ns.setFSingular(root + "vna");
-                break;
-
-            case "ia":
-                ns.setMSingular(root + "ia");
-                ns.setFSingular(root + "eida");
-                break;
-
-            case "o":
-                ns.setMSingular(root + "o");
+            case "à":
+                ns.setMSingular(root + "à");
                 ns.setFSingular(root + "ada");
-                break;
-
-            case "ea":
-                ns.setMSingular(root + "ea");
-                ns.setFSingular(root + "eda");
                 break;
 
             case "c":
@@ -312,7 +271,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
     public void setPlural() {
         // collectiv
-        if (ns.getNounClass().equals("13")) {
+        if (ns.getNounClass().equals("9")) {
             ns.setMPlural(buildPlural(ns.getMSingular()));
             ns.setPluralCollectiv(ns.getMSingular() + "a");
             return;

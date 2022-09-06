@@ -89,7 +89,35 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
-        // TODO: implement me
+        if (baseForm.length() < 3) {
+            return null;
+        }
+
+        String lastTwo = baseForm.substring(baseForm.length() - 2);
+        String lastThree = baseForm.substring(baseForm.length() - 3);
+
+        if (lastThree.equals("air")) {
+            return generateConjugation("2", baseForm);
+        }
+
+        if (lastTwo.equals("ar")) {
+            if (flex != null && flex.equals("-escha")) {
+                return generateConjugation("6", baseForm);
+            }
+            return generateConjugation("1", baseForm);
+        }
+
+        if (lastTwo.equals("er")) {
+            return generateConjugation("3", baseForm);
+        }
+
+        if (lastTwo.equals("ir")) {
+            if (flex != null && flex.equals("-escha")) {
+                return generateConjugation("5", baseForm);
+            }
+            return generateConjugation("4", baseForm);
+        }
+
         return null;
     }
 

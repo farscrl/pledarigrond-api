@@ -1,6 +1,6 @@
-package ch.pledarigrond.inflection.generation.surmiran;
+package ch.pledarigrond.inflection.generation.rumantschgrischun;
 
-import ch.pledarigrond.inflection.generation.generic.LanguageNounGeneration;
+import ch.pledarigrond.inflection.generation.generic.LanguageAdjectiveGeneration;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
@@ -17,11 +17,11 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SurmiranNounGenerator extends LanguageNounGeneration {
+public class RumantschGrischunAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
-    private static final Logger logger = LoggerFactory.getLogger(SurmiranNounGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(RumantschGrischunAdjectiveGenerator.class);
 
-    private SurmiranNounStructure ns;
+    private RumantschGrischunAdjectiveStructure as;
 
     private String baseForm;
 
@@ -33,13 +33,13 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
     private HashMap<String, String> forms;
 
-    public InflectionResponse generateForms(String nounClass, String baseForm) {
+    public InflectionResponse generateForms(String adjectiveClass, String baseForm) {
 
-        root = getRoot(baseForm, nounClass);
+        root = getRoot(baseForm, adjectiveClass);
 
-        InflectionSubType subType = SurmiranNounClasses.getNounInflectionClass(nounClass);
+        InflectionSubType subType = RumantschGrischunAdjectiveClasses.getAdjectiveInflectionClass(adjectiveClass);
         if (subType == null) {
-            throw new RuntimeException(nounClass + " is not a valid inflection class.");
+            throw new RuntimeException(adjectiveClass + " is not a valid conjugation class.");
         } else if (getEnding() == null) {
             throw new RuntimeException(baseForm + " is not a valid male singular form. Please enter a valid form.");
         }
@@ -54,29 +54,27 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
-        if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eida|eda)$")) {
+        if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eda)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
 
             switch (parts[1]) {
                 case "a":
-                    return generateForms("3", baseForm);
+                    return generateForms("1", baseForm);
                 case "dra":
-                    return generateForms("4", baseForm);
+                    return generateForms("2", baseForm);
                 case "bla":
-                    return generateForms("5", baseForm);
+                    return generateForms("3", baseForm);
                 case "cra":
-                    return generateForms("6", baseForm);
+                    return generateForms("4", baseForm);
                 case "vla":
-                    return generateForms("7", baseForm);
+                    return generateForms("5", baseForm);
                 case "vna":
-                    return generateForms("8", baseForm);
-                case "eida":
-                    return generateForms("9", baseForm);
+                    return generateForms("6", baseForm);
                 case "ada":
-                    return generateForms("10", baseForm);
-                case "eda":
-                    return generateForms("11", baseForm);
+                    return generateForms("7", baseForm);
+                case "ida":
+                    return generateForms("8", baseForm);
                 default:
                     logger.error("unknown ending: {}", parts[1]);
                     return null;
@@ -88,57 +86,48 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
-        // default, case genus is f
-        if (genus != null && genus.equals("f")) {
-            return generateForms("2", baseForm);
-        }
-
         // last 4 characters
         if (length > 4) {
             String lastFourCharacters = baseForm.substring(length - 4);
             if (lastFourCharacters.equals("cher")) {
-                return generateForms("6", baseForm);
+                return generateForms("4", baseForm);
             }
         }
 
         // last 3 characters
         String lastThreeCharacters = baseForm.substring(length - 3);
         if (lastThreeCharacters.equals("der")) {
-            return generateForms("4", baseForm);
+            return generateForms("2", baseForm);
         }
         if (lastThreeCharacters.equals("bel")) {
-            return generateForms("5", baseForm);
+            return generateForms("3", baseForm);
         }
         if (lastThreeCharacters.equals("vel")) {
-            return generateForms("7", baseForm);
+            return generateForms("5", baseForm);
         }
         if (lastThreeCharacters.equals("ven")) {
-            return generateForms("8", baseForm);
+            return generateForms("6", baseForm);
         }
 
         // last 2 characters
-        String lastTwoCharacters = baseForm.substring(length - 2);
-        if (lastTwoCharacters.equals("ia")) {
-            return generateForms("9", baseForm);
-        }
-        if (lastTwoCharacters.equals("ea")) {
-            return generateForms("11", baseForm);
-        }
         char secondToTheLastCharacter = baseForm.charAt(length-2);
         char lastCharacter = baseForm.charAt(length-1);
-        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
-            return generateForms("12", baseForm);
+        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter) && isSingleSyllable(baseForm)) {
+            return generateForms("9", baseForm);
         }
 
         // last characters
-        if (baseForm.substring(length - 1).equals("o")) {
-            return generateForms("10", baseForm);
+        if (baseForm.substring(length - 1).equals("à")) {
+            return generateForms("7", baseForm);
+        }
+        if (baseForm.substring(length - 1).equals("ì")) {
+            return generateForms("8", baseForm);
         }
 
-        return generateForms("3", baseForm);
+        return generateForms("1", baseForm);
     }
 
-    public String getRoot(String maleSingularForm, String nounClass) {
+    public String getRoot(String maleSingularForm, String adjectiveClass) {
         if (maleSingularForm == null) {
             return maleSingularForm;
         }
@@ -150,83 +139,77 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
         }
 
-        return extractRoot(maleSingularForm, nounClass);
+        return extractRoot(maleSingularForm, adjectiveClass);
     }
 
-    public String extractRoot(String maleSingularForm, String nounClass) {
-        switch (nounClass) {
+    public String extractRoot(String maleSingularForm, String adjectiveClass) {
+        switch (adjectiveClass) {
 
-            case "6":
+            case "4":
                 if (maleSingularForm.length() < 4) {
                     throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
                 }
                 ending = maleSingularForm.substring(maleSingularForm.length() - 4);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 4);
 
-            case "4":
+            case "2":
+            case "3":
             case "5":
-            case "7":
-            case "8":
+            case "6":
                 if (maleSingularForm.length() < 3) {
                     throw new RuntimeException("'" + maleSingularForm + "' is not a valid male singular form. Please enter a male singular form.");
                 }
                 ending = maleSingularForm.substring(maleSingularForm.length() - 3);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 3);
 
-            case "9":
-            case "11":
-                ending = maleSingularForm.substring(maleSingularForm.length() - 2);
-                return maleSingularForm.substring(0, maleSingularForm.length() - 2);
-
-            case "10":
-
+            case "7":
+            case "8":
                 ending = maleSingularForm.substring(maleSingularForm.length() - 1);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 1);
 
-            case "12":
+            case "9":
                 ending = maleSingularForm.substring(maleSingularForm.length() - 1);
                 return maleSingularForm;
 
             case "1":
-            case "2":
-            case "3":
             default:
                 ending = "";
                 return maleSingularForm;
         }
     }
 
-    public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
+    public HashMap<String, String> buildForms(String root, InflectionSubType adjectiveClass) {
 
-        ns = new SurmiranNounStructure();
-        ns.setBaseForm(baseForm);
-        ns.setInflectionSubType(nounClass);
+        as = new RumantschGrischunAdjectiveStructure();
+        as.setBaseForm(baseForm);
+        as.setInflectionSubType(adjectiveClass);
 
-        ns.setRoot(root);
-        ns.setEnding(getEnding());
-        ns.setNounClass(nounClass.id);
+        as.setRoot(root);
+        as.setEnding(getEnding());
+        as.setAdjectiveClass(adjectiveClass.id);
 
         setSingular();
         setPlural();
+        setAdverbialForm();
 
-        return ns.getAllFormValues();
+        return as.getAllFormValues();
 
     }
 
     public String buildPlural(String base) {
         String l1 = base.substring(base.length() - 1);
-        String l2 = base.substring(base.length() - 2);
-
-        if (l2.equals("le") || l2.equals("re")) {
-            // ignore words like "hardware" or "software"
-            if (!base.substring(base.length() - 4).equals("ware")) {
-                return base + "is";
-            }
-        }
 
         if (base.contains("-")) {
             String[] s = base.split("-", 2);
             return  buildPlural(s[0]) + "-" + s[1];
+        }
+
+        if (l1.equals("à")) {
+            return base.substring(0, base.length() - 1) + "ads";
+        }
+
+        if (l1.equals("ì")) {
+            return base.substring(0, base.length() - 1) + "ids";
         }
 
         if (l1.equals("s")) {
@@ -237,64 +220,45 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
     }
 
     public void setSingular() {
-        switch (ns.getEnding()) {
+        switch (as.getEnding()) {
             case "":
-                if (ns.getNounClass().equals("1")) {
-                    ns.setMSingular(root);
-                    ns.setFSingular(null);
-                }
-                if (ns.getNounClass().equals("2")) {
-                    ns.setMSingular(null);
-                    ns.setFSingular(root);
-                }
-                if (ns.getNounClass().equals("3")) {
-                    ns.setMSingular(root);
-                    ns.setFSingular(root + "a");
-                }
-                if (ns.getNounClass().equals("13")) {
-                    ns.setMSingular(root);
-                    ns.setFSingular(null);
-                }
+                as.setMSingular(root);
+                as.setFSingular(root + "a");
                 break;
 
             case "der":
-                ns.setMSingular(root + "der");
-                ns.setFSingular(root + "dra");
+                as.setMSingular(root + "der");
+                as.setFSingular(root + "dra");
                 break;
 
             case "bel":
-                ns.setMSingular(root + "bel");
-                ns.setFSingular(root + "bla");
+                as.setMSingular(root + "bel");
+                as.setFSingular(root + "bla");
                 break;
 
             case "cher":
-                ns.setMSingular(root + "cher");
-                ns.setFSingular(root + "cra");
+                as.setMSingular(root + "cher");
+                as.setFSingular(root + "cra");
                 break;
 
             case "vel":
-                ns.setMSingular(root + "vel");
-                ns.setFSingular(root + "vla");
+                as.setMSingular(root + "vel");
+                as.setFSingular(root + "vla");
                 break;
 
             case "ven":
-                ns.setMSingular(root + "ven");
-                ns.setFSingular(root + "vna");
+                as.setMSingular(root + "ven");
+                as.setFSingular(root + "vna");
                 break;
 
-            case "ia":
-                ns.setMSingular(root + "ia");
-                ns.setFSingular(root + "eida");
+            case "à":
+                as.setMSingular(root + "à");
+                as.setFSingular(root + "ada");
                 break;
 
-            case "o":
-                ns.setMSingular(root + "o");
-                ns.setFSingular(root + "ada");
-                break;
-
-            case "ea":
-                ns.setMSingular(root + "ea");
-                ns.setFSingular(root + "eda");
+            case "ì":
+                as.setMSingular(root + "ì");
+                as.setFSingular(root + "ida");
                 break;
 
             case "c":
@@ -305,30 +269,24 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
             case "r":
             case "t":
             case "z":
-                ns.setMSingular(root);
-                ns.setFSingular(root + ending + "a");
+                as.setMSingular(root);
+                as.setFSingular(root + ending + "a");
         }
     }
 
     public void setPlural() {
-        // collectiv
-        if (ns.getNounClass().equals("13")) {
-            ns.setMPlural(buildPlural(ns.getMSingular()));
-            ns.setPluralCollectiv(ns.getMSingular() + "a");
+        as.setMPlural(buildPlural(as.getMSingular()));
+        as.setFPlural(buildPlural(as.getFSingular()));
+    }
+
+    public void setAdverbialForm() {
+        String ending = as.getMSingular().substring(as.getMSingular().length() - 2);
+        if (ending.equals("al") || ending.equals("ar") || ending.equals("il")) {
+            as.setAdverbialForm(as.getMSingular() + "main");
             return;
         }
 
-        if (!ns.getNounClass().equals("2")) {
-            ns.setMPlural(buildPlural(ns.getMSingular()));
-        } else {
-            ns.setMPlural(null);
-        }
-
-        if (!ns.getNounClass().equals("1")) {
-            ns.setFPlural(buildPlural(ns.getFSingular()));
-        } else {
-            ns.setFPlural(null);
-        }
+        as.setAdverbialForm(as.getFSingular() + "main");
     }
 
 
@@ -344,7 +302,7 @@ public class SurmiranNounGenerator extends LanguageNounGeneration {
 
         out.append(forms.get("root"));
         out.append("\n");
-        out.append(forms.get("nounClass"));
+        out.append(forms.get("adjectiveClass"));
         out.append("\n");
         out.append("\n");
 
