@@ -292,6 +292,38 @@ public class SpellcheckerGenerator {
         list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural1")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
         list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural2")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
         list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural3")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing3encliticm")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentsing3encliticf")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("preschentplural3enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing3encliticm")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectsing3encliticf")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("imperfectplural3enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing3encliticm")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalsing3encliticf")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("cundizionalplural3enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing3encliticm")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futursing3encliticf")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural1enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural2enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(language, lemmaVersion.getEntryValue("futurplural3enclitic")), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
     protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
