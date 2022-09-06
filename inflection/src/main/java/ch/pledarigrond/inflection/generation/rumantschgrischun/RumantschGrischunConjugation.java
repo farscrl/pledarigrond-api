@@ -407,6 +407,11 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
                 }
                 break;
 
+            case "4":
+                cs.setImperativ1(root + "a!");
+                cs.setImperativ2(root + "i!");
+                break;
+
             default:
                 cs.setImperativ1(root + "a!");
                 cs.setImperativ2(root + "ai!");
@@ -420,19 +425,19 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
             case "true":
                 if (isVocal(startChar)) {
                     cs.setFutursing1("vegn a " + RumantschGrischunPronouns.pron_r_v_1ps + cs.getInfinitiv());
-                    cs.setFutursing2("vengs a " + RumantschGrischunPronouns.pron_r_v_2ps + cs.getInfinitiv());
+                    cs.setFutursing2("vegns a " + RumantschGrischunPronouns.pron_r_v_2ps + cs.getInfinitiv());
                     cs.setFutursing3("vegn a " + RumantschGrischunPronouns.pron_r_v_3ps + cs.getInfinitiv());
 
-                    cs.setFuturplural1("vengnin ad " + RumantschGrischunPronouns.pron_r_v_1pp + cs.getInfinitiv());
+                    cs.setFuturplural1("vegnin ad " + RumantschGrischunPronouns.pron_r_v_1pp + cs.getInfinitiv());
                     cs.setFuturplural2("vegnis ad " + RumantschGrischunPronouns.pron_r_v_2pp + cs.getInfinitiv());
                     cs.setFuturplural3("vegnan a " + RumantschGrischunPronouns.pron_r_v_3pp + cs.getInfinitiv());
 
                 } else {
                     cs.setFutursing1("vegn a " + RumantschGrischunPronouns.pron_r_1ps + cs.getInfinitiv());
-                    cs.setFutursing2("vengs a " + RumantschGrischunPronouns.pron_r_2ps + cs.getInfinitiv());
+                    cs.setFutursing2("vegns a " + RumantschGrischunPronouns.pron_r_2ps + cs.getInfinitiv());
                     cs.setFutursing3("vegn a " + RumantschGrischunPronouns.pron_r_3ps + cs.getInfinitiv());
 
-                    cs.setFuturplural1("vengnin ad " + RumantschGrischunPronouns.pron_r_1pp + cs.getInfinitiv());
+                    cs.setFuturplural1("vegnin ad " + RumantschGrischunPronouns.pron_r_1pp + cs.getInfinitiv());
                     cs.setFuturplural2("vegnis ad " + RumantschGrischunPronouns.pron_r_2pp + cs.getInfinitiv());
                     cs.setFuturplural3("vegnan a " + RumantschGrischunPronouns.pron_r_3pp + cs.getInfinitiv());
 
@@ -442,17 +447,17 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
             case "false":
                 if (isVocal(startChar)) {
                     cs.setFutursing1("vegn ad " + cs.getInfinitiv());
-                    cs.setFutursing2("vengs ad " + cs.getInfinitiv());
+                    cs.setFutursing2("vegns ad " + cs.getInfinitiv());
                     cs.setFutursing3("vegn ad " + cs.getInfinitiv());
-                    cs.setFuturplural1("vengnin ad " + cs.getInfinitiv());
+                    cs.setFuturplural1("vegnin ad " + cs.getInfinitiv());
                     cs.setFuturplural2("vegnis ad " + cs.getInfinitiv());
                     cs.setFuturplural3("vegnan ad " + cs.getInfinitiv());
 
                 } else {
                     cs.setFutursing1("vegn a " + cs.getInfinitiv());
-                    cs.setFutursing2("vengs a " + cs.getInfinitiv());
+                    cs.setFutursing2("vegns a " + cs.getInfinitiv());
                     cs.setFutursing3("vegn a " + cs.getInfinitiv());
-                    cs.setFuturplural1("vengnin a " + cs.getInfinitiv());
+                    cs.setFuturplural1("vegnin a " + cs.getInfinitiv());
                     cs.setFuturplural2("vegnis a " + cs.getInfinitiv());
                     cs.setFuturplural3("vegnan a " + cs.getInfinitiv());
                 }
