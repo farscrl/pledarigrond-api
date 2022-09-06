@@ -81,7 +81,7 @@ public class SpellcheckerGenerator {
 
             Map<String, Object> versionTemplateData = new HashMap<>();
             versionTemplateData.put("version",getVersion());
-            versionTemplateData.put("build", buildDateFormat.format(now));
+            versionTemplateData.put("buildid", buildDateFormat.format(now));
             Writer versionFileWriter = new FileWriter(versionFile);
             Template versionTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("version.ftlh");
             versionTemplate.process(versionTemplateData, versionFileWriter);

@@ -1,1 +1,1 @@
-${version}-${build}
+${version}-${buildid}
