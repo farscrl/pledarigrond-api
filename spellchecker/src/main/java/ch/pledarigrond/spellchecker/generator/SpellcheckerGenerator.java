@@ -8,6 +8,7 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
+import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
 import com.mongodb.BasicDBObject;
@@ -33,8 +34,11 @@ public class SpellcheckerGenerator {
 
     PgEnvironment pgEnvironment;
 
-    public SpellcheckerGenerator(PgEnvironment pgEnvironment) {
+    private List<Name> names;
+
+    public SpellcheckerGenerator(PgEnvironment pgEnvironment, List<Name> names) {
         this.pgEnvironment = pgEnvironment;
+        this.names = names;
     }
 
     public File exportWordList(Language language) throws NoDatabaseAvailableException, IOException {
@@ -195,7 +199,7 @@ public class SpellcheckerGenerator {
 
             LemmaVersion current = entry.getCurrent();
             String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
-            if (inflectionType == null) {
+            if (inflectionType == null || inflectionType.equals("")) {
                 extractDefault(hunspellList, current);
             } else if (inflectionType.equals("V")) {
                 extractVerbs(language, hunspellList, current);
@@ -206,6 +210,12 @@ public class SpellcheckerGenerator {
             } else {
                 throw new RuntimeException("Unexpected inflection type: " + inflectionType);
             }
+        }
+
+        if (names != null) {
+            names.forEach(name -> {
+                extractName(hunspellList, language, name);
+            });
         }
 
         removeWordsFromBlocklist(language, hunspellList);
@@ -331,6 +341,29 @@ public class SpellcheckerGenerator {
         }
 
         list.addWord(candidate, new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+    }
+
+    protected void extractName(HunspellList list, Language language, Name name) {
+        String languageLemma = getLanguageLemma(language, name);
+        if (languageLemma != null && !languageLemma.equals("")) {
+            list.addWord(languageLemma, new SpellcheckerRules[]{});
+        } else {
+            list.addWord(name.getNameRumantschGrischun(), new SpellcheckerRules[]{});
+        }
+        if (name.getNameGerman() != null && !name.getNameGerman().equals("")) {
+            list.addWord(name.getNameGerman(), new SpellcheckerRules[]{});
+        }
+    }
+
+    private String getLanguageLemma(Language language, Name name) {
+        return switch (language) {
+            case SURSILVAN -> name.getNameSursilvan();
+            case SUTSILVAN -> name.getNameSutsilvan();
+            case SURMIRAN -> name.getNameSurmiran();
+            case PUTER -> name.getNamePuter();
+            case VALLADER -> name.getNameVallader();
+            case RUMANTSCHGRISCHUN -> name.getNameRumantschGrischun();
+        };
     }
 
     protected String removePronouns(Language language, String value) {
