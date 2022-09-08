@@ -117,6 +117,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     public boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException {
+        if (true) {
+            return false;
+        }
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
@@ -164,6 +167,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     public boolean fixWrongNextIds(Language language) throws DatabaseException, UnknownHostException {
+        if (true) {
+            return false;
+        }
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
@@ -218,6 +224,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     public boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException {
+        if (true) {
+            return false;
+        }
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
@@ -244,6 +253,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     public boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException {
+        if (true) {
+            return false;
+        }
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
