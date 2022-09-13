@@ -14,7 +14,6 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranInflection;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
@@ -434,17 +433,37 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             newVersion.getPgValues().putAll(lemma.getPgValues());
 
             // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding user ID
             if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
                 entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
                 newVersion.getLemmaValues().put(el.getKey(), el.getValue());
             }
-            newVersion.getLemmaValues().put("RGrammatik", "subst");
+            newVersion.getLemmaValues().putIfAbsent("RGrammatik", "subst");
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, automaticChangesType.toString());
             newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
+
+
 
             try {
                 mongoDbService.update(language, entry, newVersion);
@@ -509,6 +528,23 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
             if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
                 entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
@@ -589,6 +625,23 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 entry.getCurrent().setUserId("admin");
             }
 
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
+            }
+
             // check if verb has already conjugations
             boolean overwriteValues = true;
             if (entry.getCurrent().getLemmaValues().get("preschentsing3") != null && !entry.getCurrent().getLemmaValues().get("preschentsing3").equals("")) {
@@ -627,65 +680,76 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     public static List<String> getGenderValues() {
         return Stream.of(
-                "(m)",
-                "(n)",
+                "(coll)m",
+                "(f)m",
+                "(f)pl",
+                "(m)f",
+                "(pl)f",
+                "M",
                 "coll",
                 "f",
-                "f (pl Bands)",
-                "f (pl Banken)",
-                "f (pl Bänke)",
+                "f (m)",
+                "f(m)",
+                "f(n)",
                 "f(pl)",
-                "fcoll",
-                "fm",
+                "f.(pl)",
+                "f.pl",
+                "f/m",
+                "f/m.pl",
+                "f/n",
                 "m",
-                "m ",
-                "m (pl Bände)",
+                "m(f)",
+                "m(f).pl",
+                "m(f)f",
+                "m(f)pl",
+                "m(n)",
                 "m(pl)",
+                "m.(pl)",
                 "m.pl",
+                "m/f",
+                "m/f.pl",
+                "m/n",
                 "n",
-                "n (pl Bande)",
-                "n (pl Bänder)",
-                "nf",
-                "pl",
-                "tr"
+                "n(f)",
+                "n(pl)",
+                "pl"
         ).collect(Collectors.toList());
     }
     
     public static List<String> getGrammarValuesForAdjective() {
         return Stream.of(
-                "I. adi",
-                "II. adj",
-                "adi",
                 "adj",
-                "adj numeral",
-                "adj/Pronomen",
+                "adj (nur präd. +adv)",
+                "adj inv/adv",
+                "adj(adv)",
+                "adj.",
+                "adj.f",
+                "adj.inv",
+                "adj.inv/adv",
+                "adj.m",
+                "adj.poss.f",
+                "adj.poss.pl",
+                "adj.sup",
                 "adj/adv",
-                "adj/adverb",
-                "adj/num",
-                "adj/numeral",
-                "adj/pronom indefinit",
-                "adj/pronom interrogativ"
+                "adj/pron indef"
         ).collect(Collectors.toList());
     }
 
     public static List<String> getGrammarValuesForVerbs() {
         return Stream.of(
-                "II. Verb modal",
-                "II. tr indirect",
-                "int",
-                "int/impersunal",
-                "int/reflexiv",
-                "int/tr",
-                "int/unpersönlich",
+                "(refl) tr",
+                "(refl)tr",
+                "(tr) int",
+                "3.sg.",
                 "refl",
+                "refl. impers",
                 "tr",
-                "tr indirect/int",
-                "tr/impersunal",
+                "tr +",
+                "tr+",
                 "tr/int",
-                "tr/int/Verb modal",
-                "tr/tr indirect",
-                "tr/verb modal"
-        ).collect(Collectors.toList());
+                "tr/int/impers",
+                "tr/refl"
+                ).collect(Collectors.toList());
     }
 
     private InflectionResponse iterateOverAllInflectionsAndCompareValues(Language language, LemmaVersion lemma) {
