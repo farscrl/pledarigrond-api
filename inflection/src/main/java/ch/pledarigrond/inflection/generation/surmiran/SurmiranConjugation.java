@@ -1315,7 +1315,7 @@ public class SurmiranConjugation extends LanguageConjugation {
     private static void setPreschentEnclitic(SurmiranConjugationStructure cs) {
         if(cs.getPreschentsing1().endsWith("gl")) {
             cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
-        } else if (cs.getPreschentsing1().endsWith("tg")) {
+        } else if (cs.getPreschentsing1().endsWith("etg")) {
             cs.setPreschentsing1Enclitic(cs.getPreschentsing1().substring(0, cs.getPreschentsing1().length() - 3) + "egia");
         } else {
             cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "a");
