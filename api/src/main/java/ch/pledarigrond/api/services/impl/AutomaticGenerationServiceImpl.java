@@ -774,7 +774,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 continue;
             }
 
-            if (!inflectionResponse.getInflectionValues().get(key).equals(lemma.getLemmaValues().get(key))) {
+            if (inflectionResponse.getInflectionValues().get(key) != null && !inflectionResponse.getInflectionValues().get(key).equals(lemma.getLemmaValues().get(key))) {
                 return false;
             }
         }
