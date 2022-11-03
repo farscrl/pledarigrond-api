@@ -2,6 +2,7 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.common.data.user.Pagination;
+import ch.pledarigrond.names.entities.Category;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.names.repositories.NameRepository;
 import ch.pledarigrond.names.util.XlsxHandler;
@@ -25,9 +26,21 @@ public class NameServiceImpl implements NameService {
     private XlsxHandler xlsxHandler;
 
     @Override
-    public Page<Name> getAllNames(Pagination pagination) {
+    public Page<Name> getAllNames(Pagination pagination, String nameFilter, Category categoryFilter) {
         Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getPageSize());
-        return nameRepository.findAll(pageable);
+
+        String nameDefault = "(.*?)";
+        String categoryDefault = "(.*?)";
+
+        if (nameFilter != null) {
+            nameDefault = nameFilter;
+        }
+
+        if (categoryFilter != null) {
+            categoryDefault = categoryFilter.name();
+        }
+
+        return nameRepository.getByNameAndCategory(pageable, nameDefault, categoryDefault);
     }
 
 

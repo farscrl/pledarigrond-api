@@ -3,6 +3,7 @@ package ch.pledarigrond.api.controllers.editor;
 import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
+import ch.pledarigrond.names.entities.Category;
 import ch.pledarigrond.names.entities.Name;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class NamesController {
 
     @PreAuthorize("hasPermission('names', 'editor')")
     @GetMapping("")
-    ResponseEntity<?> list(Pagination pagination) {
-        Page<Name> names = nameService.getAllNames(pagination);
+    ResponseEntity<?> list(Pagination pagination, String name, Category category) {
+        Page<Name> names = nameService.getAllNames(pagination, name, category);
         return ResponseEntity.ok(names);
     }
 

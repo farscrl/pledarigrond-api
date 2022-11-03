@@ -32,12 +32,12 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     SurmiranSpellcheckerGenerator surmiranGenerator;
 
     public File exportWordList(Language language) throws NoDatabaseAvailableException, IOException {
-        List<Name> names = nameService.getAllNames(new Pagination(100000, 0)).stream().toList();
+        List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
         return getGeneratorForLanguage(language, names).exportWordList(language);
     }
 
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
-        List<Name> names = nameService.getAllNames(new Pagination(100000, 0)).stream().toList();
+        List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
         return getGeneratorForLanguage(language, names).exportHunspell(language);
     }
 
