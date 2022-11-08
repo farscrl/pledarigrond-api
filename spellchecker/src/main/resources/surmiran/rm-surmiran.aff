@@ -269,6 +269,60 @@ PFX T o Sch'O o
 PFX T u Sch'U u
 PFX T 0 SCH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 
+# Pronoms reflexivs apostrofai
+PFX P Y 51
+PFX P 0 m' [aeiouèòêôîAEIOU]
+PFX P a m'a a
+PFX P e m'e e
+PFX P i m'i i
+PFX P o m'o o
+PFX P u m'u u
+PFX P è m'è è
+PFX P ò m'ò ò
+PFX P ê m'ê ê
+PFX P ô m'ô ô
+PFX P î m'î î
+PFX P 0 M' [AEIOUH]
+PFX P a M'A a
+PFX P e M'E e
+PFX P i M'I i
+PFX P o M'O o
+PFX P u M'U u
+PFX P 0 t' [aeiouèòêôîAEIOU]
+PFX P a t'a a
+PFX P e t'e e
+PFX P i t'i i
+PFX P o t'o o
+PFX P u t'u u
+PFX P è t'è è
+PFX P ò t'ò ò
+PFX P ê t'ê ê
+PFX P ô t'ô ô
+PFX P î t'î î
+PFX P 0 T' [AEIOUH]
+PFX P a T'A a
+PFX P e T'E e
+PFX P i T'I i
+PFX P o T'O o
+PFX P u T'U u
+PFX P 0 s' [aeiouèòêôîAEIOU]
+PFX P a s'a a
+PFX P e s'e e
+PFX P i s'i i
+PFX P o s'o o
+PFX P u s'u u
+PFX P è s'è è
+PFX P ò s'ò ò
+PFX P ê s'ê ê
+PFX P ô s'ô ô
+PFX P î s'î î
+PFX P 0 S' [AEIOUH]
+PFX P a S'A a
+PFX P e S'E e
+PFX P i S'I i
+PFX P o S'O o
+PFX P u S'U u
+
 # Pronom congiunt an furma imperativa
 SFX Q Y 18
 SFX Q a a'm a
