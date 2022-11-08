@@ -223,12 +223,12 @@ public class SpellcheckerGenerator {
     }
 
     protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("mSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("fSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_SHORT_ADJECTIVE});
     }
 
     protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion) {

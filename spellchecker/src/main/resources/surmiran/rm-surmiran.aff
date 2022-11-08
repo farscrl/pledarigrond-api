@@ -323,6 +323,60 @@ PFX P i S'I i
 PFX P o S'O o
 PFX P u S'U u
 
+# Furmas curtas dad adjectivs
+PFX R Y 51
+PFX R 0 quant' [aeiouèòêôîAEIOU]
+PFX R a quant'a a
+PFX R e quant'e e
+PFX R i quant'i i
+PFX R o quant'o o
+PFX R u quant'u u
+PFX R è quant'è è
+PFX R ò quant'ò ò
+PFX R ê quant'ê ê
+PFX R ô quant'ô ô
+PFX R î quant'î î
+PFX R 0 QUANT' [AEIOUH]
+PFX R a QUANT'A a
+PFX R e QUANT'E e
+PFX R i QUANT'I i
+PFX R o QUANT'O o
+PFX R u QUANT'U u
+PFX R 0 pac' [aeiouèòêôîAEIOU]
+PFX R a pac'a a
+PFX R e pac'e e
+PFX R i pac'i i
+PFX R o pac'o o
+PFX R u pac'u u
+PFX R è pac'è è
+PFX R ò pac'ò ò
+PFX R ê pac'ê ê
+PFX R ô pac'ô ô
+PFX R î pac'î î
+PFX R 0 PAC' [AEIOUH]
+PFX R a PAC'A a
+PFX R e PAC'E e
+PFX R i PAC'I i
+PFX R o PAC'O o
+PFX R u PAC'U u
+PFX R 0 bler' [aeiouèòêôîAEIOU]
+PFX R a bler'a a
+PFX R e bler'e e
+PFX R i bler'i i
+PFX R o bler'o o
+PFX R u bler'u u
+PFX R è bler'è è
+PFX R ò bler'ò ò
+PFX R ê bler'ê ê
+PFX R ô bler'ô ô
+PFX R î bler'î î
+PFX R 0 BLER' [AEIOUH]
+PFX R a BLER'A a
+PFX R e BLER'E e
+PFX R i BLER'I i
+PFX R o BLER'O o
+PFX R u BLER'U u
+
 # Pronom congiunt an furma imperativa
 SFX Q Y 18
 SFX Q a a'm a
