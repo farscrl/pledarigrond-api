@@ -1,4 +1,5 @@
 src/main/resources/application-test.properties
+src/main/resources/application-test2.properties
 src/main/resources/application-prod.properties
 
 HELP.md
