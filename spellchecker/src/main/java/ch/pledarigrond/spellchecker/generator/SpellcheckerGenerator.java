@@ -73,14 +73,18 @@ public class SpellcheckerGenerator {
         File aff = resource.getFile();
 
         // create version file
-        File versionFile = new File(dir, "version.txt");
+        File versionFile = new File(dir, "rm-" + language.getName()+ "_version.txt");
+        String versionAndBuild = "";
         try {
             SimpleDateFormat buildDateFormat = new SimpleDateFormat("yyMMdd.HHmmss");
             Date now = new Date();
 
             Map<String, Object> versionTemplateData = new HashMap<>();
-            versionTemplateData.put("version",getVersion());
-            versionTemplateData.put("buildid", buildDateFormat.format(now));
+            String version = getVersion();
+            String buildId = buildDateFormat.format(now);
+            versionTemplateData.put("version", version);
+            versionTemplateData.put("buildid", buildId);
+            versionAndBuild = version + "-" + buildId;
             Writer versionFileWriter = new FileWriter(versionFile);
             Template versionTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("version.ftlh");
             versionTemplate.process(versionTemplateData, versionFileWriter);
@@ -91,7 +95,7 @@ public class SpellcheckerGenerator {
         }
 
         // create licence file
-        File licenceFile = new File(dir, "LICENSE.txt");
+        File licenceFile = new File(dir, "rm-" + language.getName()+ "_LICENSE.txt");
         try {
             SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
             Date now = new Date();
@@ -114,8 +118,7 @@ public class SpellcheckerGenerator {
         files.add(dicFile);
         files.add(versionFile);
         files.add(licenceFile);
-        File zipFile = new File(dir, "hunspell_" + language + "_" + UUID.randomUUID() + ".zip");
-        //zipFile.createNewFile();
+        File zipFile = new File(dir, "hunspell_" + language + "_" + versionAndBuild + ".zip");
         writeFilesToZip(zipFile, files);
 
         return zipFile;
