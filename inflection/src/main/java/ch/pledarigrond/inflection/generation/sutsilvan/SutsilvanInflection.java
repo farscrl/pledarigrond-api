@@ -13,6 +13,10 @@ public class SutsilvanInflection  implements LanguageInflection {
         switch (inflectionType) {
             case V:
                 return SutsilvanConjugationClasses.getVerbInflectionSubtypes();
+            case NOUN:
+                return SutsilvanNounClasses.getNounInflectionSubtypes();
+            case ADJECTIVE:
+                return SutsilvanAdjectiveClasses.getAdjectiveInflectionSubtypes();
         }
 
         return null;
@@ -20,6 +24,17 @@ public class SutsilvanInflection  implements LanguageInflection {
 
     @Override
     public InflectionResponse guessInflectionSubtype(InflectionType inflectionType, String baseForm, String genus, String flex) {
+        switch (inflectionType) {
+            case V:
+                SutsilvanConjugation conjugation = new SutsilvanConjugation();
+                return conjugation.guessInflection(baseForm, genus, flex);
+            case NOUN:
+                SutsilvanNounGenerator nounGenerator = new SutsilvanNounGenerator();
+                return nounGenerator.guessInflection(baseForm, genus, flex);
+            case ADJECTIVE:
+                SutsilvanAdjectiveGenerator adjectiveGenerator = new SutsilvanAdjectiveGenerator();
+                return adjectiveGenerator.guessInflection(baseForm, genus, flex);
+        }
         return null;
     }
 
@@ -29,6 +44,12 @@ public class SutsilvanInflection  implements LanguageInflection {
             case V:
                 SutsilvanConjugation conjugation = new SutsilvanConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
+            case NOUN:
+                SutsilvanNounGenerator nounGenerator = new SutsilvanNounGenerator();
+                return nounGenerator.generateForms(subTypeId, baseForm);
+            case ADJECTIVE:
+                SutsilvanAdjectiveGenerator adjectiveGenerator = new SutsilvanAdjectiveGenerator();
+                return adjectiveGenerator.generateForms(subTypeId, baseForm);
         }
         return null;
     }
