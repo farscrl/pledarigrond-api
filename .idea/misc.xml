@@ -3,10 +3,14 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/names/pom.xml" />
         <option value="$PROJECT_DIR$/api/pom.xml" />
+        <option value="$PROJECT_DIR$/names/pom.xml" />
         <option value="$PROJECT_DIR$/common/pom.xml" />
+        <option value="$PROJECT_DIR$/lucene/pom.xml" />
         <option value="$PROJECT_DIR$/parent/pom.xml" />
+        <option value="$PROJECT_DIR$/mongodb/pom.xml" />
+        <option value="$PROJECT_DIR$/inflection/pom.xml" />
+        <option value="$PROJECT_DIR$/spellchecker/pom.xml" />
       </list>
     </option>
   </component>
