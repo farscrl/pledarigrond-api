@@ -315,6 +315,6 @@ public class EditorServiceImpl implements EditorService {
     }
 
     private boolean excludeAutomaticChangesForLanguage(Language language) {
-        return language == Language.RUMANTSCHGRISCHUN;
+        return language == Language.RUMANTSCHGRISCHUN || language == Language.SUTSILVAN;
     }
 }
