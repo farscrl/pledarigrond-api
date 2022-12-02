@@ -2863,7 +2863,6 @@ public class SutsilvanConjugationTest {
     @Test
     public void testRule9a() {
         forms =  generator.generateConjugation("9a", "tamer");
-        ConjugationPrinter.print(forms.getInflectionValues());
 
         Assert.assertEquals("tamer", forms.getInflectionValues().get("infinitiv"));
 
