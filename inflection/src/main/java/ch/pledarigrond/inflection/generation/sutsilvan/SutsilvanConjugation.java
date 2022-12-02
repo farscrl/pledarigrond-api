@@ -254,6 +254,8 @@ public class SutsilvanConjugation extends LanguageConjugation {
             return null;
         }
 
+        baseForm = normalizeString(baseForm);
+
         String lastTwo = baseForm.substring(baseForm.length() - 2);
         String lastThree = baseForm.substring(baseForm.length() - 3);
 
@@ -1163,5 +1165,13 @@ public class SutsilvanConjugation extends LanguageConjugation {
             singleForms[i] = pronoun + singleForms[i];
         }
         return String.join("\n", singleForms);
+    }
+
+    protected String normalizeString(String query) {
+        if (query.charAt(0) == '[') {
+            query = query.substring(1, query.length() - 1);
+        }
+        query = query.replaceAll("^\\s+|\\s+$", "");
+        return query;
     }
 }

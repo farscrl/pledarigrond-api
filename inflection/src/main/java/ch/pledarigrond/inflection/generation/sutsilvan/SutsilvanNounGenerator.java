@@ -418,4 +418,15 @@ public class SutsilvanNounGenerator extends LanguageNounGeneration {
 
         return file;
     }
+
+    protected String normalizeString(String query) {
+        if (query.charAt(0) == '[') {
+            query = query.substring(1, query.length() - 1);
+        }
+        query = query.replaceAll("^\\s+|\\s+$", "");
+        if (query.endsWith("(a)")) {
+            query = query.substring(0, query.length() - 3);
+        }
+        return query;
+    }
 }
