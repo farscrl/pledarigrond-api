@@ -563,6 +563,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
                 mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
                 mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+                mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
 
                 mostRecent.setTimestamp(0L);
                 mostRecent.setUserId(null);
@@ -728,6 +729,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
                 mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
                 mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+                mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
 
                 mostRecent.setTimestamp(0L);
                 mostRecent.setUserId(null);
