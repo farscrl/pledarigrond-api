@@ -54,6 +54,13 @@ public class MongoDbServiceImpl implements MongoDbService {
         } else {
             modified = queue.push(new InsertOperation(pgEnvironment, language, entry).setLogin(login), language);
         }
+
+        // lemmaVersion didn't have a lexEntryId (as this ID is created after the LemmaVersion).
+        // we add the lexEntryId to the lemmaVersions, so that the data is indexed correctly by lucene
+        for (LemmaVersion lv: modified.getVersionHistory()) {
+            lv.setLexEntryId(modified.getId());
+        }
+
         luceneService.update(language, modified);
     }
 

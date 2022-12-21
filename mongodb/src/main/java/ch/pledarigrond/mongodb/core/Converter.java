@@ -67,6 +67,7 @@ public class Converter {
 	public static LexEntry convertToLexEntry(DBObject obj) {
 		ArrayList<Document> versions = (ArrayList<Document>) obj.get(LexEntry.VERSIONS);
 		ArrayList<LemmaVersion> list = new ArrayList<LemmaVersion>();
+		ObjectId objId = (ObjectId) obj.get(LexEntry.ID);
 		for (Document doc : versions) {
 			Map<String, String> lemmaValues = new HashMap(doc);
 			lemmaValues.keySet().removeAll(LemmaVersion.PG_KEYS);
@@ -77,9 +78,15 @@ public class Converter {
 			lemmaVersion.getLemmaValues().putAll(lemmaValues);
 			lemmaVersion.getPgValues().putAll(pgValues);
 			lemmaVersion.setTimestamp(timeStamp);
+
+			// adding the lexEntryId to the lemmaVersion
+			if (lemmaVersion.getLexEntryId() == null || lemmaVersion.getLexEntryId().isEmpty()) {
+				if (objId != null) {
+					lemmaVersion.setLexEntryId(objId.toString());
+				}
+			}
 			list.add(lemmaVersion);
 		}
-		ObjectId objId = (ObjectId) obj.get(LexEntry.ID);
 		LexEntry entry = new LexEntry();
 		if (objId != null) {
 			entry.setId(objId.toString());
