@@ -55,4 +55,8 @@ public class SurmiranSpellcheckerGenerator extends SpellcheckerGenerator{
         }
         return value;
     }
+
+    protected String normalizeString(String input) {
+        return WordListUtils.normalizeStringSurmiran(input);
+    }
 }

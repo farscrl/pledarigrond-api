@@ -9,6 +9,9 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.SpellcheckerGenerator;
 import ch.pledarigrond.spellchecker.generator.SurmiranSpellcheckerGenerator;
+import ch.pledarigrond.spellchecker.generator.SurmiranWordListGenerator;
+import ch.pledarigrond.spellchecker.generator.WordListGenerator;
+import org.apache.commons.codec.language.bm.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,11 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         return getGeneratorForLanguage(language, names).exportHunspell(language);
     }
 
+    public File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException {
+        List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
+        return getMsWordListGenerator(language, names).exportWordlist(language);
+    }
+
     private SpellcheckerGenerator getGeneratorForLanguage(Language language, List<Name> names) {
         switch (language) {
             case SURMIRAN:
@@ -54,6 +62,16 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
                     generator = new SpellcheckerGenerator(pgEnvironment, names);
                 }
                 return generator;
+        }
+    }
+
+    private WordListGenerator getMsWordListGenerator(Language language, List<Name> names) {
+        switch (language) {
+            case SURMIRAN:
+                return new SurmiranWordListGenerator(pgEnvironment, names);
+
+            default:
+                return new WordListGenerator(pgEnvironment, names);
         }
     }
 }

@@ -10,4 +10,5 @@ public interface SpellcheckerService {
 
     File exportWordList(Language language) throws NoDatabaseAvailableException, IOException;
     File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException;
+    File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException;
 }

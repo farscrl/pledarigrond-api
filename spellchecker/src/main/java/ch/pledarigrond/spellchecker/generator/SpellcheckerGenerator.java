@@ -54,7 +54,7 @@ public class SpellcheckerGenerator {
         files.add(wordlist);
         File zipFile = new File(dir, "wordlist_" + language + "_" + UUID.randomUUID() + ".zip");
         //zipFile.createNewFile();
-        writeFilesToZip(zipFile, files);
+        WordListUtils.writeFilesToZip(zipFile, files);
 
         return zipFile;
     }
@@ -119,43 +119,13 @@ public class SpellcheckerGenerator {
         files.add(versionFile);
         files.add(licenceFile);
         File zipFile = new File(dir, "hunspell_" + language + "_" + versionAndBuild + ".zip");
-        writeFilesToZip(zipFile, files);
+        WordListUtils.writeFilesToZip(zipFile, files);
 
         return zipFile;
     }
 
 
-    private void writeFilesToZip(File zipFile, List<File> filesToZip) {
-        ZipOutputStream zos = null;
-        try {
 
-            zos = new ZipOutputStream(new FileOutputStream(zipFile));
-
-            for(File f: filesToZip) {
-                String name = f.getName();
-                ZipEntry entry = new ZipEntry(name);
-                zos.putNextEntry(entry);
-
-                FileInputStream fis = null;
-                fis = new FileInputStream(f);
-                byte[] byteBuffer = new byte[1024];
-                int bytesRead = -1;
-                while ((bytesRead = fis.read(byteBuffer)) != -1) {
-                    zos.write(byteBuffer, 0, bytesRead);
-                }
-                fis.close();
-                zos.closeEntry();
-                zos.flush();
-            }
-
-
-            zos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private void writeSetTo(File wordListFile, Set<String> set) {
         try (BufferedWriter bf = new BufferedWriter(new FileWriter(wordListFile))) {
@@ -335,73 +305,33 @@ public class SpellcheckerGenerator {
             return;
         }
 
-        // Ignore cf.
-        if (candidate.startsWith("cf. ")) {
-            return;
-        }
+        candidate = normalizeString(candidate);
 
-        if (candidate.endsWith(" da")) {
-            candidate = candidate.substring(0, candidate.length() - 3);
-        }
-        if (candidate.endsWith(" a")) {
-            candidate = candidate.substring(0, candidate.length() - 2);
-        }
-        if (candidate.endsWith("!")) {
-            candidate = candidate.substring(0, candidate.length() - 1);
-        }
-        if (candidate.startsWith("far ")) {
-            candidate = candidate.substring(4);
-        }
-        if (candidate.startsWith("l'")) {
-            candidate = candidate.substring(2);
-        }
-        if (candidate.startsWith("la ")) {
-            candidate = candidate.substring(3);
-        }
-        if (candidate.startsWith("en ")) {
-            candidate = candidate.substring(3);
-        }
-        if (candidate.startsWith("en'")) {
-            candidate = candidate.substring(3);
-        }
-        if (candidate.startsWith("ena ")) {
-            candidate = candidate.substring(4);
-        }
-        if (candidate.startsWith("egn ")) {
-            candidate = candidate.substring(4);
-        }
-        if (candidate.startsWith("egna ")) {
-            candidate = candidate.substring(5);
+        if (candidate == null) {
+            return;
         }
 
         list.addWord(candidate, new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
     protected void extractName(HunspellList list, Language language, Name name) {
-        String languageLemma = getLanguageLemma(language, name);
-        if (languageLemma != null && !languageLemma.equals("")) {
-            list.addWord(languageLemma, new SpellcheckerRules[]{});
-        } else {
-            list.addWord(name.getNameRumantschGrischun(), new SpellcheckerRules[]{});
+        String rm = WordListUtils.getRomanshNameForLanguage(language, name);
+        if (rm != null) {
+            list.addWord(rm, new SpellcheckerRules[]{});
         }
-        if (name.getNameGerman() != null && !name.getNameGerman().equals("")) {
-            list.addWord(name.getNameGerman(), new SpellcheckerRules[]{});
-        }
-    }
 
-    private String getLanguageLemma(Language language, Name name) {
-        return switch (language) {
-            case SURSILVAN -> name.getNameSursilvan();
-            case SUTSILVAN -> name.getNameSutsilvan();
-            case SURMIRAN -> name.getNameSurmiran();
-            case PUTER -> name.getNamePuter();
-            case VALLADER -> name.getNameVallader();
-            case RUMANTSCHGRISCHUN -> name.getNameRumantschGrischun();
-        };
+        String de = WordListUtils.getGermanNameForLanguage(language, name);
+        if (de != null) {
+            list.addWord(de, new SpellcheckerRules[]{});
+        }
     }
 
     protected String removePronouns(Language language, String value) {
         return value;
+    }
+
+    protected String normalizeString(String input) {
+        return input;
     }
 
     private void loadWordsToAdd(Language language, HunspellList list) throws IOException {
