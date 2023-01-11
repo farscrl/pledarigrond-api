@@ -1,10 +1,13 @@
 package ch.pledarigrond.spellchecker.generator;
 
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -48,6 +51,48 @@ public class WordListUtils {
         }
         if (input.startsWith("egna ")) {
             input = input.substring(5);
+        }
+        return input;
+    }
+
+    public static String removePronounsSurmiran(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        List<String> prefixes = new ArrayList<>();
+        Collections.addAll(prefixes,
+                // has to be upfront, as other pronouns may follow
+                SurmiranPronouns.pron_conjunctiv_c,
+                SurmiranPronouns.pron_conjunctiv_v,
+
+                SurmiranPronouns.pron_1ps,
+                SurmiranPronouns.pron_2ps,
+                SurmiranPronouns.pron_3ps,
+                SurmiranPronouns.pron_1pp,
+                SurmiranPronouns.pron_2pp,
+                SurmiranPronouns.pron_3pp,
+                SurmiranPronouns.pron_r_1ps,
+                SurmiranPronouns.pron_r_2ps,
+                SurmiranPronouns.pron_r_3ps,
+                SurmiranPronouns.pron_r_1pp,
+                SurmiranPronouns.pron_r_2pp,
+                SurmiranPronouns.pron_r_3pp,
+                SurmiranPronouns.pron_r_v_1ps,
+                SurmiranPronouns.pron_r_v_2ps,
+                SurmiranPronouns.pron_r_v_3ps,
+                SurmiranPronouns.pron_r_v_1pp,
+                SurmiranPronouns.pron_r_v_2pp,
+                SurmiranPronouns.pron_r_v_3pp,
+
+                "'l",
+                "'la"
+        );
+
+        for(String p: prefixes) {
+            if (input.startsWith(p)) {
+                input =  input.substring(p.length());
+            }
         }
         return input;
     }

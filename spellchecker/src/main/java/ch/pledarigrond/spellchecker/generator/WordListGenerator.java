@@ -21,18 +21,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
-import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class WordListGenerator {
+public abstract class WordListGenerator {
     private static final Logger logger = LoggerFactory.getLogger(WordListGenerator.class);
 
     protected PgEnvironment pgEnvironment;
-    protected Map<String, PartOfSpeechTag> posLookupTable = new HashMap<>();
+    protected Map<String, PartOfSpeechTag[]> posLookupTable = new HashMap<>();
 
     private Set<String> blocklist = new HashSet<>();
-    private Map<PartOfSpeechTag, List<String>> result = new HashMap<>();
+    private Map<PartOfSpeechTag, Set<String>> baseForms = new HashMap<>();
+    private Map<PartOfSpeechTag, Set<String>> inflections = new HashMap<>();
+
+    private Set<String> foundWords;
+
+    private Set<String> noGrammar;
 
     private final List<Name> names;
 
@@ -46,18 +50,36 @@ public class WordListGenerator {
         loadBlockList(language);
 
         for (PartOfSpeechTag tag: PartOfSpeechTag.values()) {
-            result.put(tag, new ArrayList<>());
+            baseForms.put(tag, new HashSet<>());
+            inflections.put(tag, new HashSet<>());
         }
+        noGrammar = new HashSet<>();
+        foundWords = new HashSet<>();
 
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
 
         loadValidWords(language);
 
+        Set<String> notFound = new HashSet<>();
+        for(String word: noGrammar) {
+            if (!foundWords.contains(word) && !word.contains(" ")) {
+                notFound.add(word);
+            }
+        }
+        logger.error("Missing words: " + String.join(", ", notFound));
+
         List<File> files = new ArrayList<>();
-        for (Map.Entry<PartOfSpeechTag, List<String>> entry : result.entrySet()) {
+        for (Map.Entry<PartOfSpeechTag, Set<String>> entry : baseForms.entrySet()) {
             String fileName = entry.getKey().getName().replace(".", "-");
             File file = new File(dir, fileName + "_baseform.txt");
+            writeListToFile(file, entry.getValue());
+            files.add(file);
+        }
+
+        for (Map.Entry<PartOfSpeechTag, Set<String>> entry : inflections.entrySet()) {
+            String fileName = entry.getKey().getName().replace(".", "-");
+            File file = new File(dir, fileName + "_inflections.txt");
             writeListToFile(file, entry.getValue());
             files.add(file);
         }
@@ -111,9 +133,9 @@ public class WordListGenerator {
         return zipFile;
     }
 
-    protected String normalizeString(String input) {
-        return input;
-    }
+    abstract protected String normalizeString(String input);
+
+    abstract protected String removePronouns(String value);
 
     private void loadValidWords(Language language) throws NoDatabaseAvailableException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
@@ -136,32 +158,51 @@ public class WordListGenerator {
                 if (RGenus != null && !RGenus.equals("")) {
                     RGrammatik = "subst";
                 } else {
-                    logger.debug("No grammar defined for word: {}", RStichwort);
+                    // logger.error("No grammar defined for word: {}", RStichwort);
+                    noGrammar.add(RStichwort);
                     continue;
                 }
             }
-            PartOfSpeechTag tag = posLookupTable.get(RGrammatik);
+            PartOfSpeechTag[] tags = posLookupTable.get(RGrammatik);
 
-            if (tag == null) {
-                logger.debug("No POS entry defined for grammar: {}", RGrammatik);
+            if (tags == null) {
+                logger.error("No POS entry defined for grammar: {}", RGrammatik);
                 continue;
             }
 
-            result.get(tag).add(RStichwort);
+            for(PartOfSpeechTag tag : tags) {
+                addForms(baseForms.get(tag), inflections.get(tag), current, RStichwort);
+                foundWords.add(RStichwort);
+            }
         }
 
-        if (names != null && result.get(PartOfSpeechTag.NOUN) != null) {
+        if (names != null && baseForms.get(PartOfSpeechTag.NOUN) != null) {
             names.forEach(name -> {
                 String rm = WordListUtils.getRomanshNameForLanguage(language, name);
                 if (rm != null) {
-                    result.get(PartOfSpeechTag.NOUN).add(rm);
+                    baseForms.get(PartOfSpeechTag.NOUN).add(rm);
                 }
 
                 String de = WordListUtils.getGermanNameForLanguage(language, name);
                 if (de != null) {
-                    result.get(PartOfSpeechTag.NOUN).add(de);
+                    baseForms.get(PartOfSpeechTag.NOUN).add(de);
                 }
             });
+        }
+    }
+
+    private void addForms(Set<String> baseForms, Set<String> inflections, LemmaVersion current, String RStichwort) {
+        String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
+        if (inflectionType == null || inflectionType.equals("")) {
+            baseForms.add(RStichwort);
+        } else if (inflectionType.equals("V")) {
+            extractVerbs(baseForms, inflections, current, RStichwort);
+        } else if (inflectionType.equals("NOUN")) {
+            extractNouns(baseForms, inflections, current, RStichwort);
+        } else if (inflectionType.equals("ADJECTIVE")) {
+            extractAdjectives(baseForms, inflections, current, RStichwort);
+        } else {
+            throw new RuntimeException("Unexpected inflection type: " + inflectionType);
         }
     }
 
@@ -180,7 +221,7 @@ public class WordListGenerator {
         }
     }
 
-    private void writeListToFile(File wordListFile, List<String> list) {
+    private void writeListToFile(File wordListFile, Set<String> list) {
         try (BufferedWriter bf = new BufferedWriter(new FileWriter(wordListFile))) {
             for (String value : list) {
                 if (value == null) continue;
@@ -202,5 +243,121 @@ public class WordListGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+        String baseForm = lemmaVersion.getEntryValue("baseForm");
+        if (baseForm == null || baseForm.equals("")) {
+            baseForm = RStichwort;
+        }
+        baseForms.add(baseForm);
+        inflections.add(baseForm);
+        
+        inflections.add(lemmaVersion.getEntryValue("mSingular"));
+        inflections.add(lemmaVersion.getEntryValue("fSingular"));
+        inflections.add(lemmaVersion.getEntryValue("mPlural"));
+        inflections.add(lemmaVersion.getEntryValue("fPlural"));
+        inflections.add(lemmaVersion.getEntryValue("pluralCollectiv"));
+    }
+
+    protected void extractAdjectives(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+        String baseForm = lemmaVersion.getEntryValue("baseForm");
+        if (baseForm == null || baseForm.equals("")) {
+            baseForm = RStichwort;
+        }
+        baseForms.add(baseForm);
+        inflections.add(baseForm);
+        
+        inflections.add(lemmaVersion.getEntryValue("mSingular"));
+        inflections.add(lemmaVersion.getEntryValue("fSingular"));
+        inflections.add(lemmaVersion.getEntryValue("mPlural"));
+        inflections.add(lemmaVersion.getEntryValue("fPlural"));
+        this.baseForms.get(PartOfSpeechTag.ADV).add(lemmaVersion.getEntryValue("adverbialForm"));
+    }
+
+    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+        String infinitiv = lemmaVersion.getEntryValue("infinitiv");
+        if (infinitiv == null || infinitiv.equals("")) {
+            infinitiv = RStichwort;
+        }
+        baseForms.add(removePronouns(infinitiv));
+        inflections.add(removePronouns(infinitiv));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing3")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural3")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing3")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural3")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivsing1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivsing2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivsing3")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivplural1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivplural2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("conjunctivplural3")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural3")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("participperfectms")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("participperfectfs")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("participperfectmp")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("participperfectfp")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperativ1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperativ2")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("gerundium")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing3")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural1")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural2")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural3")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticm")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticf")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("preschentplural3enclitic")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticm")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticf")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("imperfectplural3enclitic")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticm")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticf")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("cundizionalplural3enclitic")));
+
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing3encliticm")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futursing3encliticf")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural1enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural2enclitic")));
+        inflections.add(removePronouns(lemmaVersion.getEntryValue("futurplural3enclitic")));
     }
 }

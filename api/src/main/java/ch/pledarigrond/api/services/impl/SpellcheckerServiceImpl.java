@@ -58,10 +58,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
                 return surmiranGenerator;
 
             default:
-                if (generator == null) {
-                    generator = new SpellcheckerGenerator(pgEnvironment, names);
-                }
-                return generator;
+                return null;
         }
     }
 
@@ -71,7 +68,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
                 return new SurmiranWordListGenerator(pgEnvironment, names);
 
             default:
-                return new WordListGenerator(pgEnvironment, names);
+                return null;
         }
     }
 }
