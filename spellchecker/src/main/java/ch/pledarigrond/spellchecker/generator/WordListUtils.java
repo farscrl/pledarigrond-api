@@ -6,9 +6,7 @@ import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -83,8 +81,11 @@ public class WordListUtils {
                 SurmiranPronouns.pron_r_v_3ps,
                 SurmiranPronouns.pron_r_v_1pp,
                 SurmiranPronouns.pron_r_v_2pp,
-                SurmiranPronouns.pron_r_v_3pp,
+                SurmiranPronouns.pron_r_v_3pp
+        );
 
+        List<String> suffixes = new ArrayList<>();
+        Collections.addAll(suffixes,
                 "'l",
                 "'la"
         );
@@ -92,6 +93,11 @@ public class WordListUtils {
         for(String p: prefixes) {
             if (input.startsWith(p)) {
                 input =  input.substring(p.length());
+            }
+        }
+        for(String s: suffixes) {
+            if (input.endsWith(s)) {
+                input = input.substring(0, input.length() - s.length());
             }
         }
         return input;
@@ -156,5 +162,26 @@ public class WordListUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String normalizeWord(String word) {
+        if (word == null) {
+            return null;
+        }
+
+        if (word.equals("") || word.equals(" ")) {
+            return null;
+        }
+
+        // Ignore ( ) ...
+        if (word.contains("(") || word.contains(")") || word.contains("...")) {
+            return null;
+        }
+
+        if (word.endsWith("!")) {
+            word = word.substring(0, word.length() - 1);
+        }
+
+        return word;
     }
 }

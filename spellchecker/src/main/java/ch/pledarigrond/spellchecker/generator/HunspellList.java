@@ -8,21 +8,9 @@ public class HunspellList {
     private final Map<String, Set<SpellcheckerRules>> wordsList = new TreeMap<>();
 
     public void addWord(String word, SpellcheckerRules[] rules) {
+        word = WordListUtils.normalizeWord(word);
         if (word == null) {
             return;
-        }
-
-        if (word.equals("") || word.equals(" ")) {
-            return;
-        }
-
-        // Ignore ( ) ...
-        if (word.contains("(") || word.contains(")") || word.contains("...")) {
-            return;
-        }
-
-        if (word.endsWith("!")) {
-            word = word.substring(0, word.length() - 1);
         }
 
         Set<SpellcheckerRules> r = wordsList.get(word);
