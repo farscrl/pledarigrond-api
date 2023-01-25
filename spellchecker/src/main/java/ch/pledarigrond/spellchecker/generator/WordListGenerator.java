@@ -71,14 +71,14 @@ public abstract class WordListGenerator {
 
         List<File> files = new ArrayList<>();
         for (Map.Entry<PartOfSpeechTag, Set<String>> entry : baseForms.entrySet()) {
-            String fileName = entry.getKey().getName().replace(".", "-");
+            String fileName = entry.getKey().getName();
             File file = new File(dir, fileName + "_baseform.txt");
             writeListToFile(file, entry.getValue());
             files.add(file);
         }
 
         for (Map.Entry<PartOfSpeechTag, Set<String>> entry : inflections.entrySet()) {
-            String fileName = entry.getKey().getName().replace(".", "-");
+            String fileName = entry.getKey().getName();
             File file = new File(dir, fileName + "_inflections.txt");
             writeListToFile(file, entry.getValue());
             files.add(file);
