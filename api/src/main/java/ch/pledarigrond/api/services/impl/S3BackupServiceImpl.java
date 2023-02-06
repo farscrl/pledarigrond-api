@@ -32,6 +32,11 @@ public class S3BackupServiceImpl implements S3BackupService {
     public S3BackupServiceImpl(@Autowired PgEnvironment pgEnvironment) {
         try {
             this.pgEnvironment = pgEnvironment;
+
+            if (pgEnvironment.getS3AccessKey() == null || pgEnvironment.getS3AccessKey().equals("") || pgEnvironment.getS3SecretKey() == null || pgEnvironment.getS3SecretKey().equals("")) {
+                return;
+            }
+
             AWSCredentials credentials = new BasicAWSCredentials(pgEnvironment.getS3AccessKey(), pgEnvironment.getS3SecretKey());
             s3Client = AmazonS3ClientBuilder
                     .standard()
