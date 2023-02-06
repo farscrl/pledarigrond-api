@@ -366,6 +366,12 @@ public abstract class WordListGenerator {
         if (word == null) {
             return;
         }
+
+        // ignore composed words
+        if (word.contains(" ")) {
+            return;
+        }
+
         set.add(word);
     }
 }
