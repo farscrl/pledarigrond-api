@@ -369,8 +369,7 @@ public class LemmaVersion implements Serializable {
 
 	@Override
 	public String toString() {
-		return "LemmaVersion [entryValues=" + lemmaValues + ", pgValues="
-				+ pgValues + "]";
+		return "LemmaVersion [entryValues=" + lemmaValues + ", pgValues=" + pgValues + "]";
 	}
 
 	public void setPgValues(HashMap<String, String> map) {
