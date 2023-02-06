@@ -19,8 +19,7 @@ public enum PartOfSpeechTag {
     NOUN("NOUN"),
     VERB("VERB"),
     VERB_DEFECTIV("VERB.defectiv"),
-    VERB_IRREGULAR("VERB.irregular"),
-    WTF("wtf");
+    VERB_IRREGULAR("VERB.irregular");
 
     private final String name;
 

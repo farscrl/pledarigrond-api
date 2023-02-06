@@ -28,4 +28,6 @@ public interface AutomaticGenerationService {
     boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException;
 
     boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean changeGrammarIndications(Language language) throws DatabaseException, UnknownHostException;
 }

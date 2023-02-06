@@ -147,6 +147,7 @@ public abstract class WordListGenerator {
             LemmaVersion current = entry.getCurrent();
 
             String RStichwort = current.getEntryValue("RStichwort");
+            String RRegularInflection = current.getEntryValue("RRegularInflection");
             RStichwort = normalizeString(RStichwort);
             if (RStichwort == null || RStichwort.equals("") || blocklist.contains(RStichwort)) {
                 continue;
@@ -156,7 +157,7 @@ public abstract class WordListGenerator {
             if (RGrammatik == null) {
                 String RGenus = current.getEntryValue("RGenus");
                 if (RGenus != null && !RGenus.equals("")) {
-                    RGrammatik = "subst";
+                    RGrammatik = "nomen";
                 } else {
                     // logger.error("No grammar defined for word: {}", RStichwort);
                     noGrammar.add(RStichwort);
@@ -171,7 +172,11 @@ public abstract class WordListGenerator {
             }
 
             for(PartOfSpeechTag tag : tags) {
-                addForms(baseForms.get(tag), inflections.get(tag), current, RStichwort);
+                if (tag == PartOfSpeechTag.VERB && RRegularInflection != null && !"true".equals(RRegularInflection)) {
+                    addForms(baseForms.get(PartOfSpeechTag.VERB_IRREGULAR), inflections.get(PartOfSpeechTag.VERB_IRREGULAR), current, RStichwort);
+                } else {
+                    addForms(baseForms.get(tag), inflections.get(tag), current, RStichwort);
+                }
                 foundWords.add(RStichwort);
             }
         }
@@ -369,6 +374,11 @@ public abstract class WordListGenerator {
 
         // ignore composed words
         if (word.contains(" ")) {
+            return;
+        }
+
+        // ignore words with an apostroph
+        if (word.contains("'")) {
             return;
         }
 

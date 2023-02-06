@@ -37,10 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -381,6 +378,232 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
         }
+
+        return true;
+    }
+
+    public boolean changeGrammarIndications(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        /*
+        List<String> endingAbel = new ArrayList<>();
+        List<String> endingIbel = new ArrayList<>();
+        List<String> endingO = new ArrayList<>();
+        List<String> endingOnt = new ArrayList<>();
+        List<String> endingOus = new ArrayList<>();
+        List<String> endingEvel = new ArrayList<>();
+        List<String> endingAnt = new ArrayList<>();
+        List<String> endingIc = new ArrayList<>();
+        List<String> endingAl = new ArrayList<>();
+        List<String> endingAint = new ArrayList<>();
+        List<String> endingIa = new ArrayList<>();
+        List<String> endingEa = new ArrayList<>();
+        List<String> endingEnt = new ArrayList<>();
+        List<String> endingMaintg = new ArrayList<>();
+        */
+
+        Set<String> rGrammatik = new HashSet<>();
+        Set<String> dGrammatik = new HashSet<>();
+
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getCurrent() != null) {
+
+                LemmaVersion current = entry.getCurrent();
+                String RStichwort = current.getLemmaValues().get("RStichwort");
+                String RGrammatik = current.getLemmaValues().get("RGrammatik");
+                String DGrammatik = current.getLemmaValues().get("DGrammatik");
+                String RGenus = current.getLemmaValues().get("RGenus");
+
+                boolean didChange = false;
+                if (RGrammatik != null && !"".equals(RGrammatik)) {
+                    String newGrammatik = mapSurmiranGrammar(RGrammatik);
+                    if (newGrammatik == null || !newGrammatik.equals(RGrammatik)) {
+                        current.getLemmaValues().put("RGrammatik", newGrammatik);
+                        RGrammatik = newGrammatik;
+                        didChange = true;
+                    }
+                }
+
+                if (DGrammatik != null && !"".equals(DGrammatik)) {
+                    String newGrammatik = mapSurmiranGrammarD(DGrammatik);
+                    if (newGrammatik == null || !newGrammatik.equals(DGrammatik)) {
+                        current.getLemmaValues().put("DGrammatik", newGrammatik);
+                        DGrammatik = newGrammatik;
+                        didChange = true;
+                    }
+                }
+
+                // not using an else clause, as mapping can generate empty values
+                if ((RGrammatik == null || "".equals(RGrammatik)) && (RStichwort != null && !RStichwort.equals("") && !RStichwort.contains(" "))) {
+
+                    if (DGrammatik != null && !DGrammatik.equals("")) {
+                        logger.warn("Set " + RStichwort + " to: " + DGrammatik);
+                    }
+
+                    if (Character.isUpperCase(RStichwort.charAt(0))) {
+                        current.getLemmaValues().put("RGrammatik", "nomen");
+                        RGrammatik = "nomen";
+                        didChange = true;
+                    } else if (RStichwort.startsWith("s'")) {
+                        current.getLemmaValues().put("RGrammatik", "verb reflexiv");
+                        RGrammatik = "verb reflexiv";
+                        didChange = true;
+                    } else if (RStichwort.endsWith("abel")) {
+                        //endingAbel.add(RStichwort);
+                        // neginas excepziuns
+                        current.getLemmaValues().put("RGrammatik", "adjectiv");
+                        RGrammatik = "adjectiv";
+                        didChange = true;
+                    } else if (RStichwort.endsWith("ibel")) {
+                        // endingIbel.add(RStichwort);
+                        // neginas excepziuns
+                        current.getLemmaValues().put("RGrammatik", "adjectiv");
+                        RGrammatik = "adjectiv";
+                        didChange = true;
+                    } else if (RStichwort.endsWith("o")) {
+                        // endingO.add(RStichwort);
+                        List<String> excepziunsO = Arrays.asList("abstraho", "apollo", "fallo", "fo", "gio",
+                                "incognito", "kilo", "malgro", "no", "passo", "pero", "portavelo", "refurmo", "saldo",
+                                "schiglio", " so", "stampro", "tignavelo", "trafo", "unisono", "utro", "zuppo");
+                        if (!excepziunsO.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ont")) {
+                        // endingOnt.add(RStichwort);
+                        List<String> excepziunsOnt = Arrays.asList("cunzont", "nunditgont", "pertutgont", "pront",
+                                "schizont", "zont");
+                        if (!excepziunsOnt.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                        current.getLemmaValues().put("RGrammatik", "adjectiv");
+                        RGrammatik = "adjectiv";
+                        didChange = true;
+                    } else if (RStichwort.endsWith("ous")) {
+                        // endingOus.add(RStichwort);
+                        List<String> excepziunsOus = Arrays.asList("nous", "stgivous", "vous");
+                        if (!excepziunsOus.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("evel")) {
+                        // endingEvel.add(RStichwort);
+                        List<String> excepziunsEvel = Arrays.asList("damanevel", "manevel");
+                        if (!excepziunsEvel.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ant")) {
+                        // endingAnt.add(RStichwort);
+                        List<String> excepziunsAnt = Arrays.asList("adegn'anavant", "anavant", "ansant", "avant",
+                                "consuprastant", "d'unfant", "dantant", "durant", "gl'unfant", "miglsanavant",
+                                "mintgatant", "nunobstant", "nurant", "or(d)avant", "ordavant", "pinavant", "pressant",
+                                "protestant", "quant", "schianavant", "tant", "mintgatant");
+                        if (!excepziunsAnt.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ic")) {
+                        // endingIc.add(RStichwort);
+                        List<String> excepziunsIc = Arrays.asList("comic", "elastic", "plastic");
+                        if (!excepziunsIc.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("al")) {
+                        // endingAl.add(RStichwort);
+                        current.getLemmaValues().put("RGrammatik", "adjectiv");
+                        RGrammatik = "adjectiv";
+                        didChange = true;
+                    } else if (RStichwort.endsWith("aint")) {
+                        // endingAint.add(RStichwort);
+                        List<String> excepziunsAint = Arrays.asList("aint", "antgaschamaint", "ardimaint", "fardalaint",
+                                "gliunschaint", "liaint", "movimaint", "paraint", "preavertimaint", "ranviamaint",
+                                "reconcessiunamaint", "seadaint", "serviaint", "sotaint", "spivaint", "suraint", "tranteraint");
+                        if (!excepziunsAint.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ia") && !RStichwort.endsWith("tia")) {
+                        // endingIa.add(RStichwort);
+                        List<String> excepziunsIa = Arrays.asList("angurgnia", "bagnnia", "buccareia", "cunterviglia",
+                                "curegia", "d'arschiglia", "damengia", "ia", "impedia", "malluia", "mengia", "ossuscheia",
+                                "pandemia", "plangsia", "staffia", "tottaveia", "uscheia", "ustareia", "via");
+                        if (!excepziunsIa.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ea")) {
+                        // endingEa.add(RStichwort);
+                        List<String> excepziunsEa = Arrays.asList("ea", "geagea", "tschartgea");
+                        if (!excepziunsEa.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("ent")) {
+                        // endingEnt.add(RStichwort);
+                        List<String> ExcepziunsEnt = Arrays.asList("absent", "concernent", "correspondent", "d'argient",
+                                "davent", "equivalent", "gugent", "impertinent", "independent", "partenent",
+                                "transparent", "tschent");
+                        if (!ExcepziunsEnt.contains(RStichwort)) {
+                            current.getLemmaValues().put("RGrammatik", "adjectiv");
+                            RGrammatik = "adjectiv";
+                            didChange = true;
+                        }
+                    } else if (RStichwort.endsWith("maintg")) {
+                        // endingMaintg.add(RStichwort);
+                        // neginas excepziuns
+                        current.getLemmaValues().put("RGrammatik", "adverb");
+                        RGrammatik = "adverb";
+                        didChange = true;
+                    }
+                }
+
+                rGrammatik.add(RGrammatik);
+                dGrammatik.add(DGrammatik);
+
+                if (didChange) {
+                    BasicDBObject newObject = Converter.convertLexEntry(entry);
+                    entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+                }
+            }
+        }
+
+        /*
+        logger.warn("Ending ABEL: " + endingAbel.toString());
+        logger.warn("Ending IBEL: " + endingIbel.toString());
+        logger.warn("Ending O: " + endingO.toString());
+        logger.warn("Ending ONT: " + endingOnt.toString());
+        logger.warn("Ending OUS: " + endingOus.toString());
+        logger.warn("Ending EVEL: " + endingEvel.toString());
+        logger.warn("Ending ANT: " + endingAnt.toString());
+        logger.warn("Ending IC: " + endingIc.toString());
+        logger.warn("Ending AL: " + endingAl.toString());
+        logger.warn("Ending AINT: " + endingAint.toString());
+        logger.warn("Ending IA: " + endingIa.toString());
+        logger.warn("Ending EN: " + endingEa.toString());
+        logger.warn("Ending ENT: " + endingEnt.toString());
+        logger.warn("Ending MAINTG: " + endingMaintg.toString());
+        */
+
+        logger.warn("RGrammatik: " + rGrammatik.toString());
+        logger.warn("DGrammatik: " + dGrammatik.toString());
 
         return true;
     }
@@ -1337,4 +1560,239 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         mostRecent.put(SutsilvanConjugationStructure.cundizionalplural3enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalplural3enclitic));
     }
     */
+
+    private String mapSurmiranGrammar(String oldGrammar) {
+        if ("I.".equals(oldGrammar)) return null;
+        if ("I. Artikel bestimmt".equals(oldGrammar)) return "artetgel definit";
+        if ("I. Artikel unbestimmt".equals(oldGrammar)) return "artetgel indefinit";
+        if ("I. Pronomen demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("I. adverb".equals(oldGrammar)) return "adverb";
+        if ("I. adverb interrogativ".equals(oldGrammar)) return "adverb";
+        if ("I. artetgel".equals(oldGrammar)) return "artetgel";
+        if ("I. artetgel definit".equals(oldGrammar)) return "artetgel definit";
+        if ("I. artetgel indefinit".equals(oldGrammar)) return "artetgel indefinit";
+        if ("I. conjuncziun".equals(oldGrammar)) return "conjuncziun";
+        if ("I. impersunal".equals(oldGrammar)) return "pronom";
+        if ("I. interjecziun".equals(oldGrammar)) return "interjecziun";
+        if ("I. prep".equals(oldGrammar)) return "preposiziun";
+        if ("I. prep/adverb".equals(oldGrammar)) return "preposiziun / adverb";
+        if ("I. pronom".equals(oldGrammar)) return "pronom";
+        if ("I. pronom demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("I. pronom demonstrativ impersunal".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("I. pronom demonstrativ neutr".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("I. pronom indefinit".equals(oldGrammar)) return "pronom indefinit";
+        if ("I. pronom interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("I. pronom neutr".equals(oldGrammar)) return "pronom";
+        if ("I. pronom numeral".equals(oldGrammar)) return null;
+        if ("I. pronom persuna / persunal".equals(oldGrammar)) return "pronom persunal";
+        if ("II.".equals(oldGrammar)) return null;
+        if ("II. Verb modal".equals(oldGrammar)) return "verb modal";
+        if ("II. adj".equals(oldGrammar)) return "adjectiv";
+        if ("II. impersunal".equals(oldGrammar)) return "pronom";
+        if ("II. interjecziun".equals(oldGrammar)) return "interjecziun";
+        if ("II. numeral".equals(oldGrammar)) return "numeral";
+        if ("II. numeral/pronom".equals(oldGrammar)) return "pronom";
+        if ("II. prep".equals(oldGrammar)) return "preposiziun";
+        if ("II. prep/adverb".equals(oldGrammar)) return "preposiziun / adverb";
+        if ("II. pronom demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("II. pronom indefinit".equals(oldGrammar)) return "pronom indefinit";
+        if ("II. pronom interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("II. pronom possessiv".equals(oldGrammar)) return "pronom";
+        if ("II. pronom neutr".equals(oldGrammar)) return "pronom";
+        if ("II. pronom persuna / persunal".equals(oldGrammar)) return "pronom";
+        if ("II. pronom reflexiv".equals(oldGrammar)) return "pronom";
+        if ("II. pronom relativ".equals(oldGrammar)) return "pronom relativ";
+        if ("II.  reflexiv".equals(oldGrammar)) return "verb reflexiv";
+        if ("II. tr".equals(oldGrammar)) return "tr";
+        if ("II. tr indirect".equals(oldGrammar)) return "tr indirect";
+        if ("III.".equals(oldGrammar)) return null;
+        if ("III. adj".equals(oldGrammar)) return "adjectiv";
+        if ("III. Pronomen unbestimmt".equals(oldGrammar)) return "pronom";
+        if ("III. Pronomen/num".equals(oldGrammar)) return "pronom";
+        if ("III. adv".equals(oldGrammar)) return "adverb";
+        if ("III. adverb".equals(oldGrammar)) return "adverb";
+        if ("III. adverb pronom".equals(oldGrammar)) return "adverb / pronom";
+        if ("III. conjuncziun".equals(oldGrammar)) return "conjuncziun";
+        if ("III. impersunal".equals(oldGrammar)) return "pronom";
+        if ("III. int".equals(oldGrammar)) return "int";
+        if ("III. int/tr".equals(oldGrammar)) return "int/tr";
+        if ("III. interjecziun".equals(oldGrammar)) return "interjecziun";
+        if ("III. prep".equals(oldGrammar)) return "preposiziun";
+        if ("III. prep/conjuncziun".equals(oldGrammar)) return "preposiziun / conjuncziun";
+        if ("III. pronom demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("III. pronom indefinit".equals(oldGrammar)) return "pronom indefinit";
+        if ("III. pronom neutr".equals(oldGrammar)) return "pronom";
+        if ("III. pronom reflexiv".equals(oldGrammar)) return "pronom";
+        if ("III. pronom relativ".equals(oldGrammar)) return "pronom relativ";
+        if ("III. tr indirect".equals(oldGrammar)) return "transitiv indirect";
+        if ("IV.".equals(oldGrammar)) return null;
+        if ("IV. adverb".equals(oldGrammar)) return "adverb";
+        if ("IV. conjuncziun".equals(oldGrammar)) return "conjuncziun";
+        if ("IV. Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("IV. unpersönlich".equals(oldGrammar)) return "pronom";
+        if ("V. interjecziun".equals(oldGrammar)) return "interjecziun";
+        if ("Konjunktion".equals(oldGrammar)) return "conjuncziun";
+        if ("Pronomen interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("Pronomen neutr".equals(oldGrammar)) return "pronom";
+        if ("Pronomen possessiv".equals(oldGrammar)) return "pronom";
+        if ("Pronomen/adj".equals(oldGrammar)) return "pronom / adjectiv";
+        if ("Präposition".equals(oldGrammar)) return "preposiziun";
+        if ("adj".equals(oldGrammar)) return "adjectiv";
+        if ("adj demonstrativ".equals(oldGrammar)) return "adjectiv";
+        if ("adj indefinit".equals(oldGrammar)) return "adjectiv";
+        if ("adj interrogativ".equals(oldGrammar)) return "adjectiv";
+        if ("adj numeral".equals(oldGrammar)) return "adjectiv";
+        if ("adj possessiv".equals(oldGrammar)) return "adjectiv";
+        if ("adj/pronom".equals(oldGrammar)) return "adjectiv / pronom";
+        if ("adj/Pronomen".equals(oldGrammar)) return "adjectiv / pronom";
+        if ("adj/adv".equals(oldGrammar)) return "adjectiv / adverb";
+        if ("adj/adverb".equals(oldGrammar)) return "adjectiv / adverb";
+        if ("adj/num".equals(oldGrammar)) return "adjectiv";
+        if ("adj/numeral".equals(oldGrammar)) return "adjectiv";
+        if ("adj/pronom indefinit".equals(oldGrammar)) return "adjectiv";
+        if ("adj/pronom interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("adv".equals(oldGrammar)) return "adverb";
+        if ("adverb pronom".equals(oldGrammar)) return "adverb";
+        if ("adv relativ".equals(oldGrammar)) return "adverb";
+        if ("adverb/conjuncziun".equals(oldGrammar)) return "adverb";
+        if ("adv/Konjunktion".equals(oldGrammar)) return "adverb";
+        if ("adv/Präposition".equals(oldGrammar)) return "adverb";
+        if ("adverb".equals(oldGrammar)) return "adverb";
+        if ("adverb/prep".equals(oldGrammar)) return "adverb";
+        if ("cj".equals(oldGrammar)) return "conjuncziun";
+        if ("conjuncziun".equals(oldGrammar)) return "conjuncziun";
+        if ("impersunal".equals(oldGrammar)) return "verb";
+        if ("int".equals(oldGrammar)) return "int";
+        if ("int/impersunal".equals(oldGrammar)) return "int/impersunal";
+        if ("int/reflexiv".equals(oldGrammar)) return "int/reflexiv";
+        if ("int/tr".equals(oldGrammar)) return "int/tr";
+        if ("int/unpersönlich".equals(oldGrammar)) return "int";
+        if ("interj".equals(oldGrammar)) return "interjecziun";
+        if ("interjecziun".equals(oldGrammar)) return "interjecziun";
+        if ("num".equals(oldGrammar)) return "numeral";
+        if ("numeral".equals(oldGrammar)) return "numeral";
+        if ("num ord".equals(oldGrammar)) return "numeral";
+        if ("nomen".equals(oldGrammar)) return "nomen";
+        if ("part perfect/adj".equals(oldGrammar)) return null;
+        if ("prep".equals(oldGrammar)) return "preposiziun";
+        if ("preposiziun".equals(oldGrammar)) return "preposiziun";
+        if ("prep+artetgel".equals(oldGrammar)) return "preposiziun / artetgel";
+        if ("prep/conjuncziun".equals(oldGrammar)) return "preposiziun / conjuncziun";
+        if ("pron".equals(oldGrammar)) return "pronom";
+        if ("pronom".equals(oldGrammar)) return "pronom";
+        if ("pronom demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("pronom indefinit".equals(oldGrammar)) return "pronom indefinit";
+        if ("pronom interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("pronom neutr".equals(oldGrammar)) return "pronom";
+        if ("pronom persuna / persunal".equals(oldGrammar)) return "pronom persunal";
+        if ("pronom persuna / persunal indefinit".equals(oldGrammar)) return "pronom persunal";
+        if ("pron Person / personal".equals(oldGrammar)) return "pronom persunal";
+        if ("pronom reflexiv".equals(oldGrammar)) return "pronom";
+        if ("pron reflexiv".equals(oldGrammar)) return "pronom";
+        if ("pronom persuna / persunal 3a pl cumplemaint indirect".equals(oldGrammar)) return "pronom";
+        if ("pronom persuna / persunal pl".equals(oldGrammar)) return "pronom persunal";
+        if ("pronom possessiv".equals(oldGrammar)) return "pronom";
+        if ("reflexiv".equals(oldGrammar)) return "reflexiv";
+        if ("refl".equals(oldGrammar)) return "reflexiv";
+        if ("subst".equals(oldGrammar)) return "nomen";
+        if ("tr".equals(oldGrammar)) return "tr";
+        if ("tr indirect".equals(oldGrammar)) return "tr indirect";
+        if ("tr indirect/int".equals(oldGrammar)) return "tr";
+        if ("tr/impersunal".equals(oldGrammar)) return "tr";
+        if ("tr/int".equals(oldGrammar)) return "tr / int";
+        if ("tr / int".equals(oldGrammar)) return "tr / int";
+        if ("tr/int/Verb modal".equals(oldGrammar)) return "verb modal";
+        if ("tr/tr indirect".equals(oldGrammar)) return "tr";
+        if ("tr/verb modal".equals(oldGrammar)) return "verb modal";
+        if ("".equals(oldGrammar)) return null;
+        if (" ".equals(oldGrammar)) return null;
+
+        return oldGrammar;
+    }
+
+    private String mapSurmiranGrammarD(String oldGrammar) {
+        if ("adj".equals(oldGrammar)) return "adjectiv";
+        if ("adj possessiv".equals(oldGrammar)) return "adjectiv";
+        if ("adj/adv".equals(oldGrammar)) return "adjectiv / adverb";
+        if ("adj/num".equals(oldGrammar)) return "adjectiv";
+        if ("adj/Pronomen".equals(oldGrammar)) return "adjectiv / pronom";
+        if ("adj/Pronomen possessiv".equals(oldGrammar)) return "adjectiv / pronom";
+        if ("adv".equals(oldGrammar)) return "adverb";
+        if ("adv Pronomen".equals(oldGrammar)) return "adverb / pronom";
+        if ("adv relativ".equals(oldGrammar)) return "adverb";
+        if ("adv/Konjunktion".equals(oldGrammar)) return "adverb";
+        if ("adv/Präposition".equals(oldGrammar)) return "adverb";
+        if ("Artikel bestimmt".equals(oldGrammar)) return "artetgel definit";
+        if ("cj".equals(oldGrammar)) return "conjuncziun";
+        if ("I.".equals(oldGrammar)) return null;
+        if ("I. Artikel".equals(oldGrammar)) return "artetgel";
+        if ("I. Artikel bestimmt".equals(oldGrammar)) return "artetgel definit";
+        if ("I. Artikel unbestimmt".equals(oldGrammar)) return "artetgel indefinit";
+        if ("I. Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("I. Konjunktion".equals(oldGrammar)) return "conjuncziun";
+        if ("I. num".equals(oldGrammar)) return "numeral";
+        if ("I. Präposition".equals(oldGrammar)) return "preposiziun";
+        if ("I. pron".equals(oldGrammar)) return "pronom";
+        if ("I. Pronomen demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("I. Pronomen interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("II.".equals(oldGrammar)) return null;
+        if ("II. adj".equals(oldGrammar)) return "adjectiv";
+        if ("II. adj possessiv".equals(oldGrammar)) return "adjectiv";
+        if ("II. adj/num".equals(oldGrammar)) return "adjectiv";
+        if ("II. adj/Pronomen possessiv".equals(oldGrammar)) return "adjectiv";
+        if ("II. Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("II. Präposition".equals(oldGrammar)) return "preposiziun";
+        if ("II. tr".equals(oldGrammar)) return "tr";
+        if ("II. tr/int".equals(oldGrammar)) return "tr / int";
+        if ("II. unpersönlich".equals(oldGrammar)) return "verb";
+        if ("II. Verb modal".equals(oldGrammar)) return "verb modal";
+        if ("III.".equals(oldGrammar)) return null;
+        if ("III. adj".equals(oldGrammar)) return "adjectiv";
+        if ("III. adv".equals(oldGrammar)) return "adverb";
+        if ("III. int".equals(oldGrammar)) return "int";
+        if ("III. int/tr".equals(oldGrammar)) return "int / tr";
+        if ("III. Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("III. Konjunktion".equals(oldGrammar)) return "conjuncziun";
+        if ("III. Präposition".equals(oldGrammar)) return "preposiziun";
+        if ("III. pron".equals(oldGrammar)) return "pronom";
+        if ("III. Pronomen relativ".equals(oldGrammar)) return "pronom relativ";
+        if ("III. Pronomen unbestimmt".equals(oldGrammar)) return "pronom indefinit";
+        if ("III. Pronomen/num".equals(oldGrammar)) return "pronom";
+        if ("III. unpersönlich".equals(oldGrammar)) return "verb";
+        if ("int".equals(oldGrammar)) return "int";
+        if ("int/reflexiv".equals(oldGrammar)) return "int";
+        if ("int/tr".equals(oldGrammar)) return "int / tr";
+        if ("int/unpersönlich".equals(oldGrammar)) return "int";
+        if ("interj".equals(oldGrammar)) return "interjecziun";
+        if ("Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("IV.".equals(oldGrammar)) return null;
+        if ("IV. Interjektion".equals(oldGrammar)) return "interjecziun";
+        if ("IV. Pronomen unbestimmt".equals(oldGrammar)) return "pronom indefinit";
+        if ("IV. unpersönlich".equals(oldGrammar)) return "verb";
+        if ("Konjunktion".equals(oldGrammar)) return "conjuncziun";
+        if ("num".equals(oldGrammar)) return "numeral";
+        if ("num unbestimmt".equals(oldGrammar)) return "numeral";
+        if ("Präposition".equals(oldGrammar)) return "preposiziun";
+        if ("prep".equals(oldGrammar)) return "preposiziun";
+        if ("pron".equals(oldGrammar)) return "pronom";
+        if ("pron demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("pron Person / personal".equals(oldGrammar)) return "pronom persunal";
+        if ("pron possessiv".equals(oldGrammar)) return "pronom";
+        if ("pron reflexiv".equals(oldGrammar)) return "pronom";
+        if ("pron relativ".equals(oldGrammar)) return "pronom relativ";
+        if ("pron unbestimmt".equals(oldGrammar)) return "pronom indefinit";
+        if ("Pronomen demonstrativ".equals(oldGrammar)) return "pronom demonstrativ";
+        if ("Pronomen interrogativ".equals(oldGrammar)) return "pronom interrogativ";
+        if ("Pronomen neutr".equals(oldGrammar)) return "pronom";
+        if ("Pronomen possessiv".equals(oldGrammar)) return "pronom";
+        if ("Pronomen reflexiv".equals(oldGrammar)) return "pronom";
+        if ("Pronomen unbestimmt".equals(oldGrammar)) return "pronom indefinit";
+        if ("Pronomen/adj".equals(oldGrammar)) return "pronom";
+        if ("refl".equals(oldGrammar)) return "reflexiv";
+        if ("tr".equals(oldGrammar)) return "tr";
+        if ("tr/int".equals(oldGrammar)) return "tr / int";
+        if ("tr/int/Verb modal".equals(oldGrammar)) return "verb modal";
+
+        return oldGrammar;
+    }
 }

@@ -125,4 +125,22 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Allows to unify the grammar entries for surmiran
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/change_grammar_entries")
+    ResponseEntity<?> changeGrammarEntries(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.SURMIRAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.changeGrammarIndications(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
