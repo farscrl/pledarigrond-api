@@ -154,10 +154,14 @@ public abstract class WordListGenerator {
             }
 
             String RGrammatik = current.getEntryValue("RGrammatik");
+            String DGrammatik = current.getEntryValue("DGrammatik");
             if (RGrammatik == null) {
                 String RGenus = current.getEntryValue("RGenus");
                 if (RGenus != null && !RGenus.equals("")) {
                     RGrammatik = "nomen";
+                } else if (DGrammatik != null && !"".equals(DGrammatik)) {
+                    // using german grammar
+                    RGrammatik = DGrammatik;
                 } else {
                     // logger.error("No grammar defined for word: {}", RStichwort);
                     noGrammar.add(RStichwort);
