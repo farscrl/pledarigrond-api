@@ -200,6 +200,7 @@ public abstract class WordListGenerator {
         String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
         if (inflectionType == null || inflectionType.equals("")) {
             addFormToSet(baseForms, RStichwort);
+            addFormToSet(inflections, RStichwort);
         } else if (inflectionType.equals("V")) {
             extractVerbs(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("NOUN")) {
