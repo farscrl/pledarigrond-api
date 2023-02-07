@@ -3,7 +3,8 @@ package ch.pledarigrond.inflection.model;
 public enum InflectionType {
     V("v"), // verb
     NOUN("noun"),
-    ADJECTIVE("adjective")
+    ADJECTIVE("adjective"),
+    PRONOUN("pronoun")
     ;
 
     private final String name;

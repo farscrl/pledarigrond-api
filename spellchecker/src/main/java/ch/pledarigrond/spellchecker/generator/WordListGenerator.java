@@ -206,6 +206,8 @@ public abstract class WordListGenerator {
             extractNouns(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("ADJECTIVE")) {
             extractAdjectives(baseForms, inflections, current, RStichwort);
+        } else if (inflectionType.equals("PRONOUN")) {
+            extractPronouns(baseForms, inflections, current, RStichwort);
         } else {
             throw new RuntimeException("Unexpected inflection type: " + inflectionType);
         }
@@ -278,6 +280,20 @@ public abstract class WordListGenerator {
         addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
         addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
         addFormToSet(this.baseForms.get(PartOfSpeechTag.ADV), lemmaVersion.getEntryValue("adverbialForm"));
+    }
+
+    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+        String baseForm = lemmaVersion.getEntryValue("baseForm");
+        if (baseForm == null || baseForm.equals("")) {
+            baseForm = RStichwort;
+        }
+        addFormToSet(baseForms, baseForm);
+        addFormToSet(inflections, baseForm);
+
+        addFormToSet(inflections, lemmaVersion.getEntryValue("mSingular"));
+        addFormToSet(inflections, lemmaVersion.getEntryValue("fSingular"));
+        addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
+        addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
     }
 
     protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {

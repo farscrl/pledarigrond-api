@@ -22,8 +22,6 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import static ch.pledarigrond.spellchecker.model.SpellcheckerRules.*;
 
@@ -179,6 +177,8 @@ abstract public class SpellcheckerGenerator {
                 extractNouns(hunspellList, current);
             } else if (inflectionType.equals("ADJECTIVE")) {
                 extractAdjectives(hunspellList, current);
+            } else if (inflectionType.equals("PRONOUN")) {
+                extractPronouns(hunspellList, current);
             } else {
                 throw new RuntimeException("Unexpected inflection type: " + inflectionType);
             }
@@ -211,6 +211,14 @@ abstract public class SpellcheckerGenerator {
         list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
         list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
         list.addWord(lemmaVersion.getEntryValue("adverbialForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+    }
+
+    protected void extractPronouns(HunspellList list, LemmaVersion lemmaVersion) {
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fSingular"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fPlural"), new SpellcheckerRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
 
     protected void extractVerbs(Language language, HunspellList list, LemmaVersion lemmaVersion) {
