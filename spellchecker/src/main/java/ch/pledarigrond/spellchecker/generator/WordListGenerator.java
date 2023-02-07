@@ -63,7 +63,7 @@ public abstract class WordListGenerator {
 
         Set<String> notFound = new TreeSet<>();
         for(String word: noGrammar) {
-            if (!foundWords.contains(word) && !word.contains(" ")) {
+            if (!foundWords.contains(word) && !word.contains(" ") && !word.contains("'")) {
                 notFound.add(word);
             }
         }
