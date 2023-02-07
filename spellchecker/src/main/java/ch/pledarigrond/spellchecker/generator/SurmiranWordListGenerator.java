@@ -24,6 +24,7 @@ public class SurmiranWordListGenerator extends WordListGenerator {
             put("int", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
             put("int/impersunal", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
             put("int/tr", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
+            put("int / tr", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
             put("interjecziun", new PartOfSpeechTag[] { PartOfSpeechTag.INTERJ });
             put("nomen", new PartOfSpeechTag[] { PartOfSpeechTag.NOUN });
             put("numeral", new PartOfSpeechTag[] { PartOfSpeechTag.NUM_CARDINALS });
