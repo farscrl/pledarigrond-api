@@ -418,9 +418,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 String RStichwort = current.getLemmaValues().get("RStichwort");
                 String RGrammatik = current.getLemmaValues().get("RGrammatik");
                 String DGrammatik = current.getLemmaValues().get("DGrammatik");
-                String RGenus = current.getLemmaValues().get("RGenus");
 
                 boolean didChange = false;
+
                 if (RGrammatik != null && !"".equals(RGrammatik)) {
                     String newGrammatik = mapSurmiranGrammar(RGrammatik);
                     if (newGrammatik == null || !newGrammatik.equals(RGrammatik)) {
@@ -441,11 +441,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
                 // not using an else clause, as mapping can generate empty values
                 if ((RGrammatik == null || "".equals(RGrammatik)) && (RStichwort != null && !RStichwort.equals("") && !RStichwort.contains(" "))) {
-
-                    if (DGrammatik != null && !DGrammatik.equals("")) {
-                        logger.warn("Set " + RStichwort + " to: " + DGrammatik);
-                    }
-
                     if (Character.isUpperCase(RStichwort.charAt(0))) {
                         current.getLemmaValues().put("RGrammatik", "nomen");
                         RGrammatik = "nomen";
@@ -455,7 +450,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                         RGrammatik = "verb reflexiv";
                         didChange = true;
                     } else if (RStichwort.endsWith("abel")) {
-                        //endingAbel.add(RStichwort);
+                        // endingAbel.add(RStichwort);
                         // neginas excepziuns
                         current.getLemmaValues().put("RGrammatik", "adjectiv");
                         RGrammatik = "adjectiv";
@@ -1716,7 +1711,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         if ("adj/adv".equals(oldGrammar)) return "adjectiv / adverb";
         if ("adj/num".equals(oldGrammar)) return "adjectiv";
         if ("adj/Pronomen".equals(oldGrammar)) return "adjectiv / pronom";
-        if ("adj/Pronomen possessiv".equals(oldGrammar)) return "adjectiv / pronom";
+        if ("adj/Pronomen possessiv".equals(oldGrammar)) return "adjectiv / pronom possessiv";
         if ("adv".equals(oldGrammar)) return "adverb";
         if ("adv Pronomen".equals(oldGrammar)) return "adverb / pronom";
         if ("adv relativ".equals(oldGrammar)) return "adverb";
