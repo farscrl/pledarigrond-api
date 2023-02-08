@@ -141,7 +141,6 @@ public class ConjugationPrinter {
             out
                     .append("Gerundi").append("\n")
                     .append(getValue(inflectionValues, "gerundium")).append("\n")
-                    .append(getValue(inflectionValues, "imperativ2")).append("\n")
                     .append("\n");
 
             out.close();
