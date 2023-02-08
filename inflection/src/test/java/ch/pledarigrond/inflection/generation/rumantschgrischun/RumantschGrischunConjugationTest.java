@@ -224,6 +224,58 @@ public class RumantschGrischunConjugationTest {
     }
 
     @Test
+    public void testRule4Er() {
+        forms =  generator.generateConjugation("4", "deponer");
+
+        Assert.assertEquals("deponer", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("jau depon", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("ti deponas", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella depona", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus deponin", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus deponis", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas deponan", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("jau deponiva", forms.getInflectionValues().get("imperfectsing1"));
+        Assert.assertEquals("ti deponivas", forms.getInflectionValues().get("imperfectsing2"));
+        Assert.assertEquals("el/ella deponiva", forms.getInflectionValues().get("imperfectsing3"));
+        Assert.assertEquals("nus deponivan", forms.getInflectionValues().get("imperfectplural1"));
+        Assert.assertEquals("vus deponivas", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("els/ellas deponivan", forms.getInflectionValues().get("imperfectplural3"));
+
+        Assert.assertEquals("che jau deponia", forms.getInflectionValues().get("conjunctivsing1")); // SIC
+        Assert.assertEquals("che ti deponias", forms.getInflectionValues().get("conjunctivsing2")); // SIC
+        Assert.assertEquals("ch'el/ella deponia", forms.getInflectionValues().get("conjunctivsing3")); // SIC
+        Assert.assertEquals("che nus deponian", forms.getInflectionValues().get("conjunctivplural1")); // SIC
+        Assert.assertEquals("che vus deponias", forms.getInflectionValues().get("conjunctivplural2")); // SIC
+        Assert.assertEquals("ch'els/ellas deponian", forms.getInflectionValues().get("conjunctivplural3")); // SIC
+
+        Assert.assertEquals("jau deponiss", forms.getInflectionValues().get("cundizionalsing1"));
+        Assert.assertEquals("ti deponissas", forms.getInflectionValues().get("cundizionalsing2"));
+        Assert.assertEquals("el/ella deponiss", forms.getInflectionValues().get("cundizionalsing3"));
+        Assert.assertEquals("nus deponissan", forms.getInflectionValues().get("cundizionalplural1"));
+        Assert.assertEquals("vus deponissas", forms.getInflectionValues().get("cundizionalplural2"));
+        Assert.assertEquals("els/ellas deponissan", forms.getInflectionValues().get("cundizionalplural3"));
+
+        Assert.assertEquals("jau vegn a deponer", forms.getInflectionValues().get("futursing1"));
+        Assert.assertEquals("ti vegns a deponer", forms.getInflectionValues().get("futursing2"));
+        Assert.assertEquals("el/ella vegn a deponer", forms.getInflectionValues().get("futursing3"));
+        Assert.assertEquals("nus vegnin a deponer", forms.getInflectionValues().get("futurplural1"));
+        Assert.assertEquals("vus vegnis a deponer", forms.getInflectionValues().get("futurplural2"));
+        Assert.assertEquals("els/ellas vegnan a deponer", forms.getInflectionValues().get("futurplural3"));
+
+        Assert.assertEquals("deponì", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("deponida", forms.getInflectionValues().get("participperfectfs"));
+        Assert.assertEquals("deponids", forms.getInflectionValues().get("participperfectmp"));
+        Assert.assertEquals("deponidas", forms.getInflectionValues().get("participperfectfp"));
+
+        Assert.assertEquals("depona!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("deponi!", forms.getInflectionValues().get("imperativ2"));
+
+        Assert.assertEquals("deponind", forms.getInflectionValues().get("gerundium"));
+    }
+
+    @Test
     public void testRule5() {
         forms =  generator.generateConjugation("5", "offrir");
 

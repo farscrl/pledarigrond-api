@@ -5,10 +5,7 @@ import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class RumantschGrischunConjugation extends LanguageConjugation {
@@ -371,6 +368,11 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
     }
 
     private void setGerundium(String root, RumantschGrischunConjugationStructure cs) {
+        if ("4".equals(cs.getConjugationclass().id)) {
+            cs.setGerundium(root + "ind");
+            return;
+        }
+
         switch (getEnding()) {
             case "ar":
                 cs.setGerundium(root + "ond");
