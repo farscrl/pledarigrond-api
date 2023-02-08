@@ -19,6 +19,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -148,13 +149,15 @@ public abstract class WordListGenerator {
 
             String RStichwort = current.getEntryValue("RStichwort");
             String RRegularInflection = current.getEntryValue("RRegularInflection");
+            String RGrammatik = current.getEntryValue("RGrammatik");
+            String DGrammatik = current.getEntryValue("DGrammatik");
+            String preschentsing1 = current.getEntryValue("preschentsing1");
+            String preschentsing3 = current.getEntryValue("preschentsing3");
+
             RStichwort = normalizeString(RStichwort);
             if (RStichwort == null || RStichwort.equals("") || blocklist.contains(RStichwort)) {
                 continue;
             }
-
-            String RGrammatik = current.getEntryValue("RGrammatik");
-            String DGrammatik = current.getEntryValue("DGrammatik");
             if (RGrammatik == null) {
                 String RGenus = current.getEntryValue("RGenus");
                 if (RGenus != null && !RGenus.equals("")) {
@@ -176,7 +179,12 @@ public abstract class WordListGenerator {
             }
 
             for(PartOfSpeechTag tag : tags) {
-                if (tag == PartOfSpeechTag.VERB && RRegularInflection != null && !"true".equals(RRegularInflection)) {
+                if (
+                    tag == PartOfSpeechTag.VERB &&
+                    ( (StringUtils.hasLength(preschentsing1) && !StringUtils.hasLength(preschentsing3)) || (StringUtils.hasLength(preschentsing3) && !StringUtils.hasLength(preschentsing1)) )
+                ) {
+                    addForms(baseForms.get(PartOfSpeechTag.VERB_DEFECTIV), inflections.get(PartOfSpeechTag.VERB_DEFECTIV), current, RStichwort);
+                } else if (tag == PartOfSpeechTag.VERB && RRegularInflection != null && !"true".equals(RRegularInflection)) {
                     addForms(baseForms.get(PartOfSpeechTag.VERB_IRREGULAR), inflections.get(PartOfSpeechTag.VERB_IRREGULAR), current, RStichwort);
                 } else {
                     addForms(baseForms.get(tag), inflections.get(tag), current, RStichwort);
