@@ -143,4 +143,22 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Allows to fix errors in the pronouns for rg that existed for some time
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_pronouns_rg")
+    ResponseEntity<?> fixPronounsRg(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.RUMANTSCHGRISCHUN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.fixVerbPronounsRg(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

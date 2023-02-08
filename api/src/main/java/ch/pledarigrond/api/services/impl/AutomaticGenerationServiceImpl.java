@@ -11,6 +11,8 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunAdjectiveGenerator;
+import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
@@ -599,6 +601,79 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         logger.warn("RGrammatik: " + rGrammatik.toString());
         logger.warn("DGrammatik: " + dGrammatik.toString());
+
+        return true;
+    }
+
+    public boolean fixVerbPronounsRg(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getCurrent() != null) {
+
+                LemmaVersion current = entry.getCurrent();
+                String RStichwort = current.getLemmaValues().get("RStichwort");
+                String DStichwort = current.getLemmaValues().get("DStichwort");
+                String futursing2 = current.getLemmaValues().get("futursing2");
+                String futurplural1 = current.getLemmaValues().get("futurplural1");
+                String gerundium = current.getLemmaValues().get("gerundium");
+                String imperativ2 = current.getLemmaValues().get("imperativ2");
+
+                boolean didChange = false;
+
+                if (futursing2 != null && futursing2.contains("vengs a")) {
+                    //logger.warn(">> " + RStichwort + " // " + DStichwort);
+                    futursing2 = futursing2.replace("vengs a", "vegns a");
+                    current.getLemmaValues().put("futursing2", futursing2);
+                    didChange = true;
+                }
+
+                if (futurplural1 != null && futurplural1.contains("vengnin a")) {
+                    //logger.warn("** " + RStichwort + " // " + DStichwort);
+                    futurplural1 = futurplural1.replace("vengnin a", "vegnin a");
+                    current.getLemmaValues().put("futurplural1", futurplural1);
+                    didChange = true;
+                }
+
+                if (didChange) {
+                    RumantschGrischunConjugation conj = new RumantschGrischunConjugation();
+
+                    String RStichwortClean = RStichwort.replace(" (per)", "");
+                    RStichwortClean = RStichwortClean.replace(" (sin)", "");
+                    RStichwortClean = RStichwortClean.replace(" (d'insatge)", "");
+                    RStichwortClean = RStichwortClean.replace(" dad insatge", "");
+                    RStichwortClean = RStichwortClean.replace(" sin insatge", "");
+                    RStichwortClean = RStichwortClean.replace(" (per)", "");
+                    RStichwortClean = RStichwortClean.replace(" (en il tren, bus)", "");
+
+                    InflectionResponse ir = conj.guessInflection(RStichwortClean, null, null);
+                    if (ir != null) {
+                        String gerundium2 = ir.getInflectionValues().get("gerundium");
+
+                        if (!gerundium.equals(gerundium2)) {
+                            logger.warn(">> " + RStichwort + " // " + DStichwort + " ::> " + gerundium + " vs " + gerundium2);
+                        }
+
+                        String imperativ22 = ir.getInflectionValues().get("imperativ2");
+
+                        if (!imperativ2.equals(imperativ22)) {
+                            logger.warn("** " + RStichwort + " // " + DStichwort + " ::> " + imperativ2 + " vs " + imperativ22);
+                        }
+                    } else {
+                        logger.warn(">> " + RStichwort + " // " + DStichwort + " ::> " + gerundium + " vs nagin automatic [" + RStichwortClean + "]");
+                        logger.warn("** " + RStichwort + " // " + DStichwort + " ::> " + gerundium + " vs nagin automatic [" + RStichwortClean + "]");
+                    }
+
+                    // BasicDBObject newObject = Converter.convertLexEntry(entry);
+                    // entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+                }
+            }
+        }
 
         return true;
     }

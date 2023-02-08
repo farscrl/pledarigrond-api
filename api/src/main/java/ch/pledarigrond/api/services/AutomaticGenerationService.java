@@ -30,4 +30,6 @@ public interface AutomaticGenerationService {
     boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException;
 
     boolean changeGrammarIndications(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean fixVerbPronounsRg(Language language) throws DatabaseException, UnknownHostException;
 }
