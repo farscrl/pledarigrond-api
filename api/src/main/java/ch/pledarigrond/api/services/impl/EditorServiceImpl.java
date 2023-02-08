@@ -199,31 +199,6 @@ public class EditorServiceImpl implements EditorService {
         file.delete();
     }
 
-    /*
-    @Override
-    public HashMap<String, String> getOverlayEditorPreset(Language language, String overlayId, String presetId, String base) throws GenerationFailedException {
-        try {
-            OverlayEditor editor = Overlays.getEditor(overlayType);
-            if(editor != null) {
-                OverlayPresetChooser chooser = editor.getPresetChooser();
-                String presetBuilderClass = chooser.getPresetBuilderClass();
-                if(presetBuilderClass != null) {
-                    Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(presetBuilderClass);
-                    IOverlayGenerator generator = (IOverlayGenerator) clazz.newInstance();
-                    return generator.buildPreset(presetId, base);
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            logger.error("Failed to find overlay generator class", e);
-        } catch (InstantiationException e) {
-            logger.error("Failed to instantiate overlay generator class", e);
-        } catch (IllegalAccessException e) {
-            logger.error("Failed to instantiate overlay generator class", e);
-        }
-        return null;
-    }
-    */
-
     @Override
     public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
         SearchSuggestions suggestions = new SearchSuggestions();
