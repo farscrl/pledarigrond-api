@@ -154,6 +154,11 @@ public abstract class WordListGenerator {
             String preschentsing1 = current.getEntryValue("preschentsing1");
             String preschentsing3 = current.getEntryValue("preschentsing3");
 
+            if (current.getVerification() != LemmaVersion.Verification.ACCEPTED) {
+                // ignore lemmas that are not accepted (== new suggestions)
+                continue;
+            }
+
             RStichwort = normalizeString(RStichwort);
             if (RStichwort == null || RStichwort.equals("") || blocklist.contains(RStichwort)) {
                 continue;

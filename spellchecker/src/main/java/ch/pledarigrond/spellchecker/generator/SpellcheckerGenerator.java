@@ -168,6 +168,12 @@ abstract public class SpellcheckerGenerator {
             LexEntry entry = Converter.convertToLexEntry(object);
 
             LemmaVersion current = entry.getCurrent();
+
+            if (current.getVerification() != LemmaVersion.Verification.ACCEPTED) {
+                // ignore lemmas that are not accepted (== new suggestions)
+                continue;
+            }
+
             String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
             if (inflectionType == null || inflectionType.equals("")) {
                 extractDefault(hunspellList, current);
