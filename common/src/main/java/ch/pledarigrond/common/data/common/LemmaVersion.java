@@ -80,29 +80,21 @@ public class LemmaVersion implements Serializable {
 	public static final Set<String> PG_KEYS;
 
 	public static final String COMMENT = "contact_comment";
-	public static final String COMMENT__DEPRECATED = "maalr_comment";
 
 	// this is the e-mail address indicated as contact when making a suggestion. As this is a freetext field, it has no connection to the user.
 	public static final String EMAIL = "contact_email";
-	public static final String EMAIL__DEPRECATED = "maalr_email";
 
 	public static final String IP_ADDRESS = "user_ip";
-	public static final String IP_ADDRESS__DEPRECATED = "maalr_ip";
 
 	public static final HashSet<String> PUBLIC_PG_KEYS;
 
-	public static final String OVERLAY_LANG_RM__DEPRECATED = "maalr_overlay_lang2";
-	public static final String OVERLAY_LANG_DE__DEPRECATED = "maalr_overlay_lang1";
 	public static final String RM_INFLECTION_TYPE = "RInflectionType";
 	public static final String RM_INFLECTION_SUBTYPE = "RInflectionSubtype";
 
 	public static final String CATEGORIES = "categories";
-	public static final String CATEGORIES__DEPRECATED = "Bearbeitungshinweis";
 
 	public static final String RM_REDIRECT = "RRedirect";
-	public static final String RM_REDIRECT__DEPRECATED = "redirect_b";
 	public static final String DE_REDIRECT = "DRedirect";
-	public static final String DE_REDIRECT__DEPRECATED = "redirect_a";
 
 	public static final String AUTOMATIC_CHANGE = "automatic_change";
 	public static final String REVIEW_LATER = "review_later";

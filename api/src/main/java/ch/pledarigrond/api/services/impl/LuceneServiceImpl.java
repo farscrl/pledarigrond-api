@@ -124,11 +124,8 @@ public class LuceneServiceImpl implements LuceneService {
     private LemmaVersion clean(LemmaVersion lemma) {
         lemma.getPgValues().keySet().retainAll(LemmaVersion.PUBLIC_PG_KEYS);
         lemma.getLemmaValues().remove(LemmaVersion.COMMENT);
-        lemma.getLemmaValues().remove(LemmaVersion.COMMENT__DEPRECATED);
         lemma.getLemmaValues().remove(LemmaVersion.EMAIL);
-        lemma.getLemmaValues().remove(LemmaVersion.EMAIL__DEPRECATED);
         lemma.getLemmaValues().remove(LemmaVersion.IP_ADDRESS);
-        lemma.getLemmaValues().remove(LemmaVersion.IP_ADDRESS__DEPRECATED);
         return lemma;
     }
 }

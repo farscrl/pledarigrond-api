@@ -544,19 +544,9 @@ public class Database {
 			LexEntry entry = (LexEntry) unmarshaller.unmarshal(xsr);
 			entry.getVersionHistory().forEach(lemmaVersion -> {
 				HashMap<String, String> lemmaValues = lemmaVersion.getLemmaValues();
-
-				// clean up tasks (can be disabled if migration is done)
-				replaceOverlayFieldNames(lemmaValues);
-				replaceOldFieldNames(lemmaValues);
-				replaceRedirects(lemmaValues);
-
 				lemmaVersion.setLemmaValues(lemmaValues);
 
 				HashMap<String, String> pgValues = lemmaVersion.getPgValues();
-
-				// clean up tasks (can be disabled if migration is done)
-				replaceOldFieldNames(pgValues);
-
 				lemmaVersion.setPgValues(pgValues);
 			});
 			toInsert.add(new Document(Converter.convertLexEntry(entry)));
@@ -633,63 +623,5 @@ public class Database {
 
 	public MongoCursor<Document> getAll() {
 		return entryCollection.find().iterator();
-	}
-
-	private void replaceOverlayFieldNames(HashMap<String, String> values) {
-		String flexType = values.get(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
-		if (flexType != null) {
-			values.put(LemmaVersion.RM_INFLECTION_TYPE, flexType);
-		}
-		values.remove(LemmaVersion.OVERLAY_LANG_RM__DEPRECATED);
-		values.remove(LemmaVersion.OVERLAY_LANG_DE__DEPRECATED);
-
-		String flexSubtype = values.get("type");
-		if (flexSubtype != null) {
-			values.put(LemmaVersion.RM_INFLECTION_SUBTYPE, flexSubtype);
-		}
-		values.remove("type");
-	}
-
-	private void replaceOldFieldNames(HashMap<String, String> values) {
-
-		String creatorOld = values.get(LemmaVersion.CREATOR);
-		if (creatorOld != null) {
-			if (creatorOld.equals("anonymousUser")) {
-				creatorOld = PgUser.DEFAULT_USER_NAME;
-			}
-			values.put(LemmaVersion.CREATOR, creatorOld);
-		}
-
-		String commentOld = values.get(LemmaVersion.COMMENT__DEPRECATED);
-		if (commentOld != null) {
-			values.put(LemmaVersion.COMMENT, commentOld);
-		}
-		values.remove(LemmaVersion.COMMENT__DEPRECATED);
-
-		String categoryOld = values.get(LemmaVersion.CATEGORIES__DEPRECATED);
-		if (categoryOld != null) {
-			values.put(LemmaVersion.CATEGORIES, categoryOld);
-		}
-		values.remove(LemmaVersion.CATEGORIES__DEPRECATED);
-
-		String emailOld = values.get(LemmaVersion.EMAIL__DEPRECATED);
-		if (emailOld != null) {
-			values.put(LemmaVersion.EMAIL, emailOld);
-		}
-		values.remove(LemmaVersion.EMAIL__DEPRECATED);
-	}
-
-	private void replaceRedirects(HashMap<String, String> values) {
-		String redirectDeOld = values.get(LemmaVersion.DE_REDIRECT__DEPRECATED);
-		if (redirectDeOld != null) {
-			values.put(LemmaVersion.DE_REDIRECT, redirectDeOld.replace("searchPhrase=", ""));
-		}
-		values.remove(LemmaVersion.DE_REDIRECT__DEPRECATED);
-
-		String redirectRmOld = values.get(LemmaVersion.RM_REDIRECT__DEPRECATED);
-		if (redirectRmOld != null) {
-			values.put(LemmaVersion.RM_REDIRECT, redirectRmOld.replace("searchPhrase=", ""));
-		}
-		values.remove(LemmaVersion.RM_REDIRECT__DEPRECATED);
 	}
 }
