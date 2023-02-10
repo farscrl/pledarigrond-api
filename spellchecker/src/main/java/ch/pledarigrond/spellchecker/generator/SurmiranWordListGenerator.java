@@ -46,6 +46,7 @@ public class SurmiranWordListGenerator extends WordListGenerator {
             put("verb", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
             put("verb modal", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
             put("verb reflexiv", new PartOfSpeechTag[] { PartOfSpeechTag.VERB });
+            put("abreviaziun", new PartOfSpeechTag[] { PartOfSpeechTag.ABBR });
         }};
     }
 
