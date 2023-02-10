@@ -379,25 +379,25 @@ public class LuceneIndex {
 	public ArrayList<String> getSuggestionsForFieldChoice(SuggestionField suggestionField, String value, int limit) throws NoIndexAvailableException, IOException {
 		SearchCriteria searchCriteria = new SearchCriteria();
 		searchCriteria.setSuggestions(true);
-		Set<String> fields = Set.of();
+		Set<String[]> fields = Set.of();
 		if (suggestionField == SuggestionField.GENDER) {
 			searchCriteria.setGender(value);
-			fields = Set.of("DGenus", "RGenus");
+			fields = Set.of(new String[]{"DGenus_na_nw_l_t-STRING", "DGenus"}, new String[]{"RGenus_na_nw_l_t-STRING", "RGenus"});
 		} else if (suggestionField == SuggestionField.GRAMMAR) {
 			searchCriteria.setGrammar(value);
-			fields = Set.of("DGrammatik", "RGrammatik");
+			fields = Set.of(new String[]{"DGrammatik_na_nw_l_t-STRING", "DGrammatik"}, new String[]{"RGrammatik_na_nw_l_t-STRING", "RGrammatik"});
 		}
 		Query query = indexManager.buildQuery(searchCriteria);
 		if(query == null) {
 			return new ArrayList<>();
 		}
 		Set<String> allValues = new TreeSet<>();
-		for (String field : fields) {
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
+		for (String[] field : fields) {
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field[0]), Integer.MAX_VALUE);
 			ScoreDoc[] scoreDocs = docs.scoreDocs;
 			for (int i = 0; i < scoreDocs.length; i++) {
 				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
-				IndexableField[] indexableFields = doc.getFields(field);
+				IndexableField[] indexableFields = doc.getFields(field[1]);
 
 				for (IndexableField indexedField : indexableFields) {
 					String[] parts = indexedField.stringValue().split("(; ?)|(, ?)");
