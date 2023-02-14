@@ -170,7 +170,7 @@ public class WordListUtils {
         }
     }
 
-    public static String normalizeWord(String word) {
+    public static String normalizeWordListEntry(String word) {
         if (word == null) {
             return null;
         }
@@ -185,6 +185,10 @@ public class WordListUtils {
         }
 
         if (word.endsWith("!")) {
+            word = word.substring(0, word.length() - 1);
+        }
+
+        if (word.endsWith("?")) {
             word = word.substring(0, word.length() - 1);
         }
 

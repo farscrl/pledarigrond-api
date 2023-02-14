@@ -1,7 +1,6 @@
 package ch.pledarigrond.spellchecker.model;
 
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
-import ch.pledarigrond.spellchecker.model.HunspellRules;
 
 import java.util.*;
 
@@ -9,7 +8,7 @@ public class HunspellList {
     private final Map<String, Set<HunspellRules>> wordsList = new TreeMap<>();
 
     public void addWord(String word, HunspellRules[] rules) {
-        word = WordListUtils.normalizeWord(word);
+        word = WordListUtils.normalizeWordListEntry(word);
         if (word == null) {
             return;
         }

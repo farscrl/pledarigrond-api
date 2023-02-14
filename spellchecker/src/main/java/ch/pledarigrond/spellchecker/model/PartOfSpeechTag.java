@@ -1,4 +1,4 @@
-package ch.pledarigrond.spellchecker.generator;
+package ch.pledarigrond.spellchecker.model;
 
 public enum PartOfSpeechTag {
     ABBR("ABBR"),

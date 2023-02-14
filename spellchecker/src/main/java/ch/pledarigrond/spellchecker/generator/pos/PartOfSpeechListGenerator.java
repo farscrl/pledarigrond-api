@@ -1,4 +1,4 @@
-package ch.pledarigrond.spellchecker.generator;
+package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
@@ -9,6 +9,8 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.names.entities.Name;
+import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
+import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -25,23 +27,23 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public abstract class WordListGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(WordListGenerator.class);
+public abstract class PartOfSpeechListGenerator {
+    private static final Logger logger = LoggerFactory.getLogger(PartOfSpeechListGenerator.class);
 
     protected PgEnvironment pgEnvironment;
     protected Map<String, PartOfSpeechTag[]> posLookupTable = new HashMap<>();
 
     private Set<String> blocklist = new TreeSet<>();
-    private Map<PartOfSpeechTag, Set<String>> baseForms = new HashMap<>();
-    private Map<PartOfSpeechTag, Set<String>> inflections = new HashMap<>();
+    private final Map<PartOfSpeechTag, Set<String>> baseForms = new HashMap<>();
+    private final Map<PartOfSpeechTag, Set<String>> inflections = new HashMap<>();
 
     private Set<String> foundWords;
 
-    private Set<String> noGrammar;
+    private Set<String> missingGrammar;
 
     private final List<Name> names;
 
-    public WordListGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public PartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<Name> names) {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
     }
@@ -54,7 +56,7 @@ public abstract class WordListGenerator {
             baseForms.put(tag, new TreeSet<>());
             inflections.put(tag, new TreeSet<>());
         }
-        noGrammar = new TreeSet<>();
+        missingGrammar = new TreeSet<>();
         foundWords = new TreeSet<>();
 
         File dir = new File(pgEnvironment.getTempExportLocation());
@@ -63,7 +65,8 @@ public abstract class WordListGenerator {
         loadValidWords(language);
 
         Set<String> notFound = new TreeSet<>();
-        for(String word: noGrammar) {
+        for(String word: missingGrammar) {
+            // check that missing words have not been added later and are not composed words
             if (!foundWords.contains(word) && !word.contains(" ") && !word.contains("'")) {
                 notFound.add(word);
             }
@@ -138,6 +141,16 @@ public abstract class WordListGenerator {
 
     abstract protected String removePronouns(String value);
 
+    abstract protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+
+    abstract protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, LemmaVersion lemmaVersion, String RStichwort);
+
+    abstract protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+
+    abstract protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+
+    abstract protected void extractDefault(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+
     private void loadValidWords(Language language) throws NoDatabaseAvailableException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -172,7 +185,7 @@ public abstract class WordListGenerator {
                     RGrammatik = DGrammatik;
                 } else {
                     // logger.error("No grammar defined for word: {}", RStichwort);
-                    noGrammar.add(RStichwort);
+                    missingGrammar.add(RStichwort);
                     continue;
                 }
             }
@@ -203,11 +216,13 @@ public abstract class WordListGenerator {
                 String rm = WordListUtils.getRomanshNameForLanguage(language, name);
                 if (rm != null) {
                     baseForms.get(PartOfSpeechTag.NOUN).add(rm);
+                    inflections.get(PartOfSpeechTag.NOUN).add(rm);
                 }
 
                 String de = WordListUtils.getGermanNameForLanguage(language, name);
                 if (de != null) {
                     baseForms.get(PartOfSpeechTag.NOUN).add(de);
+                    inflections.get(PartOfSpeechTag.NOUN).add(de);
                 }
             });
         }
@@ -216,14 +231,13 @@ public abstract class WordListGenerator {
     private void addForms(Set<String> baseForms, Set<String> inflections, LemmaVersion current, String RStichwort) {
         String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
         if (inflectionType == null || inflectionType.equals("")) {
-            addFormToSet(baseForms, RStichwort);
-            addFormToSet(inflections, RStichwort);
+            extractDefault(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("V")) {
             extractVerbs(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("NOUN")) {
             extractNouns(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("ADJECTIVE")) {
-            extractAdjectives(baseForms, inflections, current, RStichwort);
+            extractAdjectives(baseForms, inflections, this.baseForms.get(PartOfSpeechTag.ADV), this.inflections.get(PartOfSpeechTag.ADV), current, RStichwort);
         } else if (inflectionType.equals("PRONOUN")) {
             extractPronouns(baseForms, inflections, current, RStichwort);
         } else {
@@ -270,139 +284,9 @@ public abstract class WordListGenerator {
         }
     }
 
-    protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
-        String baseForm = lemmaVersion.getEntryValue("baseForm");
-        if (baseForm == null || baseForm.equals("")) {
-            baseForm = RStichwort;
-        }
-        addFormToSet(baseForms, baseForm);
-        addFormToSet(inflections, baseForm);
-        
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("pluralCollectiv"));
-    }
-
-    protected void extractAdjectives(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
-        String baseForm = lemmaVersion.getEntryValue("baseForm");
-        if (baseForm == null || baseForm.equals("")) {
-            baseForm = RStichwort;
-        }
-        addFormToSet(baseForms, baseForm);
-        addFormToSet(inflections, baseForm);
-        
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
-        addFormToSet(this.baseForms.get(PartOfSpeechTag.ADV), lemmaVersion.getEntryValue("adverbialForm"));
-    }
-
-    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
-        String baseForm = lemmaVersion.getEntryValue("baseForm");
-        if (baseForm == null || baseForm.equals("")) {
-            baseForm = RStichwort;
-        }
-        addFormToSet(baseForms, baseForm);
-        addFormToSet(inflections, baseForm);
-
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fSingular"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
-        addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
-    }
-
-    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
-        String infinitiv = lemmaVersion.getEntryValue("infinitiv");
-        if (infinitiv == null || infinitiv.equals("")) {
-            infinitiv = RStichwort;
-        }
-        addFormToSet(baseForms, removePronouns(infinitiv));
-        addFormToSet(inflections, removePronouns(infinitiv));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing3")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural3")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing3")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural3")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivsing1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivsing2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivsing3")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivplural1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivplural2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("conjunctivplural3")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing3")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural3")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("participperfectms")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("participperfectfs")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("participperfectmp")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("participperfectfp")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperativ1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperativ2")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("gerundium")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing3")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural1")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural2")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural3")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticm")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticf")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("preschentplural3enclitic")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticm")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticf")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("imperfectplural3enclitic")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticm")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticf")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("cundizionalplural3enclitic")));
-
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing3encliticm")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futursing3encliticf")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural1enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural2enclitic")));
-        addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural3enclitic")));
-    }
-
-    private void addFormToSet(Set<String> set, String word) {
-        word = WordListUtils.normalizeStringSurmiran(word);
-        word = WordListUtils.normalizeWord(word);
+    protected void addFormToSet(Set<String> set, String word) {
+        word = normalizeString(word);
+        word = WordListUtils.normalizeWordListEntry(word);
         if (word == null) {
             return;
         }

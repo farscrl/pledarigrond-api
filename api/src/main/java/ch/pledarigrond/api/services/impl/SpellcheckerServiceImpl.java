@@ -8,8 +8,7 @@ import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
-import ch.pledarigrond.spellchecker.generator.SurmiranWordListGenerator;
-import ch.pledarigrond.spellchecker.generator.WordListGenerator;
+import ch.pledarigrond.spellchecker.generator.pos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +50,14 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         };
     }
 
-    private WordListGenerator getMsWordListGenerator(Language language, List<Name> names) {
-        switch (language) {
-            case SURMIRAN:
-                return new SurmiranWordListGenerator(pgEnvironment, names);
-
-            default:
-                return null;
-        }
+    private PartOfSpeechListGenerator getMsWordListGenerator(Language language, List<Name> names) {
+        return switch (language) {
+            case PUTER -> new PuterPartOfSpeechListGenerator(pgEnvironment, names);
+            case RUMANTSCHGRISCHUN -> new RumantschgrischunPartOfSpeechListGenerator(pgEnvironment, names);
+            case SURMIRAN -> new SurmiranPartOfSpeechListGenerator(pgEnvironment, names);
+            case SURSILVAN -> new SursilvanPartOfSpeechListGenerator(pgEnvironment, names);
+            case SUTSILVAN -> new SutsilvanPartOfSpeechListGenerator(pgEnvironment, names);
+            case VALLADER -> new ValladerPartOfSpeechListGenerator(pgEnvironment, names);
+        };
     }
 }
