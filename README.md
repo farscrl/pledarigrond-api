@@ -20,12 +20,12 @@ The API-module is a Spring Boot application. It handles the Web-Requests to the 
 The common module contains data definitions used by different modules.
 
 ### inflection
-The inflection module has the logic to inflect (conjugate, create plural forms...) words in different Romansh idioms.
+The inflection module has the logic to inflect words (conjugate, create plural forms...) in different Romansh idioms.
 
 The generation of the conjugations is partially based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.conjugator) module.
 
 ### lucene
-The lucene module creates Lucene Indexes of all entries of the dictionary. This is used to perform the searches on.
+The lucene module creates Lucene Indexes of all entries of the dictionary. It is used to perform the searches on.
 
 There are two lucene indexes that are created: one on the hard disk and another one just in RAM. Searches are always executed on the index in RAM. When the application starts, the index of the hard disk is loaded into RAM. 
 
@@ -36,5 +36,15 @@ The mongodb module handles the persistent storage of the dictionary data in a Mo
 
 This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
 
+### names
+The names module handles the storage of Names (typical romansh firstnames, lastnames, geographical names,...) used for the spellcheckers.
+
+This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
+
 ### parent
 The parent-module is parent for all modules in this repository and allows defining common pom entries.
+
+### spellchecker
+The spellchecker module handles the generation of the spellchecker files.
+
+This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
