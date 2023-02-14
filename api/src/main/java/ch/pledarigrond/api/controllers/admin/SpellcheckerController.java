@@ -30,21 +30,6 @@ public class SpellcheckerController {
     private PgEnvironment pgEnvironment;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/export_wordlist")
-    void exportWordlist(@PathVariable("language")Language language, HttpServletResponse response) {
-        try {
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            File export = spellcheckerService.exportWordList(language);
-            response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
-            stream(response, export);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/export_hunspell")
     void exportHunspell(@PathVariable("language")Language language, HttpServletResponse response) {
         try {

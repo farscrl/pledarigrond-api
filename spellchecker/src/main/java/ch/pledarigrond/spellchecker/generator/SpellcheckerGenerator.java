@@ -27,34 +27,13 @@ import static ch.pledarigrond.spellchecker.model.SpellcheckerRules.*;
 
 abstract public class SpellcheckerGenerator {
 
-    String version;
-
     PgEnvironment pgEnvironment;
 
-    private List<Name> names;
+    private final List<Name> names;
 
     public SpellcheckerGenerator(PgEnvironment pgEnvironment, List<Name> names) {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
-    }
-
-    public File exportWordList(Language language) throws NoDatabaseAvailableException, IOException {
-        File dir = new File(pgEnvironment.getTempExportLocation());
-        dir.mkdirs();
-
-        // create wordlist
-        Set<String> words = getAllValidWords(language);
-        File wordlist = new File(dir, "wordlist_" + language + ".txt");
-        writeSetTo(wordlist, words);
-
-        // write Zip
-        List<File> files = new ArrayList<>();
-        files.add(wordlist);
-        File zipFile = new File(dir, "wordlist_" + language + "_" + UUID.randomUUID() + ".zip");
-        //zipFile.createNewFile();
-        WordListUtils.writeFilesToZip(zipFile, files);
-
-        return zipFile;
     }
 
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
