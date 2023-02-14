@@ -12,6 +12,10 @@ import java.util.zip.ZipOutputStream;
 
 public class WordListUtils {
     public static String normalizeStringSurmiran(String input) {
+        if (input == null) {
+            return null;
+        }
+
         // Ignore cf.
         if (input.startsWith("cf. ")) {
             return null;
@@ -24,6 +28,9 @@ public class WordListUtils {
             input = input.substring(0, input.length() - 2);
         }
         if (input.endsWith("!")) {
+            input = input.substring(0, input.length() - 1);
+        }
+        if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
         if (input.startsWith("far ")) {

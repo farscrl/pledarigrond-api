@@ -401,6 +401,7 @@ public abstract class WordListGenerator {
     }
 
     private void addFormToSet(Set<String> set, String word) {
+        word = WordListUtils.normalizeStringSurmiran(word);
         word = WordListUtils.normalizeWord(word);
         if (word == null) {
             return;
