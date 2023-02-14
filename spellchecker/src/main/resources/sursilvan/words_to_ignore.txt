@@ -1,0 +1,2 @@
+# List of words to be ignored in the spellchecker exports.
+# Lines starting with a #-sign are ignored.

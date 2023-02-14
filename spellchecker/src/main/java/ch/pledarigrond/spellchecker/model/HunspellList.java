@@ -1,19 +1,20 @@
-package ch.pledarigrond.spellchecker.generator;
+package ch.pledarigrond.spellchecker.model;
 
-import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
+import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import ch.pledarigrond.spellchecker.model.HunspellRules;
 
 import java.util.*;
 
 public class HunspellList {
-    private final Map<String, Set<SpellcheckerRules>> wordsList = new TreeMap<>();
+    private final Map<String, Set<HunspellRules>> wordsList = new TreeMap<>();
 
-    public void addWord(String word, SpellcheckerRules[] rules) {
+    public void addWord(String word, HunspellRules[] rules) {
         word = WordListUtils.normalizeWord(word);
         if (word == null) {
             return;
         }
 
-        Set<SpellcheckerRules> r = wordsList.get(word);
+        Set<HunspellRules> r = wordsList.get(word);
         if (r== null) {
             r = new TreeSet<>();
         }
@@ -35,7 +36,7 @@ public class HunspellList {
         wordsList.remove(word);
     }
 
-    public String generateHunspellEntry(String word, Set<SpellcheckerRules> rules) {
+    public String generateHunspellEntry(String word, Set<HunspellRules> rules) {
         StringBuilder sb = new StringBuilder();
         sb.append(word);
         if (rules.size() > 0) {

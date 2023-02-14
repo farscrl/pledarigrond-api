@@ -3,7 +3,6 @@ package ch.pledarigrond.spellchecker.generator;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
 import ch.pledarigrond.names.entities.Name;
-import ch.pledarigrond.spellchecker.model.SpellcheckerRules;
 
 import java.io.*;
 import java.util.*;

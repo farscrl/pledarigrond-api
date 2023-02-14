@@ -17,6 +17,31 @@ public enum Language implements Serializable {
 		return name;
 	}
 
+	public String getSubtag() {
+		switch (name) {
+			case "puter":
+				return "puter";
+
+			case "rumantschgrischun":
+				return "rumgr";
+
+			case "surmiran":
+				return "surmiran";
+
+			case "sursilvan":
+				return "sursilv";
+
+			case "sutsilvan":
+				return "sutsilv";
+
+			case "vallader":
+				return "vallader";
+
+			default:
+				return "";
+		}
+	}
+
 	private Language(String name) {
 		this.name = name;
 	}
