@@ -296,6 +296,16 @@ public abstract class PartOfSpeechListGenerator {
             return;
         }
 
+        // split words containing a slash into two words
+        // TODO: if data is cleaned up, this condition can be removed
+        if (word.contains("/")) {
+            String[] words = word.split("/");
+
+            addFormToSet(set, words[0]);
+            addFormToSet(set, words[1]);
+            return;
+        }
+
         // ignore words with an apostroph
         if (word.contains("'")) {
             return;
