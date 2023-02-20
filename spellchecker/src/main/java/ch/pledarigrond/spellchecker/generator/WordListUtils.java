@@ -192,6 +192,10 @@ public class WordListUtils {
             word = word.substring(0, word.length() - 1);
         }
 
+        if (word.endsWith(",")) {
+            word = word.substring(0, word.length() - 1);
+        }
+
         return word;
     }
 }
