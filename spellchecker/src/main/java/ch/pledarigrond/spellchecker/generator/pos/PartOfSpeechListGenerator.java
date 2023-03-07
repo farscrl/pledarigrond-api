@@ -128,9 +128,14 @@ public abstract class PartOfSpeechListGenerator {
             throw new RuntimeException(e);
         }
 
+        // load list of vulgar words
+        ClassPathResource resource = new ClassPathResource(language.getName() + "/vulgar.txt");
+        File vulgarWords = resource.getFile();
+
         // write Zip
         files.add(versionFile);
         files.add(licenceFile);
+        files.add(vulgarWords);
         File zipFile = new File(dir, "wordlist_" + language + "_" + versionAndBuild + ".zip");
         WordListUtils.writeFilesToZip(zipFile, files);
 
