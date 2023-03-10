@@ -41,7 +41,7 @@ public class S3BackupServiceImpl implements S3BackupService {
             s3Client = AmazonS3ClientBuilder
                     .standard()
                     .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(pgEnvironment.getS3Endpoint(), ""))
+                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(pgEnvironment.getS3Endpoint(), pgEnvironment.getS3Region()))
                     .build();
 
             logger.info("Available S3 buckets: ");

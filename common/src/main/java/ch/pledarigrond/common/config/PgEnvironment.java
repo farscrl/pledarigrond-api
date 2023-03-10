@@ -115,6 +115,9 @@ public class PgEnvironment {
 	@Value("${pg.s3.endpoint}")
 	private String s3Endpoint;
 
+	@Value("${pg.s3.region}")
+	private String s3Region;
+
 	private LuceneConfiguration luceneConfigPuter;
 	private LuceneConfiguration luceneConfigRumantschgrischun;
 	private LuceneConfiguration luceneConfigSurmiran;
