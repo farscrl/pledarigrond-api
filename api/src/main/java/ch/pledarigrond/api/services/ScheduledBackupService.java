@@ -49,6 +49,16 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		backup(Language.SUTSILVAN);
 	}
 
+	@Scheduled(cron = "${pg.backup.cron.puter}")
+	public void backupPuter() {
+		backup(Language.PUTER);
+	}
+
+	@Scheduled(cron = "${pg.backup.cron.vallader}")
+	public void backupVallader() {
+		backup(Language.VALLADER);
+	}
+
 	@Scheduled(cron = "${pg.backup.cron.users}")
 	public void backupUsers() throws JAXBException, IOException, NoSuchAlgorithmException {
 		backupUserDb();
