@@ -49,7 +49,7 @@ public class Converter {
 			object.put(LexEntry.ID, new ObjectId(entry.getId()));
 		}
 		object.put(LexEntry.CURRENT, entry.getCurrentId());
-		object.put(LexEntry.INTERNAL_ID, entry.getNextInternalId());
+		object.put(LexEntry.NEXT_INTERNAL_ID, entry.getNextInternalId());
 		object.put(LexEntry.CHANGE_STAMP, entry.getChangeStamp());
 		return object;
 	}
@@ -91,7 +91,7 @@ public class Converter {
 		if (objId != null) {
 			entry.setId(objId.toString());
 		}
-		entry.setNextInternalId((Integer) obj.get(LexEntry.INTERNAL_ID));
+		entry.setNextInternalId((Integer) obj.get(LexEntry.NEXT_INTERNAL_ID));
 		entry.setLemmaVersions(list);
 		entry.setCurrentId((Integer) obj.get(LexEntry.CURRENT));
 		entry.setChangeStamp((String) obj.get(LexEntry.CHANGE_STAMP));

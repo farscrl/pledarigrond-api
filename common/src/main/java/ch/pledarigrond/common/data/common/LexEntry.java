@@ -36,7 +36,7 @@ public class LexEntry implements Serializable {
 	public static final String ID = "_id";
 	public static final String VERSIONS = "versions";
 	public static final String CURRENT = "current";
-	public static final String INTERNAL_ID = "internal_id";
+	public static final String NEXT_INTERNAL_ID = "internal_id";
 	public static final String CHANGE_STAMP = "change_stamp";
 
 	@XmlElement(name="version")
