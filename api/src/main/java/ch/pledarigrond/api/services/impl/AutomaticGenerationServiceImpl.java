@@ -761,10 +761,13 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 counter++;
 
                 int currentId = entry.getCurrentId();
-                entry.getLemmaVersionByInternalId(currentId).setVerification(LemmaVersion.Verification.ACCEPTED);
+                LemmaVersion lastAccepted = entry.getLemmaVersionByInternalId(currentId - 1);
+                if (lastAccepted != null) {
+                    lastAccepted.setVerification(LemmaVersion.Verification.ACCEPTED);
+                }
 
                 entry.getVersionHistory().forEach(lemmaVersion -> {
-                    if (lemmaVersion.getInternalId() > currentId) {
+                    if (lemmaVersion.getInternalId() >= currentId) {
                         lemmaVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
                     }
                 });
