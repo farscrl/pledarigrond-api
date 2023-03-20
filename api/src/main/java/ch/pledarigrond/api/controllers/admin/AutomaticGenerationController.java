@@ -161,4 +161,22 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * List errors in sutsilvan caused by duplication of lemmas during automatic generation
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_automatic_duplication_errors")
+    ResponseEntity<?> fixAutomaticDuplicationErrors(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.SUTSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.fixAutomaticDuplicationErrors(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -32,4 +32,6 @@ public interface AutomaticGenerationService {
     boolean changeGrammarIndications(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixVerbPronounsRg(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException;
 }

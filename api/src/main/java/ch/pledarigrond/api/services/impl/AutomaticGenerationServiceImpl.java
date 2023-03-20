@@ -678,6 +678,64 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getCurrent() == null) {
+                List<Integer> internalIds = new ArrayList<>();
+
+                int lastIndex = 10000000;
+                int duplicateIndex = 10000000;
+                int indexToReplace = 10000000;
+                if (entry.getVersionHistory().size() == 1) {
+                    if (entry.getVersionHistory().get(0).getInternalId() == 0 && entry.getCurrentId() == 1) {
+                        duplicateIndex = 1;
+                        indexToReplace = 0;
+                        entry.setCurrentId(0);
+
+                        logger.error(entry.getVersionHistory().get(0).getLemmaValues().get("RStichwort"));
+                    }
+                } else {
+                    for (int i = 0; i < entry.getVersionHistory().size(); i++) {
+                        if (entry.getVersionHistory().get(i).getInternalId() == lastIndex) {
+                            duplicateIndex = lastIndex;
+                            int indexCandidate = lastIndex - 1;
+
+                            if (entry.getVersionHistory().get(i-1).getInternalId() == indexCandidate) {
+                                logger.error("nonono");
+                            } else {
+                                indexToReplace = indexCandidate;
+                                entry.getVersionHistory().get(i-1).setInternalId(indexToReplace);
+                            }
+                        }
+                        lastIndex = entry.getVersionHistory().get(i).getInternalId();
+                    }
+                }
+
+                entry.getVersionHistory().forEach(lemmaVersion -> {
+                    internalIds.add(lemmaVersion.getInternalId());
+                });
+                logger.warn(entry.getId() + ": " + entry.getVersionHistory().size() + " entries (" + internalIds.toString() + "). Current ID: " + entry.getCurrentId() + ". " + entry.getVersionHistory().get(0).getLemmaValues().get("RStichwort") + "/" + entry.getVersionHistory().get(0).getLemmaValues().get("DStichwort"));
+                logger.warn("Resolution: duplicateIndex ( " + duplicateIndex + " ) indexToReplace ( " + indexToReplace + " )");
+                counter++;
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        logger.error("number of cases: " + counter);
+
+        return true;
+    }
+
     private boolean updateNounsByGender(Language language, String gender) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
