@@ -171,14 +171,7 @@ public class LexEntry implements Serializable {
 	}
 
 	public LemmaVersion getCurrent() {
-		List<LemmaVersion> versions = getVersionHistory();
-		// FIXME: Implement more efficient way to get current version.
-		for (LemmaVersion lv : versions) {
-			if (lv.getInternalId().equals(currentId)) {
-				return lv;
-			}
-		}
-		return null;
+		return getLemmaVersionByInternalId(currentId);
 	}
 
 	public void setCurrent(final LemmaVersion lemmaVersion) {
@@ -226,5 +219,16 @@ public class LexEntry implements Serializable {
 
 	public int getCurrentId() {
 		return currentId;
+	}
+
+	public LemmaVersion getLemmaVersionByInternalId(int internalId) {
+		List<LemmaVersion> versions = getVersionHistory();
+		// FIXME: Implement more efficient way to get current version.
+		for (LemmaVersion lv : versions) {
+			if (lv.getInternalId().equals(internalId)) {
+				return lv;
+			}
+		}
+		return null;
 	}
 }

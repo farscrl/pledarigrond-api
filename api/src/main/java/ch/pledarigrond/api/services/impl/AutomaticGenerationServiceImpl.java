@@ -736,6 +736,49 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            boolean noAccepted = true;
+            for (int i = 0; i < entry.getVersionHistory().size(); i++) {
+                if (entry.getVersionHistory().get(i).getVerification() == LemmaVersion.Verification.ACCEPTED) {
+                    noAccepted = false;
+                }
+            }
+
+            if (noAccepted) {
+                logger.warn(entry.getId());
+                logger.error(entry.getCurrent().getLemmaValues().get("RStichwort"));
+                logger.error(String.valueOf(entry.getCurrentId()));
+                logger.error("--------------------------------------------------");
+                counter++;
+
+                int currentId = entry.getCurrentId();
+                entry.getLemmaVersionByInternalId(currentId).setVerification(LemmaVersion.Verification.ACCEPTED);
+
+                entry.getVersionHistory().forEach(lemmaVersion -> {
+                    if (lemmaVersion.getInternalId() > currentId) {
+                        lemmaVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
+                    }
+                });
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        logger.error("number of cases: " + counter);
+
+        return true;
+    }
+
     private boolean updateNounsByGender(Language language, String gender) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
