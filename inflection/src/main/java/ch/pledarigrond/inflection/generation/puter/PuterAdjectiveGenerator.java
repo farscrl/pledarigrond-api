@@ -54,7 +54,7 @@ public class PuterAdjectiveGenerator extends LanguageAdjectiveGeneration {
             return null;
         }
 
-        if (baseForm.matches(".*, -(a|ada|dra|vla|bla|cra|vna|eida|eda)$")) {
+        if (baseForm.matches(".*, -(a|ra|bla|cra|na|ma|gia|glia|eda|ida)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
 
