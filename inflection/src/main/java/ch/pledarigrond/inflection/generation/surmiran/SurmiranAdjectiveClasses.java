@@ -18,7 +18,7 @@ public class SurmiranAdjectiveClasses {
                     new InflectionSubType("7", "finiziun sen «ia»","p.ex. distinguia – distingueida, distinguias, distingueidas"),
                     new InflectionSubType("8", "finiziun sen «o»","p.ex. attempo – attempada, attempos, attempadas"),
                     new InflectionSubType("9", "finiziun sen «ea»","p.ex. schlaschea – schlascheda, schlascheas, schlaschedas"),
-                    new InflectionSubType("10", "finiziun sen «(vocal)(c/f/m/n/p/r/t/z)»","p.ex. tschuf – tschuffa, tschus, tschuffas")
+                    new InflectionSubType("10", "finiziun sen «(vocal)(c/f/m/n/p/r/t/z)»","p.ex. tschuf – tschuffa, tschufs, tschuffas")
             )
     );
 
