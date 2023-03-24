@@ -20,7 +20,7 @@ public class PuterNounClasses {
                     new InflectionSubType("9", "ver -> vra", "p.ex. pover – povra"),
                     new InflectionSubType("10", "o -> eda", "p.ex. depüto – depüteda"),
                     new InflectionSubType("11", "go -> gheda", "p.ex. impiego – impiegheda"),
-                    new InflectionSubType("12", "glio -> glieada", "p.ex. piglio – piglieda"),
+                    new InflectionSubType("12", "glio -> glieda", "p.ex. piglio – piglieda"),
                     new InflectionSubType("13", "ieu -> ida", "p.ex. impedieu – impedida"),
                     new InflectionSubType("14", "glieu -> glida", "p.ex. assaglieu - assaglida"),
                     new InflectionSubType("15", "plural coll", "p.ex. bês-ch - bês-chs - bês-cha")
