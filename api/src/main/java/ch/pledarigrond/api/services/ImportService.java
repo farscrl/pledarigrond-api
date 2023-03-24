@@ -21,4 +21,5 @@ import java.security.NoSuchAlgorithmException;
 public interface ImportService {
 
     boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException;
+    boolean importLadinData(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException;
 }

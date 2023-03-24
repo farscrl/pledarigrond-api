@@ -1,5 +1,7 @@
 package ch.pledarigrond.api.services.impl;
 
+import ch.pledarigrond.api.dtos.LadinDto;
+import ch.pledarigrond.api.dtos.VerbDto;
 import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.api.services.ImportService;
 import ch.pledarigrond.api.services.LuceneService;
@@ -12,6 +14,7 @@ import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.inflection.generation.puter.PuterAdjectiveGenerator;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
@@ -36,27 +39,24 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.apache.poi.ss.usermodel.CellType.STRING;
+import static org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK;
 
 @Service
 public class ImportServiceImpl implements ImportService {
 
+    private final Logger logger = LoggerFactory.getLogger(ImportService.class);
+
     @Autowired
     private PgEnvironment pgEnvironment;
 
-    @Autowired
-    private LuceneService luceneService;
-
-    @Qualifier("backupInfoHelper")
-    @Autowired
-    private BackupInfoHelper backupInfoHelper;
-
-    private final Logger logger = LoggerFactory.getLogger(ImportService.class);
-
+    private String date = "";
 
     @Override
     public boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException {
@@ -146,4 +146,155 @@ public class ImportServiceImpl implements ImportService {
         return true;
     }
 
+    public boolean importLadinData(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException, JAXBException, XMLStreamException {
+        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
+
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        date = df.format(new Date());
+
+        Map<String, VerbDto> verbs;
+        List<LadinDto> lemmas;
+        if (language == Language.PUTER) {
+            verbs = loadVerbs("verbs_puter_total.xlsx");
+            lemmas = loadLemmas("puter.xlsx");
+        } else {
+            verbs = loadVerbs("verbs_vallader_total.xlsx");
+            lemmas = loadLemmas("vallader.xlsx");
+        }
+
+        Set<String> verbsMancants = new TreeSet<>();
+        lemmas.forEach(l -> {
+            LemmaVersion lemmaVersion = getLemmaVersion(l);
+
+            if (!l.getVerbId().equals("")) {
+                if (!verbs.containsKey(l.getVerbId())) {
+                    verbsMancants.add(l.getVerbId());
+                    logger.error("ID not found: " + l.getVerbId());
+                } else {
+                    addVerbData(lemmaVersion, verbs.get(l.getVerbId()));
+                }
+            }
+
+            LexEntry le = new LexEntry();
+            le.addLemma(lemmaVersion);
+            le.setCurrent(lemmaVersion);
+            le.setNextInternalId(1);
+
+            try {
+                db.insert(le);
+            } catch (InvalidEntryException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        logger.error(verbsMancants.toString());
+
+        return true;
+    }
+
+    private Map<String, VerbDto> loadVerbs(String fileName) throws IOException {
+        FileInputStream source = new FileInputStream(new File("api/src/main/resources/ladin/" + fileName));
+
+        Map<String, VerbDto> verbs = new HashMap<>();
+
+        Workbook workbook = new XSSFWorkbook(source);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        for (int i = 4; i <= sheet.getLastRowNum(); i++) {
+            VerbDto v = new VerbDto();
+            Row row = sheet.getRow(i);
+            String id = row.getCell(0).getStringCellValue()
+                    .replace("ö", "o").replace("ü", "u");
+            v.setVerbId(id);
+
+            verbs.put(v.getVerbId(), v);
+        }
+
+        return verbs;
+    }
+
+    private List<LadinDto> loadLemmas(String fileName) throws IOException {
+        FileInputStream source = new FileInputStream(new File("api/src/main/resources/ladin/" + fileName));
+
+        List<LadinDto> lemmas = new ArrayList<>();
+
+        Workbook workbook = new XSSFWorkbook(source);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            LadinDto l = new LadinDto();
+            Row row = sheet.getRow(i);
+            try {
+                for (int j = 0; j < 22; j++) {
+                    row.getCell(j, CREATE_NULL_AS_BLANK).setCellType(STRING);
+                }
+                l.setId(row.getCell(0, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setEinschrkR(row.getCell(1, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setFlexD(row.getCell(2, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setFlexR(row.getCell(3, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setGenusD(row.getCell(4, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setGenusR(row.getCell(5, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setGrammKatD(row.getCell(6, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setGrammD(row.getCell(7, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setGrammR(row.getCell(8, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSemindD(row.getCell(9, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSemindR(row.getCell(10, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSempraezD(row.getCell(11, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSempraezR(row.getCell(12, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSortD(row.getCell(13, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSortDohneZiffern(row.getCell(14, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSortR(row.getCell(15, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setSortRohneZiffern(row.getCell(16, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setStatusD(row.getCell(17, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setStatusR(row.getCell(18, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setStichwortD(row.getCell(19, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setStichwortR(row.getCell(20, CREATE_NULL_AS_BLANK).getStringCellValue());
+                l.setVerbId(row.getCell(21, CREATE_NULL_AS_BLANK).getStringCellValue());
+            } catch (IllegalStateException e) {
+                System.out.println(e);
+            }
+
+            lemmas.add(l);
+        }
+
+        return lemmas;
+    }
+
+    private LemmaVersion getLemmaVersion(LadinDto ladinDto) {
+        LemmaVersion lv = new LemmaVersion();
+
+        lv.getLemmaValues().put("DFlex",ladinDto.getFlexD());
+        lv.getLemmaValues().put("RFlex",ladinDto.getFlexR());
+        lv.getLemmaValues().put("DGenus",ladinDto.getGenusD());
+        lv.getLemmaValues().put("RGenus",ladinDto.getGenusR());
+        lv.getLemmaValues().put("DGrammatik",ladinDto.getGrammD());
+        lv.getLemmaValues().put("RGrammatik",ladinDto.getGrammR());
+        lv.getLemmaValues().put("DEnum",ladinDto.getSemindD());
+        lv.getLemmaValues().put("REnum",ladinDto.getSemindR());
+        lv.getLemmaValues().put("Dcategories",ladinDto.getSempraezD());
+        lv.getLemmaValues().put("categories",ladinDto.getSempraezR());
+        lv.getLemmaValues().put("DStichwort_sort",ladinDto.getSortD());
+        lv.getLemmaValues().put("RStichwort_sort",ladinDto.getSortR());
+        lv.getLemmaValues().put("DStichwort_sort_alpha",ladinDto.getSortDohneZiffern());
+        lv.getLemmaValues().put("RStichwort_sort_alpha",ladinDto.getSortRohneZiffern());
+        lv.getLemmaValues().put("DStatus",ladinDto.getStatusD());
+        lv.getLemmaValues().put("RStatus",ladinDto.getStatusR());
+        lv.getLemmaValues().put("DStichwort", ladinDto.getStichwortD());
+        lv.getLemmaValues().put("RStichwort", ladinDto.getStichwortR());
+        lv.getLemmaValues().put("verbID", ladinDto.getVerbId());
+
+        // static data
+        lv.getLemmaValues().put("user_comment", "Import " + date);
+        lv.setCreatorRole(EditorRole.ADMIN);
+        lv.setStatus(LemmaVersion.Status.NEW_ENTRY);
+        lv.setVerification(LemmaVersion.Verification.ACCEPTED);
+        lv.setInternalId(0);
+        lv.setUserId("import@pledarigrond.ch");
+
+        return lv;
+    }
+
+    private void addVerbData(LemmaVersion lemmaVersion, VerbDto verbDto) {
+
+    }
 }
