@@ -1133,7 +1133,7 @@ public class SurmiranConjugation extends LanguageConjugation {
     private void setFutur(SurmiranConjugationStructure cs) {
         switch (getIsReflexive()) {
             case "true":
-                if (startsWithVocal(root)) {
+                if (startsWithVowel(root)) {
                     switch (cs.getConjugationclass().id.substring(0, 1)) {
                         case "6":
                         case "7":

@@ -4,8 +4,6 @@ import ch.pledarigrond.inflection.model.InflectionResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.HashMap;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 public abstract class LanguageConjugation extends LanguageInflectionBase {
@@ -29,7 +27,7 @@ public abstract class LanguageConjugation extends LanguageInflectionBase {
         return root.charAt(root.length() - 1) == root.charAt(root.length() - 2);
     }
 
-    public boolean startsWithVocal(String root) {
+    public boolean startsWithVowel(String root) {
         return switch (root.substring(0, 1)) {
             case "a", "e", "i", "o", "u", "ä", "ö", "ü" -> true;
             default -> false;
