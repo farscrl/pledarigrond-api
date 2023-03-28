@@ -18,7 +18,7 @@ public class ValladerConjugationClasses {
                     new InflectionSubType("3", "-er", "Finiziun sün -er, accent sün tschep (p.ex. vender)"),
 
                     new InflectionSubType("4", "-ir", "Finiziun sün -ir (p.ex. cusir)"),
-                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir, cun infix -isch- (p.ex. admonir)")
+                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir, cun infix -isch- (p.ex. admonir)", true)
             )
     );
 
