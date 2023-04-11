@@ -89,12 +89,12 @@ public class MongoDbServiceImpl implements MongoDbService {
     }
 
     @Override
-    public void update(Language language, LexEntry oldEntry, LemmaVersion newEntry) throws Exception {
-        if(newEntry == null) throw new InvalidEntryException("Lemma must not be null!");
-        if(oldEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
+    public void update(Language language, LexEntry lexEntry, LemmaVersion newVersion) throws Exception {
+        if(newVersion == null) throw new InvalidEntryException("Lemma must not be null!");
+        if(lexEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
         String login = getUserLogin();
-        addUserInfo(language, newEntry);
-        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, oldEntry, newEntry).setLogin(login).asSuggestion(), language);
+        addUserInfo(language, newVersion);
+        LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, lexEntry, newVersion).setLogin(login).asSuggestion(), language);
         luceneService.update(language, modified);
     }
 

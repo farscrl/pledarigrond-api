@@ -90,9 +90,9 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public LexEntry update(Language language, LexEntry entry, LemmaVersion updated) throws Exception {
-        db.update(language, entry, updated);
-        return entry;
+    public LexEntry update(Language language, LexEntry lexEntry, LemmaVersion newVersion) throws Exception {
+        db.update(language, lexEntry, newVersion);
+        return lexEntry;
     }
 
     @Override
