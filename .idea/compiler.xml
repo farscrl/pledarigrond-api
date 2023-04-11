@@ -16,15 +16,5 @@
         <module name="inflection" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="api" target="17" />
-      <module name="common" target="17" />
-      <module name="inflection" target="17" />
-      <module name="lucene" target="17" />
-      <module name="mongodb" target="17" />
-      <module name="names" target="17" />
-      <module name="parent" target="17" />
-      <module name="spellchecker" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
