@@ -782,6 +782,38 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            boolean wrongId = false;
+            for (int i = 0; i < entry.getVersionHistory().size(); i++) {
+                if (!entry.getVersionHistory().get(i).getLexEntryId().equals(entry.getId())) {
+                    logger.warn("aiaiaiai: " + entry.getId() + " / " + entry.getVersionHistory().get(i).getLexEntryId());
+                    wrongId = true;
+                    entry.getVersionHistory().get(i).setLexEntryId(entry.getId());
+                }
+            }
+
+            if (wrongId) {
+                counter++;
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        logger.error("number of cases: " + counter);
+
+        return true;
+    }
+
     private boolean updateNounsByGender(Language language, String gender) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);

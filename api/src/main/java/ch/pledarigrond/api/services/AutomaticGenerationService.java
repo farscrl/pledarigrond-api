@@ -36,4 +36,6 @@ public interface AutomaticGenerationService {
     boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException;
 }

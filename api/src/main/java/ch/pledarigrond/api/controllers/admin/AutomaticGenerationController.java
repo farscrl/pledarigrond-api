@@ -198,4 +198,22 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * List errors in sutsilvan caused by duplication of lemmas during automatic generation
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_wrong_parent_id")
+    ResponseEntity<?> fixWrongParentId(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.SUTSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.fixWrongParentId(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during fixing wrong parent id");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
