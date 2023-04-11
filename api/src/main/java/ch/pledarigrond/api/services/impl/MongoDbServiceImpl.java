@@ -92,6 +92,10 @@ public class MongoDbServiceImpl implements MongoDbService {
     public void update(Language language, LexEntry lexEntry, LemmaVersion newVersion) throws Exception {
         if(newVersion == null) throw new InvalidEntryException("Lemma must not be null!");
         if(lexEntry == null) throw new InvalidEntryException("LexEntry must not be null!");
+
+        // set internal id
+        newVersion.setInternalId(lexEntry.getNextInternalId());
+
         String login = getUserLogin();
         addUserInfo(language, newVersion);
         LexEntry modified = queue.push(new UpdateOperation(pgEnvironment, language, lexEntry, newVersion).setLogin(login).asSuggestion(), language);
