@@ -7,10 +7,6 @@ public class StringToLanguageConverter implements Converter<String, Language> {
 
     @Override
     public Language convert(String source) {
-        try {
-            return Language.valueOf(source.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Language.RUMANTSCHGRISCHUN;
-        }
+        return Language.valueOf(source.toUpperCase());
     }
 }
