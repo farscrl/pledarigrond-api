@@ -232,11 +232,6 @@ public class PuterNounGenerator extends LanguageNounGeneration {
     }
 
     public String buildPlural(String base) {
-        if (base.contains("-")) {
-            String[] s = base.split("-", 2);
-            return  buildPlural(s[0]) + "-" + s[1];
-        }
-
         String l1 = base.substring(base.length() - 1);
         String l2 = base.substring(base.length() - 2);
 
