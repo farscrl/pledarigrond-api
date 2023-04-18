@@ -14,9 +14,9 @@ public class ValladerInflection implements LanguageInflection {
         switch (inflectionType) {
             case V:
                 return ValladerConjugationClasses.getVerbInflectionSubtypes();
-            /*case NOUN:
-                return PuterNounClasses.getNounInflectionSubtypes();
-            case ADJECTIVE:
+            case NOUN:
+                return ValladerNounClasses.getNounInflectionSubtypes();
+            /*case ADJECTIVE:
                 return PuterAdjectiveClasses.getAdjectiveInflectionSubtypes();*/
         }
 
@@ -29,10 +29,10 @@ public class ValladerInflection implements LanguageInflection {
             case V:
                 ValladerConjugation conjugation = new ValladerConjugation();
                 return conjugation.guessInflection(baseForm, genus, flex);
-            /*case NOUN:
-                PuterNounGenerator nounGenerator = new PuterNounGenerator();
+            case NOUN:
+                ValladerNounGenerator nounGenerator = new ValladerNounGenerator();
                 return nounGenerator.guessInflection(baseForm, genus, flex);
-            case ADJECTIVE:
+            /*case ADJECTIVE:
                 PuterAdjectiveGenerator adjectiveGenerator = new PuterAdjectiveGenerator();
                 return adjectiveGenerator.guessInflection(baseForm, genus, flex);*/
         }
@@ -45,10 +45,10 @@ public class ValladerInflection implements LanguageInflection {
             case V:
                 ValladerConjugation conjugation = new ValladerConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
-            /*case NOUN:
-                PuterNounGenerator nounGenerator = new PuterNounGenerator();
+            case NOUN:
+                ValladerNounGenerator nounGenerator = new ValladerNounGenerator();
                 return nounGenerator.generateForms(subTypeId, baseForm);
-            case ADJECTIVE:
+            /*case ADJECTIVE:
                 PuterAdjectiveGenerator adjectiveGenerator = new PuterAdjectiveGenerator();
                 return adjectiveGenerator.generateForms(subTypeId, baseForm);*/
         }
