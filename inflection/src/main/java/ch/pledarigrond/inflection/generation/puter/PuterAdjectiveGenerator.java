@@ -137,7 +137,7 @@ public class PuterAdjectiveGenerator extends LanguageAdjectiveGeneration {
         }
         char secondToTheLastCharacter = baseForm.charAt(length-2);
         char lastCharacter = baseForm.charAt(length-1);
-        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter)) {
+        if (isVocal(secondToTheLastCharacter) && isDuplicatedConsonant(lastCharacter) && isSingleSyllable(baseForm)) {
             return generateForms("12", baseForm);
         }
 

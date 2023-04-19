@@ -286,5 +286,19 @@ public class PuterAdjectiveGeneratorTest {
 
         forms = generator.guessInflection("fop", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "12");
+
+
+        // rule 12 should only be used for single syllable words
+        forms = generator.guessInflection("electric", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "1");
+
+        forms = generator.guessInflection("dogmatic", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "1");
+
+        forms = generator.guessInflection("obligatoric", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "1");
+
+        forms = generator.guessInflection("difficil", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "1");
     }
 }
