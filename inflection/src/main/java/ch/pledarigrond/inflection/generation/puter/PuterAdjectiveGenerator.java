@@ -224,10 +224,14 @@ public class PuterAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
     public String buildPlural(String base) {
         String l1 = base.substring(base.length() - 1);
+        String l2 = base.substring(base.length() - 2);
 
-        if (base.contains("-")) {
-            String[] s = base.split("-", 2);
-            return  buildPlural(s[0]) + "-" + s[1];
+        if (l2.equals("ur")) {
+            return base.substring(0, base.length() - 1) + "ors";
+        }
+
+        if (l1.equals("è")) {
+            return base.substring(0, base.length() - 1) + "els";
         }
 
         if (l1.equals("s")) {
