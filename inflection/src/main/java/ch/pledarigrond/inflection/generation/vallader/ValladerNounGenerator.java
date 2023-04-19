@@ -1,8 +1,6 @@
 package ch.pledarigrond.inflection.generation.vallader;
 
 import ch.pledarigrond.inflection.generation.generic.LanguageNounGeneration;
-import ch.pledarigrond.inflection.generation.puter.PuterNounClasses;
-import ch.pledarigrond.inflection.generation.puter.PuterNounStructure;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import lombok.Data;
@@ -23,7 +21,7 @@ public class ValladerNounGenerator extends LanguageNounGeneration {
 
     private static final Logger logger = LoggerFactory.getLogger(ValladerNounGenerator.class);
 
-    private PuterNounStructure ns;
+    private ValladerNounStructure ns;
 
     private String baseForm;
 
@@ -39,7 +37,7 @@ public class ValladerNounGenerator extends LanguageNounGeneration {
 
         root = getRoot(baseForm, nounClass);
 
-        InflectionSubType subType = PuterNounClasses.getNounInflectionClass(nounClass);
+        InflectionSubType subType = ValladerNounClasses.getNounInflectionClass(nounClass);
         if (subType == null) {
             throw new RuntimeException(nounClass + " is not a valid inflection class.");
         } else if (getEnding() == null) {
@@ -180,7 +178,7 @@ public class ValladerNounGenerator extends LanguageNounGeneration {
 
     public HashMap<String, String> buildForms(String root, InflectionSubType nounClass) {
 
-        ns = new PuterNounStructure();
+        ns = new ValladerNounStructure();
         ns.setBaseForm(baseForm);
         ns.setInflectionSubType(nounClass);
 
@@ -197,7 +195,6 @@ public class ValladerNounGenerator extends LanguageNounGeneration {
 
     public String buildPlural(String base) {
         String l1 = base.substring(base.length() - 1);
-        String l2 = base.substring(base.length() - 2);
 
         if (l1.equals("à")) {
             return base.substring(0, base.length() - 1) + "ats";
