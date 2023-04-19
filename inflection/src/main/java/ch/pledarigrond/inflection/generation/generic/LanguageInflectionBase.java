@@ -15,21 +15,24 @@ public abstract class LanguageInflectionBase {
     }
 
     public static boolean isSingleSyllable(String word) {
-        int numberVowels = 0;
-        int lastVowelPosition = -1;
+        return countSyllables(word) == 1;
+    }
 
-        for (int i = 0; i < word.length() ; i++) {
-            if(isVocal(word.charAt(i))) {
-                numberVowels++;
-                if (numberVowels > 2) {
-                    return false;
-                }
-                if (numberVowels > 1 && i - lastVowelPosition > 1) {
-                    return false;
-                }
-                lastVowelPosition = i;
+    public static int countSyllables(String word) {
+        // rules implemented according to "Grammatica Sursilvana", 1989, Arnold Spescha
+        int count = 0;
+        word = word.toLowerCase();
+
+        boolean isConsonant = true;
+
+        for (int i = 0; i < word.length(); i++) {
+            boolean isNextConsonant = !isVocal(word.charAt(i));
+            if (isConsonant && !isNextConsonant) {
+                count++;
             }
+
+            isConsonant = isNextConsonant;
         }
-        return true;
+        return count;
     }
 }

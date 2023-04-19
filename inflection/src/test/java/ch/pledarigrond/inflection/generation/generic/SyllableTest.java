@@ -1,18 +1,26 @@
 package ch.pledarigrond.inflection.generation.generic;
 
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SyllableTest {
 
     @Test
-    public void demoTestMethod() {
-        SurmiranConjugation sc = new SurmiranConjugation();
-        assertTrue(sc.isSingleSyllable("plai"));
-        assertTrue(sc.isSingleSyllable("fain"));
-        assertFalse(sc.isSingleSyllable("tomata"));
+    public void countSyllables() {
+        assertEquals(LanguageInflectionBase.countSyllables("utschi"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("rosa"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("leger"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("calar"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("combra"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("plonta"), 2);
+        assertEquals(LanguageInflectionBase.countSyllables("emprender"), 3);
+    }
+
+    @Test
+    public void checkSingleSyllable() {
+        assertTrue(LanguageInflectionBase.isSingleSyllable("plai"));
+        assertTrue(LanguageInflectionBase.isSingleSyllable("fain"));
+        assertFalse(LanguageInflectionBase.isSingleSyllable("tomata"));
     }
 }
