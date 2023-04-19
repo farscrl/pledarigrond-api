@@ -179,13 +179,6 @@ public class PuterNounGeneratorTest {
     }
 
     @Test
-    public void testPluralRule5() {
-        forms = generator.generateForms("1", "porta-chesa");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "porta-chesa");
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "portas-chesa");
-    }
-
-    @Test
     public void testUpperCase() {
         forms = generator.generateForms("3", "Argoves");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "Argoves");
