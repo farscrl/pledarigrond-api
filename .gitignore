@@ -4,6 +4,8 @@
 /data/lucene_index
 /data/export
 /data/export_tmp
+/data/db_dump
+/data/db_restore
 
 # macOS
 .DS_Store
