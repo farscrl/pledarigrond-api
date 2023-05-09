@@ -21,7 +21,7 @@ import java.net.UnknownHostException;
 
 @RestController
 @RequestMapping("{language}/admin/import")
-public class ImportContrller {
+public class ImportController {
 
     @Autowired
     private ImportService importService;
