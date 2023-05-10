@@ -61,6 +61,8 @@ public class FieldFactory {
 
 	@SuppressWarnings("unchecked")
 	public List<IndexableField> getFields(String value) {
+		value = normalizeLadinPronunciationValues(value);
+
 		if(value == null) return null;
 		if(lowercase) {
 			value = value.toLowerCase();
@@ -93,5 +95,29 @@ public class FieldFactory {
 		return "FieldFactory [type=" + type + ", name=" + name + ", stored="
 				+ stored + ", lowercase=" + lowercase + ", analyzed="
 				+ analyzed + ", analyzer=" + analyzer + "]";
+	}
+
+	/**
+	 * RStichwort in ladin (puter & vallader) contains pronunciation marks. As search should not depend
+	 * on those, we normalize the values for the search fields.
+	 * This function normalizes the values in fields with a name starting with "RStichwort_".
+	 *
+	 * @param value The field value
+	 * @return The normalized file value
+	 */
+	private String normalizeLadinPronunciationValues(String value) {
+		if (name.startsWith("RStichwort_")) {
+			return value
+					.replaceAll("ẹ", "e")
+					.replaceAll("ụ", "u")
+					.replaceAll("ạ", "a")
+					.replaceAll("ị", "i")
+					.replaceAll("ọ", "o")
+					.replaceAll("ụ̈", "ü")
+					.replaceAll("ọ̈", "ö")
+					.replaceAll("ṣ", "s");
+		}
+
+		return value;
 	}
 }
