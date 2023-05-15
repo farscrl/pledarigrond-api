@@ -34,6 +34,18 @@ public class PuterConjugation extends LanguageConjugation {
             modRoot = root + "esch";
         }
 
+        if (infinitiv.endsWith("ger")) {
+            modRoot = infinitiv.substring(0, infinitiv.length() - 2) + "i";
+        }
+
+        if (infinitiv.endsWith("glier")) {
+            modRoot = infinitiv.substring(0, infinitiv.length() - 2);
+        }
+
+        if (infinitiv.endsWith("cker")) {
+            modRoot = infinitiv.substring(0, infinitiv.length() - 3) + "c";
+        }
+
         if (modRoot == null) {
             modRoot = root;
         }
@@ -209,11 +221,32 @@ public class PuterConjugation extends LanguageConjugation {
             case "1a":
             case "2":
             case "3":
-                cs.setPreschentsing1(modRoot);
+                if (cs.getInfinitiv().endsWith("ger") || cs.getInfinitiv().endsWith("glier") || cs.getInfinitiv().endsWith("cker")) {
+                    cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 1));
+                } else if (
+                        cs.getInfinitiv().endsWith("ffer") ||
+                        cs.getInfinitiv().endsWith("ller") ||
+                        cs.getInfinitiv().endsWith("mmer") ||
+                        cs.getInfinitiv().endsWith("nner") ||
+                        cs.getInfinitiv().endsWith("pper") ||
+                        cs.getInfinitiv().endsWith("rrer") ||
+                        cs.getInfinitiv().endsWith("tter") ||
+                        cs.getInfinitiv().endsWith("zzer")
+                ) {
+                    cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 1));
+                } else {
+                    cs.setPreschentsing1(modRoot);
+                }
                 cs.setPreschentsing2(modRoot + "ast");
                 cs.setPreschentsing3(modRoot + "a");
-                cs.setPreschentplural1(root + "ains");
-                cs.setPreschentplural2(root + "ais");
+
+                if (cs.getInfinitiv().endsWith("ger") || cs.getInfinitiv().endsWith("glier") || cs.getInfinitiv().endsWith("cker")) {
+                    cs.setPreschentplural1(modRoot + "ains");
+                    cs.setPreschentplural2(modRoot + "ais");
+                } else {
+                    cs.setPreschentplural1(root + "ains");
+                    cs.setPreschentplural2(root + "ais");
+                }
                 cs.setPreschentplural3(modRoot + "an");
                 break;
 
@@ -238,12 +271,21 @@ public class PuterConjugation extends LanguageConjugation {
             case "1":
             case "2":
             case "3":
-                cs.setImperfectsing1(root + "aiva");
-                cs.setImperfectsing2(root + "aivast");
-                cs.setImperfectsing3(root + "aiva");
-                cs.setImperfectplural1(root + "aivans");
-                cs.setImperfectplural2(root + "aivas");
-                cs.setImperfectplural3(root + "aivan");
+                if (cs.getInfinitiv().endsWith("ger")) {
+                    cs.setImperfectsing1(modRoot + "aiva");
+                    cs.setImperfectsing2(modRoot + "aivast");
+                    cs.setImperfectsing3(modRoot + "aiva");
+                    cs.setImperfectplural1(modRoot + "aivans");
+                    cs.setImperfectplural2(modRoot + "aivas");
+                    cs.setImperfectplural3(modRoot + "aivan");
+                } else {
+                    cs.setImperfectsing1(root + "aiva");
+                    cs.setImperfectsing2(root + "aivast");
+                    cs.setImperfectsing3(root + "aiva");
+                    cs.setImperfectplural1(root + "aivans");
+                    cs.setImperfectplural2(root + "aivas");
+                    cs.setImperfectplural3(root + "aivan");
+                }
                 break;
 
             case "4":
@@ -360,12 +402,21 @@ public class PuterConjugation extends LanguageConjugation {
                 break;
 
             default:
-                cs.setFutursing1(root + "aro");
-                cs.setFutursing2(root + "arost");
-                cs.setFutursing3(root + "aro");
-                cs.setFuturplural1(root + "arons");
-                cs.setFuturplural2(root + "aros");
-                cs.setFuturplural3(root + "aron");
+                if (cs.getInfinitiv().endsWith("ger")) {
+                    cs.setFutursing1(modRoot + "aro");
+                    cs.setFutursing2(modRoot + "arost");
+                    cs.setFutursing3(modRoot + "aro");
+                    cs.setFuturplural1(modRoot + "arons");
+                    cs.setFuturplural2(modRoot + "aros");
+                    cs.setFuturplural3(modRoot + "aron");
+                } else {
+                    cs.setFutursing1(root + "aro");
+                    cs.setFutursing2(root + "arost");
+                    cs.setFutursing3(root + "aro");
+                    cs.setFuturplural1(root + "arons");
+                    cs.setFuturplural2(root + "aros");
+                    cs.setFuturplural3(root + "aron");
+                }
                 break;
         }
     }
@@ -382,65 +433,98 @@ public class PuterConjugation extends LanguageConjugation {
                 break;
 
             default:
-                cs.setFuturdubitativsing1(root + "aregia");
-                cs.setFuturdubitativsing2(root + "aregiast");
-                cs.setFuturdubitativsing3(root + "aregia");
-                cs.setFuturdubitativplural1(root + "aregians");
-                cs.setFuturdubitativplural2(root + "aregias");
-                cs.setFuturdubitativplural3(root + "aregian");
+                if (cs.getInfinitiv().endsWith("ger")) {
+                    cs.setFuturdubitativsing1(modRoot + "aregia");
+                    cs.setFuturdubitativsing2(modRoot + "aregiast");
+                    cs.setFuturdubitativsing3(modRoot + "aregia");
+                    cs.setFuturdubitativplural1(modRoot + "aregians");
+                    cs.setFuturdubitativplural2(modRoot + "aregias");
+                    cs.setFuturdubitativplural3(modRoot + "aregian");
+                } else {
+                    cs.setFuturdubitativsing1(root + "aregia");
+                    cs.setFuturdubitativsing2(root + "aregiast");
+                    cs.setFuturdubitativsing3(root + "aregia");
+                    cs.setFuturdubitativplural1(root + "aregians");
+                    cs.setFuturdubitativplural2(root + "aregias");
+                    cs.setFuturdubitativplural3(root + "aregian");
+                }
                 break;
         }
     }
 
 
     private static void setPreschentEnclitic(PuterConjugationStructure cs) {
-        cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "i");
-        //cs.setPreschentsing2Enclitic(cs.getPreschentsing2() + "t");
+        if (cs.getInfinitiv().endsWith("cker")) {
+            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ki");
+        } else if (
+                cs.getInfinitiv().endsWith("ffar") ||
+                        cs.getInfinitiv().endsWith("ffer") ||
+                        cs.getInfinitiv().endsWith("llar") ||
+                        cs.getInfinitiv().endsWith("ller") ||
+                        cs.getInfinitiv().endsWith("mmar") ||
+                        cs.getInfinitiv().endsWith("mmer") ||
+                        cs.getInfinitiv().endsWith("nnar") ||
+                        cs.getInfinitiv().endsWith("nner") ||
+                        cs.getInfinitiv().endsWith("ppar") ||
+                        cs.getInfinitiv().endsWith("pper") ||
+                        cs.getInfinitiv().endsWith("rrar") ||
+                        cs.getInfinitiv().endsWith("rrer") ||
+                        cs.getInfinitiv().endsWith("ttar") ||
+                        cs.getInfinitiv().endsWith("tter") ||
+                        cs.getInfinitiv().endsWith("zzar") ||
+                        cs.getInfinitiv().endsWith("zzer")
+        ) {
+            String consonant = cs.getPreschentsing1().substring(cs.getPreschentsing1().length() - 1);
+            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + consonant + "i");
+        } else {
+            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "i");
+        }
+        cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
         cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-        cs.setPreschentsing3EncliticF(cs.getPreschentsing3() + "'la");
+        cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
         cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
-        //cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
+        cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
         cs.setPreschentplural3Enclitic(cs.getPreschentplural3() + "e");
     }
 
     private static void setImperfectEnclitic(PuterConjugationStructure cs) {
-        cs.setImperfectsing1Enclitic(cs.getImperfectsing1() + "i");
-        //cs.setImperfectsing2Enclitic(cs.getImperfectsing2() + "t");
+        cs.setImperfectsing1Enclitic(cs.getImperfectsing1().substring(0, cs.getImperfectsing1().length() - 1) + "i");
+        cs.setImperfectsing2Enclitic(cs.getImperfectsing2());
         cs.setImperfectsing3EncliticM(cs.getImperfectsing3() + "'l");
-        cs.setImperfectsing3EncliticF(cs.getImperfectsing3() + "'la");
-        //cs.setImperfectplural1Enclitic(cs.getImperfectplural1() + "s");
-        //cs.setImperfectplural2Enclitic(cs.getImperfectplural2());
+        cs.setImperfectsing3EncliticF(cs.getImperfectsing3().substring(0, cs.getImperfectsing3().length() - 1) + "'la");
+        cs.setImperfectplural1Enclitic(cs.getImperfectplural1());
+        cs.setImperfectplural2Enclitic(cs.getImperfectplural2());
         cs.setImperfectplural3Enclitic(cs.getImperfectplural3() + "e");
     }
 
     private static void setCundizionalEnclitic(PuterConjugationStructure cs) {
         cs.setCundizionalsing1Enclitic(cs.getCundizionalsing1() + "i");
-        // cs.setCundizionalsing2Enclitic(cs.getCundizionalsing2() + "t");
+        cs.setCundizionalsing2Enclitic(cs.getCundizionalsing2());
         cs.setCundizionalsing3EncliticM(cs.getCundizionalsing3() + "a'l");
         cs.setCundizionalsing3EncliticF(cs.getCundizionalsing3() + "'la");
-        //cs.setCundizionalplural1Enclitic(cs.getCundizionalplural1() + "s");
-        //cs.setCundizionalplural2Enclitic(cs.getCundizionalplural2());
+        cs.setCundizionalplural1Enclitic(cs.getCundizionalplural1());
+        cs.setCundizionalplural2Enclitic(cs.getCundizionalplural2());
         cs.setCundizionalplural3Enclitic(cs.getCundizionalplural3() + "e");
     }
 
     private static void setFuturEnclitic(PuterConjugationStructure cs) {
-        //cs.setFutursing1Enclitic(cs.getFutursing1() + "ia");
-        //cs.setFutursing2Enclitic(cs.getFutursing2() + "t");
+        cs.setFutursing1Enclitic(cs.getFutursing1());
+        cs.setFutursing2Enclitic(cs.getFutursing2());
         cs.setFutursing3EncliticM(cs.getFutursing3() + "'l");
         cs.setFutursing3EncliticF(cs.getFutursing3() + "'la");
         cs.setFuturplural1Enclitic(cs.getFuturplural1() + "a");
-        //cs.setFuturplural2Enclitic(cs.getFuturplural2());
+        cs.setFuturplural2Enclitic(cs.getFuturplural2());
         cs.setFuturplural3Enclitic(cs.getFuturplural3() + "e");
     }
 
     private static void setFuturDubitativEnclitic(PuterConjugationStructure cs) {
-        cs.setFuturdubitativsing1Enclitic(cs.getFutursing1() + "i");
-        //cs.setFuturdubitativsing2Enclitic(cs.getFutursing2() + "t");
-        cs.setFuturdubitativsing3EncliticM(cs.getFutursing3() + "'l");
-        cs.setFuturdubitativsing3EncliticF(cs.getFutursing3() + "'la");
-        //cs.setFuturdubitativplural1Enclitic(cs.getFuturplural1() + "sa");
-        //cs.setFuturdubitativplural2Enclitic(cs.getFuturplural2());
-        cs.setFuturdubitativplural3Enclitic(cs.getFuturplural3() + "e");
+        cs.setFuturdubitativsing1Enclitic(cs.getFuturdubitativsing1().substring(0, cs.getFuturdubitativsing1().length() - 1));
+        cs.setFuturdubitativsing2Enclitic(cs.getFuturdubitativsing2());
+        cs.setFuturdubitativsing3EncliticM(cs.getFuturdubitativsing3() + "'l");
+        cs.setFuturdubitativsing3EncliticF(cs.getFuturdubitativsing3().substring(0, cs.getFuturdubitativsing3().length() - 2) + "'la");
+        cs.setFuturdubitativplural1Enclitic(cs.getFuturdubitativplural1());
+        cs.setFuturdubitativplural2Enclitic(cs.getFuturdubitativplural2());
+        cs.setFuturdubitativplural3Enclitic(cs.getFuturdubitativplural3() + "e");
     }
 
     private HashMap<String, String> addPronouns(HashMap<String, String> conjugation, InflectionSubType subType) {
@@ -731,6 +815,14 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setFuturplural1Enclitic(conjugation.get(PuterConjugationStructure.futurplural1enclitic));
         cs.setFuturplural2Enclitic(conjugation.get(PuterConjugationStructure.futurplural2enclitic));
         cs.setFuturplural3Enclitic(conjugation.get(PuterConjugationStructure.futurplural3enclitic));
+
+        cs.setFuturdubitativsing1Enclitic(conjugation.get(PuterConjugationStructure.futurdubitativsing1enclitic));
+        cs.setFuturdubitativsing2Enclitic(conjugation.get(PuterConjugationStructure.futurdubitativsing2enclitic));
+        cs.setFuturdubitativsing3EncliticM(conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticm));
+        cs.setFuturdubitativsing3EncliticF(conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticf));
+        cs.setFuturdubitativplural1Enclitic(conjugation.get(PuterConjugationStructure.futurdubitativplural1enclitic));
+        cs.setFuturdubitativplural2Enclitic(conjugation.get(PuterConjugationStructure.futurdubitativplural2enclitic));
+        cs.setFuturdubitativplural3Enclitic(conjugation.get(PuterConjugationStructure.futurdubitativplural3enclitic));
     }
 
     private boolean doesFormContainAllValues(InflectionResponse response, String flex) {
