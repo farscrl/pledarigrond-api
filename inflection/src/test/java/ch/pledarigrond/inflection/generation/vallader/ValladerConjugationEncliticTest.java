@@ -1,0 +1,227 @@
+package ch.pledarigrond.inflection.generation.vallader;
+
+import ch.pledarigrond.inflection.model.InflectionResponse;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class ValladerConjugationEncliticTest {
+
+    private static ValladerConjugation generator;
+    private InflectionResponse forms;
+
+    @BeforeClass
+    public static void initialize() {
+        generator = new ValladerConjugation();
+    }
+
+    @Test
+    public void testRuleAr() {
+        forms =  generator.generateConjugation("1", "müdar");
+
+        Assert.assertEquals("müdar", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("müda", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("müdast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("müda'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("müd'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("müdaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("müdais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("müdna", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("müdaiva", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("müdaivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("müdaiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("müdaiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("müdaivna", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("müdaivat", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("müdaivna", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("müdessa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("müdessast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("müdess", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("müdess'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("müdessna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("müdessat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("müdessna", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("müdaraja", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("müdarast", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("müdarà'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("müdarà'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("müdarana", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("müdarat", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("müdarana", forms.getInflectionValues().get("futurplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleIr() {
+        forms =  generator.generateConjugation("4", "partir");
+
+        Assert.assertEquals("partir", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("parta", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("partast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("parta'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("part'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("partina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("partis", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("partna", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("partiva", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("partivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("partiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("partiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("partivna", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("partivat", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("partivna", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("partissa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("partissast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("partiss", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("partiss'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("partissna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("partissat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("partissna", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("partiraja", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("partirast", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("partirà'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("partirà'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("partirana", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("partirat", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("partirana", forms.getInflectionValues().get("futurplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleGiar() {
+        forms =  generator.generateConjugation("1", "mangiar");
+
+        Assert.assertEquals("mangiar", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu mang", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü mangiast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella mangia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no mangiain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo mangiais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas mangian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("mangia", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("mangiast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("mangia'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("mang'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("mangiaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("mangiais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("mangna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleGliar() {
+        forms =  generator.generateConjugation("1", "tagliar");
+
+        Assert.assertEquals("tagliar", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu tagl", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü tagliast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella taglia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no tagliain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo tagliais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas taglian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("taglia", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("tagliast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("taglia'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("tagl'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("tagliaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("tagliais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("taglna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleGer() {
+        forms =  generator.generateConjugation("3", "leger");
+
+        Assert.assertEquals("leger", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu leg", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü legiast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella legia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no legiain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo legiais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas legian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("legia", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("legiast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("legia'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("leg'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("legiaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("legiais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("legna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleGir() {
+        forms =  generator.generateConjugation("4", "sclingir");
+
+        Assert.assertEquals("sclingir", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu scling", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü sclingiast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella sclingia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no sclingin", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo sclingis/ivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas sclingian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("sclingia", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("sclingiast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("sclingia'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("scling'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("sclingina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("sclingis", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("sclingna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleGlir() {
+        forms =  generator.generateConjugation("4", "assaglir");
+
+        Assert.assertEquals("assaglir", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu assagl", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü assagliast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella assaglia", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no assaglin", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo assaglis/ivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas assaglian", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("assaglia", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("assagliast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("assaglia'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("assagl'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("assaglina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("assaglis", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("assaglna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRuleZZ() {
+        forms =  generator.generateConjugation("1", "drizzar");
+
+        Assert.assertEquals("drizzar", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eu driz", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü drizzast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella drizza", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus/no drizzain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus/vo drizzais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas drizzan", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("drizza", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("drizzast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("drizza'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("drizz'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("drizzaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        // Assert.assertEquals("drizzais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("drizna", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+}
