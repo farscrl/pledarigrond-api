@@ -59,7 +59,7 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");
         }
-        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOMS_REFLEXIVS});
 
         ArrayList<String> forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);

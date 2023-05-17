@@ -56,7 +56,7 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");
         }
-        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
 
         list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
         list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
