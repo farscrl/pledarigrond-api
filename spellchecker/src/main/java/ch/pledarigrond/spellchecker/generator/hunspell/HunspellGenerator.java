@@ -233,4 +233,12 @@ abstract public class HunspellGenerator {
             throw new RuntimeException(e);
         }
     }
+
+    protected void addNewlines(String form, ArrayList<String> list) {
+        if (form == null) {
+            return;
+        }
+        String[] lines = form.split("\\R");
+        list.addAll(Arrays.asList(lines));
+    }
 }

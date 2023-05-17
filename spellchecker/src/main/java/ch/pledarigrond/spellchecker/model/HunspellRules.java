@@ -23,7 +23,10 @@ public enum HunspellRules {
 
 
     // RULES FOR SUTSILVAN (according to sutsilvan/rm-sutsilv.aff)
-
+    SUTSILVAN_PRONOMS_REFLEXIVS("P"),
+    SUTSILVAN_PRONOM_CONGIUNT_IMPERATIV("Q"),
+    SUTSILVAN_SHORT_ADJECTIVE("R"),
+    SUTSILVAN_PLEDS_APOSTROFAI("T"),
 
 
 

@@ -940,19 +940,19 @@ public class SutsilvanConjugation extends LanguageConjugation {
     private void setFutur(String root, SutsilvanConjugationStructure cs) {
         char startChar = root.charAt(0);
         if (isVocal(startChar)) {
-            cs.setFutursing1("vignt ad " + cs.getInfinitiv());
-            cs.setFutursing2("veans ad " + cs.getInfinitiv());
-            cs.setFutursing3("vean ad " + cs.getInfinitiv());
-            cs.setFuturplural1("vagnagn ad " + cs.getInfinitiv());
-            cs.setFuturplural2("vagnez ad " + cs.getInfinitiv());
-            cs.setFuturplural3("vignan ad " + cs.getInfinitiv());
+            cs.setFutursing1(SutsilvanPronouns.prefix_futur_1ps_v + cs.getInfinitiv());
+            cs.setFutursing2(SutsilvanPronouns.prefix_futur_2ps_v + cs.getInfinitiv());
+            cs.setFutursing3(SutsilvanPronouns.prefix_futur_3ps_v + cs.getInfinitiv());
+            cs.setFuturplural1(SutsilvanPronouns.prefix_futur_1pp_v + cs.getInfinitiv());
+            cs.setFuturplural2(SutsilvanPronouns.prefix_futur_2pp_v + cs.getInfinitiv());
+            cs.setFuturplural3(SutsilvanPronouns.prefix_futur_3pp_v + cs.getInfinitiv());
         } else {
-            cs.setFutursing1("vignt a " + cs.getInfinitiv());
-            cs.setFutursing2("veans a " + cs.getInfinitiv());
-            cs.setFutursing3("vean a " + cs.getInfinitiv());
-            cs.setFuturplural1("vagnagn a " + cs.getInfinitiv());
-            cs.setFuturplural2("vagnez a " + cs.getInfinitiv());
-            cs.setFuturplural3("vignan a " + cs.getInfinitiv());
+            cs.setFutursing1(SutsilvanPronouns.prefix_futur_1ps + cs.getInfinitiv());
+            cs.setFutursing2(SutsilvanPronouns.prefix_futur_2ps + cs.getInfinitiv());
+            cs.setFutursing3(SutsilvanPronouns.prefix_futur_3ps + cs.getInfinitiv());
+            cs.setFuturplural1(SutsilvanPronouns.prefix_futur_1pp + cs.getInfinitiv());
+            cs.setFuturplural2(SutsilvanPronouns.prefix_futur_2pp + cs.getInfinitiv());
+            cs.setFuturplural3(SutsilvanPronouns.prefix_futur_3pp + cs.getInfinitiv());
         }
     }
 

@@ -2,6 +2,7 @@ package ch.pledarigrond.spellchecker.generator;
 
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
+import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanPronouns;
 import ch.pledarigrond.names.entities.Name;
 
 import java.io.*;
@@ -76,6 +77,7 @@ public class WordListUtils {
                 SurmiranPronouns.pron_1pp,
                 SurmiranPronouns.pron_2pp,
                 SurmiranPronouns.pron_3pp,
+                SurmiranPronouns.impersonal_3ps,
                 SurmiranPronouns.pron_r_1ps,
                 SurmiranPronouns.pron_r_2ps,
                 SurmiranPronouns.pron_r_3ps,
@@ -88,6 +90,122 @@ public class WordListUtils {
                 SurmiranPronouns.pron_r_v_1pp,
                 SurmiranPronouns.pron_r_v_2pp,
                 SurmiranPronouns.pron_r_v_3pp
+        );
+
+        List<String> suffixes = new ArrayList<>();
+        Collections.addAll(suffixes,
+                "'l",
+                "'la"
+        );
+
+        for(String p: prefixes) {
+            if (input.startsWith(p)) {
+                input =  input.substring(p.length());
+            }
+        }
+        for(String s: suffixes) {
+            if (input.endsWith(s)) {
+                input = input.substring(0, input.length() - s.length());
+            }
+        }
+        return input;
+    }
+
+    public static String normalizeStringSutsilvan(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        // Ignore cf.
+        if (input.startsWith("cf. ")) {
+            return null;
+        }
+
+        if (input.endsWith(" ca")) {
+            input = input.substring(0, input.length() - 3);
+        }
+        if (input.endsWith(" da")) {
+            input = input.substring(0, input.length() - 3);
+        }
+        if (input.endsWith(" a")) {
+            input = input.substring(0, input.length() - 2);
+        }
+        if (input.endsWith("!")) {
+            input = input.substring(0, input.length() - 1);
+        }
+        if (input.endsWith("?")) {
+            input = input.substring(0, input.length() - 1);
+        }
+        if (input.startsWith("far ")) {
+            input = input.substring(4);
+        }
+        if (input.startsWith("l'")) {
+            input = input.substring(2);
+        }
+        if (input.startsWith("la ")) {
+            input = input.substring(3);
+        }
+        if (input.startsWith("en ")) {
+            input = input.substring(3);
+        }
+        if (input.startsWith("en'")) {
+            input = input.substring(3);
+        }
+        if (input.startsWith("ena ")) {
+            input = input.substring(4);
+        }
+        if (input.startsWith("egn ")) {
+            input = input.substring(4);
+        }
+        if (input.startsWith("egna ")) {
+            input = input.substring(5);
+        }
+        return input;
+    }
+
+    public static String removePronounsSutsilvan(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        List<String> prefixes = new ArrayList<>();
+        Collections.addAll(prefixes,
+                // has to be upfront, as other pronouns may follow
+                SutsilvanPronouns.pron_conjunctiv_c,
+                SutsilvanPronouns.pron_conjunctiv_v,
+
+                SutsilvanPronouns.pron_1ps,
+                SutsilvanPronouns.pron_2ps,
+                SutsilvanPronouns.pron_3ps,
+                SutsilvanPronouns.pron_1pp,
+                SutsilvanPronouns.pron_2pp,
+                SutsilvanPronouns.pron_3pp,
+                SutsilvanPronouns.impersonal_3ps,
+                SutsilvanPronouns.pron_r_1ps,
+                SurmiranPronouns.pron_r_2ps,
+                SutsilvanPronouns.pron_r_3ps,
+                SutsilvanPronouns.pron_r_1pp,
+                SutsilvanPronouns.pron_r_2pp,
+                SutsilvanPronouns.pron_r_3pp,
+                SutsilvanPronouns.pron_r_v_1ps,
+                SutsilvanPronouns.pron_r_v_2ps,
+                SutsilvanPronouns.pron_r_v_3ps,
+                SutsilvanPronouns.pron_r_v_1pp,
+                SutsilvanPronouns.pron_r_v_2pp,
+                SutsilvanPronouns.pron_r_v_3pp,
+
+                SutsilvanPronouns.prefix_futur_1ps,
+                SutsilvanPronouns.prefix_futur_1ps_v,
+                SutsilvanPronouns.prefix_futur_2ps,
+                SutsilvanPronouns.prefix_futur_2ps_v,
+                SutsilvanPronouns.prefix_futur_3ps,
+                SutsilvanPronouns.prefix_futur_3ps_v,
+                SutsilvanPronouns.prefix_futur_1pp,
+                SutsilvanPronouns.prefix_futur_1pp_v,
+                SutsilvanPronouns.prefix_futur_2pp,
+                SutsilvanPronouns.prefix_futur_2pp_v,
+                SutsilvanPronouns.prefix_futur_3pp,
+                SutsilvanPronouns.prefix_futur_3pp_v
         );
 
         List<String> suffixes = new ArrayList<>();
