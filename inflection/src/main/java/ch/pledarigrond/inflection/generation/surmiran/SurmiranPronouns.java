@@ -56,6 +56,7 @@ public class SurmiranPronouns {
     public static final String pron_1pp = "nous ";
     public static final String pron_2pp = "vous ";
     public static final String pron_3pp = "els/ellas ";
+    public static final String impersonal_3ps = "i ";
     // Reflexive pronouns for verbs with a consonant as first letter
     public static final String pron_r_1ps = "ma ";
     public static final String pron_r_2ps = "ta ";
