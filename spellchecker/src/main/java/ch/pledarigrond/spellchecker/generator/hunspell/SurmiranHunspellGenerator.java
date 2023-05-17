@@ -7,6 +7,7 @@ import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
@@ -58,82 +59,92 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
         }
         list.addWord(removePronouns(infinitiv), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        ArrayList<String> forms = new ArrayList<>();
+        addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentsing2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural3"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural3"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivsing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivsing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivsing3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivplural1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivplural2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("conjunctivplural3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("conjunctivsing1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("conjunctivsing2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("conjunctivsing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("conjunctivplural1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("conjunctivplural2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("conjunctivplural3"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural3"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("participperfectms")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("participperfectfs")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("participperfectmp")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("participperfectfp")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("participperfectms"), forms);
+        addNewlines(lemmaVersion.getEntryValue("participperfectfs"), forms);
+        addNewlines(lemmaVersion.getEntryValue("participperfectmp"), forms);
+        addNewlines(lemmaVersion.getEntryValue("participperfectfp"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperativ1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperativ2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("gerundium"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("gerundium")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("futursing1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futursing2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futursing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural2"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural3"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural1")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural2")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural3")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("preschentsing1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentsing2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentsing3encliticm"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentsing3encliticf"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("preschentplural3enclitic"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticm")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentsing3encliticf")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("preschentplural3enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing3encliticm"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing3encliticf"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectplural3enclitic"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticm")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectsing3encliticf")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("imperfectplural3enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3encliticm"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3encliticf"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("cundizionalplural3enclitic"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticm")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalsing3encliticf")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("cundizionalplural3enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        addNewlines(lemmaVersion.getEntryValue("futursing1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futursing2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futursing3encliticm"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futursing3encliticf"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural1enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural2enclitic"), forms);
+        addNewlines(lemmaVersion.getEntryValue("futurplural3enclitic"), forms);
 
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing3encliticm")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futursing3encliticf")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural1enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural2enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
-        list.addWord(removePronouns(lemmaVersion.getEntryValue("futurplural3enclitic")), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        forms.forEach(f -> {
+            list.addWord(removePronouns(f), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
+        });
+
+        forms = new ArrayList<>();
+        addNewlines(lemmaVersion.getEntryValue("imperativ1"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperativ2"), forms);
+
+        forms.forEach(f -> {
+            list.addWord(removePronouns(f), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV, SURMIRAN_PRONOMS_REFLEXIVS});
+        });
     }
 
     protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
