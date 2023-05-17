@@ -459,9 +459,9 @@ public class ImportServiceImpl implements ImportService {
             lemmaVersion.getLemmaValues().put("futurdubitativsing1", verbDto.getFuturdubitativsing1Prep() + verbDto.getFuturdubitativsing1());
             lemmaVersion.getLemmaValues().put("futurdubitativsing2", verbDto.getFuturdubitativsing2Prep() + verbDto.getFuturdubitativsing2());
             lemmaVersion.getLemmaValues().put("futurdubitativsing3", verbDto.getFuturdubitativsing3Prep() + verbDto.getFuturdubitativsing3());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural1", verbDto.getFuturdubitativplural1Prep() + verbDto.getFuturdubitativplural1Prep());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural2", verbDto.getFuturdubitativplural2Prep() + verbDto.getFuturdubitativplural2Prep());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural3", verbDto.getFuturdubitativplural3Prep() + verbDto.getFuturdubitativplural3Prep());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural1", verbDto.getFuturdubitativplural1Prep() + verbDto.getFuturdubitativplural1());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural2", verbDto.getFuturdubitativplural2Prep() + verbDto.getFuturdubitativplural2());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural3", verbDto.getFuturdubitativplural3Prep() + verbDto.getFuturdubitativplural3());
         }
 
         lemmaVersion.getLemmaValues().put("RInflectionType", "V");
