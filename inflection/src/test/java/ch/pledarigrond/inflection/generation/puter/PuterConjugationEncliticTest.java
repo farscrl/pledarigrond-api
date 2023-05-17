@@ -16,7 +16,7 @@ public class PuterConjugationEncliticTest {
     }
 
     @Test
-    public void testRuleAr() {
+    public void testRuleEr() {
         forms =  generator.generateConjugation("1", "manger");
 
         Assert.assertEquals("manger", forms.getInflectionValues().get("infinitiv"));
@@ -45,7 +45,7 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("mangessas", forms.getInflectionValues().get("cundizionalplural2enclitic"));
         Assert.assertEquals("mangessane", forms.getInflectionValues().get("cundizionalplural3enclitic"));
 
-        Assert.assertEquals("mangiaro", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("", forms.getInflectionValues().get("futursing1enclitic"));
         Assert.assertEquals("mangiarost", forms.getInflectionValues().get("futursing2enclitic"));
         Assert.assertEquals("mangiaro'l", forms.getInflectionValues().get("futursing3encliticm"));
         Assert.assertEquals("mangiaro'la", forms.getInflectionValues().get("futursing3encliticf"));

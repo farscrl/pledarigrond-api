@@ -481,7 +481,29 @@ public class PuterConjugation extends LanguageConjugation {
         }
         cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
         cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-        cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
+        if (cs.getInfinitiv().endsWith("ger") ||
+                cs.getInfinitiv().endsWith("cker") ||
+                cs.getInfinitiv().endsWith("glier") ||
+                cs.getInfinitiv().endsWith("ffar") ||
+                cs.getInfinitiv().endsWith("ffer") ||
+                cs.getInfinitiv().endsWith("llar") ||
+                cs.getInfinitiv().endsWith("ller") ||
+                cs.getInfinitiv().endsWith("mmar") ||
+                cs.getInfinitiv().endsWith("mmer") ||
+                cs.getInfinitiv().endsWith("nnar") ||
+                cs.getInfinitiv().endsWith("nner") ||
+                cs.getInfinitiv().endsWith("ppar") ||
+                cs.getInfinitiv().endsWith("pper") ||
+                cs.getInfinitiv().endsWith("rrar") ||
+                cs.getInfinitiv().endsWith("rrer") ||
+                cs.getInfinitiv().endsWith("ttar") ||
+                cs.getInfinitiv().endsWith("tter") ||
+                cs.getInfinitiv().endsWith("zzar") ||
+                cs.getInfinitiv().endsWith("zzer")) {
+            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
+        } else {
+            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 1) + "'la");
+        }
         cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
         cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
         cs.setPreschentplural3Enclitic(cs.getPreschentplural3() + "e");
@@ -508,7 +530,7 @@ public class PuterConjugation extends LanguageConjugation {
     }
 
     private static void setFuturEnclitic(PuterConjugationStructure cs) {
-        cs.setFutursing1Enclitic(cs.getFutursing1());
+        cs.setFutursing1Enclitic("");
         cs.setFutursing2Enclitic(cs.getFutursing2());
         cs.setFutursing3EncliticM(cs.getFutursing3() + "'l");
         cs.setFutursing3EncliticF(cs.getFutursing3() + "'la");

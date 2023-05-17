@@ -39,7 +39,7 @@ public class ValladerConjugationEncliticTest {
 
         Assert.assertEquals("müdessa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
         Assert.assertEquals("müdessast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
-        Assert.assertEquals("müdess", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("müdessa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
         Assert.assertEquals("müdess'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
         Assert.assertEquals("müdessna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
         Assert.assertEquals("müdessat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
@@ -78,7 +78,7 @@ public class ValladerConjugationEncliticTest {
 
         Assert.assertEquals("partissa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
         Assert.assertEquals("partissast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
-        Assert.assertEquals("partiss", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("partissa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
         Assert.assertEquals("partiss'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
         Assert.assertEquals("partissna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
         Assert.assertEquals("partissat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
