@@ -33,4 +33,16 @@ public abstract class LanguageConjugation extends LanguageInflectionBase {
             default -> false;
         };
     }
+
+    protected String setPronoun(String pronoun, String forms) {
+        return setPronoun(pronoun, forms, "");
+    }
+
+    protected String setPronoun(String pronoun, String forms, String suffix) {
+        String[] singleForms = forms.split("\n");
+        for (int i = 0; i < singleForms.length; i++) {
+            singleForms[i] = pronoun + singleForms[i] + suffix;
+        }
+        return String.join("\n", singleForms);
+    }
 }

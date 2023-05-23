@@ -1159,14 +1159,6 @@ public class SutsilvanConjugation extends LanguageConjugation {
         modRoot = null;
     }
 
-    private String setPronoun(String pronoun, String forms) {
-        String[] singleForms = forms.split("\n");
-        for (int i = 0; i < singleForms.length; i++) {
-            singleForms[i] = pronoun + singleForms[i];
-        }
-        return String.join("\n", singleForms);
-    }
-
     protected String normalizeString(String query) {
         if (query.charAt(0) == '[') {
             query = query.substring(1, query.length() - 1);
