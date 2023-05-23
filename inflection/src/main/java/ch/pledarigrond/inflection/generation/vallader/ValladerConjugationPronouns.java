@@ -6,10 +6,10 @@ public class ValladerConjugationPronouns {
     public static final String pron_1ps = "eu ";
     public static final String pron_2ps = "tü ";
     public static final String pron_3ps = "el/ella ";
-    public static final String pron_1pp = "nus/no ";
-    public static final String pron_1pp_conj = "nus ";
-    public static final String pron_2pp = "vus/vo ";
-    public static final String pron_2pp_conj = "vus ";
+    public static final String pron_1pp = "nus ";
+    public static final String pron_1pp_alt = "no ";
+    public static final String pron_2pp = "vus ";
+    public static final String pron_2pp_alt = "vo ";
     public static final String pron_3pp = "els/ellas ";
 
     // Reflexive pronouns for verbs with a consonant as first letter

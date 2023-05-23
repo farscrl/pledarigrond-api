@@ -102,8 +102,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu mang", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü mangiast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella mangia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no mangiain", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo mangiais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus mangiain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus mangiais\nvo mangiaivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas mangian", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("mangia", forms.getInflectionValues().get("preschentsing1enclitic"));
@@ -124,8 +124,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu tagl", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü tagliast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella taglia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no tagliain", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo tagliais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus tagliain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus tagliais\nvo tagliaivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas taglian", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("taglia", forms.getInflectionValues().get("preschentsing1enclitic"));
@@ -146,8 +146,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu leg", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü legiast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella legia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no legiain", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo legiais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus legiain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus legiais\nvo legiaivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas legian", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("legia", forms.getInflectionValues().get("preschentsing1enclitic"));
@@ -168,8 +168,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu scling", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü sclingiast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella sclingia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no sclingin", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo sclingis/ivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus sclingin", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus sclingis\nvus sclingivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas sclingian", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("sclingia", forms.getInflectionValues().get("preschentsing1enclitic"));
@@ -190,8 +190,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu assagl", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü assagliast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella assaglia", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no assaglin", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo assaglis/ivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus assaglin", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus assaglis\nvus assaglivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas assaglian", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("assaglia", forms.getInflectionValues().get("preschentsing1enclitic"));
@@ -212,8 +212,8 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("eu driz", forms.getInflectionValues().get("preschentsing1"));
         Assert.assertEquals("tü drizzast", forms.getInflectionValues().get("preschentsing2"));
         Assert.assertEquals("el/ella drizza", forms.getInflectionValues().get("preschentsing3"));
-        Assert.assertEquals("nus/no drizzain", forms.getInflectionValues().get("preschentplural1"));
-        Assert.assertEquals("vus/vo drizzais/aivat", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("nus drizzain", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus drizzais\nvo drizzaivat", forms.getInflectionValues().get("preschentplural2"));
         Assert.assertEquals("els/ellas drizzan", forms.getInflectionValues().get("preschentplural3"));
 
         Assert.assertEquals("drizza", forms.getInflectionValues().get("preschentsing1enclitic"));

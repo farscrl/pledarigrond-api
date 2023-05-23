@@ -221,10 +221,10 @@ public class ValladerConjugation extends LanguageConjugation {
                 cs.setPreschentsing3(modRoot + "a");
                 if (cs.getInfinitiv().endsWith("ger")) {
                     cs.setPreschentplural1(modRoot + "ain");
-                    cs.setPreschentplural2(modRoot + "ais/aivat");
+                    cs.setPreschentplural2(modRoot + "ais\n" + modRoot + "aivat");
                 } else {
                     cs.setPreschentplural1(root + "ain");
-                    cs.setPreschentplural2(root + "ais/aivat");
+                    cs.setPreschentplural2(root + "ais\n" + root + "aivat");
                 }
                 cs.setPreschentplural3(modRoot + "an");
                 break;
@@ -240,7 +240,7 @@ public class ValladerConjugation extends LanguageConjugation {
                 cs.setPreschentsing2(modRoot + "ast");
                 cs.setPreschentsing3(modRoot + "a");
                 cs.setPreschentplural1(root + "in");
-                cs.setPreschentplural2(root + "is/ivat");
+                cs.setPreschentplural2(root + "is\n" + root + "ivat");
                 cs.setPreschentplural3(modRoot + "an");
                 break;
         }
@@ -530,44 +530,44 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjugationClass(subType);
 
         // PRESCHENT
-        cs.setPreschentsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.preschentsing1));
-        cs.setPreschentsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.preschentsing2));
-        cs.setPreschentsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.preschentsing3));
-        cs.setPreschentplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.preschentplural1));
-        cs.setPreschentplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.preschentplural2));
-        cs.setPreschentplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.preschentplural3));
+        cs.setPreschentsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.preschentsing1)));
+        cs.setPreschentsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.preschentsing2)));
+        cs.setPreschentsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3)));
+        cs.setPreschentplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.preschentplural1)));
+        cs.setPreschentplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.preschentplural2)));
+        cs.setPreschentplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.preschentplural3)));
 
         // IMPERFECT
-        cs.setImperfectsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.imperfectsing1));
-        cs.setImperfectsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.imperfectsing2));
-        cs.setImperfectsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.imperfectsing3));
-        cs.setImperfectplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.imperfectplural1));
-        cs.setImperfectplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.imperfectplural2));
-        cs.setImperfectplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.imperfectplural3));
+        cs.setImperfectsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.imperfectsing1)));
+        cs.setImperfectsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.imperfectsing2)));
+        cs.setImperfectsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3)));
+        cs.setImperfectplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.imperfectplural1)));
+        cs.setImperfectplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.imperfectplural2)));
+        cs.setImperfectplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.imperfectplural3)));
 
         // CONJUNCTIV
-        cs.setConjunctivsing1(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.conjunctivsing1));
-        cs.setConjunctivsing2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.conjunctivsing2));
-        cs.setConjunctivsing3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.conjunctivsing3));
-        cs.setConjunctivplural1(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.conjunctivplural1));
-        cs.setConjunctivplural2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.conjunctivplural2));
-        cs.setConjunctivplural3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.conjunctivplural3));
+        cs.setConjunctivsing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.conjunctivsing1)));
+        cs.setConjunctivsing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.conjunctivsing2)));
+        cs.setConjunctivsing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.conjunctivsing3)));
+        cs.setConjunctivplural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.conjunctivplural1)));
+        cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
+        cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
 
         // CUNDIZIONAL
-        cs.setCundizionalsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.cundizionalsing1));
-        cs.setCundizionalsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.cundizionalsing2));
-        cs.setCundizionalsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.cundizionalsing3));
-        cs.setCundizionalplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.cundizionalplural1));
-        cs.setCundizionalplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.cundizionalplural2));
-        cs.setCundizionalplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.cundizionalplural3));
+        cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));
+        cs.setCundizionalsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2)));
+        cs.setCundizionalsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3)));
+        cs.setCundizionalplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.cundizionalplural1)));
+        cs.setCundizionalplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.cundizionalplural2)));
+        cs.setCundizionalplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.cundizionalplural3)));
 
         // IMPERATIV
-        cs.setImperativ1(ValladerConjugationPronouns.imperativ_refl_sg + conjugation.get(ValladerConjugationStructure.imperativ1) + "!");
-        cs.setImperativ2(ValladerConjugationPronouns.imperativ_refl_pl + conjugation.get(ValladerConjugationStructure.imperativ2) + "!");
-        cs.setImperativ3(ValladerConjugationPronouns.imperativ_not_refl_sg + conjugation.get(ValladerConjugationStructure.imperativ3) + "!");
-        cs.setImperativ4(ValladerConjugationPronouns.imperativ_not_refl_pl + conjugation.get(ValladerConjugationStructure.imperativ4) + "!");
-        cs.setImperativ5(ValladerConjugationPronouns.imperativ_polite_sg + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.imperativ5) + "!");
-        cs.setImperativ6(ValladerConjugationPronouns.imperativ_polite_pl + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.imperativ6) + "!");
+        cs.setImperativ1(setPronoun(ValladerConjugationPronouns.imperativ_refl_sg, conjugation.get(ValladerConjugationStructure.imperativ1), "!"));
+        cs.setImperativ2(setPronoun(ValladerConjugationPronouns.imperativ_refl_pl, conjugation.get(ValladerConjugationStructure.imperativ2), "!"));
+        cs.setImperativ3(setPronoun(ValladerConjugationPronouns.imperativ_not_refl_sg, conjugation.get(ValladerConjugationStructure.imperativ3), "!"));
+        cs.setImperativ4(setPronoun(ValladerConjugationPronouns.imperativ_not_refl_pl, conjugation.get(ValladerConjugationStructure.imperativ4), "!"));
+        cs.setImperativ5(setPronoun(ValladerConjugationPronouns.imperativ_polite_sg + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.imperativ5), "!"));
+        cs.setImperativ6(setPronoun(ValladerConjugationPronouns.imperativ_polite_pl + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.imperativ6), "!"));
 
         // PARTICIP_PERFECT
         cs.setParticipperfectms(conjugation.get(ValladerConjugationStructure.participperfectms));
@@ -576,15 +576,15 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setParticipperfectfp(conjugation.get(ValladerConjugationStructure.participperfectfp));
 
         // GERUNDIUM
-        cs.setGerundium(ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.gerundium));
+        cs.setGerundium(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.gerundium)));
 
         // FUTUR
-        cs.setFutursing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.futursing1));
-        cs.setFutursing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.futursing2));
-        cs.setFutursing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.futursing3));
-        cs.setFuturplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.futurplural1));
-        cs.setFuturplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.futurplural2));
-        cs.setFuturplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.futurplural3));
+        cs.setFutursing1(setPronoun(ValladerConjugationPronouns.pron_1ps, ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.futursing1)));
+        cs.setFutursing2(setPronoun(ValladerConjugationPronouns.pron_2ps, ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.futursing2)));
+        cs.setFutursing3(setPronoun(ValladerConjugationPronouns.pron_3ps, ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.futursing3)));
+        cs.setFuturplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.futurplural1)));
+        cs.setFuturplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.futurplural2)));
+        cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.futurplural3)));
 
         copyEncliticForms(conjugation, cs);
 
@@ -601,44 +601,44 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjugationClass(subType);
 
         // PRESCHENT
-        cs.setPreschentsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.preschentsing1));
-        cs.setPreschentsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.preschentsing2));
-        cs.setPreschentsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.preschentsing3));
-        cs.setPreschentplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.preschentplural1));
-        cs.setPreschentplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.preschentplural2));
-        cs.setPreschentplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.preschentplural3));
+        cs.setPreschentsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.preschentsing1)));
+        cs.setPreschentsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.preschentsing2)));
+        cs.setPreschentsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3)));
+        cs.setPreschentplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.preschentplural1)));
+        cs.setPreschentplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.preschentplural2)));
+        cs.setPreschentplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.preschentplural3)));
 
         // IMPERFECT
-        cs.setImperfectsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.imperfectsing1));
-        cs.setImperfectsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.imperfectsing2));
-        cs.setImperfectsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.imperfectsing3));
-        cs.setImperfectplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.imperfectplural1));
-        cs.setImperfectplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.imperfectplural2));
-        cs.setImperfectplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.imperfectplural3));
+        cs.setImperfectsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.imperfectsing1)));
+        cs.setImperfectsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.imperfectsing2)));
+        cs.setImperfectsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3)));
+        cs.setImperfectplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.imperfectplural1)));
+        cs.setImperfectplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.imperfectplural2)));
+        cs.setImperfectplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.imperfectplural3)));
 
         // CONJUNCTIV
-        cs.setConjunctivsing1(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.conjunctivsing1));
-        cs.setConjunctivsing2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.conjunctivsing2));
-        cs.setConjunctivsing3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.conjunctivsing3));
-        cs.setConjunctivplural1(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.conjunctivplural1));
-        cs.setConjunctivplural2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.conjunctivplural2));
-        cs.setConjunctivplural3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.conjunctivplural3));
+        cs.setConjunctivsing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.conjunctivsing1)));
+        cs.setConjunctivsing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.conjunctivsing2)));
+        cs.setConjunctivsing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.conjunctivsing3)));
+        cs.setConjunctivplural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.conjunctivplural1)));
+        cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
+        cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
 
         // CUNDIZIONAL
-        cs.setCundizionalsing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.cundizionalsing1));
-        cs.setCundizionalsing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.cundizionalsing2));
-        cs.setCundizionalsing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.cundizionalsing3));
-        cs.setCundizionalplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.cundizionalplural1));
-        cs.setCundizionalplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.cundizionalplural2));
-        cs.setCundizionalplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.cundizionalplural3));
+        cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));
+        cs.setCundizionalsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2)));
+        cs.setCundizionalsing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3)));
+        cs.setCundizionalplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.cundizionalplural1)));
+        cs.setCundizionalplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.cundizionalplural2)));
+        cs.setCundizionalplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.cundizionalplural3)));
 
         // IMPERATIV
-        cs.setImperativ1(ValladerConjugationPronouns.imperativ_refl_sg_vowel + conjugation.get(ValladerConjugationStructure.imperativ1) + "!");
-        cs.setImperativ2(ValladerConjugationPronouns.imperativ_refl_pl_vowel + conjugation.get(ValladerConjugationStructure.imperativ2) + "!");
-        cs.setImperativ3(ValladerConjugationPronouns.imperativ_not + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.imperativ3) + "!");
-        cs.setImperativ4(ValladerConjugationPronouns.imperativ_not + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.imperativ4) + "!");
-        cs.setImperativ5(ValladerConjugationPronouns.imperativ_polite_sg + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.imperativ5) + "!");
-        cs.setImperativ6(ValladerConjugationPronouns.imperativ_polite_pl + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.imperativ6) + "!");
+        cs.setImperativ1(setPronoun(ValladerConjugationPronouns.imperativ_refl_sg_vowel, conjugation.get(ValladerConjugationStructure.imperativ1), "!"));
+        cs.setImperativ2(setPronoun(ValladerConjugationPronouns.imperativ_refl_pl_vowel, conjugation.get(ValladerConjugationStructure.imperativ2), "!"));
+        cs.setImperativ3(setPronoun(ValladerConjugationPronouns.imperativ_not + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.imperativ3), "!"));
+        cs.setImperativ4(setPronoun(ValladerConjugationPronouns.imperativ_not + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.imperativ4), "!"));
+        cs.setImperativ5(setPronoun(ValladerConjugationPronouns.imperativ_polite_sg + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.imperativ5), "!"));
+        cs.setImperativ6(setPronoun(ValladerConjugationPronouns.imperativ_polite_pl + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.imperativ6), "!"));
 
         // PARTICIP_PERFECT
         cs.setParticipperfectms(conjugation.get(ValladerConjugationStructure.participperfectms));
@@ -647,15 +647,15 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setParticipperfectfp(conjugation.get(ValladerConjugationStructure.participperfectfp));
 
         // GERUNDIUM
-        cs.setGerundium(ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.gerundium));
+        cs.setGerundium(setPronoun(ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.gerundium)));
 
         // FUTUR
-        cs.setFutursing1(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.futursing1));
-        cs.setFutursing2(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.futursing2));
-        cs.setFutursing3(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.futursing3));
-        cs.setFuturplural1(ValladerConjugationPronouns.pron_1pp_conj + ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.futurplural1));
-        cs.setFuturplural2(ValladerConjugationPronouns.pron_2pp_conj + ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.futurplural2));
-        cs.setFuturplural3(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.futurplural3));
+        cs.setFutursing1(setPronoun(ValladerConjugationPronouns.pron_1ps, ValladerConjugationPronouns.pron_r_v_1ps + conjugation.get(ValladerConjugationStructure.futursing1)));
+        cs.setFutursing2(setPronoun(ValladerConjugationPronouns.pron_2ps, ValladerConjugationPronouns.pron_r_v_2ps + conjugation.get(ValladerConjugationStructure.futursing2)));
+        cs.setFutursing3(setPronoun(ValladerConjugationPronouns.pron_3ps, ValladerConjugationPronouns.pron_r_v_3ps + conjugation.get(ValladerConjugationStructure.futursing3)));
+        cs.setFuturplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, ValladerConjugationPronouns.pron_r_v_1pp + conjugation.get(ValladerConjugationStructure.futurplural1)));
+        cs.setFuturplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_r_v_2pp + conjugation.get(ValladerConjugationStructure.futurplural2)));
+        cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.futurplural3)));
 
         copyEncliticForms(conjugation, cs);
 
@@ -674,49 +674,49 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjugationClass(subType);
 
         // PRESCHENT
-        cs.setPreschentsing1(ValladerConjugationPronouns.pron_1ps + conjugation.get(ValladerConjugationStructure.preschentsing1));
-        cs.setPreschentsing2(ValladerConjugationPronouns.pron_2ps + conjugation.get(ValladerConjugationStructure.preschentsing2));
-        cs.setPreschentsing3(ValladerConjugationPronouns.pron_3ps + conjugation.get(ValladerConjugationStructure.preschentsing3));
-        cs.setPreschentplural1(ValladerConjugationPronouns.pron_1pp + conjugation.get(ValladerConjugationStructure.preschentplural1));
-        cs.setPreschentplural2(ValladerConjugationPronouns.pron_2pp + conjugation.get(ValladerConjugationStructure.preschentplural2));
-        cs.setPreschentplural3(ValladerConjugationPronouns.pron_3pp + conjugation.get(ValladerConjugationStructure.preschentplural3));
+        cs.setPreschentsing1(setPronoun(ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.preschentsing1)));
+        cs.setPreschentsing2(setPronoun(ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.preschentsing2)));
+        cs.setPreschentsing3(setPronoun(ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3)));
+        cs.setPreschentplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.preschentplural1)));
+        cs.setPreschentplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.preschentplural2)));
+        cs.setPreschentplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.preschentplural3)));
 
         // IMPERFECT
-        cs.setImperfectsing1(ValladerConjugationPronouns.pron_1ps + conjugation.get(ValladerConjugationStructure.imperfectsing1));
-        cs.setImperfectsing2(ValladerConjugationPronouns.pron_2ps + conjugation.get(ValladerConjugationStructure.imperfectsing2));
-        cs.setImperfectsing3(ValladerConjugationPronouns.pron_3ps + conjugation.get(ValladerConjugationStructure.imperfectsing3));
-        cs.setImperfectplural1(ValladerConjugationPronouns.pron_1pp + conjugation.get(ValladerConjugationStructure.imperfectplural1));
-        cs.setImperfectplural2(ValladerConjugationPronouns.pron_2pp + conjugation.get(ValladerConjugationStructure.imperfectplural2));
-        cs.setImperfectplural3(ValladerConjugationPronouns.pron_3pp + conjugation.get(ValladerConjugationStructure.imperfectplural3));
+        cs.setImperfectsing1(setPronoun(ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.imperfectsing1)));
+        cs.setImperfectsing2(setPronoun(ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.imperfectsing2)));
+        cs.setImperfectsing3(setPronoun(ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3)));
+        cs.setImperfectplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.imperfectplural1)));
+        cs.setImperfectplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.imperfectplural2)));
+        cs.setImperfectplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.imperfectplural3)));
 
         // CONJUNCTIV
-        cs.setConjunctivsing1(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + conjugation.get(ValladerConjugationStructure.conjunctivsing1));
-        cs.setConjunctivsing2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + conjugation.get(ValladerConjugationStructure.conjunctivsing2));
-        cs.setConjunctivsing3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + conjugation.get(ValladerConjugationStructure.conjunctivsing3));
-        cs.setConjunctivplural1(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp_conj + conjugation.get(ValladerConjugationStructure.conjunctivplural1));
-        cs.setConjunctivplural2(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp_conj + conjugation.get(ValladerConjugationStructure.conjunctivplural2));
-        cs.setConjunctivplural3(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + conjugation.get(ValladerConjugationStructure.conjunctivplural3));
+        cs.setConjunctivsing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.conjunctivsing1)));
+        cs.setConjunctivsing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.conjunctivsing2)));
+        cs.setConjunctivsing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.conjunctivsing3)));
+        cs.setConjunctivplural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.conjunctivplural1)));
+        cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
+        cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
 
         // CUNDIZIONAL
-        cs.setCundizionalsing1(ValladerConjugationPronouns.pron_1ps + conjugation.get(ValladerConjugationStructure.cundizionalsing1));
-        cs.setCundizionalsing2(ValladerConjugationPronouns.pron_2ps + conjugation.get(ValladerConjugationStructure.cundizionalsing2));
-        cs.setCundizionalsing3(ValladerConjugationPronouns.pron_3ps + conjugation.get(ValladerConjugationStructure.cundizionalsing3));
-        cs.setCundizionalplural1(ValladerConjugationPronouns.pron_1pp + conjugation.get(ValladerConjugationStructure.cundizionalplural1));
-        cs.setCundizionalplural2(ValladerConjugationPronouns.pron_2pp + conjugation.get(ValladerConjugationStructure.cundizionalplural2));
-        cs.setCundizionalplural3(ValladerConjugationPronouns.pron_3pp + conjugation.get(ValladerConjugationStructure.cundizionalplural3));
+        cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));
+        cs.setCundizionalsing2(setPronoun(ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2)));
+        cs.setCundizionalsing3(setPronoun(ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3)));
+        cs.setCundizionalplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.cundizionalplural1)));
+        cs.setCundizionalplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.cundizionalplural2)));
+        cs.setCundizionalplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.cundizionalplural3)));
 
         // IMPERATIV
-        cs.setImperativ1(conjugation.get(ValladerConjugationStructure.imperativ1) + "!");
-        cs.setImperativ2(conjugation.get(ValladerConjugationStructure.imperativ2) + "!");
+        cs.setImperativ1(setPronoun("", conjugation.get(ValladerConjugationStructure.imperativ1), "!"));
+        cs.setImperativ2(setPronoun("", conjugation.get(ValladerConjugationStructure.imperativ2), "!"));
         if (startsWithVowel(conjugation.get(ValladerConjugationStructure.imperativ3))) {
-            cs.setImperativ3(ValladerConjugationPronouns.imperativ_not_vowel + conjugation.get(ValladerConjugationStructure.imperativ3) + "!");
-            cs.setImperativ4(ValladerConjugationPronouns.imperativ_not_vowel + conjugation.get(ValladerConjugationStructure.imperativ4) + "!");
+            cs.setImperativ3(setPronoun(ValladerConjugationPronouns.imperativ_not_vowel, conjugation.get(ValladerConjugationStructure.imperativ3), "!"));
+            cs.setImperativ4(setPronoun(ValladerConjugationPronouns.imperativ_not_vowel, conjugation.get(ValladerConjugationStructure.imperativ4), "!"));
         } else {
-            cs.setImperativ3(ValladerConjugationPronouns.imperativ_not + conjugation.get(ValladerConjugationStructure.imperativ3) + "!");
-            cs.setImperativ4(ValladerConjugationPronouns.imperativ_not + conjugation.get(ValladerConjugationStructure.imperativ4) + "!");
+            cs.setImperativ3(setPronoun(ValladerConjugationPronouns.imperativ_not, conjugation.get(ValladerConjugationStructure.imperativ3), "!"));
+            cs.setImperativ4(setPronoun(ValladerConjugationPronouns.imperativ_not, conjugation.get(ValladerConjugationStructure.imperativ4), "!"));
         }
-        cs.setImperativ5(ValladerConjugationPronouns.imperativ_polite_sg + conjugation.get(ValladerConjugationStructure.imperativ5) + "!");
-        cs.setImperativ6(ValladerConjugationPronouns.imperativ_polite_pl + conjugation.get(ValladerConjugationStructure.imperativ6) + "!");
+        cs.setImperativ5(setPronoun(ValladerConjugationPronouns.imperativ_polite_sg, conjugation.get(ValladerConjugationStructure.imperativ5), "!"));
+        cs.setImperativ6(setPronoun(ValladerConjugationPronouns.imperativ_polite_pl, conjugation.get(ValladerConjugationStructure.imperativ6), "!"));
 
         // PARTICIP_PERFECT
         cs.setParticipperfectms(conjugation.get(ValladerConjugationStructure.participperfectms));
@@ -728,12 +728,12 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setGerundium(conjugation.get(ValladerConjugationStructure.gerundium));
 
         // FUTUR
-        cs.setFutursing1(ValladerConjugationPronouns.pron_1ps + conjugation.get(ValladerConjugationStructure.futursing1));
-        cs.setFutursing2(ValladerConjugationPronouns.pron_2ps + conjugation.get(ValladerConjugationStructure.futursing2));
-        cs.setFutursing3(ValladerConjugationPronouns.pron_3ps + conjugation.get(ValladerConjugationStructure.futursing3));
-        cs.setFuturplural1(ValladerConjugationPronouns.pron_1pp + conjugation.get(ValladerConjugationStructure.futurplural1));
-        cs.setFuturplural2(ValladerConjugationPronouns.pron_2pp + conjugation.get(ValladerConjugationStructure.futurplural2));
-        cs.setFuturplural3(ValladerConjugationPronouns.pron_3pp + conjugation.get(ValladerConjugationStructure.futurplural3));
+        cs.setFutursing1(setPronoun(ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.futursing1)));
+        cs.setFutursing2(setPronoun(ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.futursing2)));
+        cs.setFutursing3(setPronoun(ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.futursing3)));
+        cs.setFuturplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.futurplural1)));
+        cs.setFuturplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.futurplural2)));
+        cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.futurplural3)));
 
         copyEncliticForms(conjugation, cs);
 
@@ -817,5 +817,19 @@ public class ValladerConjugation extends LanguageConjugation {
         root = null;
         ending = null;
         modRoot = null;
+    }
+
+    // special case for 'vo' pronoun
+    protected String setPronoun(String pronoun, String forms, String suffix) {
+        String[] singleForms = forms.split("\n");
+        for (int i = 0; i < singleForms.length; i++) {
+            // 'vus' u 'vus as'
+            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("aivat")) {
+                singleForms[i] = pronoun.replace(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_2pp_alt) + singleForms[i] + suffix;
+            } else {
+                singleForms[i] = pronoun + singleForms[i] + suffix;
+            }
+        }
+        return String.join("\n", singleForms);
     }
 }
