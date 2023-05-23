@@ -140,28 +140,35 @@ public class ImportServiceImpl implements ImportService {
 
         Map<String, VerbDto> verbs;
         List<LadinDto> lemmas;
+        HashMap<Integer, String> backupLemmas;
         boolean isPuter;
         if (language == Language.PUTER) {
             isPuter = true;
             verbs = loadVerbs("puter_verbs.xlsx", isPuter);
             lemmas = loadLemmas("puter.xlsx");
+            backupLemmas = new HashMap<>();
         } else {
             isPuter = false;
             verbs = loadVerbs("vallader_verbs.xlsx", isPuter);
             lemmas = loadLemmas("vallader.xlsx");
+            backupLemmas = loadBackupLemmas("vallader_2021-12-05.xlsx");
         }
 
-        Set<String> verbsMancants = new TreeSet<>();
+        Set<String> missingVerbs = new TreeSet<>();
         lemmas.forEach(l -> {
             LemmaVersion lemmaVersion = getLemmaVersion(l);
 
             if (!l.getVerbId().equals("")) {
                 if (!verbs.containsKey(l.getVerbId())) {
-                    verbsMancants.add(l.getVerbId());
+                    missingVerbs.add(l.getVerbId());
                     logger.error("ID not found: " + l.getVerbId());
                 } else {
                     addVerbData(lemmaVersion, verbs.get(l.getVerbId()), isPuter);
                 }
+            }
+
+            if (backupLemmas.get(Integer.valueOf(l.getId())) != null) {
+                lemmaVersion.getLemmaValues().put("RSubsemantik", backupLemmas.get(Integer.valueOf(l.getId())));
             }
 
             LexEntry le = new LexEntry();
@@ -176,7 +183,7 @@ public class ImportServiceImpl implements ImportService {
             }
         });
 
-        logger.error(verbsMancants.toString());
+        logger.error(missingVerbs.toString());
 
         return true;
     }
@@ -350,12 +357,41 @@ public class ImportServiceImpl implements ImportService {
         return lemmas;
     }
 
+    /**
+     *  In the newest data we got, the column `einschrkR` is empty. In an earlier backup, it
+     *  contains data. So we import an old backup and use it to fill that column.
+     */
+    private HashMap<Integer, String> loadBackupLemmas(String fileName) throws IOException {
+        FileInputStream source = new FileInputStream(new File("api/src/main/resources/ladin/" + fileName));
+
+        HashMap<Integer, String> lemmas = new HashMap<>();
+
+        Workbook workbook = new XSSFWorkbook(source);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            try {
+                for (int j = 0; j < 22; j++) {
+                    row.getCell(j, CREATE_NULL_AS_BLANK).setCellType(STRING);
+                }
+                Integer id = Integer.valueOf(row.getCell(0, CREATE_NULL_AS_BLANK).getStringCellValue());
+                String semantics = row.getCell(1, CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+                if (semantics.equals("")) {
+                    continue;
+                }
+                lemmas.put(id, semantics);
+
+            } catch (IllegalStateException e) {
+                System.out.println(e);
+            }
+        }
+
+        return lemmas;
+    }
+
     private LemmaVersion getLemmaVersion(LadinDto ladinDto) {
         LemmaVersion lv = new LemmaVersion();
-
-        // TODO: remove?
-        lv.getLemmaValues().put("EinschrkR", ladinDto.getEinschrkR());
-        lv.getLemmaValues().put("Grammatik_kategorieD", ladinDto.getGrammKatD());
 
         lv.getLemmaValues().put("ImportedId", ladinDto.getId());
         lv.getLemmaValues().put("DFlex",ladinDto.getFlexD());
@@ -377,6 +413,7 @@ public class ImportServiceImpl implements ImportService {
         lv.getLemmaValues().put("DStichwort", ladinDto.getStichwortD());
         lv.getLemmaValues().put("RStichwort", ladinDto.getStichwortR());
         lv.getLemmaValues().put("verbID", ladinDto.getVerbId());
+        lv.getLemmaValues().put("RSubsemantik", ladinDto.getEinschrkR());
 
         // generate links
         String RStichwort = lv.getLemmaValues().get("RStichwort");
