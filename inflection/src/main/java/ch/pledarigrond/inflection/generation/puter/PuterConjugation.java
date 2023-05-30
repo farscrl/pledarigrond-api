@@ -200,6 +200,7 @@ public class PuterConjugation extends LanguageConjugation {
         setImperfect(cs);
         setConjunctiv(cs);
         setCundizional(cs);
+        setConjunctiv2(cs); // ATTENTION: has to be after cundiziunal, as it uses the forms from cundziunal
         setParticipPerfect(cs);
         setImperativ(cs);
         setGerundium(cs);
@@ -311,6 +312,15 @@ public class PuterConjugation extends LanguageConjugation {
                 cs.setConjunctivplural3(modRoot + "an");
                 break;
         }
+    }
+
+    private void setConjunctiv2(PuterConjugationStructure cs) {
+        cs.setConjunctiv2sing1(cs.getCundizionalsing1());
+        cs.setConjunctiv2sing2(cs.getCundizionalsing2());
+        cs.setConjunctiv2sing3(cs.getCundizionalsing3());
+        cs.setConjunctiv2plural1(cs.getCundizionalplural1());
+        cs.setConjunctiv2plural2(cs.getCundizionalplural2());
+        cs.setConjunctiv2plural3(cs.getCundizionalplural3());
     }
 
     private void setCundizional(PuterConjugationStructure cs) {
@@ -599,6 +609,14 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setConjunctivplural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp + PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp + PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.conjunctivplural3)));
 
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_1ps + PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2ps + PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3ps + PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_1pp + PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp + PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp + PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural3)));
+
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(PuterConjugationPronouns.pron_1ps + PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.cundizionalsing1)));
         cs.setCundizionalsing2(setPronoun(PuterConjugationPronouns.pron_2ps + PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.cundizionalsing2)));
@@ -722,6 +740,14 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setConjunctivplural1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_1pp + PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.conjunctivplural1)));
         cs.setConjunctivplural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp + PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp + PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.conjunctivplural3)));
+
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_1ps + PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2ps + PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3ps + PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_1pp + PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp + PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp + PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(PuterConjugationPronouns.pron_1ps +PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.cundizionalsing1)));
@@ -848,6 +874,14 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setConjunctivplural1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_1pp, conjugation.get(PuterConjugationStructure.conjunctivplural1)));
         cs.setConjunctivplural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp, conjugation.get(PuterConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp, conjugation.get(PuterConjugationStructure.conjunctivplural3)));
+
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_1ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3ps, conjugation.get(PuterConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_1pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(PuterConjugationPronouns.pron_conjunctiv_c + PuterConjugationPronouns.pron_2pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(PuterConjugationPronouns.pron_conjunctiv_v + PuterConjugationPronouns.pron_3pp, conjugation.get(PuterConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(PuterConjugationPronouns.pron_1ps, conjugation.get(PuterConjugationStructure.cundizionalsing1)));

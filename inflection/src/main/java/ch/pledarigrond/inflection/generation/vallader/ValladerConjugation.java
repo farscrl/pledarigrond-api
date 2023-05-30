@@ -174,6 +174,7 @@ public class ValladerConjugation extends LanguageConjugation {
         setImperfect(cs);
         setConjunctiv(cs);
         setCundizional(cs);
+        setConjunctiv2(cs); // ATTENTION: has to be after cundiziunal, as it uses the forms from cundziunal
         setParticipPerfect(cs);
         setImperativ(cs);
         setGerundium(cs);
@@ -285,6 +286,15 @@ public class ValladerConjugation extends LanguageConjugation {
                 cs.setConjunctivplural3(modRoot + "an");
                 break;
         }
+    }
+
+    private void setConjunctiv2(ValladerConjugationStructure cs) {
+        cs.setConjunctiv2sing1(cs.getCundizionalsing1());
+        cs.setConjunctiv2sing2(cs.getCundizionalsing2());
+        cs.setConjunctiv2sing3(cs.getCundizionalsing3());
+        cs.setConjunctiv2plural1(cs.getCundizionalplural1());
+        cs.setConjunctiv2plural2(cs.getCundizionalplural2());
+        cs.setConjunctiv2plural3(cs.getCundizionalplural3());
     }
 
     private void setCundizional(ValladerConjugationStructure cs) {
@@ -525,6 +535,14 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
 
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural3)));
+
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));
         cs.setCundizionalsing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2)));
@@ -631,6 +649,14 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjunctivplural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.conjunctivplural1)));
         cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
+
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));
@@ -740,6 +766,14 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setConjunctivplural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.conjunctivplural1)));
         cs.setConjunctivplural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.conjunctivplural2)));
         cs.setConjunctivplural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.conjunctivplural3)));
+
+        // CONJUNCTIV II
+        cs.setConjunctiv2sing1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3ps, conjugation.get(ValladerConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_1pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_c + ValladerConjugationPronouns.pron_2pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(ValladerConjugationPronouns.pron_conjunctiv_v + ValladerConjugationPronouns.pron_3pp, conjugation.get(ValladerConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(setPronoun(ValladerConjugationPronouns.pron_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1)));

@@ -42,6 +42,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha vus güdas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas güdan", forms.getInflectionValues().get("conjunctivplural3"));
 
+        Assert.assertEquals("ch'eau güdess", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü güdessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella güdess", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus güdessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus güdessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas güdessan", forms.getInflectionValues().get("conjunctiv2plural3"));
+
         Assert.assertEquals("eau güdess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü güdessast", forms.getInflectionValues().get("cundizionalsing2"));
         Assert.assertEquals("el/ella güdess", forms.getInflectionValues().get("cundizionalsing3"));
@@ -104,6 +111,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha nus gratuleschans", forms.getInflectionValues().get("conjunctivplural1"));
         Assert.assertEquals("cha vus gratuleschas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas gratuleschan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ch'eau gratuless", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü gratulessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella gratuless", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus gratulessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus gratulessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas gratulessan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("eau gratuless", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü gratulessast", forms.getInflectionValues().get("cundizionalsing2"));
@@ -168,6 +182,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha vus as s-chodas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas as s-chodan", forms.getInflectionValues().get("conjunctivplural3"));
 
+        Assert.assertEquals("ch'eau am s-chudess", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü at s-chudessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella as s-chudess", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus ans s-chudessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus as s-chudessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas as s-chudessan", forms.getInflectionValues().get("conjunctiv2plural3"));
+
         Assert.assertEquals("eau am s-chudess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü at s-chudessast", forms.getInflectionValues().get("cundizionalsing2"));
         Assert.assertEquals("el/ella as s-chudess", forms.getInflectionValues().get("cundizionalsing3"));
@@ -229,6 +250,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha nus ans s-chalunans", forms.getInflectionValues().get("conjunctivplural1"));
         Assert.assertEquals("cha vus as s-chalunas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas as s-chalunan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ch'eau am s-chaluness", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü at s-chalunessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella as s-chaluness", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus ans s-chalunessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus as s-chalunessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas as s-chalunessan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("eau am s-chaluness", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü at s-chalunessast", forms.getInflectionValues().get("cundizionalsing2"));
@@ -293,6 +321,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha vus s'abassas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas s'abassan", forms.getInflectionValues().get("conjunctivplural3"));
 
+        Assert.assertEquals("ch'eau m'abassess", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü t'abassessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella s'abassess", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus ans abassessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus s'abassessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas s'abassessan", forms.getInflectionValues().get("conjunctiv2plural3"));
+
         Assert.assertEquals("eau m'abassess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü t'abassessast", forms.getInflectionValues().get("cundizionalsing2"));
         Assert.assertEquals("el/ella s'abassess", forms.getInflectionValues().get("cundizionalsing3"));
@@ -355,6 +390,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha nus giodans", forms.getInflectionValues().get("conjunctivplural1"));
         Assert.assertEquals("cha vus giodas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas giodan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ch'eau giodess", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü giodessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella giodess", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus giodessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus giodessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas giodessan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("eau giodess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü giodessast", forms.getInflectionValues().get("cundizionalsing2"));
@@ -419,6 +461,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha vus vendas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas vendan", forms.getInflectionValues().get("conjunctivplural3"));
 
+        Assert.assertEquals("ch'eau vendess", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü vendessast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella vendess", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus vendessans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus vendessas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas vendessan", forms.getInflectionValues().get("conjunctiv2plural3"));
+
         Assert.assertEquals("eau vendess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü vendessast", forms.getInflectionValues().get("cundizionalsing2"));
         Assert.assertEquals("el/ella vendess", forms.getInflectionValues().get("cundizionalsing3"));
@@ -481,6 +530,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha nus partans", forms.getInflectionValues().get("conjunctivplural1"));
         Assert.assertEquals("cha vus partas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas partan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ch'eau partiss", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü partissast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella partiss", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus partissans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus partissas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas partissan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("eau partiss", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü partissast", forms.getInflectionValues().get("cundizionalsing2"));
@@ -545,6 +601,13 @@ public class PuterConjugationTest {
         Assert.assertEquals("cha nus chapeschans", forms.getInflectionValues().get("conjunctivplural1"));
         Assert.assertEquals("cha vus chapeschas", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("ch'els/ellas chapeschan", forms.getInflectionValues().get("conjunctivplural3"));
+
+        Assert.assertEquals("ch'eau chapiss", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("cha tü chapissast", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("ch'el/ella chapiss", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("cha nus chapissans", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("cha vus chapissas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("ch'els/ellas chapissan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("eau chapiss", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tü chapissast", forms.getInflectionValues().get("cundizionalsing2"));

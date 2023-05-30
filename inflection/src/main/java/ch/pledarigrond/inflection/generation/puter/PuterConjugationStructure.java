@@ -36,6 +36,13 @@ public class PuterConjugationStructure {
 	public static final String conjunctivplural2 = "conjunctivplural2";
 	public static final String conjunctivplural3 = "conjunctivplural3";
 
+	public static final String conjunctiv2sing1 = "conjunctiv2sing1";
+	public static final String conjunctiv2sing2 = "conjunctiv2sing2";
+	public static final String conjunctiv2sing3 = "conjunctiv2sing3";
+	public static final String conjunctiv2plural1 = "conjunctiv2plural1";
+	public static final String conjunctiv2plural2 = "conjunctiv2plural2";
+	public static final String conjunctiv2plural3 = "conjunctiv2plural3";
+
 	public static final String cundizionalsing1 = "cundizionalsing1";
 	public static final String cundizionalsing2 = "cundizionalsing2";
 	public static final String cundizionalsing3 = "cundizionalsing3";
@@ -119,6 +126,8 @@ public class PuterConjugationStructure {
 			imperfectplural1, imperfectplural2, imperfectplural3,
 			conjunctivsing1, conjunctivsing2, conjunctivsing3,
 			conjunctivplural1, conjunctivplural2, conjunctivplural3,
+			conjunctiv2sing1, conjunctiv2sing2, conjunctiv2sing3,
+			conjunctiv2plural1, conjunctiv2plural2, conjunctiv2plural3,
 			cundizionalsing1, cundizionalsing2, cundizionalsing3,
 			cundizionalplural1, cundizionalplural2, cundizionalplural3,
 			participperfectms, participperfectfs, participperfectmp,
@@ -266,6 +275,30 @@ public class PuterConjugationStructure {
 
 	public String getConjunctivplural3() {
 		return values.get(conjunctivplural3);
+	}
+
+	public String getConjunctiv2sing1() {
+		return values.get(conjunctiv2sing1);
+	}
+
+	public String getConjunctiv2sing2() {
+		return values.get(conjunctiv2sing2);
+	}
+
+	public String getConjunctiv2sing3() {
+		return values.get(conjunctiv2sing3);
+	}
+
+	public String getConjunctiv2plural1() {
+		return values.get(conjunctiv2plural1);
+	}
+
+	public String getConjunctiv2plural2() {
+		return values.get(conjunctiv2plural2);
+	}
+
+	public String getConjunctiv2plural3() {
+		return values.get(conjunctiv2plural3);
 	}
 
 	public String getCundizionalsing1() {
@@ -624,6 +657,30 @@ public class PuterConjugationStructure {
 		values.put(conjunctivplural3, cp3);
 	}
 
+	public void setConjunctiv2sing1(String cs1) {
+		values.put(conjunctiv2sing1, cs1);
+	}
+
+	public void setConjunctiv2sing2(String cs2) {
+		values.put(conjunctiv2sing2, cs2);
+	}
+
+	public void setConjunctiv2sing3(String cs3) {
+		values.put(conjunctiv2sing3, cs3);
+	}
+
+	public void setConjunctiv2plural1(String cp1) {
+		values.put(conjunctiv2plural1, cp1);
+	}
+
+	public void setConjunctiv2plural2(String cp2) {
+		values.put(conjunctiv2plural2, cp2);
+	}
+
+	public void setConjunctiv2plural3(String cp3) {
+		values.put(conjunctiv2plural3, cp3);
+	}
+
 	public void setCundizionalsing1(String cus1) {
 		values.put(cundizionalsing1, cus1);
 	}
@@ -952,6 +1009,18 @@ public class PuterConjugationStructure {
 				return getConjunctivplural2();
 			case conjunctivplural3:
 				return getConjunctivplural3();
+			case conjunctiv2sing1:
+				return getConjunctiv2sing1();
+			case conjunctiv2sing2:
+				return getConjunctiv2sing2();
+			case conjunctiv2sing3:
+				return getConjunctiv2sing3();
+			case conjunctiv2plural1:
+				return getConjunctiv2plural1();
+			case conjunctiv2plural2:
+				return getConjunctiv2plural2();
+			case conjunctiv2plural3:
+				return getConjunctiv2plural3();
 			case cundizionalsing1:
 				return getCundizionalsing1();
 			case cundizionalsing2:
@@ -1166,6 +1235,20 @@ public class PuterConjugationStructure {
 		buffer.append(values.get(conjunctivplural2));
 		buffer.append("\t");
 		buffer.append(values.get(conjunctivplural3));
+		buffer.append("\n");
+
+		// Conjunctiv 2
+		buffer.append(values.get(conjunctiv2sing1));
+		buffer.append("\t");
+		buffer.append(values.get(conjunctiv2sing2));
+		buffer.append("\t");
+		buffer.append(values.get(conjunctiv2sing3));
+		buffer.append("\t");
+		buffer.append(values.get(conjunctiv2plural1));
+		buffer.append("\t");
+		buffer.append(values.get(conjunctiv2plural2));
+		buffer.append("\t");
+		buffer.append(values.get(conjunctiv2plural3));
 		buffer.append("\n");
 
 		// Cundizional
