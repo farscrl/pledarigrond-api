@@ -551,14 +551,50 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setGerundium(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.gerundium)));
 
         // FUTUR
-        cs.setFutursing1(setPronoun(ValladerConjugationPronouns.pron_1ps, ValladerConjugationPronouns.pron_r_1ps + conjugation.get(ValladerConjugationStructure.futursing1)));
-        cs.setFutursing2(setPronoun(ValladerConjugationPronouns.pron_2ps, ValladerConjugationPronouns.pron_r_2ps + conjugation.get(ValladerConjugationStructure.futursing2)));
-        cs.setFutursing3(setPronoun(ValladerConjugationPronouns.pron_3ps, ValladerConjugationPronouns.pron_r_3ps + conjugation.get(ValladerConjugationStructure.futursing3)));
-        cs.setFuturplural1(setPronoun(ValladerConjugationPronouns.pron_1pp, ValladerConjugationPronouns.pron_r_1pp + conjugation.get(ValladerConjugationStructure.futurplural1)));
-        cs.setFuturplural2(setPronoun(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_r_2pp + conjugation.get(ValladerConjugationStructure.futurplural2)));
-        cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, ValladerConjugationPronouns.pron_r_3pp + conjugation.get(ValladerConjugationStructure.futurplural3)));
+        cs.setFutursing1(setPronoun(ValladerConjugationPronouns.pron_1ps + ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.futursing1)));
+        cs.setFutursing2(setPronoun(ValladerConjugationPronouns.pron_2ps + ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.futursing2)));
+        cs.setFutursing3(setPronoun(ValladerConjugationPronouns.pron_3ps + ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.futursing3)));
+        cs.setFuturplural1(setPronoun(ValladerConjugationPronouns.pron_1pp + ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.futurplural1)));
+        cs.setFuturplural2(setPronoun(ValladerConjugationPronouns.pron_2pp + ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.futurplural2)));
+        cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp + ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.futurplural3)));
 
         copyEncliticForms(conjugation, cs);
+
+        // ENCLITIC PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.preschentsing1enclitic)));
+        cs.setPreschentsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.preschentsing2enclitic)));
+        cs.setPreschentsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3encliticm)));
+        cs.setPreschentsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3encliticf)));
+        cs.setPreschentplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.preschentplural1enclitic)));
+        cs.setPreschentplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.preschentplural2enclitic)));
+        cs.setPreschentplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.preschentplural3enclitic)));
+
+        // ENCLITIC IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.imperfectsing1enclitic)));
+        cs.setImperfectsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.imperfectsing2enclitic)));
+        cs.setImperfectsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3encliticm)));
+        cs.setImperfectsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3encliticf)));
+        cs.setImperfectplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.imperfectplural1enclitic)));
+        cs.setImperfectplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.imperfectplural2enclitic)));
+        cs.setImperfectplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.imperfectplural3enclitic)));
+
+        // ENCLITIC CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1enclitic)));
+        cs.setCundizionalsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2enclitic)));
+        cs.setCundizionalsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3encliticm)));
+        cs.setCundizionalsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3encliticf)));
+        cs.setCundizionalplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.cundizionalplural1enclitic)));
+        cs.setCundizionalplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.cundizionalplural2enclitic)));
+        cs.setCundizionalplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.cundizionalplural3enclitic)));
+
+        // ENCLITIC FUTUR
+        cs.setFutursing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1ps, conjugation.get(ValladerConjugationStructure.futursing1enclitic)));
+        cs.setFutursing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2ps, conjugation.get(ValladerConjugationStructure.futursing2enclitic)));
+        cs.setFutursing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.futursing3encliticm)));
+        cs.setFutursing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_3ps, conjugation.get(ValladerConjugationStructure.futursing3encliticf)));
+        cs.setFuturplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_1pp, conjugation.get(ValladerConjugationStructure.futurplural1enclitic)));
+        cs.setFuturplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_2pp, conjugation.get(ValladerConjugationStructure.futurplural2enclitic)));
+        cs.setFuturplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_3pp, conjugation.get(ValladerConjugationStructure.futurplural3enclitic)));
 
         return cs.getAllFormValues();
     }
@@ -630,6 +666,42 @@ public class ValladerConjugation extends LanguageConjugation {
         cs.setFuturplural3(setPronoun(ValladerConjugationPronouns.pron_3pp, ValladerConjugationPronouns.pron_r_v_3pp + conjugation.get(ValladerConjugationStructure.futurplural3)));
 
         copyEncliticForms(conjugation, cs);
+
+        // ENCLITIC PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.preschentsing1enclitic)));
+        cs.setPreschentsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.preschentsing2enclitic)));
+        cs.setPreschentsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3encliticm)));
+        cs.setPreschentsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.preschentsing3encliticf)));
+        cs.setPreschentplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.preschentplural1enclitic)));
+        cs.setPreschentplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.preschentplural2enclitic)));
+        cs.setPreschentplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.preschentplural3enclitic)));
+
+        // ENCLITIC IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.imperfectsing1enclitic)));
+        cs.setImperfectsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.imperfectsing2enclitic)));
+        cs.setImperfectsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3encliticm)));
+        cs.setImperfectsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.imperfectsing3encliticf)));
+        cs.setImperfectplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.imperfectplural1enclitic)));
+        cs.setImperfectplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.imperfectplural2enclitic)));
+        cs.setImperfectplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.imperfectplural3enclitic)));
+
+        // ENCLITIC CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.cundizionalsing1enclitic)));
+        cs.setCundizionalsing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.cundizionalsing2enclitic)));
+        cs.setCundizionalsing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3encliticm)));
+        cs.setCundizionalsing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.cundizionalsing3encliticf)));
+        cs.setCundizionalplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.cundizionalplural1enclitic)));
+        cs.setCundizionalplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.cundizionalplural2enclitic)));
+        cs.setCundizionalplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.cundizionalplural3enclitic)));
+
+        // ENCLITIC FUTUR
+        cs.setFutursing1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1ps, conjugation.get(ValladerConjugationStructure.futursing1enclitic)));
+        cs.setFutursing2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2ps, conjugation.get(ValladerConjugationStructure.futursing2enclitic)));
+        cs.setFutursing3EncliticM(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.futursing3encliticm)));
+        cs.setFutursing3EncliticF(setPronoun(ValladerConjugationPronouns.pron_r_v_3ps, conjugation.get(ValladerConjugationStructure.futursing3encliticf)));
+        cs.setFuturplural1Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_1pp, conjugation.get(ValladerConjugationStructure.futurplural1enclitic)));
+        cs.setFuturplural2Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_2pp, conjugation.get(ValladerConjugationStructure.futurplural2enclitic)));
+        cs.setFuturplural3Enclitic(setPronoun(ValladerConjugationPronouns.pron_r_v_3pp, conjugation.get(ValladerConjugationStructure.futurplural3enclitic)));
 
         return cs.getAllFormValues();
     }

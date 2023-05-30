@@ -45,7 +45,7 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("mangessas", forms.getInflectionValues().get("cundizionalplural2enclitic"));
         Assert.assertEquals("mangessane", forms.getInflectionValues().get("cundizionalplural3enclitic"));
 
-        Assert.assertEquals("", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("mangiaro eau", forms.getInflectionValues().get("futursing1enclitic"));
         Assert.assertEquals("mangiarost", forms.getInflectionValues().get("futursing2enclitic"));
         Assert.assertEquals("mangiaro'l", forms.getInflectionValues().get("futursing3encliticm"));
         Assert.assertEquals("mangiaro'la", forms.getInflectionValues().get("futursing3encliticf"));
@@ -148,5 +148,95 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("drizzainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
         Assert.assertEquals("drizzais", forms.getInflectionValues().get("preschentplural2enclitic"));
         Assert.assertEquals("drizzane", forms.getInflectionValues().get("preschentplural3enclitic"));
+    }
+
+    @Test
+    public void testRule1reflexiv() {
+        forms = generator.generateConjugation("1", "as s-chaluner");
+
+        Assert.assertEquals("am s-chaluni", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("at s-chalunast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("as s-chaluna'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("as s-chalun'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("ans s-chalunainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
+        Assert.assertEquals("as s-chalunais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("as s-chalunane", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("am s-chalunaivi", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("at s-chalunaivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("as s-chalunaiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("as s-chalunaiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("ans s-chalunaivans", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("as s-chalunaivas", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("as s-chalunaivane", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("am s-chalunessi", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("at s-chalunessast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("as s-chalunessa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("as s-chaluness'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("ans s-chalunessans", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("as s-chalunessas", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("as s-chalunessane", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("am s-chalunaro eau", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("at s-chalunarost", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("as s-chalunaro'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("as s-chalunaro'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("ans s-chalunaronsa", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("as s-chalunaros", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("as s-chalunarone", forms.getInflectionValues().get("futurplural3enclitic"));
+
+        Assert.assertEquals("am s-chalunaregi", forms.getInflectionValues().get("futurdubitativsing1enclitic"));
+        Assert.assertEquals("at s-chalunaregiast", forms.getInflectionValues().get("futurdubitativsing2enclitic"));
+        Assert.assertEquals("as s-chalunaregia'l", forms.getInflectionValues().get("futurdubitativsing3encliticm"));
+        Assert.assertEquals("as s-chalunareg'la", forms.getInflectionValues().get("futurdubitativsing3encliticf"));
+        Assert.assertEquals("ans s-chalunaregians", forms.getInflectionValues().get("futurdubitativplural1enclitic"));
+        Assert.assertEquals("as s-chalunaregias", forms.getInflectionValues().get("futurdubitativplural2enclitic"));
+        Assert.assertEquals("as s-chalunaregiane", forms.getInflectionValues().get("futurdubitativplural3enclitic"));
+    }
+
+    @Test
+    public void testRule1reflexivVowel() {
+        forms = generator.generateConjugation("1", "s'abasser");
+
+        Assert.assertEquals("m'abassi", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("t'abassast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("s'abassa'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("s'abass'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("ans abassainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
+        Assert.assertEquals("s'abassais", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("s'abassane", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("m'abassaivi", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("t'abassaivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("s'abassaiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("s'abassaiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("ans abassaivans", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("s'abassaivas", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("s'abassaivane", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("m'abassessi", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("t'abassessast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("s'abassessa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("s'abassess'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("ans abassessans", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("s'abassessas", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("s'abassessane", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("m'abassaro eau", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("t'abassarost", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("s'abassaro'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("s'abassaro'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("ans abassaronsa", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("s'abassaros", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("s'abassarone", forms.getInflectionValues().get("futurplural3enclitic"));
+
+        Assert.assertEquals("m'abassaregi", forms.getInflectionValues().get("futurdubitativsing1enclitic"));
+        Assert.assertEquals("t'abassaregiast", forms.getInflectionValues().get("futurdubitativsing2enclitic"));
+        Assert.assertEquals("s'abassaregia'l", forms.getInflectionValues().get("futurdubitativsing3encliticm"));
+        Assert.assertEquals("s'abassareg'la", forms.getInflectionValues().get("futurdubitativsing3encliticf"));
+        Assert.assertEquals("ans abassaregians", forms.getInflectionValues().get("futurdubitativplural1enclitic"));
+        Assert.assertEquals("s'abassaregias", forms.getInflectionValues().get("futurdubitativplural2enclitic"));
+        Assert.assertEquals("s'abassaregiane", forms.getInflectionValues().get("futurdubitativplural3enclitic"));
     }
 }

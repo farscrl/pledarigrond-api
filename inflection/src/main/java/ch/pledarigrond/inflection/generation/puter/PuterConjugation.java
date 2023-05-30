@@ -530,7 +530,7 @@ public class PuterConjugation extends LanguageConjugation {
     }
 
     private static void setFuturEnclitic(PuterConjugationStructure cs) {
-        cs.setFutursing1Enclitic("");
+        cs.setFutursing1Enclitic(cs.getFutursing1() + " eau");
         cs.setFutursing2Enclitic(cs.getFutursing2());
         cs.setFutursing3EncliticM(cs.getFutursing3() + "'l");
         cs.setFutursing3EncliticF(cs.getFutursing3() + "'la");
@@ -642,6 +642,51 @@ public class PuterConjugation extends LanguageConjugation {
 
         copyEncliticForms(conjugation, cs);
 
+        // PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.preschentsing1enclitic)));
+        cs.setPreschentsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.preschentsing2enclitic)));
+        cs.setPreschentsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.preschentsing3encliticm)));
+        cs.setPreschentsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.preschentsing3encliticf)));
+        cs.setPreschentplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.preschentplural1enclitic)));
+        cs.setPreschentplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2pp,conjugation.get(PuterConjugationStructure.preschentplural2enclitic)));
+        cs.setPreschentplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.preschentplural3enclitic)));
+
+        // IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.imperfectsing1enclitic)));
+        cs.setImperfectsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.imperfectsing2enclitic)));
+        cs.setImperfectsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.imperfectsing3encliticm)));
+        cs.setImperfectsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.imperfectsing3encliticf)));
+        cs.setImperfectplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.imperfectplural1enclitic)));
+        cs.setImperfectplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.imperfectplural2enclitic)));
+        cs.setImperfectplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.imperfectplural3enclitic)));
+
+        // CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.cundizionalsing1enclitic)));
+        cs.setCundizionalsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.cundizionalsing2enclitic)));
+        cs.setCundizionalsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.cundizionalsing3encliticm)));
+        cs.setCundizionalsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.cundizionalsing3encliticf)));
+        cs.setCundizionalplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.cundizionalplural1enclitic)));
+        cs.setCundizionalplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.cundizionalplural2enclitic)));
+        cs.setCundizionalplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.cundizionalplural3enclitic)));
+
+        // FUTUR
+        cs.setFutursing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.futursing1enclitic)));
+        cs.setFutursing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.futursing2enclitic)));
+        cs.setFutursing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.futursing3encliticm)));
+        cs.setFutursing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.futursing3encliticf)));
+        cs.setFuturplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.futurplural1enclitic)));
+        cs.setFuturplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.futurplural2enclitic)));
+        cs.setFuturplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.futurplural3enclitic)));
+
+        // FUTUR DUBITATIV
+        cs.setFuturdubitativsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1ps, conjugation.get(PuterConjugationStructure.futurdubitativsing1enclitic)));
+        cs.setFuturdubitativsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2ps, conjugation.get(PuterConjugationStructure.futurdubitativsing2enclitic)));
+        cs.setFuturdubitativsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticm)));
+        cs.setFuturdubitativsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_3ps, conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticf)));
+        cs.setFuturdubitativplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_1pp, conjugation.get(PuterConjugationStructure.futurdubitativplural1enclitic)));
+        cs.setFuturdubitativplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_2pp, conjugation.get(PuterConjugationStructure.futurdubitativplural2enclitic)));
+        cs.setFuturdubitativplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_3pp, conjugation.get(PuterConjugationStructure.futurdubitativplural3enclitic)));
+
         return cs.getAllFormValues();
     }
 
@@ -720,6 +765,51 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setFuturdubitativplural3(setPronoun(PuterConjugationPronouns.pron_3pp + PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.futurdubitativplural3)));
 
         copyEncliticForms(conjugation, cs);
+
+        // PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.preschentsing1enclitic)));
+        cs.setPreschentsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.preschentsing2enclitic)));
+        cs.setPreschentsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.preschentsing3encliticm)));
+        cs.setPreschentsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.preschentsing3encliticf)));
+        cs.setPreschentplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.preschentplural1enclitic)));
+        cs.setPreschentplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2pp,conjugation.get(PuterConjugationStructure.preschentplural2enclitic)));
+        cs.setPreschentplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.preschentplural3enclitic)));
+
+        // IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.imperfectsing1enclitic)));
+        cs.setImperfectsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.imperfectsing2enclitic)));
+        cs.setImperfectsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.imperfectsing3encliticm)));
+        cs.setImperfectsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.imperfectsing3encliticf)));
+        cs.setImperfectplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.imperfectplural1enclitic)));
+        cs.setImperfectplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.imperfectplural2enclitic)));
+        cs.setImperfectplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.imperfectplural3enclitic)));
+
+        // CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.cundizionalsing1enclitic)));
+        cs.setCundizionalsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.cundizionalsing2enclitic)));
+        cs.setCundizionalsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.cundizionalsing3encliticm)));
+        cs.setCundizionalsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.cundizionalsing3encliticf)));
+        cs.setCundizionalplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.cundizionalplural1enclitic)));
+        cs.setCundizionalplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.cundizionalplural2enclitic)));
+        cs.setCundizionalplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.cundizionalplural3enclitic)));
+
+        // FUTUR
+        cs.setFutursing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.futursing1enclitic)));
+        cs.setFutursing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.futursing2enclitic)));
+        cs.setFutursing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.futursing3encliticm)));
+        cs.setFutursing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.futursing3encliticf)));
+        cs.setFuturplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.futurplural1enclitic)));
+        cs.setFuturplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.futurplural2enclitic)));
+        cs.setFuturplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.futurplural3enclitic)));
+
+        // FUTUR DUBITATIV
+        cs.setFuturdubitativsing1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1ps, conjugation.get(PuterConjugationStructure.futurdubitativsing1enclitic)));
+        cs.setFuturdubitativsing2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2ps, conjugation.get(PuterConjugationStructure.futurdubitativsing2enclitic)));
+        cs.setFuturdubitativsing3EncliticM(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticm)));
+        cs.setFuturdubitativsing3EncliticF(setPronoun(PuterConjugationPronouns.pron_r_v_3ps, conjugation.get(PuterConjugationStructure.futurdubitativsing3encliticf)));
+        cs.setFuturdubitativplural1Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_1pp, conjugation.get(PuterConjugationStructure.futurdubitativplural1enclitic)));
+        cs.setFuturdubitativplural2Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_2pp, conjugation.get(PuterConjugationStructure.futurdubitativplural2enclitic)));
+        cs.setFuturdubitativplural3Enclitic(setPronoun(PuterConjugationPronouns.pron_r_v_3pp, conjugation.get(PuterConjugationStructure.futurdubitativplural3enclitic)));
 
         return cs.getAllFormValues();
     }

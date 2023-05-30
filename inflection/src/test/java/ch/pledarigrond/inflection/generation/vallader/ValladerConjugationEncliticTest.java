@@ -224,4 +224,78 @@ public class ValladerConjugationEncliticTest {
         Assert.assertEquals("drizzais\n(drizzaivat)", forms.getInflectionValues().get("preschentplural2enclitic"));
         Assert.assertEquals("drizna", forms.getInflectionValues().get("preschentplural3enclitic"));
     }
+
+    @Test
+    public void testRule1reflexiv() {
+        forms = generator.generateConjugation("1a", "as barricadar");
+
+        Assert.assertEquals("am barricadescha", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("at barricadeschast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("as barricadescha'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("as barricadesch'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("ans barricadaina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        Assert.assertEquals("as barricadais\n(as barricadaivat)", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("as barricadeschna", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("am barricadaiva", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("at barricadaivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("as barricadaiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("as barricadaiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("ans barricadaivna", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("as barricadaivat", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("as barricadaivna", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("am barricadessa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("at barricadessast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("as barricadessa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("as barricadess'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("ans barricadessna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("as barricadessat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("as barricadessna", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("am barricadaraja", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("at barricadarast", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("as barricadarà'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("as barricadarà'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("ans barricadarana", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("as barricadarat", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("as barricadarana", forms.getInflectionValues().get("futurplural3enclitic"));
+    }
+
+    @Test
+    public void testRule1reflexivVowel() {
+        forms = generator.generateConjugation("1", "s'inachürar");
+
+        Assert.assertEquals("m'inachüra", forms.getInflectionValues().get("preschentsing1enclitic"));
+        Assert.assertEquals("t'inachürast", forms.getInflectionValues().get("preschentsing2enclitic"));
+        Assert.assertEquals("s'inachüra'l", forms.getInflectionValues().get("preschentsing3encliticm"));
+        Assert.assertEquals("s'inachür'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("ans inachüraina", forms.getInflectionValues().get("preschentplural1enclitic"));
+        Assert.assertEquals("s'inachürais\n(s'inachüraivat)", forms.getInflectionValues().get("preschentplural2enclitic"));
+        Assert.assertEquals("s'inachürna", forms.getInflectionValues().get("preschentplural3enclitic"));
+
+        Assert.assertEquals("m'inachüraiva", forms.getInflectionValues().get("imperfectsing1enclitic"));
+        Assert.assertEquals("t'inachüraivast", forms.getInflectionValues().get("imperfectsing2enclitic"));
+        Assert.assertEquals("s'inachüraiva'l", forms.getInflectionValues().get("imperfectsing3encliticm"));
+        Assert.assertEquals("s'inachüraiv'la", forms.getInflectionValues().get("imperfectsing3encliticf"));
+        Assert.assertEquals("ans inachüraivna", forms.getInflectionValues().get("imperfectplural1enclitic"));
+        Assert.assertEquals("s'inachüraivat", forms.getInflectionValues().get("imperfectplural2enclitic"));
+        Assert.assertEquals("s'inachüraivna", forms.getInflectionValues().get("imperfectplural3enclitic"));
+
+        Assert.assertEquals("m'inachüressa", forms.getInflectionValues().get("cundizionalsing1enclitic"));
+        Assert.assertEquals("t'inachüressast", forms.getInflectionValues().get("cundizionalsing2enclitic"));
+        Assert.assertEquals("s'inachüressa'l", forms.getInflectionValues().get("cundizionalsing3encliticm"));
+        Assert.assertEquals("s'inachüress'la", forms.getInflectionValues().get("cundizionalsing3encliticf"));
+        Assert.assertEquals("ans inachüressna", forms.getInflectionValues().get("cundizionalplural1enclitic"));
+        Assert.assertEquals("s'inachüressat", forms.getInflectionValues().get("cundizionalplural2enclitic"));
+        Assert.assertEquals("s'inachüressna", forms.getInflectionValues().get("cundizionalplural3enclitic"));
+
+        Assert.assertEquals("m'inachüraraja", forms.getInflectionValues().get("futursing1enclitic"));
+        Assert.assertEquals("t'inachürarast", forms.getInflectionValues().get("futursing2enclitic"));
+        Assert.assertEquals("s'inachürarà'l", forms.getInflectionValues().get("futursing3encliticm"));
+        Assert.assertEquals("s'inachürarà'la", forms.getInflectionValues().get("futursing3encliticf"));
+        Assert.assertEquals("ans inachürarana", forms.getInflectionValues().get("futurplural1enclitic"));
+        Assert.assertEquals("s'inachürarat", forms.getInflectionValues().get("futurplural2enclitic"));
+        Assert.assertEquals("s'inachürarana", forms.getInflectionValues().get("futurplural3enclitic"));
+    }
 }
