@@ -112,8 +112,8 @@ public class LadinCleanupServiceImpl implements LadinCleanupService {
             DBObject object = new BasicDBObject(cursor.next());
             LexEntry entry = Converter.convertToLexEntry(object);
 
-            if (entry.getCurrent().getLemmaValues().get("RStichwort").equals("")
-                    || entry.getCurrent().getLemmaValues().get("DStichwort").equals("")) {
+            if (entry.getCurrent().getLemmaValues().get("RStichwort").trim().equals("")
+                    || entry.getCurrent().getLemmaValues().get("DStichwort").trim().equals("")) {
 
                 BasicDBObject toDelete = Converter.convertLexEntry(entry);
                 entryCollection.deleteOne(eq("_id", toDelete.get("_id")));
