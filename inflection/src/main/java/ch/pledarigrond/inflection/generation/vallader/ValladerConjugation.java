@@ -221,10 +221,10 @@ public class ValladerConjugation extends LanguageConjugation {
                 cs.setPreschentsing3(modRoot + "a");
                 if (cs.getInfinitiv().endsWith("ger")) {
                     cs.setPreschentplural1(modRoot + "ain");
-                    cs.setPreschentplural2(modRoot + "ais\n" + modRoot + "aivat");
+                    cs.setPreschentplural2(modRoot + "ais\n(" + modRoot + "aivat)");
                 } else {
                     cs.setPreschentplural1(root + "ain");
-                    cs.setPreschentplural2(root + "ais\n" + root + "aivat");
+                    cs.setPreschentplural2(root + "ais\n(" + root + "aivat)");
                 }
                 cs.setPreschentplural3(modRoot + "an");
                 break;
@@ -240,7 +240,7 @@ public class ValladerConjugation extends LanguageConjugation {
                 cs.setPreschentsing2(modRoot + "ast");
                 cs.setPreschentsing3(modRoot + "a");
                 cs.setPreschentplural1(root + "in");
-                cs.setPreschentplural2(root + "is\n" + root + "ivat");
+                cs.setPreschentplural2(root + "is\n(" + root + "ivat)");
                 cs.setPreschentplural3(modRoot + "an");
                 break;
         }
@@ -395,39 +395,11 @@ public class ValladerConjugation extends LanguageConjugation {
 
 
     private static void setPreschentEnclitic(ValladerConjugationStructure cs) {
-        if (cs.getInfinitiv().endsWith("giar")) {
-            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
-            cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
-            cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
-            cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
-            cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
-            cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 3) + "na");
-        } else if  (cs.getInfinitiv().endsWith("gliar")) {
-            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
-            cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
-            cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
-            cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
-            cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
-            cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 3) + "na");
-        } else if(cs.getInfinitiv().endsWith("ger")) {
-            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
-            cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
-            cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
-            cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
-            cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
-            cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 3) + "na");
-        } else if(cs.getInfinitiv().endsWith("gir")) {
-            cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
-            cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
-            cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
-            cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
-            cs.setPreschentplural1Enclitic(cs.getPreschentplural1() + "a");
-            cs.setPreschentplural2Enclitic(cs.getPreschentplural2());
-            cs.setPreschentplural3Enclitic(cs.getPreschentplural3().substring(0, cs.getPreschentplural3().length() - 3) + "na");
-        } else if(cs.getInfinitiv().endsWith("glir")) {
+        if (cs.getInfinitiv().endsWith("giar") ||
+            cs.getInfinitiv().endsWith("gliar") ||
+            cs.getInfinitiv().endsWith("ger") ||
+            cs.getInfinitiv().endsWith("gir") ||
+            cs.getInfinitiv().endsWith("glir")) {
             cs.setPreschentsing1Enclitic(cs.getPreschentsing1() + "ia");
             cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
             cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
@@ -823,11 +795,22 @@ public class ValladerConjugation extends LanguageConjugation {
     protected String setPronoun(String pronoun, String forms, String suffix) {
         String[] singleForms = forms.split("\n");
         for (int i = 0; i < singleForms.length; i++) {
+
+            boolean enclosedInBrackets = false;
+            if (singleForms[i].charAt(0) == '(' && singleForms[i].charAt(singleForms[i].length()-1) == ')') {
+                enclosedInBrackets = true;
+                singleForms[i] = singleForms[i].replace("(", "").replace(")", "");
+            }
+
             // 'vus' u 'vus as'
-            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("aivat")) {
+            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("ivat")) {
                 singleForms[i] = pronoun.replace(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_2pp_alt) + singleForms[i] + suffix;
             } else {
                 singleForms[i] = pronoun + singleForms[i] + suffix;
+            }
+
+            if (enclosedInBrackets) {
+                singleForms[i] = "(" + singleForms[i] + ")";
             }
         }
         return String.join("\n", singleForms);
