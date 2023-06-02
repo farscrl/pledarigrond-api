@@ -38,13 +38,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_SUBTYPE;
-import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_TYPE;
+import static ch.pledarigrond.common.data.common.LemmaVersion.*;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
 
@@ -810,6 +814,54 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         logger.error("number of cases: " + counter);
+
+        return true;
+    }
+
+    /**
+     * For sutsilvan, there are some edge cases, that will be reviewed after the review-process in the UI.
+     * This function allows to export the remaining words into a CSV file, that can be handled later on.
+     */
+    public boolean exportRemainingWords(Language language) throws IOException, InterruptedException, DatabaseException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        List<String[]> dataLines = new ArrayList<>();
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getMostRecent() != null) {
+                LemmaVersion mostRecent = entry.getMostRecent();
+
+                String id = mostRecent.getLexEntryId();
+                String RStichwort = mostRecent.getLemmaValues().get("RStichwort");
+                String DStichwort = mostRecent.getLemmaValues().get("DStichwort");
+
+                if ("true".equals(mostRecent.getReviewLater())) {
+                    // logger.error(mostRecent.getReviewLater());
+                    dataLines.add(new String[]{ id, RStichwort, DStichwort, "pli tard" });
+                }
+
+                if (mostRecent.getVerification() == Verification.UNVERIFIED && mostRecent.getAutomaticChange() != null && !"true".equals(mostRecent.getReviewLater())) {
+                    // logger.warn(mostRecent.getAutomaticChange());
+                    dataLines.add(new String[]{ id, RStichwort, DStichwort, mostRecent.getAutomaticChange() });
+                }
+
+
+            }
+        }
+
+        Files.createDirectories(Paths.get("data/export"));
+        File csvOutputFile = new File("data/export/" + language.getName() + "/not-reviewed-lemmas.csv");
+        try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            dataLines.stream()
+                    .map(this::convertToCSV)
+                    .forEach(pw::println);
+        }
 
         return true;
     }
@@ -2000,5 +2052,24 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         if ("tr/int/Verb modal".equals(oldGrammar)) return "verb modal";
 
         return oldGrammar;
+    }
+
+    private String convertToCSV(String[] data) {
+        return Stream.of(data)
+                .map(this::escapeSpecialCharacters)
+                .collect(Collectors.joining(","));
+    }
+
+    private String escapeSpecialCharacters(String data) {
+        if (data == null) {
+            return "";
+        }
+
+        String escapedData = data.replaceAll("\\R", " ");
+        if (data.contains(",") || data.contains("\"") || data.contains("'")) {
+            data = data.replace("\"", "\"\"");
+            escapedData = "\"" + data + "\"";
+        }
+        return escapedData;
     }
 }

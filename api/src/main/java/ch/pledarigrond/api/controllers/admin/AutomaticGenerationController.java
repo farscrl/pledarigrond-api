@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +213,24 @@ public class AutomaticGenerationController {
 
         if (!success) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during fixing wrong parent id");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * List errors in sutsilvan caused by duplication of lemmas during automatic generation
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/export_remaining_lemmas_to_review")
+    ResponseEntity<?> exportRemainingLemmasToReview(@PathVariable("language")Language language) throws DatabaseException, IOException, InterruptedException {
+        if (language != Language.SUTSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.exportRemainingWords(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during export remaining words");
         }
 
         return ResponseEntity.ok().build();

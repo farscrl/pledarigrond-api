@@ -5,6 +5,8 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -38,4 +40,6 @@ public interface AutomaticGenerationService {
     boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean exportRemainingWords(Language language) throws IOException, InterruptedException, DatabaseException;
 }
