@@ -29,12 +29,12 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
     }
 
     protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
-        list.addWord(lemmaVersion.getEntryValue("mSingular"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
-        list.addWord(lemmaVersion.getEntryValue("fSingular"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
-        list.addWord(lemmaVersion.getEntryValue("mPlural"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
-        list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
-        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_SHORT_ADJECTIVE});
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mSingular"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fSingular"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("mPlural"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
     }
 
     protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion) {
@@ -59,7 +59,7 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");
         }
-        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOMS_REFLEXIVS});
+        list.addWord(removePronouns(infinitiv), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOMS_CUN_FURMA_INVERSIVA_DAL_PRONOM_IMPERS, SUTSILVAN_PRONOMS_REFLEXIVS});
 
         ArrayList<String> forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
@@ -128,16 +128,11 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
         addNewlines(lemmaVersion.getEntryValue("cundizionalplural2enclitic"), forms);
         addNewlines(lemmaVersion.getEntryValue("cundizionalplural3enclitic"), forms);
 
-        forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOMS_REFLEXIVS});
-        });
-
-        forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("imperativ1"), forms);
         addNewlines(lemmaVersion.getEntryValue("imperativ2"), forms);
 
         forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOM_CONGIUNT_IMPERATIV, SUTSILVAN_PRONOMS_REFLEXIVS});
+            list.addWord(removePronouns(f), new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI, SUTSILVAN_PRONOMS_CUN_FURMA_INVERSIVA_DAL_PRONOM_IMPERS, SUTSILVAN_PRONOMS_REFLEXIVS});
         });
     }
 
