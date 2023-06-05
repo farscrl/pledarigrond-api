@@ -909,7 +909,7 @@ public class ValladerConjugation extends LanguageConjugation {
             }
 
             // 'vus' u 'vus as'
-            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("ivat")) {
+            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("ivat") && singleForms.length > 1) {
                 singleForms[i] = pronoun.replace(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_2pp_alt) + singleForms[i] + suffix;
             } else {
                 singleForms[i] = pronoun + singleForms[i] + suffix;
