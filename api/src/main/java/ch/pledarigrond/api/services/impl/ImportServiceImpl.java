@@ -526,6 +526,7 @@ public class ImportServiceImpl implements ImportService {
         lv.setVerification(LemmaVersion.Verification.ACCEPTED);
         lv.setInternalId(0);
         lv.setUserId("import@pledarigrond.ch");
+        lv.setTimestamp(System.currentTimeMillis());
 
         return lv;
     }
