@@ -17,6 +17,7 @@ package ch.pledarigrond.lucene.config.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.analysis.Analyzer;
@@ -107,17 +108,8 @@ public class FieldFactory {
 	 */
 	private String normalizeLadinPronunciationValues(String value) {
 		if (name.startsWith("RStichwort_")) {
-			return value
-					.replaceAll("ẹ", "e")
-					.replaceAll("ụ", "u")
-					.replaceAll("ạ", "a")
-					.replaceAll("ị", "i")
-					.replaceAll("ọ", "o")
-					.replaceAll("ụ̈", "ü")
-					.replaceAll("ọ̈", "ö")
-					.replaceAll("ṣ", "s");
+			return PronunciationNormalizer.normalizePronunciation(value);
 		}
-
 		return value;
 	}
 }
