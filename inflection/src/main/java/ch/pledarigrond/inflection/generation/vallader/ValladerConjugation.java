@@ -899,7 +899,7 @@ public class ValladerConjugation extends LanguageConjugation {
 
     // special case for 'vo' pronoun
     protected String setPronoun(String pronoun, String forms, String suffix) {
-        String[] singleForms = forms.split("\n");
+        String[] singleForms = forms.split("\\R");
         for (int i = 0; i < singleForms.length; i++) {
 
             boolean enclosedInBrackets = false;

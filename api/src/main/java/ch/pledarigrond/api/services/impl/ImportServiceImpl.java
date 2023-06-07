@@ -10,6 +10,17 @@ import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.inflection.generation.puter.PuterConjugation;
+import ch.pledarigrond.inflection.generation.puter.PuterConjugationClasses;
+import ch.pledarigrond.inflection.generation.puter.PuterConjugationPronouns;
+import ch.pledarigrond.inflection.generation.puter.PuterConjugationStructure;
+import ch.pledarigrond.inflection.generation.vallader.ValladerConjugation;
+import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationClasses;
+import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationPronouns;
+import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationStructure;
+import ch.pledarigrond.inflection.model.InflectionResponse;
+import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
+import ch.pledarigrond.inflection.utils.PronounRemover;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.apache.poi.ss.usermodel.Row;
@@ -31,6 +42,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_SUBTYPE;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
 import static org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK;
 
@@ -208,100 +220,178 @@ public class ImportServiceImpl implements ImportService {
             v.setParticipperfectfp(row.getCell(5, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
             v.setComposedWith(row.getCell(6, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setGerundiumPrep(row.getCell(7, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setGerundium(row.getCell(8, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setGerundium(row.getCell(7, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(8, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setPreschentsing1Prep(row.getCell(9, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentsing1(row.getCell(10, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentsing2Prep(row.getCell(11, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentsing2(row.getCell(12, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentsing3Prep(row.getCell(13, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentsing3(row.getCell(14, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural1Prep(row.getCell(15, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural1(row.getCell(16, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural2Prep(row.getCell(17, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural2(row.getCell(18, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural3Prep(row.getCell(19, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setPreschentplural3(row.getCell(20, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentsing1(row.getCell(9, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(10, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentsing2(row.getCell(11, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(12, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentsing3(row.getCell(13, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(14, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentplural1(row.getCell(15, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(16, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentplural2(row.getCell(17, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(18, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setPreschentplural3(row.getCell(19, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(20, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setImperfectsing1Prep(row.getCell(21, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectsing1(row.getCell(22, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectsing2Prep(row.getCell(23, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectsing2(row.getCell(24, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectsing3Prep(row.getCell(25, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectsing3(row.getCell(26, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural1Prep(row.getCell(27, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural1(row.getCell(28, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural2Prep(row.getCell(29, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural2(row.getCell(30, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural3Prep(row.getCell(31, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperfectplural3(row.getCell(32, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectsing1(row.getCell(21, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(22, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectsing2(row.getCell(23, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(24, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectsing3(row.getCell(25, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(26, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectplural1(row.getCell(27, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(28, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectplural2(row.getCell(29, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(30, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperfectplural3(row.getCell(31, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(32, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setFutursing1Prep(row.getCell(33, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFutursing1(row.getCell(34, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFutursing2Prep(row.getCell(35, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFutursing2(row.getCell(36, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFutursing3Prep(row.getCell(37, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFutursing3(row.getCell(38, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural1Prep(row.getCell(39, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural1(row.getCell(40, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural2Prep(row.getCell(41, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural2(row.getCell(42, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural3Prep(row.getCell(43, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setFuturplural3(row.getCell(44, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFutursing1(row.getCell(33, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(34, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFutursing2(row.getCell(35, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(36, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFutursing3(row.getCell(37, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(38, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFuturplural1(row.getCell(39, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(40, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFuturplural2(row.getCell(41, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(42, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setFuturplural3(row.getCell(43, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(44, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setConjunctivsing1Prep(row.getCell(45, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivsing1(row.getCell(46, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivsing2Prep(row.getCell(47, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivsing2(row.getCell(48, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivsing3Prep(row.getCell(49, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivsing3(row.getCell(50, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural1Prep(row.getCell(51, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural1(row.getCell(52, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural2Prep(row.getCell(53, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural2(row.getCell(54, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural3Prep(row.getCell(55, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setConjunctivplural3(row.getCell(56, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivsing1(row.getCell(45, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(46, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivsing2(row.getCell(47, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(48, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivsing3(row.getCell(49, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(50, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivplural1(row.getCell(51, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(52, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivplural2(row.getCell(53, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(54, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setConjunctivplural3(row.getCell(55, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(56, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setCundizionalsing1Prep(row.getCell(57, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalsing1(row.getCell(58, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalsing2Prep(row.getCell(59, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalsing2(row.getCell(60, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalsing3Prep(row.getCell(61, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalsing3(row.getCell(62, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural1Prep(row.getCell(63, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural1(row.getCell(64, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural2Prep(row.getCell(65, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural2(row.getCell(66, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural3Prep(row.getCell(67, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setCundizionalplural3(row.getCell(68, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalsing1(row.getCell(57, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(58, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalsing2(row.getCell(59, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(60, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalsing3(row.getCell(61, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(62, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalplural1(row.getCell(63, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(64, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalplural2(row.getCell(65, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(66, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setCundizionalplural3(row.getCell(67, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(68, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
-            v.setImperativ1Prep(row.getCell(69, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ1(row.getCell(70, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ2Prep(row.getCell(71, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ2(row.getCell(72, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ3Prep(row.getCell(73, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ3(row.getCell(74, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ4Prep(row.getCell(75, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ4(row.getCell(76, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ5Prep(row.getCell(77, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ5(row.getCell(78, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ6Prep(row.getCell(79, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-            v.setImperativ6(row.getCell(80, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ1(row.getCell(69, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(70, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ2(row.getCell(71, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(72, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ3(row.getCell(73, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(74, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ4(row.getCell(75, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(76, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ5(row.getCell(77, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(78, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+            v.setImperativ6(row.getCell(79, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                    + row.getCell(80, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
 
             if (isPuter) {
-                v.setFuturdubitativsing1Prep(row.getCell(81, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativsing1(row.getCell(82, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativsing2Prep(row.getCell(83, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativsing2(row.getCell(84, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativsing3Prep(row.getCell(85, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativsing3(row.getCell(86, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural1Prep(row.getCell(87, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural1(row.getCell(88, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural2Prep(row.getCell(89, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural2(row.getCell(90, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural3Prep(row.getCell(91, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
-                v.setFuturdubitativplural3(row.getCell(92, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                // import futur dubitativ
+                v.setFuturdubitativsing1(row.getCell(81, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(82, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                v.setFuturdubitativsing2(row.getCell(83, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(84, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                v.setFuturdubitativsing3(row.getCell(85, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(86, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                v.setFuturdubitativplural1(row.getCell(87, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(88, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                v.setFuturdubitativplural2(row.getCell(89, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(90, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+                v.setFuturdubitativplural3(row.getCell(91, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " ")
+                        + row.getCell(92, CREATE_NULL_AS_BLANK).getStringCellValue().replace("&nbsp;", " "));
+
+
+                // generate conjunctiv 2
+                if (v.getCundizionalsing1() != null && !"".equals(v.getCundizionalsing1())) {
+                    v.setConjunctiv2sing1("ch'" +v.getCundizionalsing1());
+                }
+                if (v.getCundizionalsing2() != null && !"".equals(v.getCundizionalsing2())) {
+                    v.setConjunctiv2sing2("cha " +v.getCundizionalsing2());
+                }
+                if (v.getCundizionalsing3() != null && !"".equals(v.getCundizionalsing3())) {
+                    v.setConjunctiv2sing3("ch'" +v.getCundizionalsing3());
+                }
+                if (v.getCundizionalplural1() != null && !"".equals(v.getCundizionalplural1())) {
+                    v.setConjunctiv2plural1("cha " +v.getCundizionalplural1());
+                }
+                if (v.getCundizionalplural2() != null && !"".equals(v.getCundizionalplural2())) {
+                    v.setConjunctiv2plural2("cha " +v.getCundizionalplural2());
+                }
+                if (v.getCundizionalplural3() != null && !"".equals(v.getCundizionalplural3())) {
+                    v.setConjunctiv2plural3("ch'" +v.getCundizionalplural3());
+                }
+            } else {
+                // replace pronoun 1 p pl
+                v.setPreschentplural1(v.getPreschentplural1().replace("nus/no", "nus"));
+                v.setImperfectplural1(v.getImperfectplural1().replace("nus/no", "nus"));
+                v.setFuturplural1(v.getFuturplural1().replace("nus/no", "nus"));
+                v.setCundizionalplural1(v.getCundizionalplural1().replace("nus/no", "nus"));
+
+                // replace multiple forms with new line
+                String preschentplural2 = v.getPreschentplural2();
+                if (preschentplural2.startsWith("vus/vo ") && preschentplural2.endsWith("ais/aivat")) {
+                    String root = preschentplural2.replace("vus/vo ", "").replace("ais/aivat", "");
+                    v.setPreschentplural2("vus " + root + "ais\n(vo " + root + "aivat)");
+                } else if (preschentplural2.startsWith("vus s'") && preschentplural2.endsWith("ais/aivat")) {
+                    String root = preschentplural2.replace("vus/vo s'", "").replace("ais/aivat", "");
+                    v.setPreschentplural2("vus s'" + root + "ais\n(vo s'" + root + "aivat)");
+                } else if (preschentplural2.startsWith("vus as ") && preschentplural2.endsWith("ais/aivat")) {
+                    String root = preschentplural2.replace("vus/vo as", "").replace("ais/aivat", "");
+                    v.setPreschentplural2("vus as " + root + "ais\n(vo as " + root + "aivat)");
+                } else if (preschentplural2.startsWith("vus/vo ") && preschentplural2.endsWith("is/ivat")) {
+                    String root = preschentplural2.replace("vus/vo ", "").replace("is/ivat", "");
+                    v.setPreschentplural2("vus " + root + "is\n(vo " + root + "ivat)");
+                } else if (preschentplural2.startsWith("vus s'") && preschentplural2.endsWith("is/ivat")) {
+                    String root = preschentplural2.replace("vus/vo s'", "").replace("is/ivat", "");
+                    v.setPreschentplural2("vus s'" + root + "is\n(vo s'" + root + "ivat)");
+                } else if (preschentplural2.startsWith("vus as") && preschentplural2.endsWith("is/ivat")) {
+                    String root = preschentplural2.replace("vus/vo as", "").replace("is/ivat", "");
+                    v.setPreschentplural2("vus as " + root + "is\n(vo as " + root + "ivat)");
+                } else if (!"".equals(preschentplural2)) {
+                    logger.error("verbs senza ais/aivat: " + v.getInfinitiv());
+                }
+
+                // replace pronoun 2 p pl
+                v.setPreschentplural2(v.getPreschentplural2().replace("vus/vo", "vus"));
+                v.setImperfectplural2(v.getImperfectplural2().replace("vus/vo", "vus"));
+                v.setFuturplural2(v.getFuturplural2().replace("vus/vo", "vus"));
+                v.setCundizionalplural2(v.getCundizionalplural2().replace("vus/vo", "vus"));
+
+                // generate conjunctiv 2
+                if (v.getCundizionalsing1() != null && !"".equals(v.getCundizionalsing1())) {
+                    v.setConjunctiv2sing1("ch'" +v.getCundizionalsing1());
+                }
+                if (v.getCundizionalsing2() != null && !"".equals(v.getCundizionalsing2())) {
+                    v.setConjunctiv2sing2("cha " +v.getCundizionalsing2());
+                }
+                if (v.getCundizionalsing3() != null && !"".equals(v.getCundizionalsing3())) {
+                    v.setConjunctiv2sing3("ch'" +v.getCundizionalsing3());
+                }
+                if (v.getCundizionalplural1() != null && !"".equals(v.getCundizionalplural1())) {
+                    v.setConjunctiv2plural1("cha " +v.getCundizionalplural1());
+                }
+                if (v.getCundizionalplural2() != null && !"".equals(v.getCundizionalplural2())) {
+                    v.setConjunctiv2plural2("cha " +v.getCundizionalplural2());
+                }
+                if (v.getCundizionalplural3() != null && !"".equals(v.getCundizionalplural3())) {
+                    v.setConjunctiv2plural3("ch'" +v.getCundizionalplural3());
+                }
             }
 
             verbs.put(v.getVerbId(), v);
@@ -443,65 +533,563 @@ public class ImportServiceImpl implements ImportService {
     private void addVerbData(LemmaVersion lemmaVersion, VerbDto verbDto, boolean isPuter) {
         lemmaVersion.getLemmaValues().put("infinitiv", verbDto.getInfinitiv());
 
-        lemmaVersion.getLemmaValues().put("preschentsing1", verbDto.getPreschentsing1Prep() + verbDto.getPreschentsing1());
-        lemmaVersion.getLemmaValues().put("preschentsing2", verbDto.getPreschentsing2Prep() + verbDto.getPreschentsing2());
-        lemmaVersion.getLemmaValues().put("preschentsing3", verbDto.getPreschentsing3Prep() + verbDto.getPreschentsing3());
-        lemmaVersion.getLemmaValues().put("preschentplural1", verbDto.getPreschentplural1Prep() + verbDto.getPreschentplural1());
-        lemmaVersion.getLemmaValues().put("preschentplural2", verbDto.getPreschentplural2Prep() + verbDto.getPreschentplural2());
-        lemmaVersion.getLemmaValues().put("preschentplural3", verbDto.getPreschentplural3Prep() + verbDto.getPreschentplural3());
+        lemmaVersion.getLemmaValues().put("preschentsing1", verbDto.getPreschentsing1());
+        lemmaVersion.getLemmaValues().put("preschentsing2", verbDto.getPreschentsing2());
+        lemmaVersion.getLemmaValues().put("preschentsing3", verbDto.getPreschentsing3());
+        lemmaVersion.getLemmaValues().put("preschentplural1", verbDto.getPreschentplural1());
+        lemmaVersion.getLemmaValues().put("preschentplural2", verbDto.getPreschentplural2());
+        lemmaVersion.getLemmaValues().put("preschentplural3", verbDto.getPreschentplural3());
 
-        lemmaVersion.getLemmaValues().put("imperfectsing1", verbDto.getImperfectsing1Prep() + verbDto.getImperfectsing1());
-        lemmaVersion.getLemmaValues().put("imperfectsing2", verbDto.getImperfectsing2Prep() + verbDto.getImperfectsing2());
-        lemmaVersion.getLemmaValues().put("imperfectsing3", verbDto.getImperfectsing3Prep() + verbDto.getImperfectsing3());
-        lemmaVersion.getLemmaValues().put("imperfectplural1", verbDto.getImperfectplural1Prep() + verbDto.getImperfectplural1());
-        lemmaVersion.getLemmaValues().put("imperfectplural2", verbDto.getImperfectplural2Prep() + verbDto.getImperfectplural2());
-        lemmaVersion.getLemmaValues().put("imperfectplural3", verbDto.getImperfectplural3Prep() + verbDto.getImperfectplural3());
+        lemmaVersion.getLemmaValues().put("imperfectsing1", verbDto.getImperfectsing1());
+        lemmaVersion.getLemmaValues().put("imperfectsing2", verbDto.getImperfectsing2());
+        lemmaVersion.getLemmaValues().put("imperfectsing3", verbDto.getImperfectsing3());
+        lemmaVersion.getLemmaValues().put("imperfectplural1", verbDto.getImperfectplural1());
+        lemmaVersion.getLemmaValues().put("imperfectplural2", verbDto.getImperfectplural2());
+        lemmaVersion.getLemmaValues().put("imperfectplural3", verbDto.getImperfectplural3());
 
-        lemmaVersion.getLemmaValues().put("conjunctivsing1", verbDto.getConjunctivsing1Prep() + verbDto.getConjunctivsing1());
-        lemmaVersion.getLemmaValues().put("conjunctivsing2", verbDto.getConjunctivsing2Prep() + verbDto.getConjunctivsing2());
-        lemmaVersion.getLemmaValues().put("conjunctivsing3", verbDto.getConjunctivsing3Prep() + verbDto.getConjunctivsing3());
-        lemmaVersion.getLemmaValues().put("conjunctivplural1", verbDto.getConjunctivplural1Prep() + verbDto.getConjunctivplural1());
-        lemmaVersion.getLemmaValues().put("conjunctivplural2", verbDto.getConjunctivplural2Prep() + verbDto.getConjunctivplural2());
-        lemmaVersion.getLemmaValues().put("conjunctivplural3", verbDto.getConjunctivplural3Prep() + verbDto.getConjunctivplural3());
+        lemmaVersion.getLemmaValues().put("conjunctivsing1", verbDto.getConjunctivsing1());
+        lemmaVersion.getLemmaValues().put("conjunctivsing2", verbDto.getConjunctivsing2());
+        lemmaVersion.getLemmaValues().put("conjunctivsing3", verbDto.getConjunctivsing3());
+        lemmaVersion.getLemmaValues().put("conjunctivplural1", verbDto.getConjunctivplural1());
+        lemmaVersion.getLemmaValues().put("conjunctivplural2", verbDto.getConjunctivplural2());
+        lemmaVersion.getLemmaValues().put("conjunctivplural3", verbDto.getConjunctivplural3());
 
-        lemmaVersion.getLemmaValues().put("cundizionalsing1", verbDto.getCundizionalsing1Prep() + verbDto.getCundizionalsing1());
-        lemmaVersion.getLemmaValues().put("cundizionalsing2", verbDto.getCundizionalsing2Prep() + verbDto.getCundizionalsing2());
-        lemmaVersion.getLemmaValues().put("cundizionalsing3", verbDto.getCundizionalsing3Prep() + verbDto.getCundizionalsing3());
-        lemmaVersion.getLemmaValues().put("cundizionalplural1", verbDto.getCundizionalplural1Prep() + verbDto.getCundizionalplural1());
-        lemmaVersion.getLemmaValues().put("cundizionalplural2", verbDto.getCundizionalplural2Prep() + verbDto.getCundizionalplural2());
-        lemmaVersion.getLemmaValues().put("cundizionalplural3", verbDto.getCundizionalplural3Prep() + verbDto.getCundizionalplural3());
+        lemmaVersion.getLemmaValues().put("conjunctiv2sing1", verbDto.getConjunctiv2sing1());
+        lemmaVersion.getLemmaValues().put("conjunctiv2sing2", verbDto.getConjunctiv2sing2());
+        lemmaVersion.getLemmaValues().put("conjunctiv2sing3", verbDto.getConjunctiv2sing3());
+        lemmaVersion.getLemmaValues().put("conjunctiv2plural1", verbDto.getConjunctiv2plural1());
+        lemmaVersion.getLemmaValues().put("conjunctiv2plural2", verbDto.getConjunctiv2plural2());
+        lemmaVersion.getLemmaValues().put("conjunctiv2plural3", verbDto.getConjunctiv2plural3());
+
+        lemmaVersion.getLemmaValues().put("cundizionalsing1", verbDto.getCundizionalsing1());
+        lemmaVersion.getLemmaValues().put("cundizionalsing2", verbDto.getCundizionalsing2());
+        lemmaVersion.getLemmaValues().put("cundizionalsing3", verbDto.getCundizionalsing3());
+        lemmaVersion.getLemmaValues().put("cundizionalplural1", verbDto.getCundizionalplural1());
+        lemmaVersion.getLemmaValues().put("cundizionalplural2", verbDto.getCundizionalplural2());
+        lemmaVersion.getLemmaValues().put("cundizionalplural3", verbDto.getCundizionalplural3());
 
         lemmaVersion.getLemmaValues().put("participperfectms", verbDto.getParticipperfectms());
         lemmaVersion.getLemmaValues().put("participperfectfs", verbDto.getParticipperfectfs());
         lemmaVersion.getLemmaValues().put("participperfectmp", verbDto.getParticipperfectmp());
         lemmaVersion.getLemmaValues().put("participperfectfp", verbDto.getParticipperfectfp());
 
-        lemmaVersion.getLemmaValues().put("imperativ1", verbDto.getImperativ1Prep() + verbDto.getImperativ1());
-        lemmaVersion.getLemmaValues().put("imperativ2", verbDto.getImperativ2Prep() + verbDto.getImperativ2());
-        lemmaVersion.getLemmaValues().put("imperativ3", verbDto.getImperativ3Prep() + verbDto.getImperativ3());
-        lemmaVersion.getLemmaValues().put("imperativ4", verbDto.getImperativ4Prep() + verbDto.getImperativ4());
-        lemmaVersion.getLemmaValues().put("imperativ5", verbDto.getImperativ5Prep() + verbDto.getImperativ5());
-        lemmaVersion.getLemmaValues().put("imperativ6", verbDto.getImperativ6Prep() + verbDto.getImperativ6());
+        lemmaVersion.getLemmaValues().put("imperativ1", verbDto.getImperativ1());
+        lemmaVersion.getLemmaValues().put("imperativ2", verbDto.getImperativ2());
+        lemmaVersion.getLemmaValues().put("imperativ3", verbDto.getImperativ3());
+        lemmaVersion.getLemmaValues().put("imperativ4", verbDto.getImperativ4());
+        lemmaVersion.getLemmaValues().put("imperativ5", verbDto.getImperativ5());
+        lemmaVersion.getLemmaValues().put("imperativ6", verbDto.getImperativ6());
 
-        lemmaVersion.getLemmaValues().put("gerundium", verbDto.getGerundiumPrep() + verbDto.getGerundium());
+        lemmaVersion.getLemmaValues().put("gerundium", verbDto.getGerundium());
 
-        lemmaVersion.getLemmaValues().put("futursing1", verbDto.getFutursing1Prep() + verbDto.getFutursing1());
-        lemmaVersion.getLemmaValues().put("futursing2", verbDto.getFutursing2Prep() + verbDto.getFutursing2());
-        lemmaVersion.getLemmaValues().put("futursing3", verbDto.getFutursing3Prep() + verbDto.getFutursing3());
-        lemmaVersion.getLemmaValues().put("futurplural1", verbDto.getFuturplural1Prep() + verbDto.getFuturplural1());
-        lemmaVersion.getLemmaValues().put("futurplural2", verbDto.getFuturplural2Prep() + verbDto.getFuturplural2());
-        lemmaVersion.getLemmaValues().put("futurplural3", verbDto.getFuturplural3Prep() + verbDto.getFuturplural3());
+        lemmaVersion.getLemmaValues().put("futursing1", verbDto.getFutursing1());
+        lemmaVersion.getLemmaValues().put("futursing2", verbDto.getFutursing2());
+        lemmaVersion.getLemmaValues().put("futursing3", verbDto.getFutursing3());
+        lemmaVersion.getLemmaValues().put("futurplural1", verbDto.getFuturplural1());
+        lemmaVersion.getLemmaValues().put("futurplural2", verbDto.getFuturplural2());
+        lemmaVersion.getLemmaValues().put("futurplural3", verbDto.getFuturplural3());
 
         if (isPuter) {
-            lemmaVersion.getLemmaValues().put("futurdubitativsing1", verbDto.getFuturdubitativsing1Prep() + verbDto.getFuturdubitativsing1());
-            lemmaVersion.getLemmaValues().put("futurdubitativsing2", verbDto.getFuturdubitativsing2Prep() + verbDto.getFuturdubitativsing2());
-            lemmaVersion.getLemmaValues().put("futurdubitativsing3", verbDto.getFuturdubitativsing3Prep() + verbDto.getFuturdubitativsing3());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural1", verbDto.getFuturdubitativplural1Prep() + verbDto.getFuturdubitativplural1());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural2", verbDto.getFuturdubitativplural2Prep() + verbDto.getFuturdubitativplural2());
-            lemmaVersion.getLemmaValues().put("futurdubitativplural3", verbDto.getFuturdubitativplural3Prep() + verbDto.getFuturdubitativplural3());
+            lemmaVersion.getLemmaValues().put("futurdubitativsing1", verbDto.getFuturdubitativsing1());
+            lemmaVersion.getLemmaValues().put("futurdubitativsing2", verbDto.getFuturdubitativsing2());
+            lemmaVersion.getLemmaValues().put("futurdubitativsing3", verbDto.getFuturdubitativsing3());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural1", verbDto.getFuturdubitativplural1());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural2", verbDto.getFuturdubitativplural2());
+            lemmaVersion.getLemmaValues().put("futurdubitativplural3", verbDto.getFuturdubitativplural3());
+
+            generateEncliticFormsPuter(lemmaVersion);
+        } else {
+            generateEncliticFormsVallader(lemmaVersion);
         }
 
         lemmaVersion.getLemmaValues().put("RInflectionType", "V");
         lemmaVersion.getLemmaValues().put("composedWith", verbDto.getComposedWith());
+    }
+    
+    private void generateEncliticFormsPuter(LemmaVersion lemmaVersion) {
+        PuterConjugationStructure cs = ConjugationStructureGenerator.generatePuterConjugationStructure(lemmaVersion.getLemmaValues());
+        cs.setConjugationClass(PuterConjugationClasses.getConjugationClass(lemmaVersion.getEntryValue(RM_INFLECTION_SUBTYPE)));
+
+        if (cs.getConjugationclass() == null) {
+            PuterConjugation conj = new PuterConjugation();
+            InflectionResponse ir = conj.guessInflection(lemmaVersion.getEntryValue("RStichwort"), "", "");
+            if (ir != null) {
+                cs.setConjugationClass(ir.getInflectionSubType());
+            } else {
+                cs.setConjugationClass(PuterConjugationClasses.getConjugationClass("1"));
+            }
+        }
+        PronounRemover pr = new PronounRemover();
+        cs.setPreschentsing1(pr.removePronouns(Language.PUTER, cs.getPreschentsing1()));
+        cs.setPreschentsing2(pr.removePronouns(Language.PUTER, cs.getPreschentsing2()));
+        cs.setPreschentsing3(pr.removePronouns(Language.PUTER, cs.getPreschentsing3()));
+        cs.setPreschentplural1(pr.removePronouns(Language.PUTER, cs.getPreschentplural1()));
+        cs.setPreschentplural2(pr.removePronouns(Language.PUTER, cs.getPreschentplural2()));
+        cs.setPreschentplural3(pr.removePronouns(Language.PUTER, cs.getPreschentplural3()));
+
+        cs.setImperfectsing1(pr.removePronouns(Language.PUTER, cs.getImperfectsing1()));
+        cs.setImperfectsing2(pr.removePronouns(Language.PUTER, cs.getImperfectsing2()));
+        cs.setImperfectsing3(pr.removePronouns(Language.PUTER, cs.getImperfectsing3()));
+        cs.setImperfectplural1(pr.removePronouns(Language.PUTER, cs.getImperfectplural1()));
+        cs.setImperfectplural2(pr.removePronouns(Language.PUTER, cs.getImperfectplural2()));
+        cs.setImperfectplural3(pr.removePronouns(Language.PUTER, cs.getImperfectplural3()));
+
+        cs.setCundizionalsing1(pr.removePronouns(Language.PUTER, cs.getCundizionalsing1()));
+        cs.setCundizionalsing2(pr.removePronouns(Language.PUTER, cs.getCundizionalsing2()));
+        cs.setCundizionalsing3(pr.removePronouns(Language.PUTER, cs.getCundizionalsing3()));
+        cs.setCundizionalplural1(pr.removePronouns(Language.PUTER, cs.getCundizionalplural1()));
+        cs.setCundizionalplural2(pr.removePronouns(Language.PUTER, cs.getCundizionalplural2()));
+        cs.setCundizionalplural3(pr.removePronouns(Language.PUTER, cs.getCundizionalplural3()));
+
+        cs.setFutursing1(pr.removePronouns(Language.PUTER, cs.getFutursing1()));
+        cs.setFutursing2(pr.removePronouns(Language.PUTER, cs.getFutursing2()));
+        cs.setFutursing3(pr.removePronouns(Language.PUTER, cs.getFutursing3()));
+        cs.setFuturplural1(pr.removePronouns(Language.PUTER, cs.getFuturplural1()));
+        cs.setFuturplural2(pr.removePronouns(Language.PUTER, cs.getFuturplural2()));
+        cs.setFuturplural3(pr.removePronouns(Language.PUTER, cs.getFuturplural3()));
+
+        cs.setFuturdubitativsing1(pr.removePronouns(Language.PUTER, cs.getFuturdubitativsing1()));
+        cs.setFuturdubitativsing2(pr.removePronouns(Language.PUTER, cs.getFuturdubitativsing2()));
+        cs.setFuturdubitativsing3(pr.removePronouns(Language.PUTER, cs.getFuturdubitativsing3()));
+        cs.setFuturdubitativplural1(pr.removePronouns(Language.PUTER, cs.getFuturdubitativplural1()));
+        cs.setFuturdubitativplural2(pr.removePronouns(Language.PUTER, cs.getFuturdubitativplural2()));
+        cs.setFuturdubitativplural3(pr.removePronouns(Language.PUTER, cs.getFuturdubitativplural3()));
+
+        if (
+                cs.getPreschentsing1() == null || cs.getPreschentsing1().isEmpty() ||
+                        cs.getPreschentsing2() == null || cs.getPreschentsing2().isEmpty() ||
+                        cs.getPreschentsing3() == null || cs.getPreschentsing3().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+
+                        cs.getImperfectsing1() == null || cs.getImperfectsing1().isEmpty() ||
+                        cs.getImperfectsing2() == null || cs.getImperfectsing2().isEmpty() ||
+                        cs.getImperfectsing3() == null || cs.getImperfectsing3().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+
+                        cs.getCundizionalsing1() == null || cs.getCundizionalsing1().isEmpty() ||
+                        cs.getCundizionalsing2() == null || cs.getCundizionalsing2().isEmpty() ||
+                        cs.getCundizionalsing3() == null || cs.getCundizionalsing3().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+
+                        cs.getFutursing1() == null || cs.getFutursing1().isEmpty() ||
+                        cs.getFutursing2() == null || cs.getFutursing2().isEmpty() ||
+                        cs.getFutursing3() == null || cs.getFutursing3().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
+
+                        cs.getFuturdubitativsing1() == null || cs.getFuturdubitativsing1().isEmpty() ||
+                        cs.getFuturdubitativsing2() == null || cs.getFuturdubitativsing2().isEmpty() ||
+                        cs.getFuturdubitativsing3() == null || cs.getFuturdubitativsing3().isEmpty() ||
+                        cs.getFuturdubitativplural1() == null || cs.getFuturdubitativplural1().isEmpty() ||
+                        cs.getFuturdubitativplural1() == null || cs.getFuturdubitativplural1().isEmpty() ||
+                        cs.getFuturdubitativplural1() == null || cs.getFuturdubitativplural1().isEmpty()
+        ) {
+            logger.debug("Form missing for: " + lemmaVersion.getLemmaValues().get("RStichwort"));
+            return;
+        }
+
+        PuterConjugation.addEncliticForms(cs);
+
+        addEncliticPronounsPuter(cs);
+
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentsing1enclitic, cs.getPreschentsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentsing2enclitic, cs.getPreschentsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentsing3encliticm, cs.getPreschentsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentsing3encliticf, cs.getPreschentsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentplural1enclitic, cs.getPreschentplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentplural2enclitic, cs.getPreschentplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.preschentplural3enclitic, cs.getPreschentplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectsing1enclitic, cs.getImperfectsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectsing2enclitic, cs.getImperfectsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectsing3encliticm, cs.getImperfectsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectsing3encliticf, cs.getImperfectsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectplural1enclitic, cs.getImperfectplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectplural2enclitic, cs.getImperfectplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.imperfectplural3enclitic, cs.getImperfectplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalsing1enclitic, cs.getCundizionalsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalsing2enclitic, cs.getCundizionalsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalsing3encliticm, cs.getCundizionalsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalsing3encliticf, cs.getCundizionalsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalplural1enclitic, cs.getCundizionalplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalplural2enclitic, cs.getCundizionalplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.cundizionalplural3enclitic, cs.getCundizionalplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futursing1enclitic, cs.getFutursing1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futursing2enclitic, cs.getFutursing2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futursing3encliticm, cs.getFutursing3EncliticM());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futursing3encliticf, cs.getFutursing3EncliticF());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurplural1enclitic, cs.getFuturplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurplural2enclitic, cs.getFuturplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurplural3enclitic, cs.getFuturplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativsing1enclitic, cs.getFuturdubitativsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativsing2enclitic, cs.getFuturdubitativsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativsing3encliticm, cs.getFuturdubitativsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativsing3encliticf, cs.getFuturdubitativsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativplural1enclitic, cs.getFuturdubitativplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativplural2enclitic, cs.getFuturdubitativplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(PuterConjugationStructure.futurdubitativplural3enclitic, cs.getFuturdubitativplural3Enclitic());
+    }
+
+
+    private void addEncliticPronounsPuter(PuterConjugationStructure cs) {
+        String verb = cs.getInfinitiv();
+
+        if (verb.startsWith("as ")) {
+            // Reflexive Verbs that start with consonants
+            addReflexivePronounsPuter(cs);
+
+        } else if (verb.startsWith("s'")) {
+            // Reflexive Verbs that start with vowels
+            addReflexivePronounsVowelPuter(cs);
+        }
+    }
+
+    private void addReflexivePronounsPuter(PuterConjugationStructure cs) {
+        // PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1ps, cs.getPreschentsing1Enclitic()));
+        cs.setPreschentsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2ps, cs.getPreschentsing2Enclitic()));
+        cs.setPreschentsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getPreschentsing3EncliticM()));
+        cs.setPreschentsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getPreschentsing3EncliticF()));
+        cs.setPreschentplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1pp, cs.getPreschentplural1Enclitic()));
+        cs.setPreschentplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2pp, cs.getPreschentplural2Enclitic()));
+        cs.setPreschentplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_3pp, cs.getPreschentplural3Enclitic()));
+
+        // IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1ps, cs.getImperfectsing1Enclitic()));
+        cs.setImperfectsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2ps, cs.getImperfectsing2Enclitic()));
+        cs.setImperfectsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getImperfectsing3EncliticM()));
+        cs.setImperfectsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getImperfectsing3EncliticF()));
+        cs.setImperfectplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1pp, cs.getImperfectplural1Enclitic()));
+        cs.setImperfectplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2pp, cs.getImperfectplural2Enclitic()));
+        cs.setImperfectplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_3pp, cs.getImperfectplural3Enclitic()));
+
+        // CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1ps, cs.getCundizionalsing1Enclitic()));
+        cs.setCundizionalsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2ps, cs.getCundizionalsing2Enclitic()));
+        cs.setCundizionalsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getCundizionalsing3EncliticM()));
+        cs.setCundizionalsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getCundizionalsing3EncliticF()));
+        cs.setCundizionalplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1pp, cs.getCundizionalplural1Enclitic()));
+        cs.setCundizionalplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2pp, cs.getCundizionalplural2Enclitic()));
+        cs.setCundizionalplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_3pp, cs.getCundizionalplural3Enclitic()));
+
+        // FUTUR
+        cs.setFutursing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1ps, cs.getFutursing1Enclitic()));
+        cs.setFutursing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2ps, cs.getFutursing2Enclitic()));
+        cs.setFutursing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getFutursing3EncliticM()));
+        cs.setFutursing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getFutursing3EncliticF()));
+        cs.setFuturplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1pp, cs.getFuturplural1Enclitic()));
+        cs.setFuturplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2pp, cs.getFuturplural2Enclitic()));
+        cs.setFuturplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_3pp, cs.getFuturplural3Enclitic()));
+
+        // FUTUR DUBITATIV
+        cs.setFuturdubitativsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1ps, cs.getFuturdubitativsing1Enclitic()));
+        cs.setFuturdubitativsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2ps, cs.getFuturdubitativsing2Enclitic()));
+        cs.setFuturdubitativsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getFuturdubitativsing3EncliticM()));
+        cs.setFuturdubitativsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_3ps, cs.getFuturdubitativsing3EncliticF()));
+        cs.setFuturdubitativplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_1pp, cs.getFuturdubitativplural1Enclitic()));
+        cs.setFuturdubitativplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_2pp, cs.getFuturdubitativplural2Enclitic()));
+        cs.setFuturdubitativplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_3pp, cs.getFuturdubitativplural3Enclitic()));
+    }
+
+    private void addReflexivePronounsVowelPuter(PuterConjugationStructure cs) {
+        // PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1ps, cs.getPreschentsing1Enclitic()));
+        cs.setPreschentsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2ps, cs.getPreschentsing2Enclitic()));
+        cs.setPreschentsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getPreschentsing3EncliticM()));
+        cs.setPreschentsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getPreschentsing3EncliticF()));
+        cs.setPreschentplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1pp, cs.getPreschentplural1Enclitic()));
+        cs.setPreschentplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2pp, cs.getPreschentplural2Enclitic()));
+        cs.setPreschentplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_3pp, cs.getPreschentplural3Enclitic()));
+
+        // IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1ps, cs.getImperfectsing1Enclitic()));
+        cs.setImperfectsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2ps, cs.getImperfectsing2Enclitic()));
+        cs.setImperfectsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getImperfectsing3EncliticM()));
+        cs.setImperfectsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getImperfectsing3EncliticF()));
+        cs.setImperfectplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1pp, cs.getImperfectplural1Enclitic()));
+        cs.setImperfectplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2pp, cs.getImperfectplural2Enclitic()));
+        cs.setImperfectplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_3pp, cs.getImperfectplural3Enclitic()));
+
+        // CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1ps, cs.getCundizionalsing1Enclitic()));
+        cs.setCundizionalsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2ps, cs.getCundizionalsing2Enclitic()));
+        cs.setCundizionalsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getCundizionalsing3EncliticM()));
+        cs.setCundizionalsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getCundizionalsing3EncliticF()));
+        cs.setCundizionalplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1pp, cs.getCundizionalplural1Enclitic()));
+        cs.setCundizionalplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2pp, cs.getCundizionalplural2Enclitic()));
+        cs.setCundizionalplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_3pp, cs.getCundizionalplural3Enclitic()));
+
+        // FUTUR
+        cs.setFutursing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1ps, cs.getFutursing1Enclitic()));
+        cs.setFutursing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2ps, cs.getFutursing2Enclitic()));
+        cs.setFutursing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getFutursing3EncliticM()));
+        cs.setFutursing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getFutursing3EncliticF()));
+        cs.setFuturplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1pp, cs.getFuturplural1Enclitic()));
+        cs.setFuturplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2pp, cs.getFuturplural2Enclitic()));
+        cs.setFuturplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_3pp, cs.getFuturplural3Enclitic()));
+
+        // FUTUR DUBITATIV
+        cs.setFuturdubitativsing1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1ps, cs.getFuturdubitativsing1Enclitic()));
+        cs.setFuturdubitativsing2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2ps, cs.getFuturdubitativsing2Enclitic()));
+        cs.setFuturdubitativsing3EncliticM(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getFuturdubitativsing3EncliticM()));
+        cs.setFuturdubitativsing3EncliticF(setPronounPuter(PuterConjugationPronouns.pron_r_v_3ps, cs.getFuturdubitativsing3EncliticF()));
+        cs.setFuturdubitativplural1Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_1pp, cs.getFuturdubitativplural1Enclitic()));
+        cs.setFuturdubitativplural2Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_2pp, cs.getFuturdubitativplural2Enclitic()));
+        cs.setFuturdubitativplural3Enclitic(setPronounPuter(PuterConjugationPronouns.pron_r_v_3pp, cs.getFuturdubitativplural3Enclitic()));
+    }
+
+    protected String setPronounPuter(String pronoun, String forms) {
+        return setPronounPuter(pronoun, forms, "");
+    }
+
+    protected String setPronounPuter(String pronoun, String forms, String suffix) {
+        String[] singleForms = forms.split("\\R");
+        for (int i = 0; i < singleForms.length; i++) {
+            if ("".equals(singleForms[i])) {
+                continue;
+            }
+            singleForms[i] = pronoun + singleForms[i] + suffix;
+        }
+        return String.join("\n", singleForms);
+    }
+
+    private void generateEncliticFormsVallader(LemmaVersion lemmaVersion) {
+        ValladerConjugationStructure cs = ConjugationStructureGenerator.generateValladerConjugationStructure(lemmaVersion.getLemmaValues());
+        cs.setConjugationClass(ValladerConjugationClasses.getConjugationClass(lemmaVersion.getEntryValue(RM_INFLECTION_SUBTYPE)));
+
+        if (cs.getConjugationclass() == null) {
+            PuterConjugation conj = new PuterConjugation();
+            InflectionResponse ir = conj.guessInflection(lemmaVersion.getEntryValue("RStichwort"), "", "");
+            if (ir != null) {
+                cs.setConjugationClass(ir.getInflectionSubType());
+            } else {
+                cs.setConjugationClass(ValladerConjugationClasses.getConjugationClass("1"));
+            }
+        }
+        PronounRemover pr = new PronounRemover();
+        cs.setPreschentsing1(pr.removePronouns(Language.VALLADER, cs.getPreschentsing1()));
+        cs.setPreschentsing2(pr.removePronouns(Language.VALLADER, cs.getPreschentsing2()));
+        cs.setPreschentsing3(pr.removePronouns(Language.VALLADER, cs.getPreschentsing3()));
+        cs.setPreschentplural1(pr.removePronouns(Language.VALLADER, cs.getPreschentplural1()));
+        cs.setPreschentplural2(pr.removePronouns(Language.VALLADER, cs.getPreschentplural2()));
+        cs.setPreschentplural3(pr.removePronouns(Language.VALLADER, cs.getPreschentplural3()));
+
+        cs.setImperfectsing1(pr.removePronouns(Language.VALLADER, cs.getImperfectsing1()));
+        cs.setImperfectsing2(pr.removePronouns(Language.VALLADER, cs.getImperfectsing2()));
+        cs.setImperfectsing3(pr.removePronouns(Language.VALLADER, cs.getImperfectsing3()));
+        cs.setImperfectplural1(pr.removePronouns(Language.VALLADER, cs.getImperfectplural1()));
+        cs.setImperfectplural2(pr.removePronouns(Language.VALLADER, cs.getImperfectplural2()));
+        cs.setImperfectplural3(pr.removePronouns(Language.VALLADER, cs.getImperfectplural3()));
+
+        cs.setCundizionalsing1(pr.removePronouns(Language.VALLADER, cs.getCundizionalsing1()));
+        cs.setCundizionalsing2(pr.removePronouns(Language.VALLADER, cs.getCundizionalsing2()));
+        cs.setCundizionalsing3(pr.removePronouns(Language.VALLADER, cs.getCundizionalsing3()));
+        cs.setCundizionalplural1(pr.removePronouns(Language.VALLADER, cs.getCundizionalplural1()));
+        cs.setCundizionalplural2(pr.removePronouns(Language.VALLADER, cs.getCundizionalplural2()));
+        cs.setCundizionalplural3(pr.removePronouns(Language.VALLADER, cs.getCundizionalplural3()));
+
+        cs.setFutursing1(pr.removePronouns(Language.VALLADER, cs.getFutursing1()));
+        cs.setFutursing2(pr.removePronouns(Language.VALLADER, cs.getFutursing2()));
+        cs.setFutursing3(pr.removePronouns(Language.VALLADER, cs.getFutursing3()));
+        cs.setFuturplural1(pr.removePronouns(Language.VALLADER, cs.getFuturplural1()));
+        cs.setFuturplural2(pr.removePronouns(Language.VALLADER, cs.getFuturplural2()));
+        cs.setFuturplural3(pr.removePronouns(Language.VALLADER, cs.getFuturplural3()));
+
+        if (
+                cs.getPreschentsing1() == null || cs.getPreschentsing1().isEmpty() ||
+                        cs.getPreschentsing2() == null || cs.getPreschentsing2().isEmpty() ||
+                        cs.getPreschentsing3() == null || cs.getPreschentsing3().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+                        cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
+
+                        cs.getImperfectsing1() == null || cs.getImperfectsing1().isEmpty() ||
+                        cs.getImperfectsing2() == null || cs.getImperfectsing2().isEmpty() ||
+                        cs.getImperfectsing3() == null || cs.getImperfectsing3().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+                        cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
+
+                        cs.getCundizionalsing1() == null || cs.getCundizionalsing1().isEmpty() ||
+                        cs.getCundizionalsing2() == null || cs.getCundizionalsing2().isEmpty() ||
+                        cs.getCundizionalsing3() == null || cs.getCundizionalsing3().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+                        cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
+
+                        cs.getFutursing1() == null || cs.getFutursing1().isEmpty() ||
+                        cs.getFutursing2() == null || cs.getFutursing2().isEmpty() ||
+                        cs.getFutursing3() == null || cs.getFutursing3().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
+                        cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty()
+        ) {
+            logger.debug("Form missing for: " + lemmaVersion.getLemmaValues().get("RStichwort"));
+            return;
+        }
+
+        ValladerConjugation.addEncliticForms(cs);
+
+        addEncliticPronounsVallader(cs);
+
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentsing1enclitic, cs.getPreschentsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentsing2enclitic, cs.getPreschentsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentsing3encliticm, cs.getPreschentsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentsing3encliticf, cs.getPreschentsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentplural1enclitic, cs.getPreschentplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentplural2enclitic, cs.getPreschentplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.preschentplural3enclitic, cs.getPreschentplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectsing1enclitic, cs.getImperfectsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectsing2enclitic, cs.getImperfectsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectsing3encliticm, cs.getImperfectsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectsing3encliticf, cs.getImperfectsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectplural1enclitic, cs.getImperfectplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectplural2enclitic, cs.getImperfectplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.imperfectplural3enclitic, cs.getImperfectplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalsing1enclitic, cs.getCundizionalsing1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalsing2enclitic, cs.getCundizionalsing2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalsing3encliticm, cs.getCundizionalsing3EncliticM());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalsing3encliticf, cs.getCundizionalsing3EncliticF());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalplural1enclitic, cs.getCundizionalplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalplural2enclitic, cs.getCundizionalplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.cundizionalplural3enclitic, cs.getCundizionalplural3Enclitic());
+
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futursing1enclitic, cs.getFutursing1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futursing2enclitic, cs.getFutursing2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futursing3encliticm, cs.getFutursing3EncliticM());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futursing3encliticf, cs.getFutursing3EncliticF());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futurplural1enclitic, cs.getFuturplural1Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futurplural2enclitic, cs.getFuturplural2Enclitic());
+        lemmaVersion.getLemmaValues().put(ValladerConjugationStructure.futurplural3enclitic, cs.getFuturplural3Enclitic());
+    }
+
+    private void addEncliticPronounsVallader(ValladerConjugationStructure cs) {
+        String verb = cs.getInfinitiv();
+
+        if (verb.startsWith("as ")) {
+            // Reflexive Verbs that start with consonants
+            addReflexivePronounsVallader(cs);
+
+        } else if (verb.startsWith("s'")) {
+            // Reflexive Verbs that start with vowels
+            addReflexivePronounsVowelVallader(cs);
+        }
+    }
+
+    private void addReflexivePronounsVallader(ValladerConjugationStructure cs) {
+        // ENCLITIC PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1ps, cs.getPreschentsing1Enclitic()));
+        cs.setPreschentsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2ps, cs.getPreschentsing2Enclitic()));
+        cs.setPreschentsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getPreschentsing3EncliticM()));
+        cs.setPreschentsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getPreschentsing3EncliticF()));
+        cs.setPreschentplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1pp, cs.getPreschentplural1Enclitic()));
+        cs.setPreschentplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2pp, cs.getPreschentplural2Enclitic()));
+        cs.setPreschentplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_3pp, cs.getPreschentplural3Enclitic()));
+
+        // ENCLITIC IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1ps, cs.getImperfectsing1Enclitic()));
+        cs.setImperfectsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2ps, cs.getImperfectsing2Enclitic()));
+        cs.setImperfectsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getImperfectsing3EncliticM()));
+        cs.setImperfectsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getImperfectsing3EncliticF()));
+        cs.setImperfectplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1pp, cs.getImperfectplural1Enclitic()));
+        cs.setImperfectplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2pp, cs.getImperfectplural2Enclitic()));
+        cs.setImperfectplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_3pp, cs.getImperfectplural3Enclitic()));
+
+        // ENCLITIC CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1ps, cs.getCundizionalsing1Enclitic()));
+        cs.setCundizionalsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2ps, cs.getCundizionalsing2Enclitic()));
+        cs.setCundizionalsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getCundizionalsing3EncliticM()));
+        cs.setCundizionalsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getCundizionalsing3EncliticF()));
+        cs.setCundizionalplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1pp, cs.getCundizionalplural1Enclitic()));
+        cs.setCundizionalplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2pp, cs.getCundizionalplural2Enclitic()));
+        cs.setCundizionalplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_3pp, cs.getCundizionalplural3Enclitic()));
+
+        // ENCLITIC FUTUR
+        cs.setFutursing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1ps, cs.getFutursing1Enclitic()));
+        cs.setFutursing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2ps, cs.getFutursing2Enclitic()));
+        cs.setFutursing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getFutursing3EncliticM()));
+        cs.setFutursing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_3ps, cs.getFutursing3EncliticF()));
+        cs.setFuturplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_1pp, cs.getFuturplural1Enclitic()));
+        cs.setFuturplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_2pp, cs.getFuturplural2Enclitic()));
+        cs.setFuturplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_3pp, cs.getFuturplural3Enclitic()));
+    }
+
+    private void addReflexivePronounsVowelVallader(ValladerConjugationStructure cs) {
+        // ENCLITIC PRESCHENT
+        cs.setPreschentsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1ps, cs.getPreschentsing1Enclitic()));
+        cs.setPreschentsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2ps, cs.getPreschentsing2Enclitic()));
+        cs.setPreschentsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getPreschentsing3EncliticM()));
+        cs.setPreschentsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getPreschentsing3EncliticF()));
+        cs.setPreschentplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1pp, cs.getPreschentplural1Enclitic()));
+        cs.setPreschentplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2pp, cs.getPreschentplural2Enclitic()));
+        cs.setPreschentplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3pp, cs.getPreschentplural3Enclitic()));
+
+        // ENCLITIC IMPERFECT
+        cs.setImperfectsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1ps, cs.getImperfectsing1Enclitic()));
+        cs.setImperfectsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2ps, cs.getImperfectsing2Enclitic()));
+        cs.setImperfectsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getImperfectsing3EncliticM()));
+        cs.setImperfectsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getImperfectsing3EncliticF()));
+        cs.setImperfectplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1pp, cs.getImperfectplural1Enclitic()));
+        cs.setImperfectplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2pp, cs.getImperfectplural2Enclitic()));
+        cs.setImperfectplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3pp, cs.getImperfectplural3Enclitic()));
+
+        // ENCLITIC CUNDIZIONAL
+        cs.setCundizionalsing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1ps, cs.getCundizionalsing1Enclitic()));
+        cs.setCundizionalsing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2ps, cs.getCundizionalsing2Enclitic()));
+        cs.setCundizionalsing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getCundizionalsing3EncliticM()));
+        cs.setCundizionalsing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getCundizionalsing3EncliticF()));
+        cs.setCundizionalplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1pp, cs.getCundizionalplural1Enclitic()));
+        cs.setCundizionalplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2pp, cs.getCundizionalplural2Enclitic()));
+        cs.setCundizionalplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3pp, cs.getCundizionalplural3Enclitic()));
+
+        // ENCLITIC FUTUR
+        cs.setFutursing1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1ps, cs.getFutursing1Enclitic()));
+        cs.setFutursing2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2ps, cs.getFutursing2Enclitic()));
+        cs.setFutursing3EncliticM(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getFutursing3EncliticM()));
+        cs.setFutursing3EncliticF(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3ps, cs.getFutursing3EncliticF()));
+        cs.setFuturplural1Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_1pp, cs.getFuturplural1Enclitic()));
+        cs.setFuturplural2Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_2pp, cs.getFuturplural2Enclitic()));
+        cs.setFuturplural3Enclitic(setPronounVallader(ValladerConjugationPronouns.pron_r_v_3pp, cs.getFuturplural3Enclitic()));
+    }
+
+    protected String setPronounVallader(String pronoun, String forms) {
+        return setPronounVallader(pronoun, forms, "");
+    }
+
+
+    protected String setPronounVallader(String pronoun, String forms, String suffix) {
+        String[] singleForms = forms.split("\\R");
+        for (int i = 0; i < singleForms.length; i++) {
+
+            boolean enclosedInBrackets = false;
+            if (singleForms[i].charAt(0) == '(' && singleForms[i].charAt(singleForms[i].length()-1) == ')') {
+                enclosedInBrackets = true;
+                singleForms[i] = singleForms[i].replace("(", "").replace(")", "");
+            }
+
+            // 'vus' u 'vus as'
+            if (pronoun.startsWith(ValladerConjugationPronouns.pron_2pp) && singleForms[i].endsWith("ivat") && singleForms.length > 1) {
+                singleForms[i] = pronoun.replace(ValladerConjugationPronouns.pron_2pp, ValladerConjugationPronouns.pron_2pp_alt) + singleForms[i] + suffix;
+            } else {
+                singleForms[i] = pronoun + singleForms[i] + suffix;
+            }
+
+            if (enclosedInBrackets) {
+                singleForms[i] = "(" + singleForms[i] + ")";
+            }
+        }
+        return String.join("\n", singleForms);
     }
 }
