@@ -32,7 +32,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü salüdaivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella salüdaiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus salüdaivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo salüdaivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus salüdaivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas salüdaivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu salüda", forms.getInflectionValues().get("conjunctivsing1"));
@@ -95,7 +95,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü gratulaivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella gratulaiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus gratulaivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo gratulaivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus gratulaivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas gratulaivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu gratulescha", forms.getInflectionValues().get("conjunctivsing1"));
@@ -158,7 +158,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü at barricadaivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella as barricadaiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus ans barricadaivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo as barricadaivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus as barricadaivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas as barricadaivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu am barricadescha", forms.getInflectionValues().get("conjunctivsing1"));
@@ -286,7 +286,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü t'inachüraivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella s'inachüraiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus ans inachüraivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo s'inachüraivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus s'inachüraivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas s'inachüraivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu m'inachüra", forms.getInflectionValues().get("conjunctivsing1"));
@@ -414,7 +414,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü giodaivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella giodaiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus giodaivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo giodaivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus giodaivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas giodaivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu gioda", forms.getInflectionValues().get("conjunctivsing1"));
@@ -477,7 +477,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü vendaivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella vendaiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus vendaivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo vendaivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus vendaivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas vendaivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu venda", forms.getInflectionValues().get("conjunctivsing1"));
@@ -540,7 +540,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü cusivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella cusiva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus cusivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo cusivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus cusivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas cusivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu cusa", forms.getInflectionValues().get("conjunctivsing1"));
@@ -603,7 +603,7 @@ public class ValladerConjugationTest {
         Assert.assertEquals("tü admonivast", forms.getInflectionValues().get("imperfectsing2"));
         Assert.assertEquals("el/ella admoniva", forms.getInflectionValues().get("imperfectsing3"));
         Assert.assertEquals("nus admonivan", forms.getInflectionValues().get("imperfectplural1"));
-        Assert.assertEquals("vo admonivat", forms.getInflectionValues().get("imperfectplural2"));
+        Assert.assertEquals("vus admonivat", forms.getInflectionValues().get("imperfectplural2"));
         Assert.assertEquals("els/ellas admonivan", forms.getInflectionValues().get("imperfectplural3"));
 
         Assert.assertEquals("ch'eu admonischa", forms.getInflectionValues().get("conjunctivsing1"));
