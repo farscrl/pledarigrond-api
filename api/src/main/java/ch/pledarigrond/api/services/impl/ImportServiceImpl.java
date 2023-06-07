@@ -598,6 +598,12 @@ public class ImportServiceImpl implements ImportService {
             lemmaVersion.getLemmaValues().put("futurdubitativplural2", verbDto.getFuturdubitativplural2());
             lemmaVersion.getLemmaValues().put("futurdubitativplural3", verbDto.getFuturdubitativplural3());
 
+            String futur1_2ppl = lemmaVersion.getLemmaValues().get("futurplural2");
+            if (lemmaVersion.getLemmaValues().get("infinitiv").endsWith("ir") && futur1_2ppl.endsWith("iro")) {
+                lemmaVersion.getLemmaValues().put("futurplural2", futur1_2ppl + "s");
+                logger.warn("Changed futur1 2p.pl.: " + lemmaVersion.getLemmaValues().get("infinitiv"));
+            }
+
             generateEncliticFormsPuter(lemmaVersion);
         } else {
             generateEncliticFormsVallader(lemmaVersion);
