@@ -40,10 +40,21 @@ public class PronounRemover {
 
         String[] singleForms = value.split("\\R");
         for (int i = 0; i < singleForms.length; i++) {
+            if (singleForms[i].equals("")) {
+                continue;
+            }
+            boolean enclosedInBrackets = false;
+            if (singleForms[i].charAt(0) == '(' && singleForms[i].charAt(singleForms[i].length()-1) == ')') {
+                enclosedInBrackets = true;
+                singleForms[i] = singleForms[i].replace("(", "").replace(")", "");
+            }
             for(String p: prefixes) {
                 if (singleForms[i].startsWith(p)) {
                     singleForms[i] =  singleForms[i].substring(p.length()).trim();
                 }
+            }
+            if (enclosedInBrackets) {
+                singleForms[i] = "(" + singleForms[i] + ")";
             }
         }
         return String.join("\n", singleForms);
@@ -99,7 +110,14 @@ public class PronounRemover {
                 PuterConjugationPronouns.pron_r_v_3ps,
                 PuterConjugationPronouns.pron_r_v_1pp,
                 PuterConjugationPronouns.pron_r_v_2pp,
-                PuterConjugationPronouns.pron_r_v_3pp
+                PuterConjugationPronouns.pron_r_v_3pp,
+                PuterConjugationPronouns.imperativ_not,
+                PuterConjugationPronouns.imperativ_not_refl_sg,
+                PuterConjugationPronouns.imperativ_not_refl_pl,
+                PuterConjugationPronouns.imperativ_refl_sg,
+                PuterConjugationPronouns.imperativ_refl_pl,
+                PuterConjugationPronouns.imperativ_polite_sg,
+                PuterConjugationPronouns.imperativ_polite_pl
         );
     }
 
@@ -113,7 +131,9 @@ public class PronounRemover {
                 ValladerConjugationPronouns.pron_2ps,
                 ValladerConjugationPronouns.pron_3ps,
                 ValladerConjugationPronouns.pron_1pp,
+                ValladerConjugationPronouns.pron_1pp_alt,
                 ValladerConjugationPronouns.pron_2pp,
+                ValladerConjugationPronouns.pron_2pp_alt,
                 ValladerConjugationPronouns.pron_3pp,
                 ValladerConjugationPronouns.pron_r_1ps,
                 ValladerConjugationPronouns.pron_r_2ps,
@@ -126,7 +146,17 @@ public class PronounRemover {
                 ValladerConjugationPronouns.pron_r_v_3ps,
                 ValladerConjugationPronouns.pron_r_v_1pp,
                 ValladerConjugationPronouns.pron_r_v_2pp,
-                ValladerConjugationPronouns.pron_r_v_3pp
+                ValladerConjugationPronouns.pron_r_v_3pp,
+                ValladerConjugationPronouns.imperativ_not,
+                ValladerConjugationPronouns.imperativ_not_vowel,
+                ValladerConjugationPronouns.imperativ_not_refl_sg,
+                ValladerConjugationPronouns.imperativ_not_refl_pl,
+                ValladerConjugationPronouns.imperativ_refl_sg,
+                ValladerConjugationPronouns.imperativ_refl_sg_vowel,
+                ValladerConjugationPronouns.imperativ_refl_pl,
+                ValladerConjugationPronouns.imperativ_refl_pl_vowel,
+                ValladerConjugationPronouns.imperativ_polite_sg,
+                ValladerConjugationPronouns.imperativ_polite_pl
         );
     }
 }

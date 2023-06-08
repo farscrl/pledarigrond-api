@@ -349,19 +349,19 @@ public class ImportServiceImpl implements ImportService {
                     String root = preschentplural2.replace("vus/vo ", "").replace("ais/aivat", "");
                     v.setPreschentplural2("vus " + root + "ais\n(vo " + root + "aivat)");
                 } else if (preschentplural2.startsWith("vus s'") && preschentplural2.endsWith("ais/aivat")) {
-                    String root = preschentplural2.replace("vus/vo s'", "").replace("ais/aivat", "");
+                    String root = preschentplural2.replace("vus s'", "").replace("ais/aivat", "");
                     v.setPreschentplural2("vus s'" + root + "ais\n(vo s'" + root + "aivat)");
                 } else if (preschentplural2.startsWith("vus as ") && preschentplural2.endsWith("ais/aivat")) {
-                    String root = preschentplural2.replace("vus/vo as", "").replace("ais/aivat", "");
+                    String root = preschentplural2.replace("vus as", "").replace("ais/aivat", "");
                     v.setPreschentplural2("vus as " + root + "ais\n(vo as " + root + "aivat)");
                 } else if (preschentplural2.startsWith("vus/vo ") && preschentplural2.endsWith("is/ivat")) {
                     String root = preschentplural2.replace("vus/vo ", "").replace("is/ivat", "");
                     v.setPreschentplural2("vus " + root + "is\n(vo " + root + "ivat)");
                 } else if (preschentplural2.startsWith("vus s'") && preschentplural2.endsWith("is/ivat")) {
-                    String root = preschentplural2.replace("vus/vo s'", "").replace("is/ivat", "");
+                    String root = preschentplural2.replace("vus s'", "").replace("is/ivat", "");
                     v.setPreschentplural2("vus s'" + root + "is\n(vo s'" + root + "ivat)");
                 } else if (preschentplural2.startsWith("vus as") && preschentplural2.endsWith("is/ivat")) {
-                    String root = preschentplural2.replace("vus/vo as", "").replace("is/ivat", "");
+                    String root = preschentplural2.replace("vus as", "").replace("is/ivat", "");
                     v.setPreschentplural2("vus as " + root + "is\n(vo as " + root + "ivat)");
                 } else if (!"".equals(preschentplural2)) {
                     logger.error("verbs senza ais/aivat: " + v.getInfinitiv());
