@@ -11,12 +11,10 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunAdjectiveGenerator;
 import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
-import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanConjugationStructure;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
@@ -50,7 +48,6 @@ import java.util.stream.Stream;
 
 import static ch.pledarigrond.common.data.common.LemmaVersion.*;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
 
 @Service
 public class AutomaticGenerationServiceImpl implements AutomaticGenerationService {
@@ -73,9 +70,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         StopWatch watch = new StopWatch();
         watch.start();
 
-        List<String> genders = getGenderValues();
+        List<String> genders = getGenderValues(language);
         for (String gender : genders) {
             boolean success = updateNounsByGender(language, gender);
+            // boolean success = updateNounsByGenderSutsilvan(language, gender);
             if (!success) {
                 return false;
             }
@@ -90,9 +88,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         StopWatch watch = new StopWatch();
         watch.start();
 
-        List<String> grammarValuesForAdjective = getGrammarValuesForAdjective();
+        List<String> grammarValuesForAdjective = getGrammarValuesForAdjective(language);
         for (String grammarValue : grammarValuesForAdjective) {
             boolean success = updateAdjectivesByGrammar(language, grammarValue);
+            // boolean success = updateAdjectivesByGrammarSutsilvan(language, grammarValue);
             if (!success) {
                 return false;
             }
@@ -107,9 +106,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         StopWatch watch = new StopWatch();
         watch.start();
 
-        List<String> grammarValuesForVerbs = getGrammarValuesForVerbs();
+        List<String> grammarValuesForVerbs = getGrammarValuesForVerbs(language);
         for (String grammarValue : grammarValuesForVerbs) {
             boolean success = updateVerbsByGrammar(language, grammarValue);
+            // boolean success = updateVerbsByGrammarSutsilvan(language, grammarValue);
             if (!success) {
                 return false;
             }
@@ -933,6 +933,103 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
 
+            LexEntry entry = null;
+            try {
+                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding user ID
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
+            }
+
+            LemmaVersion mostRecent = createNewLemmaVersion(entry);
+            entry.addLemma(mostRecent);
+
+            InflectionResponse inflectionResponse = null;
+            try {
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+            } catch (StringIndexOutOfBoundsException ex) {
+                continue;
+            }
+            if (inflectionResponse == null) {
+                continue;
+            }
+
+            for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+            }
+
+            mostRecent.getLemmaValues().putIfAbsent("RGrammatik", "subst");
+            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
+            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+
+            mostRecent.setTimestamp(0L);
+            mostRecent.setUserId(null);
+
+            try {
+                mongoDbService.update(language, entry, mostRecent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean updateNounsByGenderSutsilvan(Language language, String gender) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setGender(gender);
+        searchCriteria.setExcludeAutomaticChanged(true);
+        searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<LemmaVersion> lemmas;
+        try {
+            lemmas = editorService.search(language, searchCriteria, pagination);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < lemmas.getContent().size(); i++) {
+            LemmaVersion lemma = lemmas.getContent().get(i);
+            // logger.debug(lemma.toString());
+
+            String RStichwort = lemma.getLemmaValues().get("RStichwort");
+
             List<LexEntry> lexEntries = new ArrayList<>();
             LexEntry entry = null;
             try {
@@ -1132,6 +1229,101 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
 
+            LexEntry entry = null;
+            try {
+                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
+            }
+
+            LemmaVersion mostRecent = createNewLemmaVersion(entry);
+            entry.addLemma(mostRecent);
+
+            InflectionResponse inflectionResponse = null;
+            try {
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+            } catch (StringIndexOutOfBoundsException ex) {
+                continue;
+            }
+            if (inflectionResponse == null) {
+                continue;
+            }
+
+            for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+            }
+
+            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
+            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+
+            mostRecent.setTimestamp(0L);
+            mostRecent.setUserId(null);
+
+            try {
+                mongoDbService.update(language, entry, mostRecent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean updateAdjectivesByGrammarSutsilvan(Language language, String grammarValue) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setGrammar(grammarValue);
+        searchCriteria.setExcludeAutomaticChanged(true);
+        searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<LemmaVersion> lemmas;
+        try {
+            lemmas = editorService.search(language, searchCriteria, pagination);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < lemmas.getContent().size(); i++) {
+            LemmaVersion lemma = lemmas.getContent().get(i);
+            // logger.debug(lemma.toString());
+
+            String RStichwort = lemma.getLemmaValues().get("RStichwort");
+
             List<LexEntry> lexEntries = new ArrayList<>();
             LexEntry entry = null;
             try {
@@ -1274,7 +1466,104 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+
     private boolean updateVerbsByGrammar(Language language, String grammarValue) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setGrammar(grammarValue);
+        searchCriteria.setExcludeAutomaticChanged(true);
+        searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<LemmaVersion> lemmas;
+        try {
+            lemmas = editorService.search(language, searchCriteria, pagination);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (int i = 0; i < lemmas.getContent().size(); i++) {
+            LemmaVersion lemma = lemmas.getContent().get(i);
+            logger.debug(lemma.toString());
+
+            String RStichwort = lemma.getLemmaValues().get("RStichwort");
+
+            LexEntry entry = null;
+            try {
+                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
+            }
+
+            LemmaVersion mostRecent = createNewLemmaVersion(entry);
+            entry.addLemma(mostRecent);
+
+            InflectionResponse inflectionResponse = null;
+            try {
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+            } catch (StringIndexOutOfBoundsException ex) {
+                continue;
+            }
+            if (inflectionResponse == null) {
+                continue;
+            }
+
+
+            for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+            }
+
+            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.VERBS.toString());
+            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+
+            mostRecent.setTimestamp(0L);
+            mostRecent.setUserId(null);
+
+            try {
+                mongoDbService.update(language, entry, mostRecent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean updateVerbsByGrammarSutsilvan(Language language, String grammarValue) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
@@ -1688,7 +1977,75 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    public static List<String> getGenderValues() {
+    public static List<String> getGenderValues(Language language) {
+        if (language == Language.PUTER) {
+            return Stream.of(
+                    "(m)",
+                    "f",
+                    "f ",
+                    "f (fpl)",
+                    "f(pl)",
+                    "f/m",
+                    "f/m/n",
+                    "f/n",
+                    "ff",
+                    "fpl",
+                    "m",
+                    "m  ",
+                    "m(f)",
+                    "m/f",
+                    "m/mpl",
+                    "m/n",
+                    "m/n                                                                                                                                       ",
+                    "m/pl",
+                    "mpl",
+                    "n/f",
+                    "n/m",
+                    "npl",
+                    "pl",
+                    "pl/npl"
+            ).collect(Collectors.toList());
+        }
+
+        if (language == Language.VALLADER) {
+            return Stream.of(
+                    "(f)",
+                    "(m)",
+                    "f",
+                    "f ",
+                    "f  ",
+                    "f (pl)",
+                    "f coll",
+                    "f pl",
+                    "f(m)",
+                    "f/m",
+                    "f/m/n",
+                    "f/n",
+                    "ff",
+                    "fm",
+                    "fpl",
+                    "m",
+                    "m ",
+                    "m (-)",
+                    "m(n",
+                    "m(pl)",
+                    "m.f",
+                    "m/f",
+                    "m/fpl",
+                    "m/n",
+                    "m/npl",
+                    "mf",
+                    "mfpl",
+                    "ml",
+                    "mpl",
+                    "n",
+                    "n/f",
+                    "n/m",
+                    "npl",
+                    "pl"
+            ).collect(Collectors.toList());
+        }
+
         return Stream.of(
                 "(coll)m",
                 "(f)m",
@@ -1729,7 +2086,95 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         ).collect(Collectors.toList());
     }
     
-    public static List<String> getGrammarValuesForAdjective() {
+    public static List<String> getGrammarValuesForAdjective(Language language) {
+        if (language == Language.PUTER) {
+            return Stream.of(
+                    "I. adj",
+                    "I. adj cump",
+                    "I. adj invar",
+                    "I. adj pred",
+                    "I. adj/adv",
+                    "I. adj/pron",
+                    "I. adj/pron poss",
+                    "I. num/adj",
+                    "II. adj",
+                    "II. adj attr",
+                    "II. adj pred",
+                    "II. adj/adv",
+                    "II. adj/pron dem",
+                    "II. num/adj",
+                    "III. adj",
+                    "adj",
+                    "adj (pred)",
+                    "adj f",
+                    "adj indef",
+                    "adj invar",
+                    "adj invar / num",
+                    "adj invar/adv",
+                    "adj m",
+                    "adj mpl",
+                    "adj pred",
+                    "adj pred f",
+                    "adj pred invar",
+                    "adj pred invar / adv",
+                    "adj pred/adv",
+                    "adj/adv",
+                    "adj/adv cump",
+                    "adj/cj",
+                    "adj/num",
+                    "adj/pp",
+                    "adj/pron",
+                    "adj/pron dem",
+                    "adj/pron dem fpl",
+                    "adj/pron dem mpl",
+                    "adj/pron dem pl f",
+                    "adj/pron f",
+                    "adj/pron indef",
+                    "adj/pron indef f",
+                    "adj/pron poss",
+                    "adj/pron poss fpl",
+                    "adjf",
+                    "num/adj",
+                    "num/adj f",
+                    "pron/adj",
+                    "pron/adj dem",
+                    "pron/adj dem dat"
+            ).collect(Collectors.toList());
+        }
+
+        if (language == Language.VALLADER) {
+            return Stream.of(
+                    "I. adj",
+                    "I. adj invar",
+                    "I. adj/adv",
+                    "I. adj/pron",
+                    "II. adj",
+                    "II. adj attr",
+                    "II. adj inv.",
+                    "II. adj/adj",
+                    "II. adj/adv",
+                    "II. adj/pron",
+                    "III. adj",
+                    "aadj",
+                    "adj",
+                    "adj attr",
+                    "adj invar",
+                    "adj poss f",
+                    "adj poss m",
+                    "adj pred",
+                    "adj.",
+                    "adj./pron.poss",
+                    "adj.f",
+                    "adj.inv",
+                    "adj.inv/adv",
+                    "adj/adv",
+                    "adj/num",
+                    "adj/pp",
+                    "adj/pron",
+                    "adj/pron.indef"
+            ).collect(Collectors.toList());
+        }
+
         return Stream.of(
                 "adj",
                 "adj (nur präd. +adv)",
@@ -1748,7 +2193,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         ).collect(Collectors.toList());
     }
 
-    public static List<String> getGrammarValuesForVerbs() {
+    public static List<String> getGrammarValuesForVerbs(Language language) {
         return Stream.of(
                 "(refl) tr",
                 "(refl)tr",
