@@ -133,7 +133,7 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/change_grammar_entries")
     ResponseEntity<?> changeGrammarEntries(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
-        if (language != Language.SURMIRAN) {
+        if (language != Language.SURMIRAN && language != Language.PUTER && language != Language.VALLADER) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
         boolean success = automaticGenerationService.changeGrammarIndications(language);

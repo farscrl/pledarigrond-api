@@ -410,8 +410,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         List<String> endingMaintg = new ArrayList<>();
         */
 
-        Set<String> rGrammatik = new HashSet<>();
-        Set<String> dGrammatik = new HashSet<>();
+        // Set<String> rGrammatik = new HashSet<>();
+        // Set<String> dGrammatik = new HashSet<>();
 
 
         while (cursor.hasNext()) {
@@ -428,7 +428,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 boolean didChange = false;
 
                 if (RGrammatik != null && !"".equals(RGrammatik)) {
-                    String newGrammatik = mapSurmiranGrammar(RGrammatik);
+                    String newGrammatik = mapGrammar(language, false, RGrammatik);
                     if (newGrammatik == null || !newGrammatik.equals(RGrammatik)) {
                         current.getLemmaValues().put("RGrammatik", newGrammatik);
                         RGrammatik = newGrammatik;
@@ -437,7 +437,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
 
                 if (DGrammatik != null && !"".equals(DGrammatik)) {
-                    String newGrammatik = mapSurmiranGrammarD(DGrammatik);
+                    String newGrammatik = mapGrammar(language, true, DGrammatik);
                     if (newGrammatik == null || !newGrammatik.equals(DGrammatik)) {
                         current.getLemmaValues().put("DGrammatik", newGrammatik);
                         DGrammatik = newGrammatik;
@@ -445,6 +445,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                     }
                 }
 
+                /*
                 // not using an else clause, as mapping can generate empty values
                 if ((RGrammatik == null || "".equals(RGrammatik)) && (RStichwort != null && !RStichwort.equals("") && !RStichwort.contains(" "))) {
                     if (Character.isUpperCase(RStichwort.charAt(0))) {
@@ -575,9 +576,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                         didChange = true;
                     }
                 }
+                */
 
-                rGrammatik.add(RGrammatik);
-                dGrammatik.add(DGrammatik);
+                // rGrammatik.add(RGrammatik);
+                // dGrammatik.add(DGrammatik);
 
                 if (didChange) {
                     BasicDBObject newObject = Converter.convertLexEntry(entry);
@@ -603,8 +605,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         logger.warn("Ending MAINTG: " + endingMaintg.toString());
         */
 
-        logger.warn("RGrammatik: " + rGrammatik.toString());
-        logger.warn("DGrammatik: " + dGrammatik.toString());
+        // logger.warn("RGrammatik: " + rGrammatik.toString());
+        // logger.warn("DGrammatik: " + dGrammatik.toString());
 
         return true;
     }
@@ -1860,6 +1862,24 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
     */
 
+    private String mapGrammar(Language language, boolean isGerman, String oldGrammar) {
+        if (language == Language.SURMIRAN) {
+            if (isGerman) {
+                return mapSurmiranGrammarD(oldGrammar);
+            } else {
+                return mapSurmiranGrammar(oldGrammar);
+            }
+        } else if (language == Language.VALLADER) {
+            if (isGerman) {
+                return mapValladerGrammarD(oldGrammar);
+            } else {
+                return mapValladerGrammar(oldGrammar);
+            }
+        }
+
+        return oldGrammar;
+    }
+
     private String mapSurmiranGrammar(String oldGrammar) {
         if ("I.".equals(oldGrammar)) return null;
         if ("I. Artikel bestimmt".equals(oldGrammar)) return "artetgel definit";
@@ -2091,6 +2111,231 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         if ("tr".equals(oldGrammar)) return "tr";
         if ("tr/int".equals(oldGrammar)) return "tr / int";
         if ("tr/int/Verb modal".equals(oldGrammar)) return "verb modal";
+
+        return oldGrammar;
+    }
+
+    private String mapValladerGrammar(String oldGrammar) {
+        if ("1".trim().equals(oldGrammar.trim())) return null;
+        if ("2".trim().equals(oldGrammar.trim())) return null;
+        if ("  ".trim().equals(oldGrammar.trim())) return null;
+        if (" 1. + subst".trim().equals(oldGrammar.trim())) return "subst";
+        if (" 1. interr".trim().equals(oldGrammar.trim())) return null;
+        if (" 1. invar".trim().equals(oldGrammar.trim())) return null;
+        if (" 1. sg".trim().equals(oldGrammar.trim())) return null;
+        if (" adj".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj ".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj f".trim().equals(oldGrammar.trim())) return "adj.f";
+        if (" adj fpl".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj invar".trim().equals(oldGrammar.trim())) return "adj.inv";
+        if (" adj invar/adv".trim().equals(oldGrammar.trim())) return "adj.inv/adv";
+        if (" adj mp".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj mpl".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj poss".trim().equals(oldGrammar.trim())) return "adj./pron.poss";
+        if (" adj pred invar".trim().equals(oldGrammar.trim())) return "adj.inv";
+        if (" adj pred/adv".trim().equals(oldGrammar.trim())) return "adj.inv/adv";
+        if (" adj/adv".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if (" adj/adv f".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if (" adj/pp".trim().equals(oldGrammar.trim())) return "adj";
+        if (" adj/prep".trim().equals(oldGrammar.trim())) return "prep";
+        if (" adv".trim().equals(oldGrammar.trim())) return "adv";
+        if (" adv interr".trim().equals(oldGrammar.trim())) return "adv";
+        //if (" adv; prep".trim().equals(oldGrammar.trim())) return "[na chatto!!!]";
+        if (" adv/adj".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if (" adv/cj".trim().equals(oldGrammar.trim())) return "adv/cj";
+        if (" adv/interj".trim().equals(oldGrammar.trim())) return "adv";
+        if (" adv/prep".trim().equals(oldGrammar.trim())) return "adv/prep";
+        if (" art poss".trim().equals(oldGrammar.trim())) return "pron.poss";
+        if (" art/adj".trim().equals(oldGrammar.trim())) return "pron.indef";
+        if (" art/pron".trim().equals(oldGrammar.trim())) return "pron.poss";
+        if (" art/pron dem".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if (" art/pron fpl".trim().equals(oldGrammar.trim())) return "pron.poss";
+        if (" art/pron poss".trim().equals(oldGrammar.trim())) return "pron.poss";
+        //if (" art/pron poss".trim().equals(oldGrammar.trim())) return "[na chatto!]";
+        if (" be inf".trim().equals(oldGrammar.trim())) return "be inf";
+        if (" cj".trim().equals(oldGrammar.trim())) return "cj";
+        if (" cj/adv".trim().equals(oldGrammar.trim())) return "adv/cj";
+        if (" ei Heirat)".trim().equals(oldGrammar.trim())) return null;
+        if (" f".trim().equals(oldGrammar.trim())) return null;
+        if (" gerundi".trim().equals(oldGrammar.trim())) return "grd";
+        if (" I.".trim().equals(oldGrammar.trim())) return null;
+        if (" I. adj".trim().equals(oldGrammar.trim())) return "adj";
+        if (" I. adj indef".trim().equals(oldGrammar.trim())) return "pron.indef";
+        if (" I. adj invar".trim().equals(oldGrammar.trim())) return "adj.inv";
+        if (" I. adj/art".trim().equals(oldGrammar.trim())) return null;
+        if (" I. adj/pron".trim().equals(oldGrammar.trim())) return "adj/pron.indef";
+        if (" I. adv".trim().equals(oldGrammar.trim())) return "adv";
+        if (" I. art/pron".trim().equals(oldGrammar.trim())) return null;
+        if (" I. fsg".trim().equals(oldGrammar.trim())) return null;
+        if (" I. interj".trim().equals(oldGrammar.trim())) return "interj";
+        if (" I. interr".trim().equals(oldGrammar.trim())) return "pron.interr";
+        if (" I. intr".trim().equals(oldGrammar.trim())) return "intr";
+        if (" I. intr/tr".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if (" I. intr/tr ind".trim().equals(oldGrammar.trim())) return null;
+        if (" I. num".trim().equals(oldGrammar.trim())) return "num";
+        if (" I. num/adj".trim().equals(oldGrammar.trim())) return "num";
+        if (" I. pp".trim().equals(oldGrammar.trim())) return "pp";
+        if (" I. pred".trim().equals(oldGrammar.trim())) return "adj.";
+        if (" I. prep".trim().equals(oldGrammar.trim())) return "prep";
+        if (" I. pron ind".trim().equals(oldGrammar.trim())) return "pron.indef";
+        if (" I. sg".trim().equals(oldGrammar.trim())) return null;
+        if (" I. tr".trim().equals(oldGrammar.trim())) return "tr";
+        if (" I. tr ind".trim().equals(oldGrammar.trim())) return "intr";
+        if (" I. tr/intr".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if (" II.".trim().equals(oldGrammar.trim())) return null;
+        if (" II. ".trim().equals(oldGrammar.trim())) return null;
+        if (" II. adj".trim().equals(oldGrammar.trim())) return "adj";
+        if (" II. adj f".trim().equals(oldGrammar.trim())) return "adj.f";
+        if (" II. adj invar".trim().equals(oldGrammar.trim())) return "adj.inv";
+        if (" II. adj pred".trim().equals(oldGrammar.trim())) return "adj.";
+        if (" II. adj/adv".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if (" II. adv".trim().equals(oldGrammar.trim())) return "adv";
+        if (" II. adv/prep".trim().equals(oldGrammar.trim())) return "prep";
+        if (" II. cj".trim().equals(oldGrammar.trim())) return "cj";
+        if (" II. fpl".trim().equals(oldGrammar.trim())) return null;
+        if (" II. impers".trim().equals(oldGrammar.trim())) return "impers";
+        if (" II. interj".trim().equals(oldGrammar.trim())) return "interj";
+        if (" II. intr".trim().equals(oldGrammar.trim())) return "intr";
+        if (" II. num/adj".trim().equals(oldGrammar.trim())) return "num";
+        if (" II. o.i.".trim().equals(oldGrammar.trim())) return null;
+        if (" II. pl".trim().equals(oldGrammar.trim())) return null;
+        if (" II. pp".trim().equals(oldGrammar.trim())) return "pp";
+        if (" II. pp mpl".trim().equals(oldGrammar.trim())) return "pp";
+        if (" II. prep".trim().equals(oldGrammar.trim())) return "prep";
+        if (" II. pron".trim().equals(oldGrammar.trim())) return "pron";
+        if (" II. pron rel".trim().equals(oldGrammar.trim())) return "pron.rel";
+        if (" II. refl".trim().equals(oldGrammar.trim())) return "refl";
+        if (" II. rel".trim().equals(oldGrammar.trim())) return "refl";
+        if (" II. tr".trim().equals(oldGrammar.trim())) return "tr";
+        if (" II..".trim().equals(oldGrammar.trim())) return null;
+        if (" III.".trim().equals(oldGrammar.trim())) return null;
+        if (" III. adj".trim().equals(oldGrammar.trim())) return "adj";
+        if (" III. adv".trim().equals(oldGrammar.trim())) return "adv";
+        if (" impers".trim().equals(oldGrammar.trim())) return "impers";
+        if (" impt pl".trim().equals(oldGrammar.trim())) return null;
+        if (" impt sg".trim().equals(oldGrammar.trim())) return null;
+        if (" int".trim().equals(oldGrammar.trim())) return "intr";
+        if (" interj".trim().equals(oldGrammar.trim())) return "interj";
+        if (" intr".trim().equals(oldGrammar.trim())) return "intr";
+        // if (" intr".trim().equals(oldGrammar.trim())) return "[na chatto!!!]";
+        if (" intr (tr)".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if (" intr/tr".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if (" intr/tr ind".trim().equals(oldGrammar.trim())) return "intr";
+        if (" IV.".trim().equals(oldGrammar.trim())) return null;
+        if (" IV. adj".trim().equals(oldGrammar.trim())) return "adj";
+        if (" IV. adv".trim().equals(oldGrammar.trim())) return "adv";
+        if (" IV. impers".trim().equals(oldGrammar.trim())) return "impers";
+        if (" IV. interj".trim().equals(oldGrammar.trim())) return "interj";
+        if (" m".trim().equals(oldGrammar.trim())) return null;
+        if (" num/adj".trim().equals(oldGrammar.trim())) return "num";
+        if (" num/adj ".trim().equals(oldGrammar.trim())) return "num";
+        if (" pl".trim().equals(oldGrammar.trim())) return null;
+        if (" pp".trim().equals(oldGrammar.trim())) return "pp";
+        if (" pp invar".trim().equals(oldGrammar.trim())) return "pp";
+        if (" pp mpl".trim().equals(oldGrammar.trim())) return "pp";
+        if (" pp/adj".trim().equals(oldGrammar.trim())) return "pp";
+        if (" ppf".trim().equals(oldGrammar.trim())) return "pp";
+        if (" ppf pl".trim().equals(oldGrammar.trim())) return "pp";
+        if (" ppmpl".trim().equals(oldGrammar.trim())) return "pp";
+        if (" prep".trim().equals(oldGrammar.trim())) return "prep";
+        if (" prep+art".trim().equals(oldGrammar.trim())) return "prep";
+        if (" prep/adv".trim().equals(oldGrammar.trim())) return "adv/prep";
+        if (" pron".trim().equals(oldGrammar.trim())) return "pron";
+        if (" pron encl.".trim().equals(oldGrammar.trim())) return "pron";
+        if (" pron f".trim().equals(oldGrammar.trim())) return "pron";
+        if (" pron indef".trim().equals(oldGrammar.trim())) return "pron.indef";
+        if (" pron invar".trim().equals(oldGrammar.trim())) return "pron.indef";
+        if (" pron pers".trim().equals(oldGrammar.trim())) return "pron.pers";
+        if (" pron poss".trim().equals(oldGrammar.trim())) return "pron.poss";
+        if (" pron refl".trim().equals(oldGrammar.trim())) return "pron.refl";
+        if (" pron+prep".trim().equals(oldGrammar.trim())) return "pron";
+        if (" pron/adj".trim().equals(oldGrammar.trim())) return "adj/pron.indef";
+        if (" pron/adj dem".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if (" refl".trim().equals(oldGrammar.trim())) return "refl";
+        if (" sg".trim().equals(oldGrammar.trim())) return null;
+        if (" tr".trim().equals(oldGrammar.trim())) return "tr";
+        // if (" tr".trim().equals(oldGrammar.trim())) return "[na chatto!!!]";
+        if (" tr ind".trim().equals(oldGrammar.trim())) return "intr";
+        if (" tr/intr".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if (" tr/refl".trim().equals(oldGrammar.trim())) return "tr";
+        if (" tr/v modal".trim().equals(oldGrammar.trim())) return "tr";
+        if (" v".trim().equals(oldGrammar.trim())) return null;
+        if (" v defect".trim().equals(oldGrammar.trim())) return "intr";
+        if (" v mod".trim().equals(oldGrammar.trim())) return "intr";
+        if (" VI.".trim().equals(oldGrammar.trim())) return null;
+        if ("I. adj/adv".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if ("I. adv interr".trim().equals(oldGrammar.trim())) return null;
+        if ("I. art/adj".trim().equals(oldGrammar.trim())) return null;
+        if ("I. cj".trim().equals(oldGrammar.trim())) return null;
+        if ("I. dem".trim().equals(oldGrammar.trim())) return null;
+        if ("I. f".trim().equals(oldGrammar.trim())) return null;
+        if ("I. intr (tr)".trim().equals(oldGrammar.trim())) return null;
+        if ("I. prep acc".trim().equals(oldGrammar.trim())) return null;
+        if ("I. prep dat".trim().equals(oldGrammar.trim())) return null;
+        if ("I. prep gen".trim().equals(oldGrammar.trim())) return null;
+        if ("I. pron".trim().equals(oldGrammar.trim())) return "pron";
+        if ("I. pron dem".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if ("I. pron pers".trim().equals(oldGrammar.trim())) return "pron.pers";
+        if ("I. pron poss".trim().equals(oldGrammar.trim())) return "pron.poss";
+        if ("I. rel gen".trim().equals(oldGrammar.trim())) return null;
+        if ("I. sg f".trim().equals(oldGrammar.trim())) return null;
+        if ("II. adj attr".trim().equals(oldGrammar.trim())) return "adj";
+        if ("II. adj inv.".trim().equals(oldGrammar.trim())) return "adj.inv";
+        if ("II. adj/adj".trim().equals(oldGrammar.trim())) return null;
+        if ("II. adj/pron".trim().equals(oldGrammar.trim())) return "pron";
+        if ("II. adv (prep)".trim().equals(oldGrammar.trim())) return "prep";
+        if ("II. adv rel".trim().equals(oldGrammar.trim())) return "adv.rel";
+        if ("II. adv/adj".trim().equals(oldGrammar.trim())) return "adj/adv";
+        if ("II. adv/cj".trim().equals(oldGrammar.trim())) return "cj";
+        if ("II. adv/pron ind".trim().equals(oldGrammar.trim())) return "adv";
+        if ("II. indef".trim().equals(oldGrammar.trim())) return null;
+        if ("II. intr (tr)".trim().equals(oldGrammar.trim())) return null;
+        if ("II. m pl".trim().equals(oldGrammar.trim())) return null;
+        if ("II. nom pl".trim().equals(oldGrammar.trim())) return null;
+        if ("II. prep acc".trim().equals(oldGrammar.trim())) return null;
+        if ("II. prep dat".trim().equals(oldGrammar.trim())) return null;
+        if ("II. prep gen".trim().equals(oldGrammar.trim())) return null;
+        if ("II. pron ref".trim().equals(oldGrammar.trim())) return "pron.refl";
+        if ("III. cj".trim().equals(oldGrammar.trim())) return null;
+        if ("III. dem".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if ("III. impers".trim().equals(oldGrammar.trim())) return null;
+        if ("III. interj".trim().equals(oldGrammar.trim())) return null;
+        if ("III. prep".trim().equals(oldGrammar.trim())) return null;
+        if ("III. pron in".trim().equals(oldGrammar.trim())) return null;
+        if ("V.".trim().equals(oldGrammar.trim())) return null;
+        if ("aadj".trim().equals(oldGrammar.trim())) return null;
+        if ("adf".trim().equals(oldGrammar.trim())) return null;
+        if ("adg".trim().equals(oldGrammar.trim())) return null;
+        if ("adh".trim().equals(oldGrammar.trim())) return null;
+        if ("adj attr".trim().equals(oldGrammar.trim())) return "adj";
+        if ("adj poss f".trim().equals(oldGrammar.trim())) return null;
+        if ("adj poss m".trim().equals(oldGrammar.trim())) return null;
+        if ("adj pred".trim().equals(oldGrammar.trim())) return "adj";
+        if ("adj/num".trim().equals(oldGrammar.trim())) return null;
+        if ("adj/pron".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if ("adv/prep gen".trim().equals(oldGrammar.trim())) return null;
+        if ("art def".trim().equals(oldGrammar.trim())) return "art";
+        if ("intr(tr)".trim().equals(oldGrammar.trim())) return "tr/intr";
+        if ("num".trim().equals(oldGrammar.trim())) return "num";
+        if ("num/pron".trim().equals(oldGrammar.trim())) return "art.indef";
+        if ("pp f".trim().equals(oldGrammar.trim())) return "pp";
+        if ("prep acc".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep acc/dat".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep dat".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep dat/acc".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep dat/gen".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep gen".trim().equals(oldGrammar.trim())) return "prep";
+        if ("prep gen/cj".trim().equals(oldGrammar.trim())) return "prep/cj";
+        if ("prep gen/dat".trim().equals(oldGrammar.trim())) return "prep";
+        if ("pron dem".trim().equals(oldGrammar.trim())) return "pron.dem";
+        if ("pron interr".trim().equals(oldGrammar.trim())) return "pron.interr";
+        if ("tr (refl)".trim().equals(oldGrammar.trim())) return "intr";
+        if ("verstossen540".trim().equals(oldGrammar.trim())) return "adj";
+
+        return oldGrammar;
+    }
+
+    private String mapValladerGrammarD(String oldGrammar) {
 
         return oldGrammar;
     }
