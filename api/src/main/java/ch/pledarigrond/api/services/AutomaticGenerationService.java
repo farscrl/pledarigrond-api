@@ -42,4 +42,6 @@ public interface AutomaticGenerationService {
     boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException;
 
     boolean exportRemainingWords(Language language) throws IOException, InterruptedException, DatabaseException;
+
+    boolean exportWordsWithGrammarV(Language language) throws IOException, DatabaseException;
 }

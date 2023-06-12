@@ -235,4 +235,23 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     *  During manual review, words with grammar "v" have often been problematic. Thus, this allows to export a list of
+     *      * all the affected words.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/export_words_with_grammar_v")
+    ResponseEntity<?> exportWordsWithGrammarV(@PathVariable("language")Language language) throws DatabaseException, IOException, InterruptedException {
+        if (language != Language.PUTER && language != Language.VALLADER) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.exportWordsWithGrammarV(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during export remaining words");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

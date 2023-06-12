@@ -866,6 +866,47 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    /**
+     * During manual review, words with grammar "v" have often been problematic. Thus, this allows to export a list of
+     * all the affected words.
+     */
+    public boolean exportWordsWithGrammarV(Language language) throws IOException, DatabaseException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        List<String[]> dataLines = new ArrayList<>();
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getMostRecent() != null) {
+                LemmaVersion mostRecent = entry.getMostRecent();
+
+                String id = mostRecent.getLexEntryId();
+                String RGrammatik = mostRecent.getLemmaValues().get("RGrammatik");
+                String RStichwort = mostRecent.getLemmaValues().get("RStichwort");
+                String DStichwort = mostRecent.getLemmaValues().get("DStichwort");
+
+                if ("v".equals(RGrammatik.trim())) {
+                    // logger.error(mostRecent.getReviewLater());
+                    dataLines.add(new String[]{ id, RStichwort, DStichwort, RGrammatik });
+                }
+            }
+        }
+
+        Files.createDirectories(Paths.get("data/export"));
+        File csvOutputFile = new File("data/export/" + language.getName() + "/words-with-v_" + language + ".csv");
+        try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            dataLines.stream()
+                    .map(this::convertToCSV)
+                    .forEach(pw::println);
+        }
+
+        return true;
+    }
+
     private boolean updateNounsByGender(Language language, String gender) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
