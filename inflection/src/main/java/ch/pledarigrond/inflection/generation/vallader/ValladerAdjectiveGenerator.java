@@ -1,5 +1,6 @@
 package ch.pledarigrond.inflection.generation.vallader;
 
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.inflection.generation.generic.LanguageAdjectiveGeneration;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
@@ -34,7 +35,7 @@ public class ValladerAdjectiveGenerator extends LanguageAdjectiveGeneration {
     private HashMap<String, String> forms;
 
     public InflectionResponse generateForms(String adjectiveClass, String baseForm) {
-
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         root = getRoot(baseForm, adjectiveClass);
 
         InflectionSubType subType = ValladerAdjectiveClasses.getAdjectiveInflectionClass(adjectiveClass);
@@ -48,6 +49,7 @@ public class ValladerAdjectiveGenerator extends LanguageAdjectiveGeneration {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         baseForm = normalizeString(baseForm);
         int length = baseForm.length();
         if (length < 3) {

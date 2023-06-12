@@ -1,5 +1,6 @@
 package ch.pledarigrond.inflection.generation.puter;
 
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.inflection.generation.generic.LanguageConjugation;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
@@ -27,7 +28,7 @@ public class PuterConjugation extends LanguageConjugation {
 
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
         resetValues();
-
+        infinitiv = PronunciationNormalizer.normalizePronunciation(infinitiv);
         root = getRoot(infinitiv);
 
         if (conjugationClass.equals("1a") || conjugationClass.equals("4a")) {
@@ -63,6 +64,7 @@ public class PuterConjugation extends LanguageConjugation {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         if (baseForm.length() < 3) {
             return null;
         }

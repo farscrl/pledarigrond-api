@@ -1,5 +1,6 @@
 package ch.pledarigrond.inflection.generation.puter;
 
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.inflection.generation.generic.LanguageNounGeneration;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
@@ -34,7 +35,7 @@ public class PuterNounGenerator extends LanguageNounGeneration {
     private HashMap<String, String> forms;
 
     public InflectionResponse generateForms(String nounClass, String baseForm) {
-
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         root = getRoot(baseForm, nounClass);
 
         InflectionSubType subType = PuterNounClasses.getNounInflectionClass(nounClass);
@@ -48,6 +49,7 @@ public class PuterNounGenerator extends LanguageNounGeneration {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         baseForm = normalizeString(baseForm);
         int length = baseForm.length();
         if (length < 3) {

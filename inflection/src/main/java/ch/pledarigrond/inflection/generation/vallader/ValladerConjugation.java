@@ -1,5 +1,6 @@
 package ch.pledarigrond.inflection.generation.vallader;
 
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.inflection.generation.generic.LanguageConjugation;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionSubType;
@@ -24,6 +25,7 @@ public class ValladerConjugation extends LanguageConjugation {
 
     public InflectionResponse generateConjugation(String conjugationClass, String infinitiv) {
         resetValues();
+        infinitiv = PronunciationNormalizer.normalizePronunciation(infinitiv);
 
         root = getRoot(infinitiv);
 
@@ -56,6 +58,7 @@ public class ValladerConjugation extends LanguageConjugation {
     }
 
     public InflectionResponse guessInflection(String baseForm, String genus, String flex) {
+        baseForm = PronunciationNormalizer.normalizePronunciation(baseForm);
         if (baseForm.length() < 3) {
             return null;
         }
