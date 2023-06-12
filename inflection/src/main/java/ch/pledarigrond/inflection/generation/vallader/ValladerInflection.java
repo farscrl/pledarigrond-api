@@ -16,8 +16,8 @@ public class ValladerInflection implements LanguageInflection {
                 return ValladerConjugationClasses.getVerbInflectionSubtypes();
             case NOUN:
                 return ValladerNounClasses.getNounInflectionSubtypes();
-            /*case ADJECTIVE:
-                return PuterAdjectiveClasses.getAdjectiveInflectionSubtypes();*/
+            case ADJECTIVE:
+                return ValladerAdjectiveClasses.getAdjectiveInflectionSubtypes();
         }
 
         return null;
@@ -32,9 +32,9 @@ public class ValladerInflection implements LanguageInflection {
             case NOUN:
                 ValladerNounGenerator nounGenerator = new ValladerNounGenerator();
                 return nounGenerator.guessInflection(baseForm, genus, flex);
-            /*case ADJECTIVE:
-                PuterAdjectiveGenerator adjectiveGenerator = new PuterAdjectiveGenerator();
-                return adjectiveGenerator.guessInflection(baseForm, genus, flex);*/
+            case ADJECTIVE:
+                ValladerAdjectiveGenerator adjectiveGenerator = new ValladerAdjectiveGenerator();
+                return adjectiveGenerator.guessInflection(baseForm, genus, flex);
         }
         return null;
     }
@@ -48,9 +48,9 @@ public class ValladerInflection implements LanguageInflection {
             case NOUN:
                 ValladerNounGenerator nounGenerator = new ValladerNounGenerator();
                 return nounGenerator.generateForms(subTypeId, baseForm);
-            /*case ADJECTIVE:
-                PuterAdjectiveGenerator adjectiveGenerator = new PuterAdjectiveGenerator();
-                return adjectiveGenerator.generateForms(subTypeId, baseForm);*/
+            case ADJECTIVE:
+                ValladerAdjectiveGenerator adjectiveGenerator = new ValladerAdjectiveGenerator();
+                return adjectiveGenerator.generateForms(subTypeId, baseForm);
         }
         return null;
     }
