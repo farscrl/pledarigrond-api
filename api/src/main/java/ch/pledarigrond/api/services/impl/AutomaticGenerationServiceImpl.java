@@ -975,7 +975,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             InflectionResponse inflectionResponse = null;
             try {
                 inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
-            } catch (StringIndexOutOfBoundsException ex) {
+            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
             if (inflectionResponse == null) {
@@ -1270,7 +1270,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             InflectionResponse inflectionResponse = null;
             try {
                 inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
-            } catch (StringIndexOutOfBoundsException ex) {
+            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
             if (inflectionResponse == null) {
@@ -1532,7 +1532,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             InflectionResponse inflectionResponse = null;
             try {
                 inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
-            } catch (StringIndexOutOfBoundsException ex) {
+            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
             if (inflectionResponse == null) {
