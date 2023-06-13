@@ -43,11 +43,14 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static ch.pledarigrond.common.data.common.LemmaVersion.*;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
 
 @Service
 public class AutomaticGenerationServiceImpl implements AutomaticGenerationService {
@@ -70,13 +73,27 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         StopWatch watch = new StopWatch();
         watch.start();
 
+        List<String[]> noInflectionList = new ArrayList<>();
+
         List<String> genders = getGenderValues(language);
         for (String gender : genders) {
-            boolean success = updateNounsByGender(language, gender);
+            boolean success = updateNounsByGender(language, gender, noInflectionList);
             // boolean success = updateNounsByGenderSutsilvan(language, gender);
             if (!success) {
                 return false;
             }
+        }
+
+        try {
+            Files.createDirectories(Paths.get("data/export"));
+            File csvOutputFile = new File("data/export/" + language.getName() + "/nouns-without-inflection.csv");
+            try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+                noInflectionList.stream()
+                        .map(this::convertToCSV)
+                        .forEach(pw::println);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         watch.stop();
@@ -88,13 +105,28 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         StopWatch watch = new StopWatch();
         watch.start();
 
+        List<String[]> noInflectionList = new ArrayList<>();
+
         List<String> grammarValuesForAdjective = getGrammarValuesForAdjective(language);
         for (String grammarValue : grammarValuesForAdjective) {
-            boolean success = updateAdjectivesByGrammar(language, grammarValue);
+            boolean success = updateAdjectivesByGrammar(language, grammarValue, noInflectionList);
             // boolean success = updateAdjectivesByGrammarSutsilvan(language, grammarValue);
             if (!success) {
                 return false;
             }
+        }
+
+
+        try {
+            Files.createDirectories(Paths.get("data/export"));
+            File csvOutputFile = new File("data/export/" + language.getName() + "/adjectives-without-inflection.csv");
+            try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+                noInflectionList.stream()
+                        .map(this::convertToCSV)
+                        .forEach(pw::println);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         watch.stop();
@@ -909,7 +941,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    private boolean updateNounsByGender(Language language, String gender) {
+    private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
         searchCriteria.setExcludeAutomaticChanged(true);
@@ -931,7 +963,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             LemmaVersion lemma = lemmas.getContent().get(i);
             // logger.debug(lemma.toString());
 
+            String id = lemma.getLexEntryId();
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
+            String DStichwort = lemma.getLemmaValues().get("DStichwort");
 
             LexEntry entry = null;
             try {
@@ -976,10 +1010,44 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             try {
                 inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
             }
             if (inflectionResponse == null) {
-                continue;
+                if (language == Language.PUTER || language == Language.VALLADER) {
+
+                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
+                    List<Pattern> patterns = new ArrayList<>();
+                    patterns.add(Pattern.compile("^([\\p{L}]+) \\(([\\p{L}]+), pl\\); [\\p{L}]+ \\([\\p{L}]+, pl\\)$")); //impiegà (impiegạts, pl); impiegạda (impiegạdas, pl)
+                    patterns.add(Pattern.compile("^([\\p{L}]+) \\(([\\p{L}]+), pl\\)$")); // grà (grads, pl)
+                    patterns.add(Pattern.compile("^([\\p{L}]+) \\([\\p{L}. ]+\\)()$")); // duọnna (dna.)
+                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // oboịst, oboịsta
+
+                    for (Pattern pattern: patterns) {
+                        Matcher matcher = pattern.matcher(RStichwort);
+                        if (matcher.matches()) {
+                            String base = matcher.group(1);
+                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
+                            try {
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, base, mostRecent.getLemmaValues().get("RGenus"), plural);
+                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                                // do nothing
+                            }
+
+                            if (inflectionResponse != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (inflectionResponse == null) {
+                        noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                        continue;
+                    }
+                } else {
+                    noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                    continue;
+                }
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
@@ -1205,7 +1273,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    private boolean updateAdjectivesByGrammar(Language language, String grammarValue) {
+    private boolean updateAdjectivesByGrammar(Language language, String grammarValue, List<String[]> noInflectionList) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
@@ -1227,7 +1295,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             LemmaVersion lemma = lemmas.getContent().get(i);
             // logger.debug(lemma.toString());
 
+            String id = lemma.getLexEntryId();
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
+            String DStichwort = lemma.getLemmaValues().get("DStichwort");
 
             LexEntry entry = null;
             try {
@@ -1271,10 +1341,41 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             try {
                 inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
             }
             if (inflectionResponse == null) {
-                continue;
+                if (language == Language.PUTER || language == Language.VALLADER) {
+
+                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
+                    List<Pattern> patterns = new ArrayList<>();
+                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // furbạz, furbạzza
+
+                    for (Pattern pattern: patterns) {
+                        Matcher matcher = pattern.matcher(RStichwort);
+                        if (matcher.matches()) {
+                            String base = matcher.group(1);
+                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
+                            try {
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, base, mostRecent.getLemmaValues().get("RGenus"), plural);
+                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                                // do nothing
+                            }
+
+                            if (inflectionResponse != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (inflectionResponse == null) {
+                        noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                        continue;
+                    }
+                } else {
+                    noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                    continue;
+                }
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
