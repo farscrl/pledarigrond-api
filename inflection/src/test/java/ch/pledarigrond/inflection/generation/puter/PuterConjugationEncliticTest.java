@@ -122,7 +122,7 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("püffi", forms.getInflectionValues().get("preschentsing1enclitic"));
         Assert.assertEquals("püffast", forms.getInflectionValues().get("preschentsing2enclitic"));
         Assert.assertEquals("püffa'l", forms.getInflectionValues().get("preschentsing3encliticm"));
-        Assert.assertEquals("püf'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("püff'la", forms.getInflectionValues().get("preschentsing3encliticf"));
         Assert.assertEquals("püffainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
         Assert.assertEquals("püffais", forms.getInflectionValues().get("preschentplural2enclitic"));
         Assert.assertEquals("püffane", forms.getInflectionValues().get("preschentplural3enclitic"));
@@ -144,7 +144,7 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("drizzi", forms.getInflectionValues().get("preschentsing1enclitic"));
         Assert.assertEquals("drizzast", forms.getInflectionValues().get("preschentsing2enclitic"));
         Assert.assertEquals("drizza'l", forms.getInflectionValues().get("preschentsing3encliticm"));
-        Assert.assertEquals("driz'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("drizz'la", forms.getInflectionValues().get("preschentsing3encliticf"));
         Assert.assertEquals("drizzainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
         Assert.assertEquals("drizzais", forms.getInflectionValues().get("preschentplural2enclitic"));
         Assert.assertEquals("drizzane", forms.getInflectionValues().get("preschentplural3enclitic"));
