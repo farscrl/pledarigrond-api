@@ -137,7 +137,7 @@ public class AutomaticGenerationController {
     }
 
     /**
-     * Allows to unify the grammar entries for surmiran
+     * Allows to unify the grammar entries
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/change_grammar_entries")
@@ -149,6 +149,24 @@ public class AutomaticGenerationController {
 
         if (!success) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Allows to unify the genus entries
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/change_genus_entries")
+    ResponseEntity<?> changeGenusEntries(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.PUTER && language != Language.VALLADER) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.changeGenusIndications(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing genus indications");
         }
 
         return ResponseEntity.ok().build();

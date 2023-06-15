@@ -643,6 +643,62 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean changeGenusIndications(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        Set<String> rGenus = new HashSet<>();
+        Set<String> dGenus = new HashSet<>();
+
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getCurrent() != null) {
+
+                LemmaVersion current = entry.getCurrent();
+                String RStichwort = current.getLemmaValues().get("RStichwort");
+                String RGenus = current.getLemmaValues().get("RGenus");
+                String DGenus = current.getLemmaValues().get("DGenus");
+
+                boolean didChange = false;
+
+                if (RGenus != null && !"".equals(RGenus)) {
+                    String newGenus = mapGenus(language, false, RGenus);
+                    if (newGenus == null || !newGenus.equals(RGenus)) {
+                        current.getLemmaValues().put("RGenus", newGenus);
+                        RGenus = newGenus;
+                        didChange = true;
+                    }
+                }
+
+                if (DGenus != null && !"".equals(DGenus)) {
+                    String newGenus = mapGenus(language, true, DGenus);
+                    if (newGenus == null || !newGenus.equals(DGenus)) {
+                        current.getLemmaValues().put("DGenus", newGenus);
+                        DGenus = newGenus;
+                        didChange = true;
+                    }
+                }
+
+                rGenus.add(RGenus);
+                dGenus.add(DGenus);
+
+                /* if (didChange) {
+                    BasicDBObject newObject = Converter.convertLexEntry(entry);
+                    entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+                } */
+            }
+        }
+
+        logger.warn("RGenus: " + rGenus.toString());
+        logger.warn("DGenus: " + dGenus.toString());
+
+        return true;
+    }
+
     public boolean fixVerbPronounsRg(Language language) throws DatabaseException, UnknownHostException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -2429,6 +2485,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
         }
 
+        return oldGrammar;
+    }
+
+    private String mapGenus(Language language, boolean isGerman, String oldGrammar) {
+        // TODO: implement me
         return oldGrammar;
     }
 
