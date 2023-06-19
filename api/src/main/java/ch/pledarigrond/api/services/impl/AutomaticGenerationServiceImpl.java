@@ -1109,7 +1109,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
             }
 
-            mostRecent.getLemmaValues().putIfAbsent("RGrammatik", "subst");
+            if (mostRecent.getLemmaValues().get("RGrammatik") == null || "".equals(mostRecent.getLemmaValues().get("RGrammatik"))) {
+                mostRecent.getLemmaValues().put("RGrammatik", "subst");
+            }
             mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
             mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
