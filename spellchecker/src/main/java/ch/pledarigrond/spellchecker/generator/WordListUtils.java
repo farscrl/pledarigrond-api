@@ -300,7 +300,7 @@ public class WordListUtils {
         }
 
         // Ignore ( ) ...
-        if (word.contains("(") || word.contains(")") || word.contains("...")) {
+        if (word.contains("...")) {
             return null;
         }
 

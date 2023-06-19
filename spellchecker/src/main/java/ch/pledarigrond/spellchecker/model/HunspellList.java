@@ -1,13 +1,28 @@
 package ch.pledarigrond.spellchecker.model;
 
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HunspellList {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HunspellList.class);
     private final Map<String, Set<HunspellRules>> wordsList = new TreeMap<>();
 
     public void addWord(String word, HunspellRules[] rules) {
+        if (word == null) {
+            return;
+        }
+
+        if (word.contains("(") || word.contains(")")) {
+            findBrackets(word).forEach(w -> addWord(w, rules));
+            return;
+        }
+
         word = WordListUtils.normalizeWordListEntry(word);
         if (word == null) {
             return;
@@ -43,5 +58,34 @@ public class HunspellList {
             rules.forEach(sb::append);
         }
         return sb.toString();
+    }
+
+    public static List<String> findBrackets(String str){
+        // LOG.info(str);
+
+        String pattern = "(.*)\\((.+)\\)(.*)";
+
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(str);
+        if (m.matches())
+        {
+            List<String> prefix = findBrackets(m.group(1));
+            String middle = m.group(2);
+            List<String> suffix = findBrackets(m.group(3));
+
+            List<String> result = new ArrayList<>();
+            prefix.forEach(pfx -> {
+                suffix.forEach(sfx -> {
+                    result.add(pfx + middle + sfx);
+                    result.add(pfx + sfx);
+                });
+            });
+            return result;
+        } else {
+            if (str.contains("(") || str.contains(")")) {
+                LOG.error("Could not parse: {}", str);
+            }
+            return List.of(str.replace("(", "").replace(")", ""));
+        }
     }
 }
