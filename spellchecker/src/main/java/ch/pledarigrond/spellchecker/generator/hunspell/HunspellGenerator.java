@@ -186,12 +186,12 @@ abstract public class HunspellGenerator {
     private void extractName(HunspellList list, Language language, Name name) {
         String rm = WordListUtils.getRomanshNameForLanguage(language, name);
         if (rm != null) {
-            list.addWord(rm, new HunspellRules[]{});
+            list.addWord(rm, new HunspellRules[]{}, false);
         }
 
         String de = WordListUtils.getGermanNameForLanguage(language, name);
         if (de != null) {
-            list.addWord(de, new HunspellRules[]{});
+            list.addWord(de, new HunspellRules[]{}, false);
         }
     }
 

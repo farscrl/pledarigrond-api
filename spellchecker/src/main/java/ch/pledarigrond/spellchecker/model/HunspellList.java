@@ -14,6 +14,10 @@ public class HunspellList {
     private final Map<String, Set<HunspellRules>> wordsList = new TreeMap<>();
 
     public void addWord(String word, HunspellRules[] rules) {
+        addWord(word, rules, true);
+    }
+    
+    public void addWord(String word, HunspellRules[] rules, boolean rejectWordsWithWhitespace) {
         if (word == null) {
             return;
         }
@@ -25,6 +29,11 @@ public class HunspellList {
 
         word = WordListUtils.normalizeWordListEntry(word);
         if (word == null) {
+            return;
+        }
+
+        // ignore composed words
+        if (rejectWordsWithWhitespace && word.contains(" ")) {
             return;
         }
 
