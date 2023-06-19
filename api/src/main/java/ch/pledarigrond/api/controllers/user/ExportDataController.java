@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -22,7 +23,13 @@ public class ExportDataController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/json")
-    void exportJson(@PathVariable("language") Language language, HttpServletResponse response) throws IOException {
+    void exportJson(@PathVariable("language") Language language, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // export for Puter/Vallader only possible for admins
+        if ((language == Language.PUTER || language == Language.VALLADER) && !request.isUserInRole("ROLE_ADMIN")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
+            return;
+        }
+
         File export = scheduledDumpService.getJsonExportFile(language);
         response.setContentType("application/json");
         response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
