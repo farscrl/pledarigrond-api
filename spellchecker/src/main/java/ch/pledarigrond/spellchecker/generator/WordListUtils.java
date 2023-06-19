@@ -293,6 +293,8 @@ public class WordListUtils {
             return null;
         }
 
+        word = word.trim();
+
         if (word.equals("") || word.equals(" ")) {
             return null;
         }
