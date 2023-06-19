@@ -1414,7 +1414,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                             String base = matcher.group(1);
                             String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
                             try {
-                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, base, mostRecent.getLemmaValues().get("RGenus"), plural);
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, mostRecent.getLemmaValues().get("RGenus"), plural);
                             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                                 // do nothing
                             }
