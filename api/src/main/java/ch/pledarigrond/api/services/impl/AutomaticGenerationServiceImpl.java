@@ -648,9 +648,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
 
-        Set<String> rGenus = new HashSet<>();
-        Set<String> dGenus = new HashSet<>();
-
+        // Set<String> rGenus = new HashSet<>();
+        // Set<String> dGenus = new HashSet<>();
 
         while (cursor.hasNext()) {
             DBObject object = new BasicDBObject(cursor.next());
@@ -683,18 +682,18 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                     }
                 }
 
-                rGenus.add(RGenus);
-                dGenus.add(DGenus);
+                // rGenus.add(RGenus);
+                // dGenus.add(DGenus);
 
-                /* if (didChange) {
+                if (didChange) {
                     BasicDBObject newObject = Converter.convertLexEntry(entry);
                     entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-                } */
+                }
             }
         }
 
-        logger.warn("RGenus: " + rGenus.toString());
-        logger.warn("DGenus: " + dGenus.toString());
+        // logger.warn("RGenus: " + rGenus.toString());
+        // logger.warn("DGenus: " + dGenus.toString());
 
         return true;
     }
@@ -2488,9 +2487,22 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return oldGrammar;
     }
 
-    private String mapGenus(Language language, boolean isGerman, String oldGrammar) {
-        // TODO: implement me
-        return oldGrammar;
+    private String mapGenus(Language language, boolean isGerman, String oldGenus) {
+        if (language == Language.VALLADER) {
+            if (isGerman) {
+                return mapValladerGenusD(oldGenus);
+            } else {
+                return mapValladerGenusR(oldGenus);
+            }
+        } else if (language == Language.PUTER) {
+            if (isGerman) {
+                return mapPuterGenusD(oldGenus);
+            } else {
+                return mapPuterGenusR(oldGenus);
+            }
+        }
+
+        return oldGenus;
     }
 
     private String mapSurmiranGrammar(String oldGrammar) {
@@ -3269,6 +3281,142 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         if (" V.".trim().equals(oldGrammar.trim())) return null;
         if ("n".trim().equals(oldGrammar.trim())) return "num";
         
+        return oldGrammar;
+    }
+
+    private String mapPuterGenusR(String oldGrammar) {
+        if (" fpl".trim().equals(oldGrammar.trim())) return "f.pl";
+        if (" (m)".trim().equals(oldGrammar.trim())) return "m";
+        if (" m/f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" mpl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" fpl".trim().equals(oldGrammar.trim())) return "f.pl";
+        if (" mpl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" m  ".trim().equals(oldGrammar.trim())) return "m";
+        if (" m".trim().equals(oldGrammar.trim())) return "m";
+        if (" f (fpl)".trim().equals(oldGrammar.trim())) return "f(pl)";
+        if (" m/mpl".trim().equals(oldGrammar.trim())) return "m(pl)";
+        if (" mpl,fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" m,fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" f ".trim().equals(oldGrammar.trim())) return "f";
+        if (" tr".trim().equals(oldGrammar.trim())) return null;
+
+        return oldGrammar;
+    }
+
+    private String mapPuterGenusD(String oldGrammar) {
+        if (" n/f".trim().equals(oldGrammar.trim())) return "f/n";
+        if (" f/n".trim().equals(oldGrammar.trim())) return "f/n";
+        if (" m/f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f/m".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" m/n".trim().equals(oldGrammar.trim())) return "m/n";
+        if (" n/m".trim().equals(oldGrammar.trim())) return "m/n";
+        if (" f/m/n".trim().equals(oldGrammar.trim())) return "m/f/n";
+        if (" f(pl)".trim().equals(oldGrammar.trim())) return "f";
+        if (" fpl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" (n)".trim().equals(oldGrammar.trim())) return "n";
+        if (" f".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f,m".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" mpl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" npl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" m/pl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" m(f)".trim().equals(oldGrammar.trim())) return "m(f)";
+        if (" m".trim().equals(oldGrammar.trim())) return "m";
+        if (" n".trim().equals(oldGrammar.trim())) return "n";
+        if (" m/n ".trim().equals(oldGrammar.trim())) return "m/n";
+        if ("pl".trim().equals(oldGrammar.trim())) return "pl";
+
+        return oldGrammar;
+    }
+
+    private String mapValladerGenusR(String oldGrammar) {
+        if (" ff".trim().equals(oldGrammar.trim())) return "f";
+        if (" ,m".trim().equals(oldGrammar.trim())) return "m";
+        if (" (m)".trim().equals(oldGrammar.trim())) return "m";
+        if (" m/f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f/m".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f,".trim().equals(oldGrammar.trim())) return "f";
+        if (" fm".trim().equals(oldGrammar.trim())) return "m";
+        if (" M".trim().equals(oldGrammar.trim())) return "m";
+        if (" m, f pl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" m/fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" m;pl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" mf".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" ml".trim().equals(oldGrammar.trim())) return "m";
+        if (" m(pl)".trim().equals(oldGrammar.trim())) return "m(pl)";
+        if (" fpl".trim().equals(oldGrammar.trim())) return "f.pl";
+        if (" m.f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f,m".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" mfpl".trim().equals(oldGrammar.trim())) return "f.pl";
+        if (" f  ".trim().equals(oldGrammar.trim())) return "f";
+        if (" mpl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" m,pl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" (f)".trim().equals(oldGrammar.trim())) return "f";
+        if (" m".trim().equals(oldGrammar.trim())) return "m";
+        if (" f,fpl".trim().equals(oldGrammar.trim())) return "f(pl)";
+        if (" f(m)".trim().equals(oldGrammar.trim())) return "f";
+        if (" ,f".trim().equals(oldGrammar.trim())) return "f";
+        if (" pl".trim().equals(oldGrammar.trim())) return "m.pl";
+        if (" m,mpl".trim().equals(oldGrammar.trim())) return "m(pl)";
+        if ("f pl".trim().equals(oldGrammar.trim())) return "f.pl";
+
+        return oldGrammar;
+    }
+
+    private String mapValladerGenusD(String oldGrammar) {
+        if (" ff".trim().equals(oldGrammar.trim())) return "f";
+        if (" plüö".trim().equals(oldGrammar.trim())) return "pl";
+        if (" n/f".trim().equals(oldGrammar.trim())) return "f/n";
+        if (" f/n".trim().equals(oldGrammar.trim())) return "f/n";
+        if (" m/f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f/m".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" m".trim().equals(oldGrammar.trim())) return "m";
+        if (" pl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" m/n".trim().equals(oldGrammar.trim())) return "m/n";
+        if (" n/m".trim().equals(oldGrammar.trim())) return "m/n";
+        if (" N".trim().equals(oldGrammar.trim())) return "n";
+        if (" m/n,f".trim().equals(oldGrammar.trim())) return "m/f/n";
+        if (" m ".trim().equals(oldGrammar.trim())) return "m";
+        if (" f;fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" m/fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" f/m/n".trim().equals(oldGrammar.trim())) return "m/f/n";
+        if (" f coll".trim().equals(oldGrammar.trim())) return "f";
+        if (" f (pl)".trim().equals(oldGrammar.trim())) return "f";
+        if (" ^".trim().equals(oldGrammar.trim())) return "f";
+        if (" m (-)".trim().equals(oldGrammar.trim())) return "m";
+        if (" m/npl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" fpl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" m.f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" d".trim().equals(oldGrammar.trim())) return "f";
+        if (" f".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" f".trim().equals(oldGrammar.trim())) return "f";
+        if ("m".trim().equals(oldGrammar.trim())) return "m";
+        if (" h".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,pl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" npl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" (f)".trim().equals(oldGrammar.trim())) return "f";
+        if (" m,f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" ,".trim().equals(oldGrammar.trim()))  return null;;
+        if (" m,,".trim().equals(oldGrammar.trim())) return "m";
+        if (" m".trim().equals(oldGrammar.trim())) return "m";
+        if (" f,pl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" n".trim().equals(oldGrammar.trim())) return "n";
+        if (" m,n".trim().equals(oldGrammar.trim())) return "m/n";
+        if (" f,fpl".trim().equals(oldGrammar.trim())) return "m/fpl";
+        if (" m(n".trim().equals(oldGrammar.trim())) return "m";
+        if (" t".trim().equals(oldGrammar.trim())) return "f";
+        if (" m;f".trim().equals(oldGrammar.trim())) return "m/f";
+        if (" ;".trim().equals(oldGrammar.trim()))  return null;;
+        if (" pl".trim().equals(oldGrammar.trim())) return "pl";
+        if (" m,f,n".trim().equals(oldGrammar.trim())) return "m/f/n";
+        if (" m,n,f".trim().equals(oldGrammar.trim())) return "m/f/n";
+        if ("f pl".trim().equals(oldGrammar.trim())) return "pl";
+
         return oldGrammar;
     }
 
