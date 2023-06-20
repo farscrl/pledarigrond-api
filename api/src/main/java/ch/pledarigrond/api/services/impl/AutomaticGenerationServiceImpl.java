@@ -1391,12 +1391,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
 
-            LemmaVersion mostRecent = createNewLemmaVersion(entry);
-            entry.addLemma(mostRecent);
-
             InflectionResponse inflectionResponse = null;
             try {
-                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+                // disabled to generate sutsilvan forms
+                // inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, entry.getCurrent().getLemmaValues().get("RStichwort"), entry.getCurrent().getLemmaValues().get("RGenus"), entry.getCurrent().getLemmaValues().get("RFlex"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
@@ -1414,7 +1412,34 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                             String base = matcher.group(1);
                             String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
                             try {
-                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, mostRecent.getLemmaValues().get("RGenus"), plural);
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, entry.getCurrent().getLemmaValues().get("RGenus"), plural);
+                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                                // do nothing
+                            }
+
+                            if (inflectionResponse != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (inflectionResponse == null) {
+                        noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                        continue;
+                    }
+                } else if (language == Language.SUTSILVAN) {
+
+                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
+                    List<Pattern> patterns = new ArrayList<>();
+                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // furbạz, furbạzza
+
+                    for (Pattern pattern: patterns) {
+                        Matcher matcher = pattern.matcher(RStichwort);
+                        if (matcher.matches()) {
+                            String base = matcher.group(1);
+                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
+                            try {
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, entry.getCurrent().getLemmaValues().get("RGenus"), plural);
                             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                                 // do nothing
                             }
@@ -1435,6 +1460,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
 
+            LemmaVersion mostRecent = createNewLemmaVersion(entry);
+            entry.addLemma(mostRecent);
+
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
                 mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
             }
@@ -1454,7 +1482,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 return false;
             }
         }
-
         return true;
     }
 
