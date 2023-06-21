@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://pledarigrond.ch", "https://*.pledarigrond.ch", "https://admin.dicziunaris-ladins.ch", "https://*.admin.dicziunaris-ladins.ch", "https://admin-test.dicziunaris-ladins.ch", "https://*.admin-test.dicziunaris-ladins.ch", "https://pg.pre.far.ch", "https://*.pg.pre.far.ch", "http://localhost:[*]"));
+        configuration.setAllowedOriginPatterns(List.of("https://pledarigrond.ch", "https://*.pledarigrond.ch", "https://admin.dicziunaris-ladins.ch", "https://*.admin.dicziunaris-ladins.ch", "https://admin-test.dicziunaris-ladins.ch", "https://*.admin-test.dicziunaris-ladins.ch", "https://pg.pre.far.ch", "https://*.pg.pre.far.ch", "http://localhost:[*]", "https://localhost:[*]"));
         configuration.setAllowedMethods(List.of("*"));
         // setAllowCredentials(true) is important, otherwise:
         // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
