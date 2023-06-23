@@ -72,6 +72,7 @@ public class NameServiceImpl implements NameService {
 
     @Override
     public boolean importAllNames(InputStream inputStream) {
+        nameRepository.deleteAll();
         return xlsxHandler.importNames(inputStream);
     }
 }
