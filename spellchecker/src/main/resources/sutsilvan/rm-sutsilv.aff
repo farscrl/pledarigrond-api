@@ -308,8 +308,20 @@ PFX P o L'O o
 PFX P u L'U u
 
 # pronom cun furma inversiva dal pronom impersunal
-SFX Q Y 4
-SFX Q 0 'ign .
+SFX Q Y 16
+SFX Q a 'ign a
+SFX Q e 'ign e
+SFX Q i 'ign i
+SFX Q o 'ign o
+SFX Q u 'ign u
 SFX Q 0 'gl .
-SFX Q 0 'igl .
-SFX Q 0 'igls .
+SFX Q a 'igl a
+SFX Q e 'igl e
+SFX Q i 'igl i
+SFX Q o 'igl o
+SFX Q u 'igl u
+SFX Q a 'igls a
+SFX Q e 'igls e
+SFX Q i 'igls i
+SFX Q o 'igls o
+SFX Q u 'igls u
