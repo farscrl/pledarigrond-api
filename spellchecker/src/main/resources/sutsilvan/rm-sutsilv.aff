@@ -20,9 +20,10 @@ ICONV ’ '
 OCONV 1
 OCONV ' ’
 
-PFX T Y 214
+PFX T Y 226
 PFX T 0 l' [aeiouèòêôîAEIOU]
 PFX T a l'a a
+PFX T â l'â â
 PFX T e l'e e
 PFX T i l'i i
 PFX T o l'o o
@@ -40,6 +41,7 @@ PFX T o L'O o
 PFX T u L'U u
 PFX T 0 gl' [aeiouèòêôîAEIOU]
 PFX T a gl'a a
+PFX T â gl'â â
 PFX T e gl'e e
 PFX T i gl'i i
 PFX T o gl'o o
@@ -57,6 +59,7 @@ PFX T o GL'O o
 PFX T u GL'U u
 PFX T 0 egn' [aeiouèòêôîAEIOU]
 PFX T a egn'a a
+PFX T â egn'â â
 PFX T e egn'e e
 PFX T i egn'i i
 PFX T o egn'o o
@@ -74,6 +77,7 @@ PFX T o EGN'O o
 PFX T u EGN'U u
 PFX T 0 d' [aeiouèòêôîAEIOU]
 PFX T a d'a a
+PFX T â d'â â
 PFX T e d'e e
 PFX T i d'i i
 PFX T o d'o o
@@ -91,6 +95,7 @@ PFX T o D'O o
 PFX T u D'U u
 PFX T 0 quest' [aeiouèòêôîAEIOU]
 PFX T a quest'a a
+PFX T â quest'â â
 PFX T e quest'e e
 PFX T i quest'i i
 PFX T o quest'o o
@@ -109,6 +114,7 @@ PFX T u Quest'U u
 PFX T 0 QUEST' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 quell' [aeiouèòêôîAEIOU]
 PFX T a quell'a a
+PFX T â quell'â â
 PFX T e quell'e e
 PFX T i quell'i i
 PFX T o quell'o o
@@ -127,6 +133,7 @@ PFX T u Quell'U u
 PFX T 0 QUELL' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 mintg' [aeiouèòêôîAEIOU]
 PFX T a mintg'a a
+PFX T â mintg'â â
 PFX T e mintg'e e
 PFX T i mintg'i i
 PFX T o mintg'o o
@@ -145,6 +152,7 @@ PFX T u Mintg'U u
 PFX T 0 MINTG' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 tschell' [aeiouèòêôîAEIOU]
 PFX T a tschell'a a
+PFX T â tschell'â â
 PFX T e tschell'e e
 PFX T i tschell'i i
 PFX T o tschell'o o
@@ -163,6 +171,7 @@ PFX T u Tschell'U u
 PFX T 0 TESCHELL' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 lez' [aeiouèòêôîAEIOU]
 PFX T a lez'a a
+PFX T â lez'â â
 PFX T e lez'e e
 PFX T i lez'i i
 PFX T o lez'o o
@@ -181,6 +190,7 @@ PFX T u Lez'U u
 PFX T 0 LEZ' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 c' [aeiouèòêôîAEIOU]
 PFX T a c'a a
+PFX T â c'â â
 PFX T e c'e e
 PFX T i c'i i
 PFX T o c'o o
@@ -200,6 +210,7 @@ PFX T u C'U u
 PFX T 0 C' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 sch' [aeiouèòêôîAEIOU]
 PFX T a sch'a a
+PFX T â sch'â â
 PFX T e sch'e e
 PFX T i sch'i i
 PFX T o sch'o o
@@ -219,6 +230,7 @@ PFX T u Sch'U u
 PFX T 0 SCH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 PFX T 0 sainz' [aeiouèòêôîAEIOU]
 PFX T a sainz'a a
+PFX T â sainz'â â
 PFX T e sainz'e e
 PFX T i sainz'i i
 PFX T o sainz'o o
@@ -237,9 +249,10 @@ PFX T u Sainz'U u
 PFX T 0 SAINZ' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 
 # Pronoms reflexivs apostrofai
-PFX P Y 68
+PFX P Y 72
 PFX P 0 m' [aeiouèòêôîAEIOU]
 PFX P a m'a a
+PFX P â m'â â
 PFX P e m'e e
 PFX P i m'i i
 PFX P o m'o o
@@ -257,6 +270,7 @@ PFX P o M'O o
 PFX P u M'U u
 PFX P 0 t' [aeiouèòêôîAEIOU]
 PFX P a t'a a
+PFX P â t'â â
 PFX P e t'e e
 PFX P i t'i i
 PFX P o t'o o
@@ -274,6 +288,7 @@ PFX P o T'O o
 PFX P u T'U u
 PFX P 0 s' [aeiouèòêôîAEIOU]
 PFX P a s'a a
+PFX P â s'â â
 PFX P e s'e e
 PFX P i s'i i
 PFX P o s'o o
@@ -291,6 +306,7 @@ PFX P o S'O o
 PFX P u S'U u
 PFX P 0 l' [aeiouèòêôîAEIOU]
 PFX P a l'a a
+PFX P â l'â â
 PFX P e l'e e
 PFX P i l'i i
 PFX P o l'o o
@@ -308,19 +324,22 @@ PFX P o L'O o
 PFX P u L'U u
 
 # pronom cun furma inversiva dal pronom impersunal
-SFX Q Y 16
+SFX Q Y 19
 SFX Q a 'ign a
+SFX Q â 'ign â
 SFX Q e 'ign e
 SFX Q i 'ign i
 SFX Q o 'ign o
 SFX Q u 'ign u
 SFX Q 0 'gl .
 SFX Q a 'igl a
+SFX Q â 'igl â
 SFX Q e 'igl e
 SFX Q i 'igl i
 SFX Q o 'igl o
 SFX Q u 'igl u
 SFX Q a 'igls a
+SFX Q â 'igls â
 SFX Q e 'igls e
 SFX Q i 'igls i
 SFX Q o 'igls o
