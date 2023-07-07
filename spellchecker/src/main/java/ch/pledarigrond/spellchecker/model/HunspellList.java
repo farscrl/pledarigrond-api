@@ -27,6 +27,11 @@ public class HunspellList {
             return;
         }
 
+        if (word.contains("[") || word.contains("]")) {
+            findSquaredBrackets(word).forEach(w -> addWord(w, rules));
+            return;
+        }
+
         word = WordListUtils.normalizeWordListEntry(word);
         if (word == null) {
             return;
@@ -95,6 +100,35 @@ public class HunspellList {
                 LOG.error("Could not parse: {}", str);
             }
             return List.of(str.replace("(", "").replace(")", ""));
+        }
+    }
+
+    public static List<String> findSquaredBrackets(String str){
+        // LOG.info(str);
+
+        String pattern = "(.*)\\[(.+)\\](.*)";
+
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(str);
+        if (m.matches())
+        {
+            List<String> prefix = findSquaredBrackets(m.group(1));
+            String middle = m.group(2);
+            List<String> suffix = findSquaredBrackets(m.group(3));
+
+            List<String> result = new ArrayList<>();
+            prefix.forEach(pfx -> {
+                suffix.forEach(sfx -> {
+                    result.add(pfx + middle + sfx);
+                    result.add(pfx + sfx);
+                });
+            });
+            return result;
+        } else {
+            if (str.contains("[") || str.contains("]")) {
+                LOG.error("Could not parse: {}", str);
+            }
+            return List.of(str.replace("[", "").replace("]", ""));
         }
     }
 }
