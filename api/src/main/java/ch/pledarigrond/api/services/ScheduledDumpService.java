@@ -49,12 +49,12 @@ public class ScheduledDumpService {
 
     @Scheduled(cron = "${pg.export.cron}")
     private void exportJSON() throws IOException, NoDatabaseAvailableException, NoSuchAlgorithmException {
-        // exportDataForLanguage(Language.PUTER);
+        exportDataForLanguage(Language.PUTER);
         exportDataForLanguage(Language.RUMANTSCHGRISCHUN);
         exportDataForLanguage(Language.SURMIRAN);
-        // exportDataForLanguage(Language.SURSILVAN);
+        exportDataForLanguage(Language.SURSILVAN);
         exportDataForLanguage(Language.SUTSILVAN);
-        // exportDataForLanguage(Language.VALLADER);
+        exportDataForLanguage(Language.VALLADER);
     }
 
     private void exportDataForLanguage(Language language) throws IOException, NoDatabaseAvailableException, NoSuchAlgorithmException {
