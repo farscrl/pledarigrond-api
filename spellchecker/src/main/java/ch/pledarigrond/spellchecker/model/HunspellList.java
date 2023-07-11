@@ -16,7 +16,7 @@ public class HunspellList {
     public void addWord(String word, HunspellRules[] rules) {
         addWord(word, rules, true);
     }
-
+    
     public void addWord(String word, HunspellRules[] rules, boolean rejectWordsWithWhitespace) {
         if (word == null) {
             return;

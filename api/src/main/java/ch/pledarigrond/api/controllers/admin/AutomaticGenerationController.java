@@ -42,7 +42,7 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_adjective_forms")
     ResponseEntity<?> generateAdjectiveForms(@PathVariable("language")Language language) {
-        if (language != Language.SUTSILVAN) {
+        if (language != Language.PUTER && language != Language.VALLADER) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
         boolean success = automaticGenerationService.generateAdjectiveForms(language);
