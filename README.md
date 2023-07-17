@@ -39,12 +39,8 @@ This module is heavily based on a copy of this [Maalr](https://github.com/platta
 ### names
 The names module handles the storage of Names (typical romansh firstnames, lastnames, geographical names,...) used for the spellcheckers.
 
-This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
-
 ### parent
 The parent-module is parent for all modules in this repository and allows defining common pom entries.
 
 ### spellchecker
 The spellchecker module handles the generation of the spellchecker files.
-
-This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
