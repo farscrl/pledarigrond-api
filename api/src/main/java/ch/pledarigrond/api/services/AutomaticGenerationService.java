@@ -17,6 +17,8 @@ public interface AutomaticGenerationService {
 
     boolean generateAdjectiveForms(Language language);
 
+    boolean generateAdjectiveFormsFromList(Language language);
+
     boolean generateVerbForms(Language language);
 
     boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException;

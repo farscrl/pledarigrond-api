@@ -11,6 +11,7 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
@@ -50,7 +51,6 @@ import java.util.stream.Stream;
 
 import static ch.pledarigrond.common.data.common.LemmaVersion.*;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
 
 @Service
 public class AutomaticGenerationServiceImpl implements AutomaticGenerationService {
@@ -130,6 +130,33 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         watch.stop();
+        logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+        return true;
+    }
+
+    public boolean generateAdjectiveFormsFromList(Language language) {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        File importList = new File("../data/import/ladin/puter-adj.txt");
+        if (language == Language.VALLADER) {
+            importList = new File("../data/import/ladin/vallader-adj.txt");
+        }
+
+        List<String> wordsToUpdate;
+        try (Stream<String> lines = Files.lines(Paths.get(importList.getAbsolutePath()))) {
+            wordsToUpdate = lines.collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        int count = 0;
+        for (String word : wordsToUpdate) {
+            count += updateAdjectivesForWord(language, word);
+        }
+
+        watch.stop();
+        logger.warn("Updated {} adjectives", count);
         logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
         return true;
     }
@@ -1456,6 +1483,149 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         return true;
+    }
+
+    private int updateAdjectivesForWord(Language language, String word) {
+        word = PronunciationNormalizer.normalizePronunciation(word);
+        //logger.warn(word);
+        int counter = 0;
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setSearchPhrase(word);
+        searchCriteria.setExcludeAutomaticChanged(true);
+        searchCriteria.setSuggestions(true);
+        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<LemmaVersion> lemmas;
+        try {
+            lemmas = editorService.search(language, searchCriteria, pagination);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return counter;
+        }
+
+        for (int i = 0; i < lemmas.getContent().size(); i++) {
+            LemmaVersion lemma = lemmas.getContent().get(i);
+
+
+            String id = lemma.getLexEntryId();
+            String RStichwort = lemma.getLemmaValues().get("RStichwort");
+            RStichwort = PronunciationNormalizer.normalizePronunciation(RStichwort);
+            String DStichwort = lemma.getLemmaValues().get("DStichwort");
+
+            String RGenus = lemma.getLemmaValues().get("RGenus");
+            String RGrammatik = lemma.getLemmaValues().get("RGrammatik");
+
+            if ((RGenus != null && !RGenus.equals("")) || (RGrammatik != null && !RGrammatik.equals(""))) {
+                continue;
+            }
+
+            if (!RStichwort.equals(word) && !RStichwort.startsWith(word + ",")) {
+                continue;
+            }
+
+            LexEntry entry = null;
+            try {
+                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return counter;
+            }
+
+            // ignore if lemma has already new version
+            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+                continue;
+            }
+            counter++;
+            //logger.warn(lemma.toString());
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+                entry.getCurrent().setUserId("admin");
+            }
+
+            // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
+            // adding timestamp
+            if (entry.getCurrent().getTimestamp() == 0L) {
+                // searching in history for last timestamp and using that
+                for (LemmaVersion lv: entry.getVersionHistory()) {
+                    if (lv.getTimestamp() != 0L) {
+                        entry.getCurrent().setTimestamp(lv.getTimestamp());
+                        break;
+                    }
+                }
+
+                // if timestamp is still not set, setting current
+                if (entry.getCurrent().getTimestamp() == 0L) {
+                    entry.getCurrent().setTimestamp(System.currentTimeMillis());
+                }
+            }
+
+            LemmaVersion mostRecent = createNewLemmaVersion(entry);
+            entry.addLemma(mostRecent);
+
+            InflectionResponse inflectionResponse = null;
+            try {
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                continue;
+            }
+            if (inflectionResponse == null) {
+                if (language == Language.PUTER || language == Language.VALLADER) {
+
+                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
+                    List<Pattern> patterns = new ArrayList<>();
+                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // furbạz, furbạzza
+
+                    for (Pattern pattern: patterns) {
+                        Matcher matcher = pattern.matcher(RStichwort);
+                        if (matcher.matches()) {
+                            String base = matcher.group(1);
+                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
+                            try {
+                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, mostRecent.getLemmaValues().get("RGenus"), plural);
+                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
+                                // do nothing
+                            }
+
+                            if (inflectionResponse != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (inflectionResponse == null) {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+            }
+
+            mostRecent.getLemmaValues().put("RGrammatik", "adj");
+            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
+            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+
+            mostRecent.setTimestamp(0L);
+            mostRecent.setUserId(null);
+
+            try {
+                mongoDbService.update(language, entry, mostRecent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return counter;
+            }
+        }
+
+        return counter;
     }
 
     private boolean updateAdjectivesByGrammarSutsilvan(Language language, String grammarValue) {
