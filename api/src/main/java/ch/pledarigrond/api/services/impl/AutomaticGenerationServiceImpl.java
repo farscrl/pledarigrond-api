@@ -702,6 +702,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+        int counter = 0;
 
         while (cursor.hasNext()) {
             DBObject object = new BasicDBObject(cursor.next());
@@ -734,6 +735,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
 
                 if (didChange) {
+                    // BLOC: check if gerundium/imperativ2 is correct
+                    // there are no fixes applied, just log output
                     RumantschGrischunConjugation conj = new RumantschGrischunConjugation();
 
                     String RStichwortClean = RStichwort.replace(" (per)", "");
@@ -761,12 +764,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                         logger.warn(">> " + RStichwort + " // " + DStichwort + " ::> " + gerundium + " vs nagin automatic [" + RStichwortClean + "]");
                         logger.warn("** " + RStichwort + " // " + DStichwort + " ::> " + gerundium + " vs nagin automatic [" + RStichwortClean + "]");
                     }
+                    // BLOCK END
 
-                    // BasicDBObject newObject = Converter.convertLexEntry(entry);
-                    // entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+                    // Save changes to DB
+                    BasicDBObject newObject = Converter.convertLexEntry(entry);
+                    entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+
+                    counter++;
                 }
             }
         }
+        logger.warn("Changed " + counter + " entries");
 
         return true;
     }
