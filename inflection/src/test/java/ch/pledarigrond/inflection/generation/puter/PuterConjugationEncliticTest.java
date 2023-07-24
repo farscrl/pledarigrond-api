@@ -78,7 +78,7 @@ public class PuterConjugationEncliticTest {
         Assert.assertEquals("blocki", forms.getInflectionValues().get("preschentsing1enclitic"));
         Assert.assertEquals("bloccast", forms.getInflectionValues().get("preschentsing2enclitic"));
         Assert.assertEquals("blocca'l", forms.getInflectionValues().get("preschentsing3encliticm"));
-        Assert.assertEquals("bloc'la", forms.getInflectionValues().get("preschentsing3encliticf"));
+        Assert.assertEquals("blocc'la", forms.getInflectionValues().get("preschentsing3encliticf"));
         Assert.assertEquals("bloccainsa", forms.getInflectionValues().get("preschentplural1enclitic"));
         Assert.assertEquals("bloccais", forms.getInflectionValues().get("preschentplural2enclitic"));
         Assert.assertEquals("bloccane", forms.getInflectionValues().get("preschentplural3enclitic"));

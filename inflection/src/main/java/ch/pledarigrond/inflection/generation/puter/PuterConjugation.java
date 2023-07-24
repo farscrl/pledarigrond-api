@@ -494,7 +494,6 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setPreschentsing2Enclitic(cs.getPreschentsing2());
         cs.setPreschentsing3EncliticM(cs.getPreschentsing3() + "'l");
         if (cs.getInfinitiv().endsWith("ger") ||
-                cs.getInfinitiv().endsWith("cker") ||
                 cs.getInfinitiv().endsWith("glier")) {
             cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 2) + "'la");
         } else if (cs.getInfinitiv().endsWith("ffar") ||
@@ -512,7 +511,8 @@ public class PuterConjugation extends LanguageConjugation {
                 cs.getInfinitiv().endsWith("ttar") ||
                 cs.getInfinitiv().endsWith("tter") ||
                 cs.getInfinitiv().endsWith("zzar") ||
-                cs.getInfinitiv().endsWith("zzer")) {
+                cs.getInfinitiv().endsWith("zzer") ||
+                cs.getInfinitiv().endsWith("cker")) {
             cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 1) + "'la");
         } else {
             cs.setPreschentsing3EncliticF(cs.getPreschentsing3().substring(0, cs.getPreschentsing3().length() - 1) + "'la");
