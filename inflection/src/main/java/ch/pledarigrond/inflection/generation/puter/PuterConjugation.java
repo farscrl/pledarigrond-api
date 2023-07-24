@@ -35,16 +35,16 @@ public class PuterConjugation extends LanguageConjugation {
             modRoot = root + "esch";
         }
 
-        if (infinitiv.endsWith("ger")) {
-            modRoot = infinitiv.substring(0, infinitiv.length() - 2) + "i";
+        if (getInfinitiv().endsWith("ger")) {
+            modRoot = getInfinitiv().substring(0, getInfinitiv().length() - 2) + "i";
         }
 
-        if (infinitiv.endsWith("glier")) {
-            modRoot = infinitiv.substring(0, infinitiv.length() - 2);
+        if (getInfinitiv().endsWith("glier")) {
+            modRoot = getInfinitiv().substring(0, getInfinitiv().length() - 2);
         }
 
-        if (infinitiv.endsWith("cker")) {
-            modRoot = infinitiv.substring(0, infinitiv.length() - 3) + "c";
+        if (getInfinitiv().endsWith("cker")) {
+            modRoot = getInfinitiv().substring(0, getInfinitiv().length() - 3) + "c";
         }
 
         if (modRoot == null) {

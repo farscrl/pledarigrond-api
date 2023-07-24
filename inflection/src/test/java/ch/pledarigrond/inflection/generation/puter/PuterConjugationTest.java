@@ -295,6 +295,13 @@ public class PuterConjugationTest {
     }
 
     @Test
+    public void testRule1reflexivModRoot() {
+        forms = generator.generateConjugation("1", "as blocker");
+
+        Assert.assertEquals("eau am bloc", forms.getInflectionValues().get("preschentsing1"));
+    }
+
+    @Test
     public void testRule1reflexivVowel() {
         forms =  generator.generateConjugation("1", "s'abasser");
 

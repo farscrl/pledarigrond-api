@@ -142,6 +142,13 @@ public class ValladerConjugationTest {
     }
 
     @Test
+    public void testRule1reflexivModRoot() {
+        forms = generator.generateConjugation("1a", "as manger");
+
+        Assert.assertEquals("eu am mang", forms.getInflectionValues().get("preschentsing1"));
+    }
+
+    @Test
     public void testRule1reflexiv() {
         forms =  generator.generateConjugation("1a", "as barricadar");
 

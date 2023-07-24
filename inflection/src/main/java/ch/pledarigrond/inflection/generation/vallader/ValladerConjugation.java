@@ -37,8 +37,8 @@ public class ValladerConjugation extends LanguageConjugation {
             modRoot = root + "isch";
         }
 
-        if (infinitiv.endsWith("ger") || infinitiv.endsWith("gir") || infinitiv.endsWith("glir")) {
-            modRoot = infinitiv.substring(0, infinitiv.length() - 2) + "i";
+        if (getInfinitiv().endsWith("ger") || getInfinitiv().endsWith("gir") || getInfinitiv().endsWith("glir")) {
+            modRoot = getInfinitiv().substring(0, getInfinitiv().length() - 2) + "i";
         }
 
         if (modRoot == null) {

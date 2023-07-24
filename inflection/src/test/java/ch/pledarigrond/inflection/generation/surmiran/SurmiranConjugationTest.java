@@ -68,6 +68,15 @@ public class SurmiranConjugationTest {
     }
 
     @Test
+    public void testRule1ReflexiveModRoot() {
+        forms = generator.generateConjugation("1", "sa magler");
+
+        Assert.assertEquals("sa magler", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("ia ma magl", forms.getInflectionValues().get("preschentsing1"));
+    }
+
+    @Test
     public void testRule1a() {
         forms =  generator.generateConjugation("1a", "tadlar");
 
