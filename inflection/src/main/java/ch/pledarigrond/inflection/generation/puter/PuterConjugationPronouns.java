@@ -32,6 +32,7 @@ public class PuterConjugationPronouns {
 
     // Imperativ
     public static final String imperativ_not = "nu ";
+    public static final String imperativ_not_vowel = "nun ";
     public static final String imperativ_not_refl_sg = "nu't ";
     public static final String imperativ_not_refl_pl = "nu's ";
     public static final String imperativ_refl_sg = "'t";

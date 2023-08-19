@@ -86,6 +86,28 @@ public class PuterConjugationTest {
     }
 
     @Test
+    public void testRule1Vowel() {
+        forms =  generator.generateConjugation("1", "occuper");
+
+        Assert.assertEquals("occuper", forms.getInflectionValues().get("infinitiv"));
+
+        Assert.assertEquals("eau occup", forms.getInflectionValues().get("preschentsing1"));
+        Assert.assertEquals("tü occupast", forms.getInflectionValues().get("preschentsing2"));
+        Assert.assertEquals("el/ella occupa", forms.getInflectionValues().get("preschentsing3"));
+        Assert.assertEquals("nus occupains", forms.getInflectionValues().get("preschentplural1"));
+        Assert.assertEquals("vus occupais", forms.getInflectionValues().get("preschentplural2"));
+        Assert.assertEquals("els/ellas occupan", forms.getInflectionValues().get("preschentplural3"));
+
+        Assert.assertEquals("occupa!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("occupè!", forms.getInflectionValues().get("imperativ2"));
+        Assert.assertEquals("nun occuper!", forms.getInflectionValues().get("imperativ3"));
+        Assert.assertEquals("nun occupè!", forms.getInflectionValues().get("imperativ4"));
+        Assert.assertEquals("ch'El/Ella occupa!", forms.getInflectionValues().get("imperativ5"));
+        Assert.assertEquals("ch'Els/Ellas occupan!", forms.getInflectionValues().get("imperativ6"));
+
+    }
+
+    @Test
     public void testRule1a() {
         forms =  generator.generateConjugation("1a", "gratuler");
 

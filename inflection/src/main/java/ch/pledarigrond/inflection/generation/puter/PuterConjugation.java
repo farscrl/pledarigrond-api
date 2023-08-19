@@ -897,8 +897,13 @@ public class PuterConjugation extends LanguageConjugation {
         // IMPERATIV
         cs.setImperativ1(setPronoun("", conjugation.get(PuterConjugationStructure.imperativ1), "!"));
         cs.setImperativ2(setPronoun("", conjugation.get(PuterConjugationStructure.imperativ2), "!"));
-        cs.setImperativ3(setPronoun(PuterConjugationPronouns.imperativ_not, conjugation.get(PuterConjugationStructure.imperativ3), "!"));
-        cs.setImperativ4(setPronoun(PuterConjugationPronouns.imperativ_not, conjugation.get(PuterConjugationStructure.imperativ4), "!"));
+        if (startsWithVowel(conjugation.get(PuterConjugationStructure.imperativ3))) {
+            cs.setImperativ3(setPronoun(PuterConjugationPronouns.imperativ_not_vowel, conjugation.get(PuterConjugationStructure.imperativ3), "!"));
+            cs.setImperativ4(setPronoun(PuterConjugationPronouns.imperativ_not_vowel, conjugation.get(PuterConjugationStructure.imperativ4), "!"));
+        } else {
+            cs.setImperativ3(setPronoun(PuterConjugationPronouns.imperativ_not, conjugation.get(PuterConjugationStructure.imperativ3), "!"));
+            cs.setImperativ4(setPronoun(PuterConjugationPronouns.imperativ_not, conjugation.get(PuterConjugationStructure.imperativ4), "!"));
+        }
         cs.setImperativ5(setPronoun(PuterConjugationPronouns.imperativ_polite_sg, conjugation.get(PuterConjugationStructure.imperativ5), "!"));
         cs.setImperativ6(setPronoun(PuterConjugationPronouns.imperativ_polite_pl, conjugation.get(PuterConjugationStructure.imperativ6), "!"));
 
@@ -919,7 +924,7 @@ public class PuterConjugation extends LanguageConjugation {
         cs.setFuturplural2(setPronoun(PuterConjugationPronouns.pron_2pp, conjugation.get(PuterConjugationStructure.futurplural2)));
         cs.setFuturplural3(setPronoun(PuterConjugationPronouns.pron_3pp, conjugation.get(PuterConjugationStructure.futurplural3)));
 
-        // FUTUR
+        // FUTUR DUBITATIV
         cs.setFuturdubitativsing1(setPronoun(PuterConjugationPronouns.pron_1ps, conjugation.get(PuterConjugationStructure.futurdubitativsing1)));
         cs.setFuturdubitativsing2(setPronoun(PuterConjugationPronouns.pron_2ps, conjugation.get(PuterConjugationStructure.futurdubitativsing2)));
         cs.setFuturdubitativsing3(setPronoun(PuterConjugationPronouns.pron_3ps, conjugation.get(PuterConjugationStructure.futurdubitativsing3)));
