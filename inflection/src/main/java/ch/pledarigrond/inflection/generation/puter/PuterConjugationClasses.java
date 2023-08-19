@@ -10,15 +10,15 @@ public class PuterConjugationClasses {
 
     private static final List<InflectionSubType> conjugationClasses = new ArrayList<>(
             Arrays.asList(
-                    new InflectionSubType("1", "-er", "Finiziun sün -er, accent sün la finiziun (p.ex. güder)"),
-                    new InflectionSubType("1a", "-er (-esch-)", "Finiziun sün -er, accent sün la finiziun, cun infix -esch- (p.ex. gratuler)", true),
+                    new InflectionSubType("1", "-er", "Finiziun sün -er cun accent finel (chanter)"),
+                    new InflectionSubType("1a", "-er (-esch-)", "Finiziun sün -er cun accent finel ed infix -esch- (programmer)", true),
 
-                    new InflectionSubType("2", "-air", "Finiziun sün -air, accent sün finiziun (p.ex. giodair)"),
+                    new InflectionSubType("3", "-er", "Finiziun sün -er cun accent sül tschep (vender)"),
 
-                    new InflectionSubType("3", "-er", "Finiziun sün -er, accent sün tschep (p.ex. vender)"),
+                    new InflectionSubType("4", "-ir/-er", "Finiziun sün -ir/-er cun 1./2. pl. sün -ins/-is (partir, cuorrer)"),
+                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir cun infix -esch- (chapir)", true),
 
-                    new InflectionSubType("4", "-ir", "Finiziun sün -ir (p.ex. partir)"),
-                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir, cun infix -esch- (p.ex. chapir)", true)
+                    new InflectionSubType("2", "-air", "Finiziun sün -air, accent sün finiziun (p.ex. giodair)")
             )
     );
 

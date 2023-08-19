@@ -10,15 +10,15 @@ public class ValladerConjugationClasses {
 
     private static final List<InflectionSubType> conjugationClasses = new ArrayList<>(
             Arrays.asList(
-                    new InflectionSubType("1", "-ar", "Finiziun sün -ar, accent sün la finiziun (p.ex. salüdar)"),
-                    new InflectionSubType("1a", "-ar (-esch-)", "Finiziun sün -ar, accent sün la finiziun, cun infix -esch- (p.ex. gratular)", true),
+                    new InflectionSubType("1", "-ar", "Finiziun sün -ar (chantar)"),
+                    new InflectionSubType("1a", "-ar (-esch-)", "Finiziun sün -ar cun infix -esch- (programmar)", true),
 
-                    new InflectionSubType("2", "-air", "Finiziun sün -air, accent sün finiziun (p.ex. giodair)"),
+                    new InflectionSubType("3", "-er", "Finiziun sün -er (vender)"),
 
-                    new InflectionSubType("3", "-er", "Finiziun sün -er, accent sün tschep (p.ex. vender)"),
+                    new InflectionSubType("4", "-ir/-er", "Finiziun sün -ir/-er cun 1./2. pl. sün -in/-is (partir, cuorrer)"),
+                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir cun infix -isch- (chapir)", true),
 
-                    new InflectionSubType("4", "-ir", "Finiziun sün -ir (p.ex. cusir)"),
-                    new InflectionSubType("4a", "-ir", "Finiziun sün -ir, cun infix -isch- (p.ex. admonir)", true)
+                    new InflectionSubType("2", "-air", "Finiziun sün -air, accent sün finiziun (p.ex. giodair)")
             )
     );
 
