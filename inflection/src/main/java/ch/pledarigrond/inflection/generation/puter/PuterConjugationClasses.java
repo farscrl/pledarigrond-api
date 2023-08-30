@@ -18,7 +18,7 @@ public class PuterConjugationClasses {
                     new InflectionSubType("4", "-ir/-er", "Finiziun sün -ir/-er cun 1./2. pl. sün -ins/-is (partir, cuorrer)"),
                     new InflectionSubType("4a", "-ir", "Finiziun sün -ir cun infix -esch- (chapir)", true),
 
-                    new InflectionSubType("2", "-air", "Finiziun sün -air, accent sün finiziun (p.ex. giodair)")
+                    new InflectionSubType("2", "-air", "Finiziun sün -air (giodair)")
             )
     );
 
