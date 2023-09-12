@@ -3,10 +3,12 @@ package ch.pledarigrond.spellchecker.model;
 public enum HunspellRules {
 
     // RULES FOR PUTER (according to puter/rm-puter.aff)
-
-
+    PUTER_PRONOMS_REFLEXIVS("P"),
+    PUTER_PLEDS_APOSTROFAI("T"),
 
     // RULES FOR RUMANTSCH GRISCHUN (according to rumantschgrischun/rm-rumgr.aff)
+    RUMANTSCH_GRISCHUN_PRONOMS_REFLEXIVS("P"),
+    RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI("T"),
 
 
 
@@ -30,6 +32,9 @@ public enum HunspellRules {
 
 
     // RULES FOR VALLADER (according to vallader/rm-vallader.aff)
+    VALLADER_PRONOMS_REFLEXIVS("P"),
+    VALLADER_PLEDS_APOSTROFAI("T"),
+
     ;
 
     public final String abbr;

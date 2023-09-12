@@ -79,10 +79,6 @@ public class RumantschGrischunPronouns {
 	// Particip Perfect Classification
 
 	// Normal Verbs
-	public static final String pp_ms = "m. sg.:";
-	public static final String pp_fs = "f. sg.:";
-	public static final String pp_mp = "m. pl.:";
-	public static final String pp_fp = "f. pl.:";
 
 	// Reflexives
 	public static final String pp_r1 = "avair";

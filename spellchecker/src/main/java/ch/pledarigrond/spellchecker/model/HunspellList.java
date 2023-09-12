@@ -1,5 +1,6 @@
 package ch.pledarigrond.spellchecker.model;
 
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class HunspellList {
         if (word == null) {
             return;
         }
+
+        word = PronunciationNormalizer.normalizePronunciation(word);
 
         if (word.contains("(") || word.contains(")")) {
             findBrackets(word).forEach(w -> addWord(w, rules));
