@@ -151,4 +151,8 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
 
         list.addWord(candidate, new HunspellRules[]{SUTSILVAN_PLEDS_APOSTROFAI});
     }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        // Do nothing
+    }
 }

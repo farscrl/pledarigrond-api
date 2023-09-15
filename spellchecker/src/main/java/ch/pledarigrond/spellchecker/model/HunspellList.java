@@ -134,4 +134,16 @@ public class HunspellList {
             return List.of(str.replace("[", "").replace("]", ""));
         }
     }
+
+    public void applyRuleOnCondition(CheckCondition condition, HunspellRules rule) {
+        wordsList.forEach((word, rules) -> {
+            if (condition.check(word)) {
+                rules.add(rule);
+            }
+        });
+    }
+
+    public interface CheckCondition {
+        boolean check(String word);
+    }
 }

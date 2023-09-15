@@ -162,4 +162,8 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
 
         list.addWord(candidate, new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI});
     }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        // Do nothing
+    }
 }

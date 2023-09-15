@@ -174,4 +174,8 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
 
         list.addWord(candidate, new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        // Do nothing
+    }
 }

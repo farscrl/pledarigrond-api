@@ -164,6 +164,8 @@ abstract public class HunspellGenerator {
             });
         }
 
+        postProcessHunspellList(hunspellList);
+
         removeWordsFromBlocklist(language, hunspellList);
 
         return hunspellList.getListAsSet();
@@ -180,6 +182,8 @@ abstract public class HunspellGenerator {
     abstract protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion);
 
     abstract protected String removePronouns(String value);
+
+    abstract protected void postProcessHunspellList(HunspellList list);
 
     abstract protected String normalizeString(String input);
 

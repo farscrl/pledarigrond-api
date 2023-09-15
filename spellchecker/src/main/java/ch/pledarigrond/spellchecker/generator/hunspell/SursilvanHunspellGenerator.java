@@ -43,4 +43,8 @@ public class SursilvanHunspellGenerator extends HunspellGenerator {
     protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
         // TODO: implement me
     }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        // Do nothing
+    }
 }

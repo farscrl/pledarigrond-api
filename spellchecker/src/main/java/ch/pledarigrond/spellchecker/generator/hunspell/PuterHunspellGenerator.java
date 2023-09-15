@@ -189,4 +189,8 @@ public class PuterHunspellGenerator extends HunspellGenerator {
 
         list.addWord(candidate, new HunspellRules[]{PUTER_PLEDS_APOSTROFAI});
     }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        // Do nothing
+    }
 }

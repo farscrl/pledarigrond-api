@@ -59,18 +59,21 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");
         }
         list.addWord(removePronouns(infinitiv), new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+        if (startsWithVowel(infinitiv)) {
+            list.addWord(removePronouns(infinitiv), new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_REFLEXIVS});
+        }
 
         ArrayList<String> forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
         addNewlines(lemmaVersion.getEntryValue("preschentsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms);
+        // addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms); // below
         addNewlines(lemmaVersion.getEntryValue("preschentplural1"), forms);
         addNewlines(lemmaVersion.getEntryValue("preschentplural2"), forms);
         addNewlines(lemmaVersion.getEntryValue("preschentplural3"), forms);
 
         addNewlines(lemmaVersion.getEntryValue("imperfectsing1"), forms);
         addNewlines(lemmaVersion.getEntryValue("imperfectsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
+        // addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms); // below
         addNewlines(lemmaVersion.getEntryValue("imperfectplural1"), forms);
         addNewlines(lemmaVersion.getEntryValue("imperfectplural2"), forms);
         addNewlines(lemmaVersion.getEntryValue("imperfectplural3"), forms);
@@ -103,16 +106,31 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         addNewlines(lemmaVersion.getEntryValue("futurplural2"), forms);
         addNewlines(lemmaVersion.getEntryValue("futurplural3"), forms);
 
-        forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
-        });
-
-        forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("imperativ1"), forms);
         addNewlines(lemmaVersion.getEntryValue("imperativ2"), forms);
 
         forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+            String form = removePronouns(f);
+            list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+            if (startsWithVowel(form)) {
+                list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_REFLEXIVS});
+            }
+        });
+
+        forms = new ArrayList<>();
+        addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms);
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
+
+        String finalInfinitiv = infinitiv;
+        forms.forEach(f -> {
+            String form = removePronouns(f);
+            list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+            if (startsWithVowel(form)) {
+                list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_REFLEXIVS});
+            }
+            if (!finalInfinitiv.endsWith("ia")) {
+                list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_IMPRES});
+            }
         });
     }
 
@@ -130,5 +148,27 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         }
 
         list.addWord(candidate, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+    }
+
+    protected void postProcessHunspellList(HunspellList list) {
+        list.applyRuleOnCondition(new CheckIfStartsWithVowel(), RUMANTSCH_GRISCHUN_NEGAZIUN);
+    }
+
+    private boolean startsWithVowel(String root) {
+        if (root == null || root.isEmpty()) {
+            return false;
+        }
+        return switch (root.toLowerCase().substring(0, 1)) {
+            case "a", "e", "i", "o", "u", "h" -> true;
+            default -> false;
+        };
+    }
+
+    public class CheckIfStartsWithVowel implements HunspellList.CheckCondition {
+
+        @Override
+        public boolean check(String word) {
+            return startsWithVowel(word);
+        }
     }
 }
