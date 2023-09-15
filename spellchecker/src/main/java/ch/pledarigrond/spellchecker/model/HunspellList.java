@@ -143,6 +143,30 @@ public class HunspellList {
         });
     }
 
+    public void separateWordsWithSlash() {
+        Map<String, HunspellRules[]> newEntries = new TreeMap<>();
+
+        Iterator<Map.Entry<String, Set<HunspellRules>>> itr = wordsList.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, Set<HunspellRules>> entry = itr.next();
+
+            String word = entry.getKey();
+            if (word.contains("/")) {
+                String[] words = word.split("/");
+
+                HunspellRules[] rules = new HunspellRules[entry.getValue().size()];
+                entry.getValue().toArray(rules);
+
+                for (String w : words) {
+                    newEntries.put(w, rules);
+                }
+                itr.remove();
+            }
+        }
+
+        newEntries.forEach(this::addWord);
+    }
+
     public interface CheckCondition {
         boolean check(String word);
     }

@@ -152,6 +152,7 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
 
     protected void postProcessHunspellList(HunspellList list) {
         list.applyRuleOnCondition(new CheckIfStartsWithVowel(), RUMANTSCH_GRISCHUN_NEGAZIUN);
+        list.separateWordsWithSlash();
     }
 
     private boolean startsWithVowel(String root) {
