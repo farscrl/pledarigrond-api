@@ -6,6 +6,7 @@ public class PuterConjugationPronouns {
     public static final String pron_1ps = "eau ";
     public static final String pron_2ps = "tü ";
     public static final String pron_3ps = "el/ella ";
+    public static final String pron_3ps_impers = "a/que ";
     public static final String pron_1pp = "nus ";
     public static final String pron_2pp = "vus ";
     public static final String pron_3pp = "els/ellas ";

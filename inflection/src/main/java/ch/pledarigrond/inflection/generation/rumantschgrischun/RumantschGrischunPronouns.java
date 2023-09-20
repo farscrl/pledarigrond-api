@@ -54,6 +54,7 @@ public class RumantschGrischunPronouns {
 	public static final String pron_1ps = "jau ";
 	public static final String pron_2ps = "ti ";
 	public static final String pron_3ps = "el/ella ";
+	public static final String pron_3ps_impers = "i ";
 	public static final String pron_1pp = "nus ";
 	public static final String pron_2pp = "vus ";
 	public static final String pron_3pp = "els/ellas ";

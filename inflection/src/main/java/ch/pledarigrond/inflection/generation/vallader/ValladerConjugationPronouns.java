@@ -6,6 +6,7 @@ public class ValladerConjugationPronouns {
     public static final String pron_1ps = "eu ";
     public static final String pron_2ps = "tü ";
     public static final String pron_3ps = "el/ella ";
+    public static final String pron_3ps_impers = "i ";
     public static final String pron_1pp = "nus ";
     public static final String pron_1pp_alt = "no ";
     public static final String pron_2pp = "vus ";
