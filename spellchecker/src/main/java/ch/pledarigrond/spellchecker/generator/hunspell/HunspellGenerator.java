@@ -124,7 +124,7 @@ abstract public class HunspellGenerator {
         HunspellList hunspellList = new HunspellList();
 
         // TODO: get rid of that external list
-        if (language == Language.SURMIRAN) {
+        if (language == Language.SURMIRAN || language == Language.RUMANTSCHGRISCHUN) {
             loadWordsToAdd(language, hunspellList);
         }
 
@@ -208,7 +208,12 @@ abstract public class HunspellGenerator {
             String line = reader.readLine();
 
             if (!line.startsWith("#")) {
-                list.addWord(line, new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+                if (language == Language.SURMIRAN) {
+                    list.addWord(line, new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI});
+                } else if (language == Language.RUMANTSCHGRISCHUN) {
+                    list.addWord(line, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+                }
+
             }
         }
     }
