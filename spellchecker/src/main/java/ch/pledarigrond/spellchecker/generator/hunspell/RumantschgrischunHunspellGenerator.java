@@ -8,6 +8,7 @@ import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,6 +160,10 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         if (root == null || root.isEmpty()) {
             return false;
         }
+
+        // convert è -> e
+        root = Normalizer.normalize(root, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
         return switch (root.toLowerCase().substring(0, 1)) {
             case "a", "e", "i", "o", "u", "h" -> true;
             default -> false;
