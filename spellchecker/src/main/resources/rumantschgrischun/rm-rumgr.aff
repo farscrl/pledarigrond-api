@@ -260,26 +260,6 @@ PFX T O Mintg'o O
 PFX T U Mintg'u U
 PFX T H Mintg'h H
 PFX T 0 MINTG' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
-PFX T 0 mintg' [aeiouhèòêôîAEIOUH]
-PFX T a sch'a a
-PFX T e sch'e e
-PFX T i sch'i i
-PFX T o sch'o o
-PFX T u sch'u u
-PFX T h sch'h h
-PFX T è sch'è è
-PFX T ò sch'ò ò
-PFX T ê sch'ê ê
-PFX T ô sch'ô ô
-PFX T î sch'î î
-PFX T 0 Sch' [AEIOUH]
-PFX T A Sch'a A
-PFX T E Sch'e E
-PFX T I Sch'i I
-PFX T O Sch'o O
-PFX T U Sch'u U
-PFX T H Sch'h H
-PFX T 0 SCH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
 
 # pronoms reflexivs apostrofads
 # pronom object cumbinà cun l'imperativ u cun in auter cumplement verbal
@@ -344,7 +324,7 @@ PFX P H S'h H
 
 # pronom impersunal 'ins' cumbinà cun 3. pers. sing. preschent indicativ
 # pronom impersunal 'ins' cumbinà cun 3. pers. sing. imperfect indicativ
-SFX Q Y 18
+SFX Q Y 5
 SFX Q a a'ins a
 SFX Q e e'ins e
 SFX Q i i'ins i
