@@ -5,6 +5,8 @@ public enum HunspellRules {
     // RULES FOR PUTER (according to puter/rm-puter.aff)
     PUTER_PRONOMS_REFLEXIVS("P"),
     PUTER_PLEDS_APOSTROFAI("T"),
+    PUTER_PRONOMS_OBJECTS_IMPERATIV_AFFIRMATIV("Q"),
+    PUTER_PRONOM_REFLEXIV_IMPERATIV_AFFIRMATIV("R"),
 
     // RULES FOR RUMANTSCH GRISCHUN (according to rumantschgrischun/rm-rumgr.aff)
     RUMANTSCH_GRISCHUN_NEGAZIUN("O"),
