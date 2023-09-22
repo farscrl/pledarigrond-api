@@ -1,0 +1,36 @@
+# pronoms objects cun la particla da negaziun
+nu'm
+nu't
+nu'l
+nu'ns
+nu's
+nu'ls
+
+# apostroph
+scha'l
+scha'ls
+chi'd
+cha'd
+scha'd
+
+# pronoms reflexivs en connex cun l'imperativ negativ
+nu't
+nu'ns
+nu's
+
+# apostrof en cumbinaziun cun la furma da curtaschia
+da'L
+da'Ls
+ch'El
+ch'Ella
+
+# apostrof en cumbinaziun cun il pronom indefinit a's (avant consonant) ed a s' (avant vocal e h- betg pronunzià)
+a's
+cha's
+scha's
+s'es
+s'ho
+
+# preposiziun in en cumbinaziun cun il/ils (i'l 18evel tschientiner, i'ls Stedis Unieus)
+i'l
+i'ls

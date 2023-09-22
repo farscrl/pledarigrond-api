@@ -123,10 +123,7 @@ abstract public class HunspellGenerator {
     private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException, IOException {
         HunspellList hunspellList = new HunspellList();
 
-        // TODO: get rid of that external list
-        if (language == Language.SURMIRAN || language == Language.RUMANTSCHGRISCHUN) {
-            loadWordsToAdd(language, hunspellList);
-        }
+        loadWordsToAdd(language, hunspellList);
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -212,8 +209,11 @@ abstract public class HunspellGenerator {
                     list.addWord(line, new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI});
                 } else if (language == Language.RUMANTSCHGRISCHUN) {
                     list.addWord(line, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+                } else if (language == Language.PUTER) {
+                    list.addWord(line, new HunspellRules[]{});
+                } else if (language == Language.VALLADER) {
+                    list.addWord(line, new HunspellRules[]{});
                 }
-
             }
         }
     }
