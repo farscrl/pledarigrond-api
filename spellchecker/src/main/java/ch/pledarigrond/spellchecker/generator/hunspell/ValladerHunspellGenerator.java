@@ -8,6 +8,7 @@ import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,10 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");
         }
-        list.addWord(removePronouns(infinitiv), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(removePronouns(infinitiv), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
+        if (startsWithVowel(infinitiv)) {
+            list.addWord(removePronouns(infinitiv), new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
+        }
 
         ArrayList<String> forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
@@ -143,7 +147,11 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         addNewlines(lemmaVersion.getEntryValue("futurplural3enclitic"), forms);
 
         forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+            String form = removePronouns(f);
+            list.addWord(form, new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
+            if (startsWithVowel(form)) {
+                list.addWord(form, new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
+            }
         });
 
         forms = new ArrayList<>();
@@ -155,7 +163,12 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         addNewlines(lemmaVersion.getEntryValue("imperativ6"), forms);
 
         forms.forEach(f -> {
-            list.addWord(removePronouns(f), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+            String form = removePronouns(f);
+            list.addWord(form, new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
+            if (startsWithVowel(form)) {
+                list.addWord(form, new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
+            }
+            list.addWord(removePronouns(f), new HunspellRules[]{VALLADER_PRONOM_REFLEXIV_IMPERATIV_AFFIRMATIV_PREFIX, VALLADER_PRONOM_REFLEXIV_IMPERATIV_AFFIRMATIV_SUFFIX, VALLADER_PRONOMS_OBJECTS_IMPERATIV_AFFIRMATIV});
         });
     }
 
@@ -176,6 +189,20 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
     }
 
     protected void postProcessHunspellList(HunspellList list) {
-        // Do nothing
+        list.separateWordsWithSlash();
+    }
+
+    private boolean startsWithVowel(String root) {
+        if (root == null || root.isEmpty()) {
+            return false;
+        }
+
+        // convert è -> e
+        root = Normalizer.normalize(root, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+        return switch (root.toLowerCase().substring(0, 1)) {
+            case "a", "e", "i", "o", "u", "h" -> true;
+            default -> false;
+        };
     }
 }

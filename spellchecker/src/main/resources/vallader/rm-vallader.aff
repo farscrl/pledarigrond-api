@@ -1,0 +1,340 @@
+SET UTF-8
+TRY aioertnsclmdpgubzfvhàq'ACMSkBGPLxEyRTVòIODNwFéùèìjUZKHWJYQXÙÀÒÈÌÉ
+
+MAP 5
+MAP aàAÀ
+MAP eéèEÉÈ
+MAP iìIÌ
+MAP oòOÒ
+MAP uùUÙ
+
+REP 4
+REP ó ò
+REP á à
+REP ú ù
+REP í ì
+
+ICONV 1
+ICONV ’ '
+
+OCONV 1
+OCONV ' ’
+
+PFX T Y 197
+PFX T 0 l' [aeiouhèòêôîAEIOUH]
+PFX T a l'a a
+PFX T e l'e e
+PFX T i l'i i
+PFX T o l'o o
+PFX T u l'u u
+PFX T h l'h h
+PFX T è l'è è
+PFX T ò l'ò ò
+PFX T ê l'ê ê
+PFX T ô l'ô ô
+PFX T î l'î î
+PFX T 0 L' [AEIOUH]
+PFX T A L'A A
+PFX T E L'E E
+PFX T I L'I I
+PFX T O L'O O
+PFX T U L'U U
+PFX T H L'H H
+PFX T 0 ün' [aeiouhèòêôîAEIOUH]
+PFX T a ün'a a
+PFX T e ün'e e
+PFX T i ün'i i
+PFX T o ün'o o
+PFX T u ün'u u
+PFX T h ün'h h
+PFX T è ün'è è
+PFX T ò ün'ò ò
+PFX T ê ün'ê ê
+PFX T ô ün'ô ô
+PFX T î ün'î î
+PFX T 0 Ün' [AEIOUH]
+PFX T A Ün'a A
+PFX T E Ün'e E
+PFX T I Ün'i I
+PFX T O Ün'o O
+PFX T U Ün'u U
+PFX T H Ün'h H
+PFX T 0 d' [aeiouhèòêôîAEIOUH]
+PFX T a d'a a
+PFX T e d'e e
+PFX T i d'i i
+PFX T o d'o o
+PFX T u d'u u
+PFX T h d'h h
+PFX T è d'è è
+PFX T ò d'ò ò
+PFX T ê d'ê ê
+PFX T ô d'ô ô
+PFX T î d'î î
+PFX T 0 D' [AEIOUH]
+PFX T A D'a A
+PFX T E D'e E
+PFX T I D'i I
+PFX T O D'o O
+PFX T U D'u U
+PFX T H D'h H
+PFX T 0 quist' [aeiouhèòêôîAEIOUH]
+PFX T a quist'a a
+PFX T e quist'e e
+PFX T i quist'i i
+PFX T o quist'o o
+PFX T u quist'u u
+PFX T h quist'h h
+PFX T è quist'è è
+PFX T ò quist'ò ò
+PFX T ê quist'ê ê
+PFX T ô quist'ô ô
+PFX T î quist'î î
+PFX T 0 Quist' [AEIOUH]
+PFX T A Quist'a A
+PFX T E Quist'e E
+PFX T I Quist'i I
+PFX T O Quist'o O
+PFX T U Quist'u U
+PFX T H Quist'h H
+PFX T 0 QUIST' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 quell' [aeiouhèòêôîAEIOUH]
+PFX T a quell'a a
+PFX T e quell'e e
+PFX T i quell'i i
+PFX T o quell'o o
+PFX T u quell'u u
+PFX T h quell'h h
+PFX T è quell'è è
+PFX T ò quell'ò ò
+PFX T ê quell'ê ê
+PFX T ô quell'ô ô
+PFX T î quell'î î
+PFX T 0 Quell' [AEIOUH]
+PFX T A Quell'a A
+PFX T E Quell'e E
+PFX T I Quell'i I
+PFX T O Quell'o O
+PFX T U Quell'u U
+PFX T H Quell'h H
+PFX T 0 QUELL' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 ch' [aeiouhèòêôîAEIOUH]
+PFX T a ch'a a
+PFX T e ch'e e
+PFX T i ch'i i
+PFX T o ch'o o
+PFX T u ch'u u
+PFX T h ch'h h
+PFX T è ch'è è
+PFX T ò ch'ò ò
+PFX T ê ch'ê ê
+PFX T ô ch'ô ô
+PFX T î ch'î î
+PFX T 0 Ch' [AEIOUH]
+PFX T A Ch'a A
+PFX T E Ch'e E
+PFX T I Ch'i I
+PFX T O Ch'o O
+PFX T U Ch'u U
+PFX T H Ch'h H
+PFX T 0 CH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 sch' [aeiouhèòêôîAEIOUH]
+PFX T a sch'a a
+PFX T e sch'e e
+PFX T i sch'i i
+PFX T o sch'o o
+PFX T u sch'u u
+PFX T h sch'h h
+PFX T è sch'è è
+PFX T ò sch'ò ò
+PFX T ê sch'ê ê
+PFX T ô sch'ô ô
+PFX T î sch'î î
+PFX T 0 Sch' [AEIOUH]
+PFX T A Sch'a A
+PFX T E Sch'e E
+PFX T I Sch'i I
+PFX T O Sch'o O
+PFX T U Sch'u U
+PFX T H Sch'h H
+PFX T 0 SCH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 sainz' [aeiouhèòêôîAEIOUH]
+PFX T a sainz'a a
+PFX T e sainz'e e
+PFX T i sainz'i i
+PFX T o sainz'o o
+PFX T u sainz'u u
+PFX T h sainz'h h
+PFX T è sainz'è è
+PFX T ò sainz'ò ò
+PFX T ê sainz'ê ê
+PFX T ô sainz'ô ô
+PFX T î sainz'î î
+PFX T 0 Sainz' [AEIOUH]
+PFX T A Sainz'a A
+PFX T E Sainz'e E
+PFX T I Sainz'i I
+PFX T O Sainz'o O
+PFX T U Sainz'u U
+PFX T H Sainz'h H
+PFX T 0 SAINZ' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 minch' [aeiouhèòêôîAEIOUH]
+PFX T a minch'a a
+PFX T e minch'e e
+PFX T i minch'i i
+PFX T o minch'o o
+PFX T u minch'u u
+PFX T h minch'h h
+PFX T è minch'è è
+PFX T ò minch'ò ò
+PFX T ê minch'ê ê
+PFX T ô minch'ô ô
+PFX T î minch'î î
+PFX T 0 Minch' [AEIOUH]
+PFX T A Minch'a A
+PFX T E Minch'e E
+PFX T I Minch'i I
+PFX T O Minch'o O
+PFX T U Minch'u U
+PFX T H Minch'h H
+PFX T 0 MINCH' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+PFX T 0 ill' [aeiouhèòêôîAEIOUH]
+PFX T a ill'a a
+PFX T e ill'e e
+PFX T i ill'i i
+PFX T o ill'o o
+PFX T u ill'u u
+PFX T h ill'h h
+PFX T è ill'è è
+PFX T ò ill'ò ò
+PFX T ê ill'ê ê
+PFX T ô ill'ô ô
+PFX T î ill'î î
+PFX T 0 Ill' [AEIOUH]
+PFX T A Ill'a A
+PFX T E Ill'e E
+PFX T I Ill'i I
+PFX T O Ill'o O
+PFX T U Ill'u U
+PFX T H Ill'h H
+PFX T 0 ILL' [AEIOUH][QWERTYUIOPLKJHGFDSAZXCVBNM]
+
+# pronoms reflexivs apostrofads
+# pronoms objects
+PFX P Y 76
+PFX P 0 m' [aeiouhèòêôîAEIOUH]
+PFX P a m'a a
+PFX P e m'e e
+PFX P i m'i i
+PFX P o m'o o
+PFX P u m'u u
+PFX P h m'h h
+PFX P è m'è è
+PFX P ò m'ò ò
+PFX P ê m'ê ê
+PFX P ô m'ô ô
+PFX P î m'î î
+PFX P 0 M' [AEIOUH]
+PFX P A M'a A
+PFX P E M'e E
+PFX P I M'i I
+PFX P O M'o O
+PFX P U M'u U
+PFX P H M'h H
+PFX P 0 t' [aeiouhèòêôîAEIOUH]
+PFX P a t'a a
+PFX P e t'e e
+PFX P i t'i i
+PFX P o t'o o
+PFX P u t'u u
+PFX P h t'h h
+PFX P è t'è è
+PFX P ò t'ò ò
+PFX P ê t'ê ê
+PFX P ô t'ô ô
+PFX P î t'î î
+PFX P 0 T' [AEIOUH]
+PFX P A T'a A
+PFX P E T'e E
+PFX P I T'i I
+PFX P O T'o O
+PFX P U T'u U
+PFX P H T'h H
+PFX P 0 s' [aeiouhèòêôîAEIOUH]
+PFX P a s'a a
+PFX P e s'e e
+PFX P i s'i i
+PFX P o s'o o
+PFX P u s'u u
+PFX P h s'h h
+PFX P è s'è è
+PFX P ò s'ò ò
+PFX P ê s'ê ê
+PFX P ô s'ô ô
+PFX P î s'î î
+PFX P 0 S' [AEIOUH]
+PFX P A S'a A
+PFX P E S'e E
+PFX P I S'i I
+PFX P O S'o O
+PFX P U S'u U
+PFX P H S'h H
+PFX P 0 till' [aeiouhèòêôîAEIOUH]
+PFX P a till'a a
+PFX P e till'e e
+PFX P i till'i i
+PFX P o till'o o
+PFX P u till'u u
+PFX P h till'h h
+PFX P è till'è è
+PFX P ò till'ò ò
+PFX P ê till'ê ê
+PFX P ô till'ô ô
+PFX P î till'î î
+PFX P 0 Till' [AEIOUH]
+PFX P A Till'a A
+PFX P E Till'e E
+PFX P I Till'i I
+PFX P O Till'o O
+PFX P U Till'u U
+PFX P H Till'h H
+
+
+# pronoms objects en connex cun l'imperativ affirmativ
+SFX Q Y 4
+SFX Q 0 'm .
+SFX Q 0 'l .
+SFX Q 0 'ns .
+SFX Q 0 'ls .
+
+# pronoms reflexivs en cumbinaziun cun l'imperativ affirmativ (suffix)
+SFX R Y 3
+SFX R 0 't .
+SFX R 0 'ns .
+SFX R 0 's .
+
+# pronoms reflexivs en cumbinaziun cun l'imperativ affirmativ (prefix)
+PFX S Y 19
+PFX S 0 t' [aeiouhèòêôîAEIOUH]
+PFX S a t'a a
+PFX S e t'e e
+PFX S i t'i i
+PFX S o t'o o
+PFX S u t'u u
+PFX S h t'h h
+PFX S è t'è è
+PFX S ò t'ò ò
+PFX S ê t'ê ê
+PFX S ô t'ô ô
+PFX S î t'î î
+PFX S 0 T' [AEIOUH]
+PFX S A T'a A
+PFX S E T'e E
+PFX S I T'i I
+PFX S O T'o O
+PFX S U T'u U
+PFX S H T'h H
+
+# apostrof en cumbinaziun cun la furma da curtaschia
+PFX U Y 1
+PFX U 0 Till' .
