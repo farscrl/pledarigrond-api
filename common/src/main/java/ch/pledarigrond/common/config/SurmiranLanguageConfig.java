@@ -34,6 +34,7 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("RRedirect"),
                 new IndexedColumn("user_comment"),
                 new IndexedColumn("user_email"),
+                new IndexedColumn("REtymologie"),
 
                 // verbs
                 new IndexedColumn("irregular"),

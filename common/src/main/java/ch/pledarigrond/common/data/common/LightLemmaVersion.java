@@ -27,6 +27,7 @@ public class LightLemmaVersion implements Serializable {
 		PUBLIC_KEYS.add("DGenus");
 		PUBLIC_KEYS.add("RGrammatik");
 		PUBLIC_KEYS.add("DGrammatik");
+		PUBLIC_KEYS.add("REtymologie");
 
 		PUBLIC_KEYS.add("infinitiv");
 
