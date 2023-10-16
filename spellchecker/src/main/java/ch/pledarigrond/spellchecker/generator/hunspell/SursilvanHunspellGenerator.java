@@ -36,7 +36,11 @@ public class SursilvanHunspellGenerator extends HunspellGenerator {
         // TODO: implement me
     }
 
-    protected void extractVerbs(Language language, HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion) {
+        // TODO: implement me
+    }
+
+    protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion) {
         // TODO: implement me
     }
 

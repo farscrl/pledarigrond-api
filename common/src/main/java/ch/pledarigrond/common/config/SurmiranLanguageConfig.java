@@ -137,6 +137,12 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("fPlural"),
                 new IndexedColumn("pluralCollectiv"),
 
+                // other
+                new IndexedColumn("otherForm1"),
+                new IndexedColumn("otherForm2"),
+                new IndexedColumn("otherForm3"),
+                new IndexedColumn("otherForm4"),
+
                 // automatic generation of forms
                 new IndexedColumn(LemmaVersion.AUTOMATIC_CHANGE),
 

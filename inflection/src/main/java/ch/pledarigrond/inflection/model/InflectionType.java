@@ -4,7 +4,8 @@ public enum InflectionType {
     V("v"), // verb
     NOUN("noun"),
     ADJECTIVE("adjective"),
-    PRONOUN("pronoun")
+    PRONOUN("pronoun"),
+    OTHER("other")
     ;
 
     private final String name;

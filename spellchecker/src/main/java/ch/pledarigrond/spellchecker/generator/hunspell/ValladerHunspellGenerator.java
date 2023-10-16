@@ -54,7 +54,15 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
 
-    protected void extractVerbs(Language language, HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion) {
+        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("otherForm1"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("otherForm2"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("otherForm3"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(lemmaVersion.getEntryValue("otherForm4"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+    }
+
+    protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion) {
         String infinitiv = lemmaVersion.getEntryValue("infinitiv");
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = lemmaVersion.getEntryValue("RStichwort");

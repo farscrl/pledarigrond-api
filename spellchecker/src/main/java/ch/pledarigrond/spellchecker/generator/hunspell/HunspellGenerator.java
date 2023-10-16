@@ -143,13 +143,15 @@ abstract public class HunspellGenerator {
             if (inflectionType == null || inflectionType.equals("")) {
                 extractDefault(hunspellList, current);
             } else if (inflectionType.equals("V")) {
-                extractVerbs(language, hunspellList, current);
+                extractVerbs(hunspellList, current);
             } else if (inflectionType.equals("NOUN")) {
                 extractNouns(hunspellList, current);
             } else if (inflectionType.equals("ADJECTIVE")) {
                 extractAdjectives(hunspellList, current);
             } else if (inflectionType.equals("PRONOUN")) {
                 extractPronouns(hunspellList, current);
+            } else if (inflectionType.equals("OTHER")) {
+                extractOtherForms(hunspellList, current);
             } else {
                 throw new RuntimeException("Unexpected inflection type: " + inflectionType);
             }
@@ -174,7 +176,9 @@ abstract public class HunspellGenerator {
 
     abstract protected void extractPronouns(HunspellList list, LemmaVersion lemmaVersion);
 
-    abstract protected void extractVerbs(Language language, HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion);
+
+    abstract protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion);
 
     abstract protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion);
 
