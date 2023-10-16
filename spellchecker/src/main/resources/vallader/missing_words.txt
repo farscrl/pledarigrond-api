@@ -29,3 +29,17 @@ s'ha
 # preposiziun in en cumbinaziun cun il/ils (i'l 18avel tschientiner, i'ls Stadis Units)
 i'l
 i'ls
+pro'l
+pro'ls
+
+# furmas encliticas
+stoja
+daja
+poja
+saja
+faja
+esa
+discha
+haja
+voula
+lessa
