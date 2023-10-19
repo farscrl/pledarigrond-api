@@ -72,6 +72,24 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
             list.addWord(removePronouns(infinitiv), new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
         }
 
+        // generate special imperative form for vallader
+        if (infinitiv.endsWith("ar") || infinitiv.endsWith("er")) {
+            String imperativeForm = removePronouns(infinitiv).substring(0, removePronouns(infinitiv).length() - 2) + "à";
+            list.addWord(imperativeForm, new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
+
+            if (startsWithVowel(imperativeForm)) {
+                list.addWord(imperativeForm, new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
+            }
+        }
+        if (infinitiv.endsWith("air")) {
+            String imperativeForm = removePronouns(infinitiv).substring(0, removePronouns(infinitiv).length() - 3) + "à";
+            list.addWord(imperativeForm, new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
+
+            if (startsWithVowel(imperativeForm)) {
+                list.addWord(imperativeForm, new HunspellRules[]{VALLADER_PRONOMS_REFLEXIVS});
+            }
+        }
+
         ArrayList<String> forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
         addNewlines(lemmaVersion.getEntryValue("preschentsing2"), forms);
