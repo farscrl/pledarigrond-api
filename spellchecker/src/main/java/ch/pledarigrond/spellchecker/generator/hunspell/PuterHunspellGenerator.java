@@ -11,6 +11,7 @@ import ch.pledarigrond.spellchecker.model.HunspellRules;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
 
@@ -205,6 +206,14 @@ public class PuterHunspellGenerator extends HunspellGenerator {
         candidate = normalizeString(candidate);
 
         if (candidate == null) {
+            return;
+        }
+
+        // add comma seperated words, like 's-chet, s-chetta'
+        if (candidate.length() > 4 && Pattern.matches("^[^,]+, [^,]+$", candidate)) {
+            String[] parts = candidate.split(", ");
+            list.addWord(parts[0], new HunspellRules[]{PUTER_PLEDS_APOSTROFAI});
+            list.addWord(parts[1], new HunspellRules[]{PUTER_PLEDS_APOSTROFAI});
             return;
         }
 
