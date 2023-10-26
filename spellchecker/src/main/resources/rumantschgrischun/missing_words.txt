@@ -10,3 +10,9 @@ vegni
 poi
 fissi
 dovri
+devi
+plovi
+statti
+
+# scursanidas
+p.ex.

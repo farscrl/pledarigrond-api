@@ -1,2 +1,17 @@
 # List of words to be ignored in the spellchecker exports.
 # Lines starting with a #-sign are ignored.
+
+---
+-a
+-laj'la
+-laj
+-laja'l
+-laja
+-lajan
+-lajast
+-lajat
+-lajna
+-upla
+-upel
+-upla
+11
