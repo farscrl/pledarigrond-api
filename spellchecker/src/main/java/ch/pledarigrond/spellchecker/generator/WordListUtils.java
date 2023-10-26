@@ -144,6 +144,9 @@ public class WordListUtils {
         if (input.endsWith(" da")) {
             input = input.substring(0, input.length() - 3);
         }
+        if (input.endsWith(" che")) {
+            input = input.substring(0, input.length() - 4);
+        }
         if (input.endsWith(" a")) {
             input = input.substring(0, input.length() - 2);
         }
