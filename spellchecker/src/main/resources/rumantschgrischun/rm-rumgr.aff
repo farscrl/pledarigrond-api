@@ -314,11 +314,11 @@ PFX P O S'o O
 PFX P U S'u U
 PFX P H S'h H
 
-# pronom impersunal 'ins' cumbinà cun 3. pers. sing. preschent indicativ
+# pronom impersunal 'ins' cumbinà cun 3. pers. sing. preschent indicativ, na vala betg per las finiziuns: -ia (p.ex. legia, maglia, annunzia)
 # pronom impersunal 'ins' cumbinà cun 3. pers. sing. imperfect indicativ
 SFX Q Y 5
-SFX Q a a'ins a
-SFX Q e e'ins e
-SFX Q i i'ins i
-SFX Q o o'ins o
-SFX Q u u'ins u
+SFX Q a 'ins a
+SFX Q e 'ins e
+SFX Q i 'ins i
+SFX Q o 'ins o
+SFX Q u 'ins u

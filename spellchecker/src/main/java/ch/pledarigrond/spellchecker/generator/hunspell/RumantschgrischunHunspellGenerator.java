@@ -128,7 +128,6 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
 
         forms = new ArrayList<>();
         addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
 
         String finalInfinitiv = infinitiv;
         forms.forEach(f -> {
@@ -140,6 +139,18 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
             if (!finalInfinitiv.endsWith("ia")) {
                 list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_IMPRES});
             }
+        });
+
+        forms = new ArrayList<>();
+        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
+
+        forms.forEach(f -> {
+            String form = removePronouns(f);
+            list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI});
+            if (startsWithVowel(form)) {
+                list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_REFLEXIVS});
+            }
+            list.addWord(form, new HunspellRules[]{RUMANTSCH_GRISCHUN_PRONOMS_IMPRES});
         });
     }
 
