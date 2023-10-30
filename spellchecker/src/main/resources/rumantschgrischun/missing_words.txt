@@ -1,18 +1,46 @@
 # furmas encliticas
-èsi
-hai
-datti
-fai
-vai
 stoi
-sai
-vegni
-poi
-fissi
-dovri
+stuevi
+stuessi
+datti
 devi
+dessi
+poi
+pudevi
+pudessi
+sai
+savevi
+savessi
+fai
+faschevi
+faschessi
+èsi
+eri
+fissi
+hai
+avevi
+avessi
+vegni
+vegnivi
+vegnissi
+vai
+gievi
+giessi
+stai
+stevi
+stetti
 plovi
-statti
+pluvevi
+pluvessi
+naivi
+navevi
+navessi
+dovri
+duvrevi
+duvressi
+
+# furmas specialas
+ch'jau
 
 # scursanidas
 p.ex.
