@@ -543,7 +543,11 @@ public class WordListUtils {
                 ValladerConjugationPronouns.pron_r_v_3ps,
                 ValladerConjugationPronouns.pron_r_v_1pp,
                 ValladerConjugationPronouns.pron_r_v_2pp,
-                ValladerConjugationPronouns.pron_r_v_3pp
+                ValladerConjugationPronouns.pron_r_v_3pp,
+                "el/ella/i",
+                "els/ellas/i",
+                "ch'el/ella/i",
+                "ch'els/ellas/i"
         );
 
         List<String> suffixes = new ArrayList<>();
