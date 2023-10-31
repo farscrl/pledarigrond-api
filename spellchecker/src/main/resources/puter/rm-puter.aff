@@ -20,7 +20,7 @@ ICONV ’ '
 OCONV 1
 OCONV ' ’
 
-PFX T Y 253
+PFX T Y 322
 PFX T 0 l' [aeiouhöüèòêôîAEIOUHÖÜ]
 PFX T è l'è è
 PFX T ò l'ò ò
@@ -274,6 +274,75 @@ PFX T u Aunch'U u
 PFX T h Aunch'H h
 PFX T ö Aunch'Ö ö
 PFX T ü Aunch'Ü ü
+PFX T 0 cull' [aeiouhöüèòêôîAEIOUHÖÜ]
+PFX T è cull'è è
+PFX T ò cull'ò ò
+PFX T ê cull'ê ê
+PFX T ô cull'ô ô
+PFX T î cull'î î
+PFX T a cull'A a
+PFX T e cull'E e
+PFX T i cull'I i
+PFX T o cull'O o
+PFX T u cull'U u
+PFX T h cull'H h
+PFX T ö cull'Ö ö
+PFX T ü cull'Ü ü
+PFX T 0 CULL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T a Cull'A a
+PFX T e Cull'E e
+PFX T i Cull'I i
+PFX T o Cull'O o
+PFX T u Cull'U u
+PFX T h Cull'H h
+PFX T ö Cull'Ö ö
+PFX T ü Cull'Ü ü
+PFX T 0 pell' [aeiouhöüèòêôîAEIOUHÖÜ]
+PFX T è pell'è è
+PFX T ò pell'ò ò
+PFX T ê pell'ê ê
+PFX T ô pell'ô ô
+PFX T î pell'î î
+PFX T a pell'A a
+PFX T e pell'E e
+PFX T i pell'I i
+PFX T o pell'O o
+PFX T u pell'U u
+PFX T h pell'H h
+PFX T ö pell'Ö ö
+PFX T ü pell'Ü ü
+PFX T 0 PELL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T a Pell'A a
+PFX T e Pell'E e
+PFX T i Pell'I i
+PFX T o Pell'O o
+PFX T u Pell'U u
+PFX T h Pell'H h
+PFX T ö Pell'Ö ö
+PFX T ü Pell'Ü ü
+PFX T 0 süll' [aeiouhöüèòêôîAEIOUHÖÜ]
+PFX T è süll'è è
+PFX T ò süll'ò ò
+PFX T ê süll'ê ê
+PFX T ô süll'ô ô
+PFX T î süll'î î
+PFX T a süll'A a
+PFX T e süll'E e
+PFX T i süll'I i
+PFX T o süll'O o
+PFX T u süll'U u
+PFX T h süll'H h
+PFX T ö süll'Ö ö
+PFX T ü süll'Ü ü
+PFX T 0 SÜLL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T a Süll'A a
+PFX T e Süll'E e
+PFX T i Süll'I i
+PFX T o Süll'O o
+PFX T u Süll'U u
+PFX T h Süll'H h
+PFX T ö Süll'Ö ö
+PFX T ü Süll'Ü ü
 
 # pronoms reflexivs apostrofads
 # pronoms objects
