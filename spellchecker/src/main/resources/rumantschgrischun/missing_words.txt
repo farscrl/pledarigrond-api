@@ -36,8 +36,8 @@ naivi
 navevi
 navessi
 dovri
-duvrevi
-duvressi
+duvravi
+duvrassi
 
 # furmas specialas
 ch'jau
