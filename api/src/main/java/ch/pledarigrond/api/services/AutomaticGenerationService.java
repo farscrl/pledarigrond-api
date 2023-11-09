@@ -36,4 +36,6 @@ public interface AutomaticGenerationService {
     boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException;
+
+    boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException;
 }

@@ -554,7 +554,37 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    public boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
 
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if ("subst".equals(entry.getCurrent().getLemmaValues().get("RGrammatik"))) {
+                String genus = entry.getCurrent().getLemmaValues().get("RGenus");
+                if (genus != null && !genus.isEmpty()) {
+                    // logger.warn("stizzar: " + entry.getCurrent().getLemmaValues().get("RGrammatik") + " / " + entry.getCurrent().getLemmaValues().get("RGenus") + " (" + entry.getCurrent().getLemmaValues().get("RStichwort") + ")");
+                    entry.getCurrent().getLemmaValues().put("RGrammatik", "");
+
+                    BasicDBObject newObject = Converter.convertLexEntry(entry);
+                    entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+
+                    counter++;
+                } else {
+                    logger.error("na: " + entry.getCurrent().getLemmaValues().get("RStichwort"));
+                }
+            }
+
+        }
+
+        logger.error("number of cases: " + counter);
+
+        return true;
+    }
 
     private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {
         SearchCriteria searchCriteria = new SearchCriteria();
@@ -690,7 +720,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         return true;
     }
-    
+
     private boolean updateAdjectivesByGrammar(Language language, String grammarValue, List<String[]> noInflectionList) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);

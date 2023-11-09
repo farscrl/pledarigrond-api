@@ -190,4 +190,22 @@ public class AutomaticGenerationController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Remove subst indication for puter and vallader
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/remove_subst_indication_for_puter_vallader")
+    ResponseEntity<?> removeSubstIndicationForPuterVallader(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.PUTER && language != Language.VALLADER) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.removeSubstIndicationIfGenusIsSet(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during removing subst indication");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
