@@ -23,6 +23,7 @@ import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.SimplePrefixQueryBuilder;
@@ -141,6 +142,9 @@ public class LuceneIndex {
 	
 	public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
+
+		// normalize setSearchPhrase (we remove pronunciation marks)
+		searchCriteria.setSearchPhrase(PronunciationNormalizer.normalizePronunciation(searchCriteria.getSearchPhrase()));
 
 		boolean hasAdminRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
