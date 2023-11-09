@@ -31,19 +31,9 @@ public interface AutomaticGenerationService {
 
     boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException;
 
-    boolean changeGrammarIndications(Language language) throws DatabaseException, UnknownHostException;
-
-    boolean changeGenusIndications(Language language) throws DatabaseException, UnknownHostException;
-
-    boolean fixVerbPronounsRg(Language language) throws DatabaseException, UnknownHostException;
-
     boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException;
 
     boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException;
-
-    boolean exportRemainingWords(Language language) throws IOException, InterruptedException, DatabaseException;
-
-    boolean exportWordsWithGrammarV(Language language) throws IOException, DatabaseException;
 }

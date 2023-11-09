@@ -137,60 +137,6 @@ public class AutomaticGenerationController {
     }
 
     /**
-     * Allows to unify the grammar entries
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/change_grammar_entries")
-    ResponseEntity<?> changeGrammarEntries(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
-        if (language != Language.SURMIRAN && language != Language.PUTER && language != Language.VALLADER) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-        boolean success = automaticGenerationService.changeGrammarIndications(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Allows to unify the genus entries
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/change_genus_entries")
-    ResponseEntity<?> changeGenusEntries(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
-        if (language != Language.PUTER && language != Language.VALLADER) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-        boolean success = automaticGenerationService.changeGenusIndications(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing genus indications");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Allows to fix errors in the pronouns for rg that existed for some time
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/fix_pronouns_rg")
-    ResponseEntity<?> fixPronounsRg(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
-        if (language != Language.RUMANTSCHGRISCHUN) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-        boolean success = automaticGenerationService.fixVerbPronounsRg(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    /**
      * List errors in sutsilvan caused by duplication of lemmas during automatic generation
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -240,43 +186,6 @@ public class AutomaticGenerationController {
 
         if (!success) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during fixing wrong parent id");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * List errors in sutsilvan caused by duplication of lemmas during automatic generation
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/export_remaining_lemmas_to_review")
-    ResponseEntity<?> exportRemainingLemmasToReview(@PathVariable("language")Language language) throws DatabaseException, IOException, InterruptedException {
-        if (language != Language.SUTSILVAN) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-        boolean success = automaticGenerationService.exportRemainingWords(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during export remaining words");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     *  During manual review, words with grammar "v" have often been problematic. Thus, this allows to export a list of
-     *      * all the affected words.
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/export_words_with_grammar_v")
-    ResponseEntity<?> exportWordsWithGrammarV(@PathVariable("language")Language language) throws DatabaseException, IOException, InterruptedException {
-        if (language != Language.PUTER && language != Language.VALLADER) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-        boolean success = automaticGenerationService.exportWordsWithGrammarV(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during export remaining words");
         }
 
         return ResponseEntity.ok().build();
