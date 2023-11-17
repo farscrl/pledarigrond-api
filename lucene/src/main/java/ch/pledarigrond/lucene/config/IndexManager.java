@@ -110,14 +110,16 @@ public abstract class IndexManager {
                 ).flatMap(Collection::stream).collect(Collectors.toList());
                 case ROMANSH -> Stream.of(
                         builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        builderRegistry.getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
 
                 case BOTH -> Stream.of(
                         builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
                         builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
                         builderRegistry.getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        builderRegistry.getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery part = new BooleanQuery(true);

@@ -72,6 +72,13 @@ public class BuilderRegistry {
         return new ArrayList<>();
     }
 
+    public List<Query> getEtymologyQueries(SearchMethod method, String field) {
+        if (method != SearchMethod.INTERN) {
+            return new ArrayList<>();
+        }
+        return builderMap.get("REtymologie_intern").transform(field);
+    }
+
     public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RGenus_simple_prefix");
@@ -148,5 +155,8 @@ public class BuilderRegistry {
 
         // Category
         builderMap.put("categories_infix", new InfixQueryBuilder().setColumn("categories"));
+
+        // Etymology
+        builderMap.put("REtymologie_intern", new InfixQueryBuilder().setColumn("REtymologie"));
     }
 }
