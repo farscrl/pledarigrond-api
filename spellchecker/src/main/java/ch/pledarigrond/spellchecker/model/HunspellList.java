@@ -167,6 +167,26 @@ public class HunspellList {
         newEntries.forEach(this::addWord);
     }
 
+    public void removeSoftHyphens() {
+        Map<String, HunspellRules[]> newEntries = new TreeMap<>();
+
+        Iterator<Map.Entry<String, Set<HunspellRules>>> itr = wordsList.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, Set<HunspellRules>> entry = itr.next();
+
+            String word = entry.getKey();
+            String cleanWord = word.replace("\u00AD", "");
+            if (!word.equals(cleanWord)) {
+                HunspellRules[] rules = new HunspellRules[entry.getValue().size()];
+                entry.getValue().toArray(rules);
+                newEntries.put(cleanWord, rules);
+                itr.remove();
+            }
+        }
+
+        newEntries.forEach(this::addWord);
+    }
+
     public interface CheckCondition {
         boolean check(String word);
     }

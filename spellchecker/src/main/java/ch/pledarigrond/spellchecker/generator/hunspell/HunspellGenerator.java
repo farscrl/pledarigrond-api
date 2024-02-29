@@ -9,8 +9,8 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.names.entities.Name;
-import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
 import com.mongodb.BasicDBObject;
@@ -25,7 +25,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
+import static ch.pledarigrond.spellchecker.model.HunspellRules.RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI;
+import static ch.pledarigrond.spellchecker.model.HunspellRules.SURMIRAN_PLEDS_APOSTROFAI;
 
 abstract public class HunspellGenerator {
 
@@ -163,6 +164,7 @@ abstract public class HunspellGenerator {
             });
         }
 
+        hunspellList.removeSoftHyphens();
         postProcessHunspellList(hunspellList);
 
         removeWordsFromBlocklist(language, hunspellList);
