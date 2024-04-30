@@ -3,13 +3,19 @@ package ch.pledarigrond.api.config;
 import ch.pledarigrond.api.converters.StringToLanguageConverter;
 import ch.pledarigrond.api.converters.StringToSearchDirectionConverter;
 import ch.pledarigrond.api.converters.StringToSearchMethodConverter;
+import ch.pledarigrond.api.interceptors.RequestDataInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private RequestDataInterceptor requestDataInterceptor;
 
     /** disable CORS for all requests */
     @Override
@@ -28,5 +34,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToSearchMethodConverter());
         registry.addConverter(new StringToLanguageConverter());
         WebMvcConfigurer.super.addFormatters(registry);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(requestDataInterceptor);
     }
 }

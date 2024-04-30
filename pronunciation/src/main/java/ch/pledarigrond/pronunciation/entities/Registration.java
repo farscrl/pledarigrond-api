@@ -1,8 +1,10 @@
 package ch.pledarigrond.pronunciation.entities;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "registrations")
+@Data
+@Document(collection = "#{T(ch.pledarigrond.pronunciation.utilities.RepositoryNamingClass).getRegistrationsCollectionName()}")
 public class Registration {
 
     private String DStichwort;
