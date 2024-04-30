@@ -1,11 +1,16 @@
 package ch.pledarigrond.pronunciation.entities;
 
 import lombok.Data;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.Instant;
 
 @Data
 @Document(collection = "#{T(ch.pledarigrond.pronunciation.utilities.RepositoryNamingClass).getRegistrationsCollectionName()}")
 public class Registration {
+    @Id
+    private String id;
 
     private String DStichwort;
     private String RStichwort;
@@ -18,4 +23,15 @@ public class Registration {
     private String RInflectionType;
     private String RInflectionSubtype;
 
+    @CreatedDate
+    private Instant createdDate;
+
+    @LastModifiedDate
+    private Instant lastModifiedDate;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
 }

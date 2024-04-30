@@ -6,12 +6,14 @@ import ch.pledarigrond.api.converters.StringToSearchMethodConverter;
 import ch.pledarigrond.api.interceptors.RequestDataInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableMongoAuditing
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
