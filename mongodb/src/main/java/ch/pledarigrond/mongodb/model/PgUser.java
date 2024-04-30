@@ -16,7 +16,10 @@
 package ch.pledarigrond.mongodb.model;
 
 import ch.pledarigrond.common.config.Constants;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.EditorRole;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LightUserInfo;
+import ch.pledarigrond.common.data.common.RolesObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.springframework.security.core.GrantedAuthority;
@@ -173,6 +176,20 @@ public class PgUser extends BasicDBObject {
 		super.put(Constants.Users.ROLE_NAMES, role.toString());
 	}
 
+	@XmlElement
+	public EditorRole getRegistrationsRole() {
+		String role = super.getString(Constants.Users.ROLE_REGISTRATIONS);
+		if (role == null) {
+			return EditorRole.NONE;
+		}
+		return EditorRole.valueOf(role);
+	}
+
+	public void setRegistrationsRole(EditorRole role) {
+		super.put(Constants.Users.ROLE_REGISTRATIONS, role.toString());
+	}
+
+
 	public LightUserInfo toLightUser() {
 		RolesObject roles = new RolesObject();
 		roles.setPuterRole(getPuterRole());
@@ -182,6 +199,7 @@ public class PgUser extends BasicDBObject {
 		roles.setSutsilvanRole(getSutsilvanRole());
 		roles.setValladerRole(getValladerRole());
 		roles.setNamesRole(getNamesRole());
+		roles.setRegistrationsRole(getRegistrationsRole());
 
 		LightUserInfo userInfo = new LightUserInfo();
 		userInfo.setEmail(getEmail());
@@ -237,6 +255,10 @@ public class PgUser extends BasicDBObject {
 
 		if (getNamesRole() == EditorRole.EDITOR) {
 			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_NAMES"));
+		}
+
+		if (getNamesRole() == EditorRole.EDITOR) {
+			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_REGISTRATIONS"));
 		}
 
 		return roles;

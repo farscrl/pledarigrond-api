@@ -96,6 +96,11 @@
 			<version>${project.version}</version>
         </dependency>
 		<dependency>
+			<groupId>ch.pledarigrond</groupId>
+			<artifactId>pronunciation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.31</version>

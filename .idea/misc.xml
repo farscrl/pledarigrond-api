@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/mongodb/pom.xml" />
         <option value="$PROJECT_DIR$/inflection/pom.xml" />
         <option value="$PROJECT_DIR$/spellchecker/pom.xml" />
+        <option value="$PROJECT_DIR$/pronunciation/pom.xml" />
       </list>
     </option>
   </component>

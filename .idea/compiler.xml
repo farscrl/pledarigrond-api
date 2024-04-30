@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="names" />
         <module name="common" />
+        <module name="pronunciation" />
         <module name="lucene" />
         <module name="api" />
         <module name="spellchecker" />

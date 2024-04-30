@@ -13,6 +13,9 @@ public class LanguagePermissionEvaluator implements PermissionEvaluator {
         if (targetDomainObject.equals("names")) {
             return hasNamesPermission(authentication, targetDomainObject, permission);
         }
+        if (targetDomainObject.equals("registrations")) {
+            return hasRegistrationsPermission(authentication, targetDomainObject, permission);
+        }
         return hasLanguagePermission(authentication, targetDomainObject, permission);
     }
 
@@ -40,6 +43,18 @@ public class LanguagePermissionEvaluator implements PermissionEvaluator {
                 return true;
             }
             if (grantedAuth.getAuthority().startsWith("ROLE_") && grantedAuth.getAuthority().contains("NAMES")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasRegistrationsPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        for (GrantedAuthority grantedAuth : authentication.getAuthorities()) {
+            if (grantedAuth.getAuthority().equals("ROLE_ADMIN")) {
+                return true;
+            }
+            if (grantedAuth.getAuthority().startsWith("ROLE_") && grantedAuth.getAuthority().contains("REGISTRATIONS")) {
                 return true;
             }
         }

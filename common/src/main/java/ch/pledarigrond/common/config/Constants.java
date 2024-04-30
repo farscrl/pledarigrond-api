@@ -33,5 +33,6 @@ public interface Constants {
 		String ROLE_VALLADER = "roleVallader";
 
 		String ROLE_NAMES = "roleNames";
+		String ROLE_REGISTRATIONS = "roleRegistrations";
 	}
 }

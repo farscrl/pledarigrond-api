@@ -1,0 +1,28 @@
+package ch.pledarigrond.api.controllers.editor;
+
+import ch.pledarigrond.api.services.RegistrationService;
+import ch.pledarigrond.common.data.user.Pagination;
+import ch.pledarigrond.pronunciation.entities.Registration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("editor/registrations")
+public class RegistrationsController {
+
+    @Autowired
+    private RegistrationService registrationService;
+
+    @PreAuthorize("hasPermission('registrations', 'editor')")
+    @GetMapping("")
+    ResponseEntity<?> list(Pagination pagination) {
+        Page<Registration> registrations = registrationService.getRegistrations(pagination.getPage(), pagination.getPageSize());
+        return ResponseEntity.ok(registrations);
+    }
+
+}

@@ -21,6 +21,7 @@ public class LightUserToPgUserTransformer {
         pgUser.setSutsilvanRole(lightUser.getRoles().getSutsilvanRole());
         pgUser.setValladerRole(lightUser.getRoles().getValladerRole());
         pgUser.setNamesRole(lightUser.getRoles().getNamesRole());
+        pgUser.setRegistrationsRole(lightUser.getRoles().getRegistrationsRole());
 
         return pgUser;
     }

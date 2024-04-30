@@ -13,6 +13,7 @@ public class RolesObject {
     private EditorRole valladerRole = EditorRole.NONE;
 
     private EditorRole namesRole = EditorRole.NONE;
+    private EditorRole registrationsRole = EditorRole.NONE;
 
     @JsonIgnore
     public RolesObject getCopy() {
@@ -27,6 +28,7 @@ public class RolesObject {
         copy.setValladerRole(getValladerRole());
 
         copy.setNamesRole(getNamesRole());
+        copy.setRegistrationsRole(getRegistrationsRole());
 
         return copy;
     }
