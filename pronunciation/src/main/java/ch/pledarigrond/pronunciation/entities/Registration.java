@@ -1,5 +1,6 @@
 package ch.pledarigrond.pronunciation.entities;
 
+import ch.pledarigrond.pronunciation.dto.RegistrationStatus;
 import lombok.Data;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +12,8 @@ import java.time.Instant;
 public class Registration {
     @Id
     private String id;
+
+    private RegistrationStatus status = RegistrationStatus.TODO;
 
     private String DStichwort;
     private String RStichwort;

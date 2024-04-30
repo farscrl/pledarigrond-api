@@ -11,6 +11,7 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
+import ch.pledarigrond.pronunciation.dto.RegistrationStatus;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import ch.pledarigrond.pronunciation.repositories.RegistrationRepository;
 import com.mongodb.BasicDBObject;
@@ -65,6 +66,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                     if (!registrationRepository.existsByRStichwortAndRGenusAndRGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"))) {
                         logger.warn("registration added: " + RStichwort);
                         Registration registration = new Registration();
+                        registration.setStatus(RegistrationStatus.TODO);
                         registration.setDStichwort(current.getLemmaValues().get("DStichwort"));
                         registration.setRStichwort(RStichwort);
                         registration.setRSemantik(current.getLemmaValues().get("RSemantik"));
