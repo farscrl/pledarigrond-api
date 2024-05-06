@@ -34,7 +34,7 @@ public class RegistrationsController {
         return ResponseEntity.ok(registrationService.getStatistics());
     }
 
-    @PreAuthorize("hasPermission('registrations', 'editor')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_single_words")
     ResponseEntity<?> extractSingleWords() throws UnknownHostException, DatabaseException {
         registrationService.extractSingleWords();
