@@ -257,7 +257,7 @@ public class PgUser extends BasicDBObject {
 			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_NAMES"));
 		}
 
-		if (getNamesRole() == EditorRole.EDITOR) {
+		if (getRegistrationsRole() == EditorRole.EDITOR) {
 			roles.add(new SimpleGrantedAuthority(ROLE_PREFIX + "EDITOR_REGISTRATIONS"));
 		}
 
