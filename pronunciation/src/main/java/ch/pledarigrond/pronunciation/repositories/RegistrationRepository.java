@@ -5,7 +5,7 @@ import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface RegistrationRepository extends MongoRepository<Registration, String> {
-    boolean existsByRStichwortAndRGenusAndRGrammatik(String RStichwort, String RGenus, String RGrammatik);
+    Optional<Registration> findFirstByRStichwortAndRGenusAndRGrammatik(String RStichwort, String RGenus, String RGrammatik);
 
     int countByStatus(RegistrationStatus status);
 }

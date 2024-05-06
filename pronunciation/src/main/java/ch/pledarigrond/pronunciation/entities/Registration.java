@@ -6,6 +6,8 @@ import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document(collection = "#{T(ch.pledarigrond.pronunciation.utilities.RepositoryNamingClass).getRegistrationsCollectionName()}")
@@ -25,6 +27,9 @@ public class Registration {
     private String RTags;
     private String RInflectionType;
     private String RInflectionSubtype;
+
+
+    private List<String> lemmaIds = new ArrayList<>();
 
     @CreatedDate
     private Instant createdDate;

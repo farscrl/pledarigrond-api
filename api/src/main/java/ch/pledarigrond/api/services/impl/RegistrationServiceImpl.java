@@ -11,6 +11,7 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
+import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatus;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import ch.pledarigrond.pronunciation.repositories.RegistrationRepository;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.Optional;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -63,9 +65,12 @@ public class RegistrationServiceImpl implements RegistrationService {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
                 if (isSingleWord(RStichwort)) {
-                    if (!registrationRepository.existsByRStichwortAndRGenusAndRGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"))) {
+                    Optional<Registration> existingRegistration = registrationRepository.findFirstByRStichwortAndRGenusAndRGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
+
+                    if (existingRegistration.isEmpty()) {
                         logger.warn("registration added: " + RStichwort);
                         Registration registration = new Registration();
+                        registration.getLemmaIds().add(entry.getId());
                         registration.setStatus(RegistrationStatus.TODO);
                         registration.setDStichwort(current.getLemmaValues().get("DStichwort"));
                         registration.setRStichwort(RStichwort);
@@ -79,7 +84,9 @@ public class RegistrationServiceImpl implements RegistrationService {
                         registration.setRInflectionSubtype(current.getLemmaValues().get("RInflectionSubtype"));
                         registrationRepository.save(registration);
                     } else {
-                        logger.warn("registration already exists: " + RStichwort);
+                        existingRegistration.get().getLemmaIds().add(entry.getId());
+                        logger.info("registration already exists: " + RStichwort);
+                        registrationRepository.save(existingRegistration.get());
                     }
                 }
             }
