@@ -88,6 +88,18 @@ public class RegistrationServiceImpl implements RegistrationService {
         return true;
     }
 
+    @Override
+    public RegistrationStatistics getStatistics() {
+        RegistrationStatistics statistics = new RegistrationStatistics();
+        statistics.setTotalRegistrations((int) registrationRepository.count());
+        statistics.setTodoRegistrations(registrationRepository.countByStatus(RegistrationStatus.TODO));
+        statistics.setInReviewRegistrations(registrationRepository.countByStatus(RegistrationStatus.IN_REVIEW));
+        statistics.setPostponedRegistrations(registrationRepository.countByStatus(RegistrationStatus.POSTPONED));
+        statistics.setCompletedRegistrations(registrationRepository.countByStatus(RegistrationStatus.COMPLETED));
+        statistics.setRefusedRegistrations(registrationRepository.countByStatus(RegistrationStatus.REFUSED));
+        return statistics;
+    }
+
     private static boolean isSingleWord(String input) {
         if (input == null || input.trim().isEmpty()) {
             return false; // Consider empty or null input as not a single word
