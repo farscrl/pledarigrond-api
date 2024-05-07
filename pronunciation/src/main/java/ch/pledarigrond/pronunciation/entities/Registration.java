@@ -17,17 +17,16 @@ public class Registration {
 
     private RegistrationStatus status = RegistrationStatus.TODO;
 
-    private String DStichwort;
-    private String RStichwort;
-    private String RSemantik;
-    private String RSubsemantik;
-    private String RGrammatik;
-    private String RGenus;
-    private String RFlex;
-    private String RTags;
-    private String RInflectionType;
-    private String RInflectionSubtype;
-
+    private String deStichwort;
+    private String rmStichwort;
+    private String rmSemantik;
+    private String rmSubsemantik;
+    private String rmGrammatik;
+    private String rmGenus;
+    private String rmFlex;
+    private String rmTags;
+    private String rmInflectionType;
+    private String rmInflectionSubtype;
 
     private List<String> lemmaIds = new ArrayList<>();
 

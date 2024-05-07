@@ -65,23 +65,23 @@ public class RegistrationServiceImpl implements RegistrationService {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
                 if (isSingleWord(RStichwort)) {
-                    Optional<Registration> existingRegistration = registrationRepository.findFirstByRStichwortAndRGenusAndRGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
+                    Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
 
                     if (existingRegistration.isEmpty()) {
                         logger.warn("registration added: " + RStichwort);
                         Registration registration = new Registration();
                         registration.getLemmaIds().add(entry.getId());
                         registration.setStatus(RegistrationStatus.TODO);
-                        registration.setDStichwort(current.getLemmaValues().get("DStichwort"));
-                        registration.setRStichwort(RStichwort);
-                        registration.setRSemantik(current.getLemmaValues().get("RSemantik"));
-                        registration.setRSubsemantik(current.getLemmaValues().get("RSubsemantik"));
-                        registration.setRGrammatik(current.getLemmaValues().get("RGrammatik"));
-                        registration.setRGenus(current.getLemmaValues().get("RGenus"));
-                        registration.setRFlex(current.getLemmaValues().get("RFlex"));
-                        registration.setRTags(current.getLemmaValues().get("RTags"));
-                        registration.setRInflectionType(current.getLemmaValues().get("RInflectionType"));
-                        registration.setRInflectionSubtype(current.getLemmaValues().get("RInflectionSubtype"));
+                        registration.setDeStichwort(current.getLemmaValues().get("DStichwort"));
+                        registration.setRmStichwort(RStichwort);
+                        registration.setRmSemantik(current.getLemmaValues().get("RSemantik"));
+                        registration.setRmSubsemantik(current.getLemmaValues().get("RSubsemantik"));
+                        registration.setRmGrammatik(current.getLemmaValues().get("RGrammatik"));
+                        registration.setRmGenus(current.getLemmaValues().get("RGenus"));
+                        registration.setRmFlex(current.getLemmaValues().get("RFlex"));
+                        registration.setRmTags(current.getLemmaValues().get("RTags"));
+                        registration.setRmInflectionType(current.getLemmaValues().get("RInflectionType"));
+                        registration.setRmInflectionSubtype(current.getLemmaValues().get("RInflectionSubtype"));
                         registrationRepository.save(registration);
                     } else {
                         existingRegistration.get().getLemmaIds().add(entry.getId());
