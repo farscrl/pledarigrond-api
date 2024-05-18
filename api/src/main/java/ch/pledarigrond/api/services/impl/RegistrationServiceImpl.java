@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.services.impl;
 
+import ch.pledarigrond.api.services.BunnyService;
 import ch.pledarigrond.api.services.RegistrationService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
@@ -19,14 +20,19 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import org.apache.commons.io.FilenameUtils;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
@@ -41,9 +47,50 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private PgEnvironment pgEnvironment;
 
+    @Autowired
+    private BunnyService bunnyService;
+
+    @Value("${spring.profiles.active:dev}")
+    private String activeProfile;
+
     @Override
     public Page<Registration> getRegistrations(int page, int size) {
         return registrationRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Registration getNextRegistration() {
+        Optional<Registration> registration = registrationRepository.findRandomRegistration();
+        return registration.orElse(null);
+    }
+
+    @Override
+    public Registration postponeRegistration(Registration registration) {
+        registration.setStatus(RegistrationStatus.POSTPONED);
+        registrationRepository.save(registration);
+
+        return registrationRepository.findRandomRegistration().orElse(null);
+    }
+
+    @Override
+    public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException {
+        File tempWavFile = File.createTempFile("upload", ".wav");
+        wavFile.transferTo(tempWavFile);
+
+        File mp3File = convertWavToMp3(tempWavFile);
+
+        String path = "pronunciation/" + activeProfile + "/" + registration.getId() + "/" + registration.getId();
+
+        bunnyService.uploadFile(path + ".wav", tempWavFile);
+        bunnyService.uploadFile(path + ".mp3", mp3File);
+
+        tempWavFile.delete();
+        mp3File.delete();
+
+        registration.setStatus(RegistrationStatus.IN_REVIEW);
+        registrationRepository.save(registration);
+
+        return registration;
     }
 
     @Override
@@ -113,5 +160,31 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         String[] words = input.trim().split("\\s+");
         return words.length == 1;
+    }
+
+    private File convertWavToMp3(File wavFile) throws IOException {
+        // Assuming ffmpeg is installed and added to the system path
+        String mp3FileName = FilenameUtils.removeExtension(wavFile.getName()) + ".mp3";
+        File mp3File = new File(wavFile.getParent(), mp3FileName);
+
+        ProcessBuilder pb = new ProcessBuilder("ffmpeg", "-i", wavFile.getAbsolutePath(), mp3File.getAbsolutePath());
+        pb.redirectErrorStream(true);
+        Process process = pb.start();
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!mp3File.exists()) {
+            throw new IOException("Failed to convert wav to mp3");
+        }
+
+        return mp3File;
+    }
+
+    private void uploadFileToBunny(File file, String fileName) {
+        // todo: move file if already existing
+        bunnyService.uploadFile(fileName, file);
     }
 }

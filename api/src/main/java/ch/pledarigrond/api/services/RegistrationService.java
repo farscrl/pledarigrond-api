@@ -4,11 +4,19 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 
 public interface RegistrationService {
     public Page<Registration> getRegistrations(int page, int size);
+
+    public Registration getNextRegistration();
+
+    public Registration postponeRegistration(Registration registration);
+
+    public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 
     public boolean extractSingleWords() throws DatabaseException, UnknownHostException;
 

@@ -28,6 +28,9 @@ public class Registration {
     private String rmInflectionType;
     private String rmInflectionSubtype;
 
+    private String speakerComment;
+    private String reviewerComment;
+
     private List<String> lemmaIds = new ArrayList<>();
 
     @CreatedDate

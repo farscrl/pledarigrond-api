@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 
 @RestController
@@ -29,6 +30,18 @@ public class RegistrationsController {
     }
 
     @PreAuthorize("hasPermission('registrations', 'editor')")
+    @GetMapping("/next")
+    ResponseEntity<?> getNext() {
+        return ResponseEntity.ok(registrationService.getNextRegistration());
+    }
+
+    @PreAuthorize("hasPermission('registrations', 'editor')")
+    @PostMapping("/postpone")
+    ResponseEntity<?> postpone(@Validated @RequestBody Registration registration) {
+        return ResponseEntity.ok(registrationService.postponeRegistration(registration));
+    }
+
+    @PreAuthorize("hasPermission('registrations', 'editor')")
     @GetMapping("/statistics")
     ResponseEntity<?> statistics() {
         return ResponseEntity.ok(registrationService.getStatistics());
@@ -39,5 +52,16 @@ public class RegistrationsController {
     ResponseEntity<?> extractSingleWords() throws UnknownHostException, DatabaseException {
         registrationService.extractSingleWords();
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasPermission('registrations', 'editor')")
+    @PostMapping("/upload")
+    public ResponseEntity<Registration> uploadFile(@RequestPart("registration") Registration registration, @RequestPart("file") MultipartFile file) {
+        try {
+            registration = registrationService.uploadRegistration(registration, file);
+            return ResponseEntity.ok(registration);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
