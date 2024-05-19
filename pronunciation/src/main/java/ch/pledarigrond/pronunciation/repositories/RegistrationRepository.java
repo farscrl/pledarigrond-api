@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface RegistrationRepository extends MongoRepository<Registration, String> {
+public interface RegistrationRepository extends MongoRepository<Registration, String>, RegistrationRepositoryCustom {
     Optional<Registration> findFirstByRmStichwortAndRmGenusAndRmGrammatik(String RStichwort, String RGenus, String RGrammatik);
 
     // TODO: only with status todo

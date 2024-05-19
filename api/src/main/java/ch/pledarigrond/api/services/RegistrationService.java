@@ -1,16 +1,18 @@
 package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.exception.DatabaseException;
+import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 
 public interface RegistrationService {
-    public Page<Registration> getRegistrations(int page, int size);
+    public Page<Registration> getRegistrations(ListFilter filter, Pageable pageable);
 
     public Registration getNextRegistration();
 

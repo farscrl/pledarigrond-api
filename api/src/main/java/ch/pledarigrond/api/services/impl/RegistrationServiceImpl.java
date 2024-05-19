@@ -12,6 +12,7 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
+import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatus;
 import ch.pledarigrond.pronunciation.entities.Registration;
@@ -27,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,8 +55,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     private String activeProfile;
 
     @Override
-    public Page<Registration> getRegistrations(int page, int size) {
-        return registrationRepository.findAll(PageRequest.of(page, size));
+    public Page<Registration> getRegistrations(ListFilter filter, Pageable pageable) {
+        return registrationRepository.findByFilter(filter, pageable);
     }
 
     @Override
