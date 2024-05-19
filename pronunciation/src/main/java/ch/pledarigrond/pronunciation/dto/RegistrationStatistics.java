@@ -6,8 +6,9 @@ import lombok.Data;
 public class RegistrationStatistics {
     private int totalRegistrations;
     private int todoRegistrations;
+    private int postponedRegistrationRegistrations;
     private int inReviewRegistrations;
-    private int postponedRegistrations;
+    private int postponedReviewRegistrations;
     private int completedRegistrations;
     private int refusedRegistrations;
 }

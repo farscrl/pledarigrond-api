@@ -66,7 +66,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration postponeRegistration(Registration registration) {
-        registration.setStatus(RegistrationStatus.POSTPONED);
+        registration.setStatus(RegistrationStatus.POSTPONED_REGISTRATION);
         registrationRepository.save(registration);
 
         return registrationRepository.findRandomRegistration().orElse(null);
@@ -147,8 +147,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         RegistrationStatistics statistics = new RegistrationStatistics();
         statistics.setTotalRegistrations((int) registrationRepository.count());
         statistics.setTodoRegistrations(registrationRepository.countByStatus(RegistrationStatus.TODO));
+        statistics.setPostponedRegistrationRegistrations(registrationRepository.countByStatus(RegistrationStatus.POSTPONED_REGISTRATION));
         statistics.setInReviewRegistrations(registrationRepository.countByStatus(RegistrationStatus.IN_REVIEW));
-        statistics.setPostponedRegistrations(registrationRepository.countByStatus(RegistrationStatus.POSTPONED));
+        statistics.setPostponedReviewRegistrations(registrationRepository.countByStatus(RegistrationStatus.POSTPONED_REVIEW));
         statistics.setCompletedRegistrations(registrationRepository.countByStatus(RegistrationStatus.COMPLETED));
         statistics.setRefusedRegistrations(registrationRepository.countByStatus(RegistrationStatus.REFUSED));
         return statistics;
