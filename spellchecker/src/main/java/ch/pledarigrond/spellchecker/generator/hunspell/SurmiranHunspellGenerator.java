@@ -1,12 +1,13 @@
 package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.names.entities.Name;
-import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
     }
 
     protected String normalizeString(String input) {
-        return WordListUtils.normalizeStringSurmiran(input);
+        return WordNormalizer.normalizeStringSurmiran(input);
     }
 
     protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {

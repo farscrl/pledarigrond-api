@@ -6,6 +6,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +57,15 @@ public class RegistrationsController {
     ResponseEntity<?> extractSingleWords() throws UnknownHostException, DatabaseException {
         registrationService.extractSingleWords();
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/extract_list_of_words_by_ending")
+    ResponseEntity<?> extractListOfWordsByEnding() throws UnknownHostException, DatabaseException {
+        ByteArrayResource resource = registrationService.extractListOfWordsByEnding();
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=strings.txt")
+                .body(resource);
     }
 
     @PreAuthorize("hasPermission('registrations', 'editor')")

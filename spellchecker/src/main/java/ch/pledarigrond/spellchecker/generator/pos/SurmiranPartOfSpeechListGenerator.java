@@ -2,9 +2,10 @@ package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.names.entities.Name;
-import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
 
     @Override
     protected String normalizeString(String input) {
-        return WordListUtils.normalizeStringSurmiran(input);
+        return WordNormalizer.normalizeStringSurmiran(input);
     }
 
     @Override

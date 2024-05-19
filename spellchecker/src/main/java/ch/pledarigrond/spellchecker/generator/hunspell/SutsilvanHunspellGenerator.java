@@ -1,8 +1,8 @@
 package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
-import static ch.pledarigrond.spellchecker.model.HunspellRules.SUTSILVAN_PRONOMS_REFLEXIVS;
 
 public class SutsilvanHunspellGenerator extends HunspellGenerator {
     public SutsilvanHunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
@@ -25,7 +24,7 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
     }
 
     protected String normalizeString(String input) {
-        return WordListUtils.normalizeStringSutsilvan(input);
+        return WordNormalizer.normalizeStringSutsilvan(input);
     }
 
     protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {

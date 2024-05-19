@@ -4,6 +4,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.entities.Registration;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,8 @@ public interface RegistrationService {
     public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 
     public boolean extractSingleWords() throws DatabaseException, UnknownHostException;
+
+    public ByteArrayResource extractListOfWordsByEnding() throws DatabaseException, UnknownHostException;
 
     public RegistrationStatistics getStatistics();
 }

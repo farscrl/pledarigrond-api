@@ -1,8 +1,8 @@
 package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
@@ -25,7 +25,7 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
     }
 
     protected String normalizeString(String input) {
-        return WordListUtils.normalizeStringRumantschGrischun(input);
+        return WordNormalizer.normalizeStringRumantschGrischun(input);
     }
 
     protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {

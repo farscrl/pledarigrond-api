@@ -9,6 +9,7 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -112,6 +117,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (entry.getCurrent() != null) {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
+                RStichwort = WordNormalizer.normalizeWord(language, RStichwort);
                 if (isSingleWord(RStichwort)) {
                     Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
 
@@ -141,6 +147,43 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         return true;
+    }
+
+    @Override
+    public ByteArrayResource extractListOfWordsByEnding() throws DatabaseException, UnknownHostException {
+        Language language = RequestContext.getLanguage();
+        if (language == null) {
+            throw new DatabaseException("No language set in request context");
+        }
+
+        List<String> strings = new ArrayList<>();
+
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            if (entry.getCurrent() != null) {
+                LemmaVersion current = entry.getCurrent();
+                String RStichwort = current.getLemmaValues().get("RStichwort");
+                RStichwort = WordNormalizer.normalizeWord(language, RStichwort);
+
+                if (RStichwort != null && !RStichwort.isEmpty()) {
+                    strings.add(RStichwort);
+                }
+            }
+        }
+
+        List<String> sortedStrings = strings.stream()
+                .sorted((s1, s2) -> new StringBuilder(s1).reverse().toString()
+                        .compareTo(new StringBuilder(s2).reverse().toString()))
+                .collect(Collectors.toList());
+
+        String result = String.join("\n", sortedStrings);
+        return new ByteArrayResource(result.getBytes());
     }
 
     @Override

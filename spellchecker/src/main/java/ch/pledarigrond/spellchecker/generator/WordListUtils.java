@@ -9,68 +9,15 @@ import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationPronoun
 import ch.pledarigrond.names.entities.Name;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class WordListUtils {
 
     // PUTER
-    public static String normalizeStringPuter(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Ignore cf.
-        if (input.startsWith("cf. ")) {
-            return null;
-        }
-
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
-        }
-        if (input.endsWith(" qchs / a qchn")) {
-            input = input.substring(0, input.length() - 14);
-        }
-        if (input.endsWith(" qchs")) {
-            input = input.substring(0, input.length() - 5);
-        }
-        if (input.endsWith(" a qchn")) {
-            input = input.substring(0, input.length() - 7);
-        }
-        if (input.endsWith("!")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.endsWith("?")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.startsWith("fer ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("l'")) {
-            input = input.substring(2);
-        }
-        if (input.startsWith("la ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("il ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ün ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ün'")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("üna ")) {
-            input = input.substring(4);
-        }
-        return input;
-    }
-
     public static String removePronounsPuter(String input) {
         if (input == null) {
             return null;
@@ -131,52 +78,6 @@ public class WordListUtils {
 
 
     // RUMANTSCH GRISCHUN
-    public static String normalizeStringRumantschGrischun(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Ignore cf.
-        if (input.startsWith("cf. ")) {
-            return null;
-        }
-
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" che")) {
-            input = input.substring(0, input.length() - 4);
-        }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
-        }
-        if (input.endsWith("!")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.endsWith("?")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.startsWith("far ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("l'")) {
-            input = input.substring(2);
-        }
-        if (input.startsWith("la ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("in ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("in'")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ina ")) {
-            input = input.substring(4);
-        }
-        return input;
-    }
-
     public static String removePronounsRumantschGrischun(String input) {
         if (input == null) {
             return null;
@@ -228,55 +129,6 @@ public class WordListUtils {
     }
 
     // SURMIRAN
-    public static String normalizeStringSurmiran(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Ignore cf.
-        if (input.startsWith("cf. ")) {
-            return null;
-        }
-
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
-        }
-        if (input.endsWith("!")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.endsWith("?")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.startsWith("far ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("l'")) {
-            input = input.substring(2);
-        }
-        if (input.startsWith("la ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("en ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("en'")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ena ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egn ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egna ")) {
-            input = input.substring(5);
-        }
-        return input;
-    }
-
     public static String removePronounsSurmiran(String input) {
         if (input == null) {
             return null;
@@ -332,58 +184,6 @@ public class WordListUtils {
 
 
     // SUTSILVAN
-    public static String normalizeStringSutsilvan(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Ignore cf.
-        if (input.startsWith("cf. ")) {
-            return null;
-        }
-
-        if (input.endsWith(" ca")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
-        }
-        if (input.endsWith("!")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.endsWith("?")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.startsWith("far ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("l'")) {
-            input = input.substring(2);
-        }
-        if (input.startsWith("la ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("en ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("en'")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ena ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egn ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egna ")) {
-            input = input.substring(5);
-        }
-        return input;
-    }
-
     public static String removePronounsSutsilvan(String input) {
         if (input == null) {
             return null;
@@ -450,58 +250,6 @@ public class WordListUtils {
 
 
     // VALLADER
-    public static String normalizeStringVallader(String input) {
-        if (input == null) {
-            return null;
-        }
-
-        // Ignore cf.
-        if (input.startsWith("cf. ")) {
-            return null;
-        }
-
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
-        }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
-        }
-        if (input.endsWith("!")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.endsWith("?")) {
-            input = input.substring(0, input.length() - 1);
-        }
-        if (input.startsWith("far ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("l'")) {
-            input = input.substring(2);
-        }
-        if (input.startsWith("il ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("la ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ün ")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("ün'")) {
-            input = input.substring(3);
-        }
-        if (input.startsWith("üna ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egn ")) {
-            input = input.substring(4);
-        }
-        if (input.startsWith("egna ")) {
-            input = input.substring(5);
-        }
-        return input;
-    }
-
     public static String removePronounsVallader(String input) {
         if (input == null) {
             return null;
