@@ -19,6 +19,12 @@ public interface RegistrationService {
 
     public Registration postponeRegistration(Registration registration);
 
+    public Registration acceptRegistration(Registration registration);
+
+    public Registration rejectRegistration(Registration registration);
+
+    public Registration postponeReviewRegistration(Registration registration);
+
     public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 
     public boolean extractSingleWords() throws DatabaseException, UnknownHostException;

@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.RegistrationService;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
@@ -44,6 +45,24 @@ public class RegistrationsController {
     @PostMapping("/postpone")
     ResponseEntity<?> postpone(@Validated @RequestBody Registration registration) {
         return ResponseEntity.ok(registrationService.postponeRegistration(registration));
+    }
+
+    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PostMapping("/accept")
+    ResponseEntity<?> accept(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
+        return ResponseEntity.ok(registrationService.acceptRegistration(registration));
+    }
+
+    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PostMapping("/reject")
+    ResponseEntity<?> reject(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
+        return ResponseEntity.ok(registrationService.rejectRegistration(registration));
+    }
+
+    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PostMapping("/postpone_review")
+    ResponseEntity<?> postponeReview(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
+        return ResponseEntity.ok(registrationService.postponeReviewRegistration(registration));
     }
 
     @PreAuthorize("hasPermission('registrations', 'editor')")

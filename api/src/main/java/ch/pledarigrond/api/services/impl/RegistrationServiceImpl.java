@@ -79,6 +79,26 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    public Registration acceptRegistration(Registration registration) {
+        // TODO: Save registration to lemmas
+
+        registration.setStatus(RegistrationStatus.COMPLETED);
+        return registrationRepository.save(registration);
+    }
+
+    @Override
+    public Registration rejectRegistration(Registration registration) {
+        registration.setStatus(RegistrationStatus.REFUSED);
+        return registrationRepository.save(registration);
+    }
+
+    @Override
+    public Registration postponeReviewRegistration(Registration registration) {
+        registration.setStatus(RegistrationStatus.POSTPONED_REVIEW);
+        return registrationRepository.save(registration);
+    }
+
+    @Override
     public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException {
         File tempWavFile = File.createTempFile("upload", ".wav");
         wavFile.transferTo(tempWavFile);
