@@ -33,6 +33,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,6 +109,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         wavFile.transferTo(tempWavFile);
 
         File mp3File = convertWavToMp3(tempWavFile);
+
+        if (mp3File == null) {
+            throw new IOException("Failed to convert wav to mp3");
+        }
 
         String path = "pronunciation/" + activeProfile + "/" + registration.getId() + "/" + registration.getId();
 
@@ -227,25 +236,29 @@ public class RegistrationServiceImpl implements RegistrationService {
         return words.length == 1;
     }
 
-    private File convertWavToMp3(File wavFile) throws IOException {
-        // Assuming ffmpeg is installed and added to the system path
+    private File convertWavToMp3(File wavFile) {
         String mp3FileName = FilenameUtils.removeExtension(wavFile.getName()) + ".mp3";
         File mp3File = new File(wavFile.getParent(), mp3FileName);
 
-        ProcessBuilder pb = new ProcessBuilder("ffmpeg", "-i", wavFile.getAbsolutePath(), mp3File.getAbsolutePath());
-        pb.redirectErrorStream(true);
-        Process process = pb.start();
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(128000);
+        audio.setChannels(1);
+        audio.setSamplingRate(48000);
+
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setInputFormat("wav");
+        attrs.setOutputFormat("mp3");
+        attrs.setAudioAttributes(audio);
+
+        Encoder encoder = new Encoder();
         try {
-            process.waitFor();
-        } catch (InterruptedException e) {
+            encoder.encode(new MultimediaObject(wavFile), mp3File, attrs);
+            return mp3File;
+        } catch (EncoderException e) {
             e.printStackTrace();
+            return null;
         }
-
-        if (!mp3File.exists()) {
-            throw new IOException("Failed to convert wav to mp3");
-        }
-
-        return mp3File;
     }
 
     private void uploadFileToBunny(File file, String fileName) {
