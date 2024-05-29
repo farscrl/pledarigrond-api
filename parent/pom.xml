@@ -14,7 +14,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <revision>1.4.2</revision>
+        <revision>1.4.3-SNAPSHOT</revision>
         <lucene.version>4.6.0</lucene.version>
         <poi-ooxml.version>5.2.2</poi-ooxml.version>
     </properties>
@@ -27,6 +27,7 @@
         <module>../inflection</module>
         <module>../names</module>
         <module>../spellchecker</module>
+        <module>../pronunciation</module>
     </modules>
 
     <profiles>
