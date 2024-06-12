@@ -128,6 +128,15 @@ public class WordNormalizer {
         if (input.endsWith(" (da)")) {
             input = input.substring(0, input.length() - 5);
         }
+        if (input.endsWith("(da)")) {
+            input = input.substring(0, input.length() - 4);
+        }
+        if (input.endsWith(" (E)")) {
+            input = input.substring(0, input.length() - 4);
+        }
+        if (input.endsWith(" (cun)")) {
+            input = input.substring(0, input.length() - 6);
+        }
 
         return input;
     }
