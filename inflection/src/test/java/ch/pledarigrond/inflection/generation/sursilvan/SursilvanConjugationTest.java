@@ -2391,7 +2391,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("durmi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("durmidas", forms.getInflectionValues().get("participperfectfp"));
 
-        Assert.assertEquals("dorma!\ndierma!", forms.getInflectionValues().get("imperativ1"));
+        Assert.assertEquals("dierma!", forms.getInflectionValues().get("imperativ1"));
         Assert.assertEquals("durmi!", forms.getInflectionValues().get("imperativ2"));
 
         Assert.assertEquals("durmend", forms.getInflectionValues().get("gerundium"));

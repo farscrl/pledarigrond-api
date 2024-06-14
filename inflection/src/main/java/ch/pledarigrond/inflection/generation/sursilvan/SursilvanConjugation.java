@@ -1178,15 +1178,12 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setImperativ2(root + "i!");
                 break;
             case "4a":
+            case "4b":
             case "4c":
             case "4d":
             case "4e":
             case "4f":
                 cs.setImperativ1(modRoot + "a!");
-                cs.setImperativ2(root + "i!");
-                break;
-            case "4b":
-                cs.setImperativ1(modRootAlternative + "a!\n" + modRoot + "a!");
                 cs.setImperativ2(root + "i!");
                 break;
 
