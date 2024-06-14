@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Data
 public class SursilvanConjugation extends LanguageConjugation {
@@ -150,6 +152,80 @@ public class SursilvanConjugation extends LanguageConjugation {
                 int start = root.lastIndexOf("u");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "iu" + root.substring(start + 1);
+            }
+
+            case "2a" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "au" + root.substring(start + 1);
+            }
+
+            case "3a" -> {
+                int start = root.lastIndexOf("o");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "u" + root.substring(start + 1);
+                modRootAlternative = root.substring(0, start) + "iu" + root.substring(start + 1, root.length() - 1);
+            }
+            case "3b" -> {
+                int start = root.lastIndexOf("ie");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "i" + root.substring(start + 2);
+            }
+            case "3c" -> {
+                int start = root.lastIndexOf("au");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "u" + root.substring(start + 2);
+            }
+            case "3d" -> {
+                int start = root.lastIndexOf("ei");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 2);
+            }
+            case "3e" -> {
+                int start = root.lastIndexOf("ou");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "u" + root.substring(start + 2);
+            }
+            case "3f" -> {
+                int start = root.lastIndexOf("ia");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 2);
+            }
+
+            case "4a" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "o" + root.substring(start + 1);
+            }
+            case "4b" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "ie" + root.substring(start + 1);
+                modRootAlternative = root.substring(0, start) + "o" + root.substring(start + 1);
+            }
+            case "4c" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "uo" + root.substring(start + 1);
+            }
+            case "4d" -> {
+                int start = root.lastIndexOf("u");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "e" + root.substring(start + 1);
+            }
+            case "4e" -> {
+                int start = root.lastIndexOf("e");
+                if (start == -1) break;
+                modRoot = root.substring(0, start) + "ia" + root.substring(start + 1);
+            }
+            case "4f" -> {
+                Object[] result = findLastVowelWithRAndIndex(root);
+                if ((int) result[0] != -1) {
+                    int index = (int) result[0];
+                    String vowel = (String) result[1];
+
+                    modRoot = root.substring(0, index) + "r" + vowel.charAt(0) + root.substring(index + 2) + "i";
+                }
             }
         }
 
@@ -369,6 +445,38 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setPreschentplural2(root + "eis\n" + root + "is");
                 cs.setPreschentplural3(root + "an");
                 break;
+            case "3a":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setPreschentsing1(root + "el");
+                cs.setPreschentsing2(root + "as");
+                cs.setPreschentsing3(root + "a");
+
+                cs.setPreschentplural1(modRoot + "ein\n" + modRoot + "in");
+                cs.setPreschentplural2(modRoot + "eis\n" + modRoot + "is");
+                cs.setPreschentplural3(root + "an");
+                break;
+            case "3b":
+                cs.setPreschentsing1(root + "el");
+                cs.setPreschentsing2(root + "as");
+                cs.setPreschentsing3(root + "a");
+
+                cs.setPreschentplural1(modRoot + "in");
+                cs.setPreschentplural2(modRoot + "is");
+                cs.setPreschentplural3(root + "an");
+                break;
+
+            case "2a":
+                cs.setPreschentsing1(modRoot + "el");
+                cs.setPreschentsing2(modRoot + "as");
+                cs.setPreschentsing3(modRoot + "a");
+
+                cs.setPreschentplural1(root + "in");
+                cs.setPreschentplural2(root + "is");
+                cs.setPreschentplural3(modRoot + "an");
+                break;
 
             case "4":
                 cs.setPreschentsing1(root + "el");
@@ -378,6 +486,24 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setPreschentplural1(root + "in");
                 cs.setPreschentplural2(root + "is");
                 cs.setPreschentplural3(root + "an");
+                break;
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
+                if (modRoot.endsWith("i")) {
+                    cs.setPreschentsing1(modRoot.substring(0, modRoot.length() - 1) + "el");
+                } else {
+                    cs.setPreschentsing1(modRoot + "el");
+                }
+                cs.setPreschentsing2(modRoot + "as");
+                cs.setPreschentsing3(modRoot + "a");
+
+                cs.setPreschentplural1(root + "in");
+                cs.setPreschentplural2(root + "is");
+                cs.setPreschentplural3(modRoot + "an");
                 break;
 
             case "5":
@@ -428,8 +554,15 @@ public class SursilvanConjugation extends LanguageConjugation {
                 break;
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setImperfectsing1(root + "evel");
                 cs.setImperfectsing2(root + "evas");
@@ -440,6 +573,20 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setImperfectplural3(root + "evan");
                 break;
 
+            case "3a":
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setImperfectsing1(modRoot + "evel");
+                cs.setImperfectsing2(modRoot + "evas");
+                cs.setImperfectsing3(modRoot + "eva");
+
+                cs.setImperfectplural1(modRoot + "evan");
+                cs.setImperfectplural2(modRoot + "evas");
+                cs.setImperfectplural3(modRoot + "evan");
+                break;
         }
     }
 
@@ -532,6 +679,38 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setConjunctivplural2(root + "ies\n" + root + "eies\n" + root + "îes");
                 cs.setConjunctivplural3(root + "ien");
                 break;
+            case "3a":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setConjunctivsing1(root + "i");
+                cs.setConjunctivsing2(root + "ies");
+                cs.setConjunctivsing3(root + "i");
+
+                cs.setConjunctivplural1(root + "ien\n" + modRoot + "eien\n" + modRoot + "îen");
+                cs.setConjunctivplural2(root + "ies\n" + modRoot + "eies\n" + modRoot + "îes");
+                cs.setConjunctivplural3(root + "ien");
+                break;
+            case "3b":
+                cs.setConjunctivsing1(root + "i");
+                cs.setConjunctivsing2(root + "ies");
+                cs.setConjunctivsing3(root + "i");
+
+                cs.setConjunctivplural1(root + "ien\n" + modRoot + "îen");
+                cs.setConjunctivplural2(root + "ies\n" + modRoot + "îes");
+                cs.setConjunctivplural3(root + "ien");
+                break;
+
+            case "2a":
+                cs.setConjunctivsing1(modRoot + "i");
+                cs.setConjunctivsing2(modRoot + "ies");
+                cs.setConjunctivsing3(modRoot + "i");
+
+                cs.setConjunctivplural1(modRoot + "ien\n" + root + "îen");
+                cs.setConjunctivplural2(modRoot + "ies\n" + root + "îes");
+                cs.setConjunctivplural3(modRoot + "ien");
+                break;
 
             case "4":
                 cs.setConjunctivsing1(root + "i");
@@ -541,6 +720,32 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setConjunctivplural1(root + "îen");
                 cs.setConjunctivplural2(root + "îes");
                 cs.setConjunctivplural3(root + "ien");
+                break;
+
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
+                if (modRoot.endsWith("i")) {
+                    cs.setConjunctivsing1(modRoot);
+                    cs.setConjunctivsing2(modRoot + "es");
+                    cs.setConjunctivsing3(modRoot);
+
+                    cs.setConjunctivplural1(modRoot + "en\n" + root + "îen");
+                    cs.setConjunctivplural2(modRoot + "es\n" + root + "îes");
+                    cs.setConjunctivplural3(modRoot + "en");
+                } else {
+                    cs.setConjunctivsing1(modRoot + "i");
+                    cs.setConjunctivsing2(modRoot + "ies");
+                    cs.setConjunctivsing3(modRoot + "i");
+
+                    cs.setConjunctivplural1(modRoot + "ien\n" + root + "îen");
+                    cs.setConjunctivplural2(modRoot + "ies\n" + root + "îes");
+                    cs.setConjunctivplural3(modRoot + "ien");
+                }
+
                 break;
 
             case "5":
@@ -592,8 +797,15 @@ public class SursilvanConjugation extends LanguageConjugation {
                 break;
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setConjunctivimperfectsing1(root + "evi");
                 cs.setConjunctivimperfectsing2(root + "evies");
@@ -602,6 +814,21 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setConjunctivimperfectplural1(root + "evien");
                 cs.setConjunctivimperfectplural2(root + "evies");
                 cs.setConjunctivimperfectplural3(root + "evien");
+                break;
+
+            case "3a":
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setConjunctivimperfectsing1(modRoot + "evi");
+                cs.setConjunctivimperfectsing2(modRoot + "evies");
+                cs.setConjunctivimperfectsing3(modRoot + "evi");
+
+                cs.setConjunctivimperfectplural1(modRoot + "evien");
+                cs.setConjunctivimperfectplural2(modRoot + "evies");
+                cs.setConjunctivimperfectplural3(modRoot + "evien");
                 break;
         }
     }
@@ -643,8 +870,15 @@ public class SursilvanConjugation extends LanguageConjugation {
                 break;
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setCundizionalsing1(root + "ess");
                 cs.setCundizionalsing2(root + "esses");
@@ -653,6 +887,21 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setCundizionalplural1(root + "essen");
                 cs.setCundizionalplural2(root + "esses");
                 cs.setCundizionalplural3(root + "essen");
+                break;
+
+            case "3a":
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setCundizionalsing1(modRoot + "ess");
+                cs.setCundizionalsing2(modRoot + "esses");
+                cs.setCundizionalsing3(modRoot + "ess");
+
+                cs.setCundizionalplural1(modRoot + "essen");
+                cs.setCundizionalplural2(modRoot + "esses");
+                cs.setCundizionalplural3(modRoot + "essen");
                 break;
         }
     }
@@ -695,8 +944,15 @@ public class SursilvanConjugation extends LanguageConjugation {
 
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setCundizionalindirectsing1(root + "essi");
                 cs.setCundizionalindirectsing2(root + "essies");
@@ -705,6 +961,21 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setCundizionalindirectplural1(root + "essien");
                 cs.setCundizionalindirectplural2(root + "essies");
                 cs.setCundizionalindirectplural3(root + "essien");
+                break;
+
+            case "3a":
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setCundizionalindirectsing1(modRoot + "essi");
+                cs.setCundizionalindirectsing2(modRoot + "essies");
+                cs.setCundizionalindirectsing3(modRoot + "essi");
+
+                cs.setCundizionalindirectplural1(modRoot + "essien");
+                cs.setCundizionalindirectplural2(modRoot + "essies");
+                cs.setCundizionalindirectplural3(modRoot + "essien");
                 break;
         }
     }
@@ -743,8 +1014,15 @@ public class SursilvanConjugation extends LanguageConjugation {
                 break;
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setParticipperfectms(root + "iu");
                 cs.setParticipperfectfs(root + "ida");
@@ -752,6 +1030,23 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setParticipperfectfp(root + "idas");
                 break;
 
+            case "3a":
+                cs.setParticipperfectms(modRootAlternative + "t\n" + modRoot + "iu");
+                cs.setParticipperfectfs(modRootAlternative + "ta\n" + modRoot + "ida");
+                cs.setParticipperfectmp(modRootAlternative + "ts\n" + modRoot + "i");
+                cs.setParticipperfectfp(modRootAlternative + "tas\n" + modRoot + "idas");
+                break;
+
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setParticipperfectms(modRoot + "iu");
+                cs.setParticipperfectfs(modRoot + "ida");
+                cs.setParticipperfectmp(modRoot + "i");
+                cs.setParticipperfectfp(modRoot + "idas");
+                break;
         }
 
     }
@@ -787,10 +1082,26 @@ public class SursilvanConjugation extends LanguageConjugation {
                 break;
 
             case "2":
+            case "2a":
             case "3":
             case "4":
+            case "4a":
+            case "4b":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
             case "5":
                 cs.setGerundium(root + "end");
+                break;
+
+            case "3a":
+            case "3b":
+            case "3c":
+            case "3d":
+            case "3e":
+            case "3f":
+                cs.setGerundium(modRoot + "end");
                 break;
         }
     }
@@ -845,9 +1156,37 @@ public class SursilvanConjugation extends LanguageConjugation {
                 cs.setImperativ1(root + "a!");
                 cs.setImperativ2(root + "ei!\n" + root + "i!");
                 break;
+            case "2a":
+                cs.setImperativ1(modRoot + "a!");
+                cs.setImperativ2(root + "i!");
+                break;
+            case "3a":
+            case "3c":
+            case "3d":
+            case "3f":
+                cs.setImperativ1(root + "a!");
+                cs.setImperativ2(modRoot + "ei!\n" + modRoot + "i!");
+                break;
+            case "3b":
+            case "3e":
+                cs.setImperativ1(root + "a!");
+                cs.setImperativ2(modRoot + "i!");
+                break;
 
             case "4":
                 cs.setImperativ1(root + "a!");
+                cs.setImperativ2(root + "i!");
+                break;
+            case "4a":
+            case "4c":
+            case "4d":
+            case "4e":
+            case "4f":
+                cs.setImperativ1(modRoot + "a!");
+                cs.setImperativ2(root + "i!");
+                break;
+            case "4b":
+                cs.setImperativ1(modRootAlternative + "a!\n" + modRoot + "a!");
                 cs.setImperativ2(root + "i!");
                 break;
 
@@ -1188,5 +1527,20 @@ public class SursilvanConjugation extends LanguageConjugation {
             }
         }
         return false;
+    }
+
+    private static Object[] findLastVowelWithRAndIndex(String str) {
+        Pattern pattern = Pattern.compile("[aeiouAEIOU]r");
+        Matcher matcher = pattern.matcher(str);
+
+        int lastIndex = -1;
+        String lastVowel = null;
+
+        while (matcher.find()) {
+            lastIndex = matcher.start();
+            lastVowel = matcher.group();
+        }
+
+        return new Object[]{lastIndex, lastVowel};
     }
 }

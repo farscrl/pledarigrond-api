@@ -37,11 +37,24 @@ public class SursilvanConjugationClasses {
                     new InflectionSubType("1w", "u –> iu", "(p.ex. suar)"),
 
                     new InflectionSubType("2", "3: -er", "Finiziun sin -er, accent silla finiziun (temer)"),
+                    new InflectionSubType("2a", "u -> au", "(p.ex. guder)"),
 
                     new InflectionSubType("3", "3: -er", "Finiziun sin -er, accent sil tschep (vender)"),
+                    new InflectionSubType("3a", "o -> u", "(p.ex. volver)"),
+                    new InflectionSubType("3b", "ie -> i", "(p.ex. rietscher)"),
+                    new InflectionSubType("3c", "au -> u", "(p.ex. clauder)"),
+                    new InflectionSubType("3d", "ei -> e", "(p.ex. entscheiver)"),
+                    new InflectionSubType("3e", "uo -> u", "(p.ex. laguoter)"),
+                    new InflectionSubType("3f", "ia -> e", "(p.ex. piarder)"),
 
                     new InflectionSubType("4", "4: -ir", "Finiziun sin -ir (sentir)"),
-                    new InflectionSubType("5", "4: -ir (-esch-)", "Finiziun sin -ir cun infix -esch- (capir)")
+                    new InflectionSubType("5", "4: -ir (-esch-)", "Finiziun sin -ir cun infix -esch- (capir)"),
+                    new InflectionSubType("4a", "u -> o", "(p.ex. durmir)"),
+                    new InflectionSubType("4b", "u -> ie", "(p.ex. durmir)"),
+                    new InflectionSubType("4c", "u -> uo", "(p.ex. burlir)"),
+                    new InflectionSubType("4d", "u -> e", "(p.ex. burlir)"),
+                    new InflectionSubType("4e", "e -> ia", "(p.ex. embellir)"),
+                    new InflectionSubType("4f", "(vocal)r -> r(vocal)", "(p.ex. bargir)")
             )
     );
 
