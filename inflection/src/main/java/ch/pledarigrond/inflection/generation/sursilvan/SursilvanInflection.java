@@ -14,7 +14,7 @@ public class SursilvanInflection implements LanguageInflection {
             case V:
                 return SursilvanConjugationClasses.getVerbInflectionSubtypes();
             case NOUN:
-                return null; // RumantschGrischunNounClasses.getNounInflectionSubtypes();
+                return SursilvanNounClasses.getNounInflectionSubtypes();
             case ADJECTIVE:
                 return null; // RumantschGrischunAdjectiveClasses.getAdjectiveInflectionSubtypes();
         }
@@ -29,8 +29,8 @@ public class SursilvanInflection implements LanguageInflection {
                 SursilvanConjugation conjugation = new SursilvanConjugation();
                 return conjugation.guessInflection(baseForm, genus, flex);
             case NOUN:
-                // RumantschGrischunNounGenerator nounGenerator = new RumantschGrischunNounGenerator();
-                return null; // nounGenerator.guessInflection(baseForm, genus, flex);
+                SursilvanNounGenerator nounGenerator = new SursilvanNounGenerator();
+                return nounGenerator.guessInflection(baseForm, genus, flex);
             case ADJECTIVE:
                 // RumantschGrischunAdjectiveGenerator adjectiveGenerator = new RumantschGrischunAdjectiveGenerator();
                 return null; // adjectiveGenerator.guessInflection(baseForm, genus, flex);
@@ -45,8 +45,8 @@ public class SursilvanInflection implements LanguageInflection {
                 SursilvanConjugation conjugation = new SursilvanConjugation();
                 return conjugation.generateConjugation(subTypeId, baseForm);
             case NOUN:
-                // RumantschGrischunNounGenerator nounGenerator = new RumantschGrischunNounGenerator();
-                return null; // nounGenerator.generateForms(subTypeId, baseForm);
+                SursilvanNounGenerator nounGenerator = new SursilvanNounGenerator();
+                return nounGenerator.generateForms(subTypeId, baseForm);
             case ADJECTIVE:
                 // RumantschGrischunAdjectiveGenerator adjectiveGenerator = new RumantschGrischunAdjectiveGenerator();
                 return null; // adjectiveGenerator.generateForms(subTypeId, baseForm);
