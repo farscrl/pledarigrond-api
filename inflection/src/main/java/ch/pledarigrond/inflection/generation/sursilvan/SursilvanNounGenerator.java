@@ -56,7 +56,7 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
-        if (baseForm.matches(".*, -(bla|alla|astra|atta|ada|edra|na|ra|iala|idra|ola|tra|occa|utta|essa|cra|vla)$")) {
+        if (baseForm.matches(".*, -(bla|alla|astra|ta|atta|ada|edra|na|ra|iala|idra|ola|tra|occa|utta|essa|cra|vla)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
 
@@ -67,6 +67,7 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
                     return generateForms("5", baseForm);
                 case "astra":
                     return generateForms("6", baseForm);
+                case "ta":
                 case "atta":
                     return generateForms("7", baseForm);
                 case "ada":
@@ -183,9 +184,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
         // last characters
         if (baseForm.substring(length - 1).equals("i")) {
             return generateForms("12", baseForm);
-        }
-        if (baseForm.substring(length - 1).equals("t")) {
-            return generateForms("18", baseForm);
         }
 
         return generateForms("3", baseForm);

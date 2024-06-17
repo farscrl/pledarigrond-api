@@ -208,10 +208,16 @@ public class SursilvanNounGeneratorTest {
     public void testRule21() {
         forms = generator.generateForms("21", "pèr");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "pèr");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), null);
+        Assert.assertNull(forms.getInflectionValues().get("fSingular"));
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "pèrs");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), null);
+        Assert.assertNull(forms.getInflectionValues().get("fPlural"));
         Assert.assertEquals(forms.getInflectionValues().get("pluralCollectiv"), "pèra");
+    }
+
+    @Test
+    public void testBaseFormWithWhitespace() {
+        forms = generator.guessInflection("esch casa", null, null);
+        Assert.assertNull(forms);
     }
 
     @Test
