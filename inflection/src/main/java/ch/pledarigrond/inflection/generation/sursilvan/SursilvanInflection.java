@@ -16,7 +16,7 @@ public class SursilvanInflection implements LanguageInflection {
             case NOUN:
                 return SursilvanNounClasses.getNounInflectionSubtypes();
             case ADJECTIVE:
-                return null; // RumantschGrischunAdjectiveClasses.getAdjectiveInflectionSubtypes();
+                return SursilvanAdjectiveClasses.getAdjectiveInflectionSubtypes();
         }
 
         return null;
@@ -32,8 +32,8 @@ public class SursilvanInflection implements LanguageInflection {
                 SursilvanNounGenerator nounGenerator = new SursilvanNounGenerator();
                 return nounGenerator.guessInflection(baseForm, genus, flex);
             case ADJECTIVE:
-                // RumantschGrischunAdjectiveGenerator adjectiveGenerator = new RumantschGrischunAdjectiveGenerator();
-                return null; // adjectiveGenerator.guessInflection(baseForm, genus, flex);
+                SursilvanAdjectiveGenerator adjectiveGenerator = new SursilvanAdjectiveGenerator();
+                return adjectiveGenerator.guessInflection(baseForm, genus, flex);
         }
         return null;
     }
@@ -48,8 +48,8 @@ public class SursilvanInflection implements LanguageInflection {
                 SursilvanNounGenerator nounGenerator = new SursilvanNounGenerator();
                 return nounGenerator.generateForms(subTypeId, baseForm);
             case ADJECTIVE:
-                // RumantschGrischunAdjectiveGenerator adjectiveGenerator = new RumantschGrischunAdjectiveGenerator();
-                return null; // adjectiveGenerator.generateForms(subTypeId, baseForm);
+                SursilvanAdjectiveGenerator adjectiveGenerator = new SursilvanAdjectiveGenerator();
+                return adjectiveGenerator.generateForms(subTypeId, baseForm);
         }
         return null;
     }
