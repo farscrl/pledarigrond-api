@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package ch.pledarigrond.lucene.config.querybuilder.modifier;
+package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
-import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;

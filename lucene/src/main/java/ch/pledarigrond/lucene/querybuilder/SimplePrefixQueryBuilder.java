@@ -13,41 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package ch.pledarigrond.lucene.config.querybuilder.modifier;
+package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
-import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
+import ch.pledarigrond.lucene.util.LuceneHelper;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.RegexpQuery;
-import org.apache.lucene.search.TermQuery;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * A query builder for 'infix' queries. 
- * See {@link PgQueryBuilder} and {@link DefaultQueryBuilder} for details.
- * @author sschwieb
+ * This query builder generates a basic PrefixQuery for use in field-suggestions,
+ * using Lucene's WhiteSpaceAnalyzer (preserving all special chars, e.g. brackets)
+ * <br>
+ * <strong>Note: The transformation of the field names is proprietary.</strong>
+ * This means, that using this query builder requires a lucene index which
+ * defines fields with special naming conventions. 
+ * 
+ * @author claesn
  *
  */
-public class InfixQueryBuilder extends PgQueryBuilder {
+public class SimplePrefixQueryBuilder extends PgQueryBuilder {
 
 	@Override
 	protected void buildColumnToFieldsMapping() {
 		registerFieldMapping("first", false, FieldType.STRING, true, false);
-		registerFieldMapping("second",true, FieldType.STRING, false, false);
 	}
 
 	@Override
 	public List<Query> transform(String value) {
-		value = TokenizerHelper.tokenizeString(analyzer, value);
-		TermQuery q1 = new TermQuery(new Term(getFieldName("first"), value));
-		q1.setBoost(1000f);
-		Query q2 = new RegexpQuery(new Term(getFieldName("second"), ".*"+value+".*"));
-		TermQuery q3 = new TermQuery(new Term(getFieldName("first"), ".*"+value+".*"));
-		return Arrays.asList(q1, q2, q3);
+		value = TokenizerHelper.tokenizeString(LuceneHelper.newWhitespaceAnalyzer(), value);
+		Query query = new PrefixQuery(new Term(getFieldName("first"), value.toLowerCase()));
+		return Arrays.asList(query);
+	}
+
+	public String getIndexSortField() {
+		return super.getFieldName("first");
 	}
 	
 	

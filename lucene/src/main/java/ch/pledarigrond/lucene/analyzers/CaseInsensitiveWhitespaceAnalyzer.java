@@ -1,4 +1,4 @@
-package ch.pledarigrond.lucene.config.analyzers;
+package ch.pledarigrond.lucene.analyzers;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
