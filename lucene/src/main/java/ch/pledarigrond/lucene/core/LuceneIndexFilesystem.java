@@ -20,7 +20,7 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.lucene.config.IndexManager;
+import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;

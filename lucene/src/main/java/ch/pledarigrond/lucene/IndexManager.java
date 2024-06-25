@@ -1,4 +1,4 @@
-package ch.pledarigrond.lucene.config;
+package ch.pledarigrond.lucene;
 
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
@@ -93,10 +93,6 @@ public class IndexManager {
     public BuilderRegistry getBuilderRegistry() {
         return builderRegistry;
     }
-
-
-
-
 
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
         Document doc = new Document();

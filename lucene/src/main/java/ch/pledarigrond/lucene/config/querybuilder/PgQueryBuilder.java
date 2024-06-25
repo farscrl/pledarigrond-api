@@ -18,7 +18,7 @@ package ch.pledarigrond.lucene.config.querybuilder;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.lucene.config.IndexManager;
+import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.search.Query;
