@@ -73,7 +73,7 @@ public class IndexManager {
 
 
         for (IndexedColumn item : finalColumnSet) {
-            logger.info("   " + item.toString());
+            logger.info("   {}", item.toString());
             List<IndexedColumn> fields = dbFieldMapping.computeIfAbsent(item.getSourceColumnName(), k -> new ArrayList<>());
             fields.add(item);
         }
@@ -102,7 +102,7 @@ public class IndexManager {
             if(ignored.contains(entry.getKey())) continue;
             List<IndexableField> fields = toField(entry.getKey(), entry.getValue());
             if(fields == null) {
-                logger.warn("No mapping for field " + entry.getKey() + " - field will not be indexed!");
+                logger.warn("No mapping for field {} - field will not be indexed!", entry.getKey());
                 ignored.add(entry.getKey());
                 continue;
             }
@@ -153,7 +153,7 @@ public class IndexManager {
             return null;
         }
 
-        List<IndexableField> fields = new ArrayList<IndexableField>();
+        List<IndexableField> fields = new ArrayList<>();
         for (IndexedColumn f : indexFields) {
             List<IndexableField> field = IndexedColumnHelper.getFields(f, value);
             if(field != null) {
@@ -165,9 +165,6 @@ public class IndexManager {
 
     /**
      * Helper method to add the default pg fields of a {@link LemmaVersion} to a lucene {@link Document}.
-     * @param lexEntry
-     * @param version
-     * @param document
      */
     protected void addPgFieldsToDocument(LexEntry lexEntry, LemmaVersion version, Document document) {
         document.add(new StringField(LexEntry.ID, lexEntry.getId(), Field.Store.YES));
@@ -191,8 +188,6 @@ public class IndexManager {
 
     /**
      * Helper method to add default PG fields from a lucene {@link Document} to a {@link LemmaVersion}.
-     * @param document
-     * @param lemmaVersion
      */
     protected void addPgFieldsToLemmaVersion(Document document, LemmaVersion lemmaVersion) {
         lemmaVersion.putPgValue(LexEntry.ID, document.get(LexEntry.ID));

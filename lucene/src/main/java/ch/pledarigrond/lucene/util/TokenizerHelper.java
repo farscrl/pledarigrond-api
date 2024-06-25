@@ -46,6 +46,4 @@ public class TokenizerHelper {
 	    }
 	    return builder.toString().trim();
 	  }
-	
-
 }

@@ -22,7 +22,6 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,8 +42,6 @@ public class ExactMatchQueryBuilder extends PgQueryBuilder {
 		value = TokenizerHelper.tokenizeString(LuceneHelper.newWhitespaceAnalyzer(), value);
 		// match both upper and lower case:
 		Query query = new TermQuery(new Term(getFieldName("first"), value.toLowerCase()));
-		return Arrays.asList(query);
+		return List.of(query);
 	}
-	
-	
 }

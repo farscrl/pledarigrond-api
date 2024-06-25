@@ -20,6 +20,5 @@ import ch.pledarigrond.common.data.common.Language;
 
 public interface IndexOperation {
 	
-	public void execute(Language language) throws Exception;
-
+	void execute(Language language) throws Exception;
 }

@@ -25,10 +25,9 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 public class IndexCommandQueue {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final ExecutorService executor;
-	
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final Language language;
 	
@@ -45,66 +44,47 @@ public class IndexCommandQueue {
 	private IndexCommandQueue(Language language) {
 		this.language = language;
 
-		ThreadFactory factory = new ThreadFactory() {
-			
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread t = new Thread(r);
-				t.setName("Index-Queue");
-				return t;
-			}
-		};
+		ThreadFactory factory = r -> {
+            Thread t = new Thread(r);
+            t.setName("Index-Queue");
+            return t;
+        };
 		executor = Executors.newSingleThreadExecutor(factory);
 	}
 	
 	public void pushMulti(final List<IndexOperation> operation) throws Exception {
-		logger.info("Received " + operation.size() + " operations");
-		Callable<Void> callable = new Callable<Void>() {
-
-			@Override
-			public Void call() throws Exception {
-				try {
-					for (IndexOperation op : operation) {
-						op.execute(language);
-					}
-					return null;
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw e;
-				}
-			}
-		};
-		Future<Void> future = executor.submit(callable);
-		try {
-			future.get();
-			return;
-		} catch (ExecutionException e) {
-			if(e.getCause() != null && (e.getCause() instanceof Exception)) {
-				throw (Exception) e.getCause();
-			} else {
-				throw e;
-			}
-		}
+        logger.info("Received {} operations", operation.size());
+		Callable<Void> callable = () -> {
+            try {
+                for (IndexOperation op : operation) {
+                    op.execute(language);
+                }
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        };
+		executeCallable(callable);
 	}
-	
+
 	public void push(final IndexOperation operation) throws Exception {
-		Callable<Void> callable = new Callable<Void>() {
+		Callable<Void> callable = () -> {
+            try {
+                operation.execute(language);
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        };
+		executeCallable(callable);
+	}
 
-			@Override
-			public Void call() throws Exception {
-				try {
-					operation.execute(language);
-					return null;
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw e;
-				}
-			}
-		};
+	private void executeCallable(Callable<Void> callable) throws Exception {
 		Future<Void> future = executor.submit(callable);
 		try {
 			future.get();
-			return;
 		} catch (ExecutionException e) {
 			if(e.getCause() != null && (e.getCause() instanceof Exception)) {
 				throw (Exception) e.getCause();
@@ -113,5 +93,4 @@ public class IndexCommandQueue {
 			}
 		}
 	}
-
 }

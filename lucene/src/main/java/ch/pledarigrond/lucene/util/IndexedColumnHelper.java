@@ -35,7 +35,7 @@ public class IndexedColumnHelper {
     }
 
     private static List<IndexableField> semicolonFields(String name, String value, Field.Store stored) {
-        List<IndexableField> fields = new ArrayList<IndexableField>();
+        List<IndexableField> fields = new ArrayList<>();
         String[] split = value.split(";");
         for (String part : split) {
             if(!part.trim().isEmpty()) {

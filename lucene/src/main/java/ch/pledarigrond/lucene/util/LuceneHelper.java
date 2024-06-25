@@ -42,5 +42,4 @@ public class LuceneHelper {
 	public static Analyzer newWhitespaceAnalyzer() {
 		return new WhitespaceAnalyzer(CURRENT);
 	}
-
 }

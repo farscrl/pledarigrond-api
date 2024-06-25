@@ -16,10 +16,8 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.util.LuceneHelper;
@@ -34,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -52,11 +51,8 @@ class LuceneIndexFilesystem {
 	private final boolean tracing = logger.isTraceEnabled();
 	private IndexManager indexManager;
 
-	private Language language;
-
-	public LuceneIndexFilesystem(LuceneConfiguration luceneConfiguration) {
-		this.language = luceneConfiguration.getLanguage();
-		setLuceneConfiguration(luceneConfiguration);
+    public LuceneIndexFilesystem(LuceneConfiguration luceneConfiguration) {
+        setLuceneConfiguration(luceneConfiguration);
 	}
 
 	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {
@@ -70,7 +66,7 @@ class LuceneIndexFilesystem {
 		indexManager = IndexManager.getInstance();
 	}
 	
-	int addToIndex(final Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
+	int addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
 		logger.info("Indexing...");
 		int counter = 0;
 		try {
@@ -78,20 +74,12 @@ class LuceneIndexFilesystem {
 			IndexWriter writer = initIndexWriter();
 			counter = indexDocs(writer, iterator);
 			writer.close();
-			OutputStreamWriter osw = new OutputStreamWriter(
-					new FileOutputStream(luceneConfiguration.getLuceneTimestampFile()),
-					"UTF-8");
+			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(luceneConfiguration.getLuceneTimestampFile()), StandardCharsets.UTF_8);
 			BufferedWriter bw = new BufferedWriter(osw);
 			bw.write("Created on " + new Date());
 			bw.close();
-			logger.info("Indexing prepared: "
-					+ (new Date().getTime() - begin.getTime())
-					+ " total milliseconds");
+            logger.info("Indexing prepared: {} total milliseconds", new Date().getTime() - begin.getTime());
 			return counter;
-		} catch (UnsupportedEncodingException e) {
-			throw new IndexException(e);
-		} catch (FileNotFoundException e) {
-			throw new IndexException(e);
 		} catch (IOException e) {
 			throw new IndexException(e);
 		}
@@ -113,8 +101,7 @@ class LuceneIndexFilesystem {
 			writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		}
 		writerConfig.setRAMBufferSizeMB(512.0);
-		IndexWriter writer = new IndexWriter(indexDirectory, writerConfig);
-		return writer;
+        return new IndexWriter(indexDirectory, writerConfig);
 	}
 
 	private boolean indexAvailable() {
@@ -129,14 +116,11 @@ class LuceneIndexFilesystem {
 	private void deleteIndexDirectory() {
 		File[] files = luceneConfiguration.getLuceneIndexDir().listFiles();
 		if (files != null) {
-			logger.warn("Cleanup - Deleting " + files.length
-					+ " possibly broken index files in "
-					+ luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
+            logger.warn("Cleanup - Deleting {} possibly broken index files in {}", files.length, luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
 			for (File file : files) {
 				boolean deleted = file.delete();
 				if (!deleted) {
-					logger.warn("Failed to delete during cleanup: "
-							+ file.getAbsolutePath());
+                    logger.warn("Failed to delete during cleanup: {}", file.getAbsolutePath());
 				}
 			}
 		}
@@ -149,18 +133,18 @@ class LuceneIndexFilesystem {
 			LexEntry lexEntry = iterator.next();
 			List<Document> docs = createDocument(lexEntry);
 			if(tracing) {
-				logger.trace("Indexing Documents: " + docs);
+                logger.trace("Indexing Documents: {}", docs);
 			}
 			for (Document doc : docs) {
 				writer.addDocument(doc);
 			}
 			counter++;
 			if(counter % 10000 == 0) {
-				logger.debug("Indexed " + nf.format(counter) + " documents.");
+                logger.debug("Indexed {} documents.", nf.format(counter));
 			}
 		}
 		logger.info("###########################################");
-		logger.info("Indexing completed - " + nf.format(counter) + " entries have been indexed.");
+        logger.info("Indexing completed - {} entries have been indexed.", nf.format(counter));
 		logger.info("###########################################");
 		return counter;
 	}
@@ -180,22 +164,12 @@ class LuceneIndexFilesystem {
 	}
 
 	void dropIndex() throws IndexException {
-		IndexWriter writer = null;
-		try {
-			writer = initIndexWriter();
-			writer.deleteAll();
-		} catch (IOException e) {
-			throw new IndexException(e);
-		} finally {
-			if(writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					// Ignore
-				}
-			}
-		}
-	}
+        try (IndexWriter writer = initIndexWriter()) {
+            writer.deleteAll();
+        } catch (IOException e) {
+            throw new IndexException(e);
+        }
+    }
 
 	void update(LexEntry entry) throws IOException {
 		IndexWriter writer = initIndexWriter();
@@ -222,12 +196,12 @@ class LuceneIndexFilesystem {
 		File dir = indexDirectory.getDirectory();
 		long lastModified = 0;
 		File[] files = dir.listFiles();
-		for (File file : files) {
+        assert files != null;
+        for (File file : files) {
 			if(file.lastModified() > lastModified) {
 				lastModified = file.lastModified();
 			}
 		}
 		return lastModified;
 	}
-
 }

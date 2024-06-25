@@ -52,6 +52,4 @@ public class SuffixQueryBuilder extends PgQueryBuilder {
 		TermQuery q3 = new TermQuery(new Term(getFieldName("first"), ".*"+value));
 		return Arrays.asList(q1, q2, q3);
 	}
-
-	
 }

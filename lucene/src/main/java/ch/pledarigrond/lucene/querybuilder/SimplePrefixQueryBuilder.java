@@ -22,7 +22,6 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,13 +46,6 @@ public class SimplePrefixQueryBuilder extends PgQueryBuilder {
 	public List<Query> transform(String value) {
 		value = TokenizerHelper.tokenizeString(LuceneHelper.newWhitespaceAnalyzer(), value);
 		Query query = new PrefixQuery(new Term(getFieldName("first"), value.toLowerCase()));
-		return Arrays.asList(query);
+		return List.of(query);
 	}
-
-	public String getIndexSortField() {
-		return super.getFieldName("first");
-	}
-	
-	
-	
 }

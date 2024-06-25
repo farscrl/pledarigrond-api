@@ -21,7 +21,6 @@ import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -35,7 +34,6 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.sandbox.queries.DuplicateFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.BooleanClause.Occur;
@@ -119,10 +117,10 @@ public class LuceneIndex {
 
 		long s1 = System.nanoTime();
 		Query query = buildQuery(searchCriteria);
-		TopDocs docs = null;
+		TopDocs docs;
 
 		Sort sort = new Sort();
-		String[] items = null;
+		String[] items;
 		if(searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
 			items = new String[] { "RStichwort", "RStichwort_sort"};
 		} else {
@@ -135,7 +133,7 @@ public class LuceneIndex {
 			fields[i+1] = new SortField(item, Type.STRING);
 		}
 		sort.setSort(fields);
-		Page<LemmaVersion> result = null;
+		Page<LemmaVersion> result;
 
 		int pageSize = pagination.getPageSize();
 		int pageNr = pagination.getPage();
@@ -177,7 +175,7 @@ public class LuceneIndex {
 	}
 	
 	private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
-		final ArrayList<LemmaVersion> results = new ArrayList<LemmaVersion>(pageSize);
+		final ArrayList<LemmaVersion> results = new ArrayList<>(pageSize);
 		final ScoreDoc[] scoreDocs = docs.scoreDocs;
 		IndexSearcher searcher = luceneIndexRam.get(language).getSearcher();
 		for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
@@ -192,8 +190,8 @@ public class LuceneIndex {
 
 	
 	public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		String sortField = null;
-		List<Query> queries = null;
+		String sortField;
+		List<Query> queries;
 		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
 		if(dictionaryLanguage == DictionaryLanguage.GERMAN) {
 			queries =  indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
@@ -246,55 +244,50 @@ public class LuceneIndex {
 	public IndexStatistics getIndexStatistics() {
 		final IndexStatistics statistics = new IndexStatistics();
 		try {
-			queue.push(new IndexOperation() {
-
-				@Override
-				public void execute(Language language) throws Exception {
-					int all = luceneIndexRam.get(language).getSearcher().getIndexReader().numDocs();
-					int unverified = 0;
-					int approved = 0;
-					int unknown = 0;
-					IndexReader reader = luceneIndexRam.get(language).getSearcher().getIndexReader();
-					HashMap<String, Integer> byInflectionType = new HashMap<String, Integer>();
-					for (int i = 0; i < all; i++) {
-						Document document = reader.document(i);
-						String verification = document.get(LemmaVersion.VERIFICATION);
-						try {
-							if (LemmaVersion.Verification.ACCEPTED.equals(LemmaVersion.Verification.valueOf(verification))) {
-								approved++;
-							} else if (LemmaVersion.Verification.UNVERIFIED.equals(LemmaVersion.Verification.valueOf(verification))) {
-								unverified++;
-							} else {
-								unknown++;
-							}
-						} catch (Exception e) {
-							unknown++;
-						}
-						String flexType = document.get(LemmaVersion.RM_INFLECTION_TYPE);
-						if(flexType != null) {
-							Integer old = byInflectionType.get(flexType);
-							if(old == null) old = 0;
-							byInflectionType.put(flexType, old+1);
-						}
-					}
-					statistics.setInflectionCount(byInflectionType);
-					statistics.setNumberOfEntries(all);
-					statistics.setUnverifiedEntries(unverified);
-					statistics.setApprovedEntries(approved);
-					statistics.setUnknown(unknown);
-					statistics.setLastUpdated(luceneIndexFilesystem.get(language).getLastUpdated());
-				}
-			});
+			queue.push(language -> {
+                int all = luceneIndexRam.get(language).getSearcher().getIndexReader().numDocs();
+                int unverified = 0;
+                int approved = 0;
+                int unknown = 0;
+                IndexReader reader = luceneIndexRam.get(language).getSearcher().getIndexReader();
+                HashMap<String, Integer> byInflectionType = new HashMap<>();
+                for (int i = 0; i < all; i++) {
+                    Document document = reader.document(i);
+                    String verification = document.get(LemmaVersion.VERIFICATION);
+                    try {
+                        if (LemmaVersion.Verification.ACCEPTED.equals(LemmaVersion.Verification.valueOf(verification))) {
+                            approved++;
+                        } else if (LemmaVersion.Verification.UNVERIFIED.equals(LemmaVersion.Verification.valueOf(verification))) {
+                            unverified++;
+                        } else {
+                            unknown++;
+                        }
+                    } catch (Exception e) {
+                        unknown++;
+                    }
+                    String flexType = document.get(LemmaVersion.RM_INFLECTION_TYPE);
+                    if(flexType != null) {
+                        Integer old = byInflectionType.get(flexType);
+                        if(old == null) old = 0;
+                        byInflectionType.put(flexType, old+1);
+                    }
+                }
+                statistics.setInflectionCount(byInflectionType);
+                statistics.setNumberOfEntries(all);
+                statistics.setUnverifiedEntries(unverified);
+                statistics.setApprovedEntries(approved);
+                statistics.setUnknown(unknown);
+                statistics.setLastUpdated(luceneIndexFilesystem.get(language).getLastUpdated());
+            });
 			return statistics;
 		} catch (Exception e) {
 			return new IndexStatistics();
 		}
 	}
 
-	public ArrayList<String> getSuggestionsForField(String fieldName, String searchTerm, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
+	public ArrayList<String> getSuggestionsForField(String fieldName, String searchTerm, int limit) throws NoIndexAvailableException, IOException {
 		Query query = getSuggestionsQuery(fieldName, searchTerm);
-        ArrayList<String> results = new ArrayList<>();
-		Set<String> allValues = new TreeSet<>();
+        Set<String> allValues = new TreeSet<>();
 		ArrayList<String> fields = new ArrayList<>();
 		fields.add(fieldName);
 		for (String field : fields) {
@@ -314,14 +307,9 @@ public class LuceneIndex {
 				}
 			}
 		}
-		results.addAll(allValues);
-		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit));
-			return new ArrayList<>(resultList);
-		} else {
-			return results;
-		}
+		return getLimitedResults(limit, allValues);
 	}
+
 
 	// p.ex. grammar, gender
 	public ArrayList<String> getSuggestionsForFieldChoice(SuggestionField suggestionField, String value, int limit) throws NoIndexAvailableException, IOException {
@@ -357,40 +345,26 @@ public class LuceneIndex {
 				}
 			}
 		}
-		ArrayList<String> results = new ArrayList<>(allValues);
-		if(results.size() > 0) {
-			List<String> resultList = results.subList(0, Math.min(results.size(), limit));
-			return new ArrayList<>(resultList);
-		} else {
-			return results;
-		}
+		return getLimitedResults(limit, allValues);
 	}
 
 	public void reloadIndex() throws NoIndexAvailableException {
 		try {
-			queue.push(new IndexOperation() {
-				
-				@Override
-				public void execute(Language language) throws NoIndexAvailableException {
-					logger.info("Reloading index...");
-					luceneIndexRam.get(language).reloadIndex();
-					logger.info("Index reloaded");
-				}
-			});
+			queue.push(language -> {
+                logger.info("Reloading index...");
+                luceneIndexRam.get(language).reloadIndex();
+                logger.info("Index reloaded");
+            });
 		} catch (Exception e) {
 			throw new NoIndexAvailableException(e);
 		}
 	}
 
-	public void addToIndex(final Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
+	public void addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
 		try {
-			queue.push(new IndexOperation() {
-				
-				@Override
-				public void execute(Language language) throws Exception {
-					int added = luceneIndexFilesystem.get(language).addToIndex(iterator);
-				}
-			});
+			queue.push(language -> {
+                int added = luceneIndexFilesystem.get(language).addToIndex(iterator);
+            });
 		} catch (Exception e) {
 			throw new IndexException(e);
 		}
@@ -398,13 +372,7 @@ public class LuceneIndex {
 
 	public void dropIndex() throws IndexException {
 		try {
-			queue.push(new IndexOperation() {
-
-				@Override
-				public void execute(Language language) throws Exception {
-					luceneIndexFilesystem.get(language).dropIndex();
-				}
-			});
+			queue.push(language -> luceneIndexFilesystem.get(language).dropIndex());
 		} catch (Exception e) {
 			throw new IndexException(e);
 		}
@@ -412,18 +380,14 @@ public class LuceneIndex {
 	
 	public void update(final LexEntry entry) throws IOException {
 		try {
-			queue.push(new IndexOperation() {
-				
-				@Override
-				public void execute(Language language) throws Exception {
-					long start = System.currentTimeMillis();
-					luceneIndexFilesystem.get(language).update(entry);
-					luceneIndexRam.get(language).update(entry);
-					long end = System.currentTimeMillis();
-					logger.info("Index update for entry " + entry.getId()
-							+ " completed after " + (end - start) + " ms.");
-				}
-			});
+			queue.push(language -> {
+                long start = System.currentTimeMillis();
+                luceneIndexFilesystem.get(language).update(entry);
+                luceneIndexRam.get(language).update(entry);
+                long end = System.currentTimeMillis();
+                logger.info("Index update for entry " + entry.getId()
+                        + " completed after " + (end - start) + " ms.");
+            });
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
@@ -462,7 +426,7 @@ public class LuceneIndex {
 		long prepareStart = System.nanoTime();
 		BooleanQuery finalQuery = new BooleanQuery(true);
 
-		if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().equals("")) {
+		if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().isEmpty()) {
 			List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
 				case GERMAN -> Stream.of(
 						indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
@@ -621,5 +585,15 @@ public class LuceneIndex {
 		bc.add(query, BooleanClause.Occur.MUST);
 		bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
 		return bc;
+	}
+
+	private ArrayList<String> getLimitedResults(int limit, Set<String> allValues) {
+		ArrayList<String> results = new ArrayList<>(allValues);
+		if(!results.isEmpty()) {
+			List<String> resultList = results.subList(0, Math.min(results.size(), limit));
+			return new ArrayList<>(resultList);
+		} else {
+			return results;
+		}
 	}
 }

@@ -16,7 +16,6 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.IndexManager;
@@ -59,11 +58,8 @@ import java.util.Set;
 	private RAMDirectory ram;
 	private DirectoryReader reader;
 
-	private final Language language;
-
-	public LuceneIndexRam(LuceneConfiguration luceneConfiguration) {
-		this.language = luceneConfiguration.getLanguage();
-		setLuceneConfiguration(luceneConfiguration);
+    public LuceneIndexRam(LuceneConfiguration luceneConfiguration) {
+        setLuceneConfiguration(luceneConfiguration);
 	}
 
 	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {
@@ -89,7 +85,7 @@ import java.util.Set;
 	private synchronized void loadIndex() throws NoIndexAvailableException {
 		if (searcher == null) {
 			try {
-				logger.info("Loading index from directory " + luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
+                logger.info("Loading index from directory {}", luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
 				NIOFSDirectory directory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir());
 				ram = new RAMDirectory(directory, new IOContext());
 				reader = DirectoryReader.open(ram);
@@ -123,8 +119,7 @@ import java.util.Set;
 		IndexWriterConfig writerConfig = new IndexWriterConfig(LuceneHelper.CURRENT, LuceneHelper.newAnalyzer());
 		writerConfig.setOpenMode(OpenMode.APPEND);
 		writerConfig.setRAMBufferSizeMB(512.0);
-		IndexWriter writer = new IndexWriter(ram, writerConfig);
-		return writer;
+        return new IndexWriter(ram, writerConfig);
 	}
 
 	void update(LexEntry entry) throws IOException, NoIndexAvailableException {
@@ -145,8 +140,8 @@ import java.util.Set;
 	}
 	
 	private List<Document> createDocument(LexEntry lexEntry) {
-		List<Document> docs = new ArrayList<Document>();
-		Set<LemmaVersion> versions = new HashSet<LemmaVersion>();
+		List<Document> docs = new ArrayList<>();
+		Set<LemmaVersion> versions = new HashSet<>();
 		if(lexEntry.getCurrent() != null) {
 			versions.add(lexEntry.getCurrent());
 		}

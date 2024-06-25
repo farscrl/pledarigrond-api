@@ -26,6 +26,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ import java.util.List;
  * the results of a query: If a user searches for a term (for instance, 
  * 'car'), all exact translations should be listed before any
  * translation which contains the term among others ('car insurance', 
- * 'car crash', etc).
+ * 'car crash', etc.).
  *
  * This is a special case of the DefaultQueryBuilder, used for the fields
  * containing additional search terms. As those additional terms are not
@@ -82,7 +83,7 @@ public class DefaultQueryBuilderSplittingWhitespaces extends PgQueryBuilder {
 			//append wildcard (cf. PrefixQueries)
 			value += "*";
 			Query query = parser.parse(value);
-			toReturn = Arrays.asList(query);
+			toReturn = Collections.singletonList(query);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

@@ -52,7 +52,4 @@ public class PrefixQueryBuilder extends PgQueryBuilder {
 		Query q2 = new PrefixQuery(new Term(getFieldName("second"), value));
 		return Arrays.asList(q1, q2);
 	}
-	
-	
-	
 }

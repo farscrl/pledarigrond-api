@@ -32,7 +32,7 @@ import java.util.List;
  * the results of a query: If a user searches for a term (for instance, 
  * 'car'), all exact translations should be listed before any
  * translation which contains the term among others ('car insurance', 
- * 'car crash', etc). This is internally realized by using both
+ * 'car crash', etc.). This is internally realized by using both
  * {@link TermQuery} and {@link PrefixQuery}, and by modifying the
  * field names which are searched by lucene.
  * <br>
@@ -62,7 +62,4 @@ public class DefaultQueryBuilder extends PgQueryBuilder {
 		PrefixQuery fifth = new PrefixQuery(new Term(super.getFieldName("third"), value));
 		return Arrays.asList(first,second,fourth, fifth);
 	}
-	
-	
-
 }

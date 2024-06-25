@@ -43,8 +43,8 @@ public abstract class PgQueryBuilder {
 	
 	protected final Analyzer analyzer = LuceneHelper.newAnalyzer();
 	protected String column;
-	private final Map<String, String> finalFieldNames = new HashMap<String, String>();
-	private final Set<IndexedColumn> columns = new HashSet<IndexedColumn>();
+	private final Map<String, String> finalFieldNames = new HashMap<>();
+	private final Set<IndexedColumn> columns = new HashSet<>();
 	
 	/**
 	 * Initialize the builder for the given column.
@@ -68,12 +68,6 @@ public abstract class PgQueryBuilder {
 	/**
 	 * Register a variation of the index field for the column the query builder
 	 * was created for.
-	 * @param name A symbolic name to lookup the field during querying
-	 * @param analyzed lucene-specific: Whether or not the term should be analyzed
-	 * @param type The type of the field
-	 * @param lowercase Whether or not 
-	 *
-	 * @see LuceneHelper
 	 */
 	protected void registerFieldMapping(String name, boolean analyzed, FieldType type, boolean lowercase, boolean whitespace) {
 		IndexedColumn item = new IndexedColumn(column);
@@ -99,22 +93,11 @@ public abstract class PgQueryBuilder {
 				"t-" + type;
 	}
 
-	/**
-	 * Returns all {@link IndexedColumn}s required by the 
-	 * query builder.
-	 * @return
-	 */
 	public Set<IndexedColumn> getRegisteredColumns() {
 		return columns;
 	}
 
-	/**
-	 * Returns the field name with the given symbolic name
-	 * @param registeredName
-	 * @return
-	 */
 	protected String getFieldName(String registeredName) {
 		return finalFieldNames.get(registeredName);
 	}
-
 }
