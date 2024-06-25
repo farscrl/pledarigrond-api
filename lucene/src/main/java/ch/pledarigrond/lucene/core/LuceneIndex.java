@@ -15,10 +15,10 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
-import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
@@ -31,7 +31,6 @@ import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.common.config.LuceneConfiguration;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
@@ -83,8 +82,6 @@ public class LuceneIndex {
 
 	private IndexManager indexManager;
 
-	private HashMap<String, Type> sortTypes;
-
 	private SimplePrefixQueryBuilder langBIndexBuilder;
 
 	private SimplePrefixQueryBuilder langAIndexBuilder;
@@ -112,11 +109,6 @@ public class LuceneIndex {
 		luceneIndexFilesystem.get(this.language).initialize();
 		luceneIndexFilesystem.get(this.language).resetIndexDirectory();
 		indexManager = IndexManager.getInstance(this.language);
-		Set<IndexedColumn> columns = indexManager.getFinalColumnSet();
-		sortTypes = new HashMap<>();
-		for (IndexedColumn item : columns) {
-			sortTypes.put(item.getIndexFieldName(), getType(item.getType()));
-		}
 		// Create query builder for static dictionary pages
 		langAIndexBuilder = new SimplePrefixQueryBuilder();
 		langAIndexBuilder.setColumn("DStichwort");
@@ -169,7 +161,7 @@ public class LuceneIndex {
 		fields[0] = SortField.FIELD_SCORE;
 		for(int i = 0; i < items.length; i++) {
 			String item = items[i];
-			fields[i+1] = new SortField(item, sortTypes.get(item));
+			fields[i+1] = new SortField(item, Type.STRING);
 		}
 		sort.setSort(fields);
 		Page<LemmaVersion> result = null;

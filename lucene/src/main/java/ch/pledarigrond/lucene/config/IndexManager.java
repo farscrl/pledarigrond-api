@@ -41,7 +41,6 @@ public class IndexManager {
     protected BuilderRegistry builderRegistry = new BuilderRegistry();
 
     // the final set of columns, that should be added to the index
-    protected Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
 
     /**
      * The {@link FieldFactory}-objects required by the current search configuration.
@@ -90,7 +89,9 @@ public class IndexManager {
     }
 
     public IndexManager() {
-        logger.info("Generate list of all index-fields used for surmiran");
+        logger.info("Generate list of all index-fields");
+        Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
+
         setDefaultValues(getDatabaseColumns(), finalColumnSet);
 
         // add sort fields
@@ -355,10 +356,6 @@ public class IndexManager {
         }
         addPgFieldsToLemmaVersion(document, lv);
         return lv;
-    }
-
-    public Set<IndexedColumn> getFinalColumnSet() {
-        return this.finalColumnSet;
     }
 
     protected List<String> getSuggestionsFields() {
