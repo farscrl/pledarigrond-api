@@ -30,9 +30,7 @@ import java.util.stream.Stream;
 public class IndexManager {
 
     protected static final Logger logger = LoggerFactory.getLogger(IndexManager.class);
-
-    protected static final Set<String> errors = new HashSet<>();
-
+    
     protected String[] allColumns;
 
     protected BuilderRegistry builderRegistry = new BuilderRegistry();
@@ -60,7 +58,7 @@ public class IndexManager {
 
     /**
      * Returns the singleton instance of this class.
-     * @return IndexManagerSurmiran
+     * @return IndexManager
      */
     public static synchronized IndexManager getInstance() {
         if(indexManagerInstance == null) {
@@ -68,12 +66,6 @@ public class IndexManager {
                 indexManagerInstance = new IndexManager();
             } catch (Exception e) {
                 logger.error("Failed to initialize IndexManager", e);
-                if(errors.size() > 0) {
-                    logger.error("The following errors were detected in the configuration:");
-                    for (String error : errors) {
-                        logger.error("   " + error);
-                    }
-                }
                 throw new RuntimeException(e);
             }
         }
@@ -102,15 +94,6 @@ public class IndexManager {
                 fieldFactories.put(item.getSourceColumnName(), factoriesBySource);
             }
             factoriesBySource.add(factory);
-        }
-
-        if(errors.size() > 0) {
-            logger.error(errors.size() + " errors have been detected in the configuration:");
-            for (String error : errors) {
-                logger.error("   " + error);
-            }
-        } else {
-            logger.info("No errors have been detected in the configuration.");
         }
     }
 
