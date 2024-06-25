@@ -1,36 +1,26 @@
 package ch.pledarigrond.lucene.config;
 
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.config.querybuilder.FieldFactory;
 import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.DatabaseFields;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class IndexManager {
 
     protected static final Logger logger = LoggerFactory.getLogger(IndexManager.class);
-    
+
     protected String[] allColumns;
 
     protected BuilderRegistry builderRegistry = new BuilderRegistry();
@@ -108,187 +98,13 @@ public class IndexManager {
         };
     }
 
-    public Query getSuggestionsQuery(String fieldName, String value) {
-        List<Query> parts = builderRegistry.getSuggestionQueries(fieldName, value);
-        BooleanQuery bq = new BooleanQuery(true);
-        for (Query part : parts) {
-            bq.add(part, BooleanClause.Occur.SHOULD);
-        }
-        BooleanQuery bc = new BooleanQuery();
-        bc.add(bq, BooleanClause.Occur.MUST);
-        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-        bq = bc;
-        return bq;
+    public BuilderRegistry getBuilderRegistry() {
+        return builderRegistry;
     }
 
-    public Query buildQuery(SearchCriteria searchCriteria) {
-        long prepareStart = System.nanoTime();
-        BooleanQuery finalQuery = new BooleanQuery(true);
 
-        if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().equals("")) {
-            List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> Stream.of(
-                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
-                case ROMANSH -> Stream.of(
-                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        builderRegistry.getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
 
-                case BOTH -> Stream.of(
-                        builderRegistry.getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        builderRegistry.getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        builderRegistry.getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        builderRegistry.getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
-            };
-            BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : searchPhraseQueries) {
-                part.add(tf, BooleanClause.Occur.SHOULD);
-            }
-            finalQuery.add(part, BooleanClause.Occur.MUST);
-        }
 
-        if (searchCriteria.getGender() != null) {
-            List<Query> genderQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
-                case ROMANSH -> builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
-                case BOTH -> Stream.of(
-                        builderRegistry.getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()),
-                        builderRegistry.getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
-            };
-            BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : genderQueries) {
-                part.add(tf, BooleanClause.Occur.SHOULD);
-            }
-            finalQuery.add(part, BooleanClause.Occur.MUST);
-        }
-
-        if (searchCriteria.getGrammar() != null) {
-            List<Query> grammarQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
-                case ROMANSH -> builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
-                case BOTH -> Stream.of(
-                        builderRegistry.getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()),
-                        builderRegistry.getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
-            };
-            BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : grammarQueries) {
-                part.add(tf, BooleanClause.Occur.SHOULD);
-            }
-            finalQuery.add(part, BooleanClause.Occur.MUST);
-        }
-
-        if (searchCriteria.getSubSemantics() != null) {
-            List<Query> subSemanticsQueries = switch (searchCriteria.getSearchDirection()) {
-                case GERMAN -> builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
-                case ROMANSH -> builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
-                case BOTH -> Stream.of(
-                        builderRegistry.getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()),
-                        builderRegistry.getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
-                ).flatMap(Collection::stream).collect(Collectors.toList());
-            };
-            BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : subSemanticsQueries) {
-                part.add(tf, BooleanClause.Occur.SHOULD);
-            }
-            finalQuery.add(part, BooleanClause.Occur.MUST);
-        }
-
-        if (searchCriteria.getCategory() != null) {
-            List<Query> categoryQueries = builderRegistry.getCategoryBuilder().transform(searchCriteria.getCategory());
-            BooleanQuery part = new BooleanQuery(true);
-            for (Query tf : categoryQueries) {
-                part.add(tf, BooleanClause.Occur.SHOULD);
-            }
-            finalQuery.add(part, BooleanClause.Occur.MUST);
-        }
-
-        if (searchCriteria.getVerification() != null) {
-            try {
-                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer(Version.LUCENE_46));
-                queryParser.setAllowLeadingWildcard(true);
-                finalQuery.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (searchCriteria.getShowReviewLater() != null) {
-            try {
-                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.REVIEW_LATER, new StandardAnalyzer(Version.LUCENE_46));
-                finalQuery.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (searchCriteria.getOnlyAutomaticChanged()) {
-            try {
-                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
-                queryParser.setAllowLeadingWildcard(true);
-                finalQuery.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (searchCriteria.getExcludeAutomaticChanged()) {
-            try {
-                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.FIELD_NAMES, new StandardAnalyzer(Version.LUCENE_46));
-                queryParser.setAllowLeadingWildcard(true);
-                finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (searchCriteria.getAutomaticChangesType() != null && searchCriteria.getAutomaticChangesType() != AutomaticChangesType.ALL) {
-            try {
-                QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
-                queryParser.setAllowLeadingWildcard(true);
-                finalQuery.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Unless a user wants to see unverified suggestions, each item returned must be verified.
-        if (!searchCriteria.getSuggestions()) {
-            BooleanQuery bc = new BooleanQuery();
-            bc.add(finalQuery, BooleanClause.Occur.MUST);
-            bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-            finalQuery = bc;
-        }
-
-        long prepareEnd = System.nanoTime();
-        if(logger.isDebugEnabled()) {
-            logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
-        }
-
-        return finalQuery;
-    }
-
-    public Query buildStartsWithQuery(SearchDirection searchDirection, String prefix) {
-        List<Query> queries = builderRegistry.getStartsWithBuilder(searchDirection).transform(prefix);
-        BooleanQuery query = new BooleanQuery(true);
-        for (Query q : queries) {
-            query.add(q, BooleanClause.Occur.SHOULD);
-        }
-        BooleanQuery bc = new BooleanQuery();
-        bc.add(query, BooleanClause.Occur.MUST);
-        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-        return bc;
-    }
-
-    public List<Query> getExactMatchQueries(SearchDirection searchDirection, String value) {
-        return builderRegistry.getBuilder(searchDirection, SearchMethod.EXACT).transform(value);
-    }
 
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
         Document doc = new Document();

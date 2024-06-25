@@ -28,18 +28,21 @@ import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.sandbox.queries.DuplicateFilter;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +55,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class is responsible for managing the lucene index used by PG,
@@ -113,7 +118,7 @@ public class LuceneIndex {
 		validatePagination(pagination, hasAdminRole);
 
 		long s1 = System.nanoTime();
-		Query query = indexManager.buildQuery(searchCriteria);
+		Query query = buildQuery(searchCriteria);
 		TopDocs docs = null;
 
 		Sort sort = new Sort();
@@ -191,9 +196,9 @@ public class LuceneIndex {
 		List<Query> queries = null;
 		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
 		if(dictionaryLanguage == DictionaryLanguage.GERMAN) {
-			queries = indexManager.getExactMatchQueries(SearchDirection.GERMAN, phrase);
+			queries =  indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
 		} else {
-			queries = indexManager.getExactMatchQueries(SearchDirection.ROMANSH, phrase);
+			queries =  indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
 		}
 		int pageSize = 120;
 		try {
@@ -226,7 +231,7 @@ public class LuceneIndex {
 		}
 
 		try {
-			Query query = indexManager.buildStartsWithQuery(searchDirection, prefix);
+			Query query = buildStartsWithQuery(searchDirection, prefix);
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
 					new DuplicateFilter(field), Integer.MAX_VALUE,
 					new Sort(new SortField(sortField, Type.STRING)));
@@ -287,11 +292,8 @@ public class LuceneIndex {
 	}
 
 	public ArrayList<String> getSuggestionsForField(String fieldName, String searchTerm, int limit) throws QueryNodeException, NoIndexAvailableException, IOException, ParseException {
-		Query query = indexManager.getSuggestionsQuery(fieldName, searchTerm);
-		if(query == null) {
-			return new ArrayList<>();
-		}
-		ArrayList<String> results = new ArrayList<>();
+		Query query = getSuggestionsQuery(fieldName, searchTerm);
+        ArrayList<String> results = new ArrayList<>();
 		Set<String> allValues = new TreeSet<>();
 		ArrayList<String> fields = new ArrayList<>();
 		fields.add(fieldName);
@@ -333,7 +335,7 @@ public class LuceneIndex {
 			searchCriteria.setGrammar(value);
 			fields = Set.of(new String[]{"DGrammatik_na_nw_l_t-STRING", "DGrammatik"}, new String[]{"RGrammatik_na_nw_l_t-STRING", "RGrammatik"});
 		}
-		Query query = indexManager.buildQuery(searchCriteria);
+		Query query = buildQuery(searchCriteria);
 		if(query == null) {
 			return new ArrayList<>();
 		}
@@ -443,4 +445,181 @@ public class LuceneIndex {
 		}
 	}
 
+	private Query getSuggestionsQuery(String fieldName, String value) {
+		List<Query> parts = indexManager.getBuilderRegistry().getSuggestionQueries(fieldName, value);
+		BooleanQuery bq = new BooleanQuery(true);
+		for (Query part : parts) {
+			bq.add(part, BooleanClause.Occur.SHOULD);
+		}
+		BooleanQuery bc = new BooleanQuery();
+		bc.add(bq, BooleanClause.Occur.MUST);
+		bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+		bq = bc;
+		return bq;
+	}
+
+	private Query buildQuery(SearchCriteria searchCriteria) {
+		long prepareStart = System.nanoTime();
+		BooleanQuery finalQuery = new BooleanQuery(true);
+
+		if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().equals("")) {
+			List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
+				case GERMAN -> Stream.of(
+						indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+				case ROMANSH -> Stream.of(
+						indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+
+				case BOTH -> Stream.of(
+						indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+						indexManager.getBuilderRegistry().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+			};
+			BooleanQuery part = new BooleanQuery(true);
+			for (Query tf : searchPhraseQueries) {
+				part.add(tf, BooleanClause.Occur.SHOULD);
+			}
+			finalQuery.add(part, BooleanClause.Occur.MUST);
+		}
+
+		if (searchCriteria.getGender() != null) {
+			List<Query> genderQueries = switch (searchCriteria.getSearchDirection()) {
+				case GERMAN -> indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
+				case ROMANSH -> indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
+				case BOTH -> Stream.of(
+						indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()),
+						indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+			};
+			BooleanQuery part = new BooleanQuery(true);
+			for (Query tf : genderQueries) {
+				part.add(tf, BooleanClause.Occur.SHOULD);
+			}
+			finalQuery.add(part, BooleanClause.Occur.MUST);
+		}
+
+		if (searchCriteria.getGrammar() != null) {
+			List<Query> grammarQueries = switch (searchCriteria.getSearchDirection()) {
+				case GERMAN -> indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
+				case ROMANSH -> indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
+				case BOTH -> Stream.of(
+						indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()),
+						indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+			};
+			BooleanQuery part = new BooleanQuery(true);
+			for (Query tf : grammarQueries) {
+				part.add(tf, BooleanClause.Occur.SHOULD);
+			}
+			finalQuery.add(part, BooleanClause.Occur.MUST);
+		}
+
+		if (searchCriteria.getSubSemantics() != null) {
+			List<Query> subSemanticsQueries = switch (searchCriteria.getSearchDirection()) {
+				case GERMAN -> indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
+				case ROMANSH -> indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
+				case BOTH -> Stream.of(
+						indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()),
+						indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
+				).flatMap(Collection::stream).collect(Collectors.toList());
+			};
+			BooleanQuery part = new BooleanQuery(true);
+			for (Query tf : subSemanticsQueries) {
+				part.add(tf, BooleanClause.Occur.SHOULD);
+			}
+			finalQuery.add(part, BooleanClause.Occur.MUST);
+		}
+
+		if (searchCriteria.getCategory() != null) {
+			List<Query> categoryQueries = indexManager.getBuilderRegistry().getCategoryBuilder().transform(searchCriteria.getCategory());
+			BooleanQuery part = new BooleanQuery(true);
+			for (Query tf : categoryQueries) {
+				part.add(tf, BooleanClause.Occur.SHOULD);
+			}
+			finalQuery.add(part, BooleanClause.Occur.MUST);
+		}
+
+		if (searchCriteria.getVerification() != null) {
+			try {
+				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer(Version.LUCENE_46));
+				queryParser.setAllowLeadingWildcard(true);
+				finalQuery.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (searchCriteria.getShowReviewLater() != null) {
+			try {
+				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.REVIEW_LATER, new StandardAnalyzer(Version.LUCENE_46));
+				finalQuery.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (searchCriteria.getOnlyAutomaticChanged()) {
+			try {
+				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+				queryParser.setAllowLeadingWildcard(true);
+				finalQuery.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (searchCriteria.getExcludeAutomaticChanged()) {
+			try {
+				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.FIELD_NAMES, new StandardAnalyzer(Version.LUCENE_46));
+				queryParser.setAllowLeadingWildcard(true);
+				finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (searchCriteria.getAutomaticChangesType() != null && searchCriteria.getAutomaticChangesType() != AutomaticChangesType.ALL) {
+			try {
+				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+				queryParser.setAllowLeadingWildcard(true);
+				finalQuery.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// Unless a user wants to see unverified suggestions, each item returned must be verified.
+		if (!searchCriteria.getSuggestions()) {
+			BooleanQuery bc = new BooleanQuery();
+			bc.add(finalQuery, BooleanClause.Occur.MUST);
+			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+			finalQuery = bc;
+		}
+
+		long prepareEnd = System.nanoTime();
+		if(logger.isDebugEnabled()) {
+			logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
+		}
+
+		return finalQuery;
+	}
+
+	private Query buildStartsWithQuery(SearchDirection searchDirection, String prefix) {
+		List<Query> queries = indexManager.getBuilderRegistry().getStartsWithBuilder(searchDirection).transform(prefix);
+		BooleanQuery query = new BooleanQuery(true);
+		for (Query q : queries) {
+			query.add(q, BooleanClause.Occur.SHOULD);
+		}
+		BooleanQuery bc = new BooleanQuery();
+		bc.add(query, BooleanClause.Occur.MUST);
+		bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+		return bc;
+	}
 }
