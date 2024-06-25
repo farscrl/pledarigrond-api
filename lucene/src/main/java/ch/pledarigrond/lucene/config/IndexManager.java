@@ -5,9 +5,6 @@ import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.config.querybuilder.FieldFactory;
-import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
-import ch.pledarigrond.lucene.config.querybuilder.modifier.DefaultQueryBuilder;
-import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
 import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.DatabaseFields;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -51,11 +48,6 @@ public class IndexManager {
      */
     protected Map<String, List<FieldFactory>> fieldFactories = new HashMap<String, List<FieldFactory>>();
 
-    /**
-     * A mapping from columns to {@link PgQueryBuilder} instances, used for
-     * suggestion queries.
-     */
-    protected Map<String, PgQueryBuilder> suggestionsBuilders = new HashMap<>();
 
     /**
      * Contains all field names which are ignored when generating the index.
@@ -94,19 +86,9 @@ public class IndexManager {
         Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
 
         setDefaultValues(DatabaseFields.getDatabaseColumns(), finalColumnSet);
+        extractListOfAllColumns(finalColumnSet);
 
-        // add sort fields
-        String firstLanguageMain = "DStichwort";
-        String secondLanguageMain = "RStichwort";
-
-        finalColumnSet.addAll(getDictionaryItem(firstLanguageMain));
-        finalColumnSet.addAll(getDictionaryItem(secondLanguageMain));
-
-        // Create fields required for suggestions
-        autoGenerateSuggestionsFields(finalColumnSet, getSuggestionsFields());
-
-        extractListOfAllColumns(finalColumnSet, firstLanguageMain, secondLanguageMain);
-
+        // add fields for sorting used by query builders
         finalColumnSet.addAll(builderRegistry.getAllRegisteredColumns());
 
         // Got all lucene fields, now create field factories to ensure that they will
@@ -145,12 +127,7 @@ public class IndexManager {
     }
 
     public Query getSuggestionsQuery(String fieldName, String value) {
-        PgQueryBuilder builder = suggestionsBuilders.get(fieldName);
-        if(builder == null) {
-            logger.warn("No query builder found for field " + fieldName);
-            return null;
-        }
-        List<Query> parts = builder.transform(value);
+        List<Query> parts = builderRegistry.getSuggestionQueries(fieldName, value);
         BooleanQuery bq = new BooleanQuery(true);
         for (Query part : parts) {
             bq.add(part, BooleanClause.Occur.SHOULD);
@@ -359,12 +336,7 @@ public class IndexManager {
         return lv;
     }
 
-    protected List<String> getSuggestionsFields() {
-        return Arrays.asList(
-                "DGrammatik", "DGenus", "DSubsemantik", "categories",
-                "RGrammatik", "RGenus", "RSubsemantik"
-        );
-    }
+
     protected void setDefaultValues( List<IndexedColumn> databaseColumns, Set<IndexedColumn> finalColumnSet) {
         // Set default values for all defined columns - they are used to store the values
         // as they are, without any tokenization or modification.
@@ -403,39 +375,12 @@ public class IndexManager {
         return column;
     }
 
-    protected Set<IndexedColumn> getDictionaryItem(String mainColumn) {
-        ExactMatchQueryBuilder builder = new ExactMatchQueryBuilder();
-        builder.setColumn(mainColumn);
-        Set<IndexedColumn> columns = builder.getRegisteredColumns();
-        logger.info("Added fields for exact (dictionary) queries: " + columns);
-        return columns;
-    }
-
-    protected void autoGenerateSuggestionsFields(Set<IndexedColumn> indexedColumns, List<String> editorFields) {
-        logger.info("Auto-generating suggestion fields...");
-
-        for (String column : editorFields) {
-            DefaultQueryBuilder builder = new DefaultQueryBuilder();
-            builder.setColumn(column);
-            suggestionsBuilders.put(column, builder);
-            Set<IndexedColumn> entries = builder.getRegisteredColumns();
-            logger.info("Added fields for suggestion " + column + ": " + entries);
-            indexedColumns.addAll(entries);
-        }
-    }
-
-    protected void extractListOfAllColumns(Set<IndexedColumn> finalColumnSet, String firstLanguageMain, String secondLanguageMain) {
-        // Keep track of all column names - required to convert from lucene documents to lemma versions
+    protected void extractListOfAllColumns(Set<IndexedColumn> finalColumnSet) {
         Set<String> columnNames = new TreeSet<>();
         for (IndexedColumn item : finalColumnSet) {
             columnNames.add(item.getColumnName());
         }
-        if(!columnNames.contains(firstLanguageMain)) {
-            errors.add("Main column '" + firstLanguageMain + "' was not found in the set of all columns.");
-        }
-        if(!columnNames.contains(secondLanguageMain)) {
-            errors.add("Main column '" + secondLanguageMain + "' was not found in the set of all columns.");
-        }
+
         allColumns = columnNames.toArray(new String[0]);
     }
 

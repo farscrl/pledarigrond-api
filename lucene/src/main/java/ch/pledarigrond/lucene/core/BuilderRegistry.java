@@ -18,18 +18,20 @@ package ch.pledarigrond.lucene.core;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
-import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.config.querybuilder.PgQueryBuilder;
 import ch.pledarigrond.lucene.config.querybuilder.modifier.*;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BuilderRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger(IndexManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(BuilderRegistry.class);
 
     private final Map<String, PgQueryBuilder> builderMap = new HashMap<>();
 
@@ -77,6 +79,19 @@ public class BuilderRegistry {
             return new ArrayList<>();
         }
         return builderMap.get("REtymologie_intern").transform(field);
+    }
+
+    public List<Query> getSuggestionQueries(String field, String searchTerm) {
+        switch (field) {
+            case "DGrammatik" -> builderMap.get("DGrammatik_default").transform(searchTerm);
+            case "DGenus" -> builderMap.get("DGenus_default").transform(searchTerm);
+            case "DSubsemantik" -> builderMap.get("DSubsemantik_default").transform(searchTerm);
+            case "categories" -> builderMap.get("categories_default").transform(searchTerm);
+            case "RGrammatik" -> builderMap.get("RGrammatik_default").transform(searchTerm);
+            case "RGenus" -> builderMap.get("RGenus_default").transform(searchTerm);
+            case "RSubsemantik" -> builderMap.get("RSubsemantik_default").transform(searchTerm);
+        }
+        return List.of();
     }
 
     public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
@@ -158,5 +173,14 @@ public class BuilderRegistry {
 
         // Etymology
         builderMap.put("REtymologie_intern", new InfixQueryBuilder().setColumn("REtymologie"));
+
+        // Suggestion Builders
+        builderMap.put("DGrammatik_default", new DefaultQueryBuilder().setColumn("DGrammatik"));
+        builderMap.put("DGenus_default", new DefaultQueryBuilder().setColumn("DGenus"));
+        builderMap.put("DSubsemantik_default", new DefaultQueryBuilder().setColumn("DSubsemantik"));
+        builderMap.put("categories_default", new DefaultQueryBuilder().setColumn("categories"));
+        builderMap.put("RGrammatik_default", new DefaultQueryBuilder().setColumn("RGrammatik"));
+        builderMap.put("RGenus_default", new DefaultQueryBuilder().setColumn("RGenus"));
+        builderMap.put("RSubsemantik_default", new DefaultQueryBuilder().setColumn("RSubsemantik"));
     }
 }
