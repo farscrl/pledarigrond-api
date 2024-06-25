@@ -17,7 +17,6 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -25,8 +24,6 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.lucene.config.IndexManager;
-import ch.pledarigrond.lucene.config.querybuilder.modifier.ExactMatchQueryBuilder;
-import ch.pledarigrond.lucene.config.querybuilder.modifier.SimplePrefixQueryBuilder;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
@@ -82,14 +79,6 @@ public class LuceneIndex {
 
 	private IndexManager indexManager;
 
-	private SimplePrefixQueryBuilder langBIndexBuilder;
-
-	private SimplePrefixQueryBuilder langAIndexBuilder;
-
-	private ExactMatchQueryBuilder exactMatchesLangA;
-
-	private ExactMatchQueryBuilder exactMatchesLangB;
-
 	private final IndexCommandQueue queue;
 
 	public LuceneIndex(LuceneConfiguration luceneConfiguration) throws IOException {
@@ -101,36 +90,13 @@ public class LuceneIndex {
 		setLuceneConfiguration(luceneConfiguration);
 	}
 
-	public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration)
-			throws IOException {
-		//this.luceneConfiguration = luceneConfiguration;
+	public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) throws IOException {
 		luceneIndexRam.put(this.language, new LuceneIndexRam(luceneConfiguration));
 		luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
 		luceneIndexFilesystem.get(this.language).initialize();
 		luceneIndexFilesystem.get(this.language).resetIndexDirectory();
 		indexManager = IndexManager.getInstance(this.language);
-		// Create query builder for static dictionary pages
-		langAIndexBuilder = new SimplePrefixQueryBuilder();
-		langAIndexBuilder.setColumn("DStichwort");
-		langBIndexBuilder = new SimplePrefixQueryBuilder();
-		langBIndexBuilder.setColumn("RStichwort");
-		exactMatchesLangA = new ExactMatchQueryBuilder();
-		exactMatchesLangA.setColumn("DStichwort");
-		exactMatchesLangB = new ExactMatchQueryBuilder();
-		exactMatchesLangB.setColumn("RStichwort");
 	}
-
-	private Type getType(FieldType type) {
-		if (type == null) {
-			return Type.STRING;
-		}
-		switch(type) {
-		case INTEGER: return Type.INT;
-		default: return Type.STRING;
-		}
-	}
-
-
 	
 	public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
 		long start = System.nanoTime();
@@ -225,9 +191,9 @@ public class LuceneIndex {
 		List<Query> queries = null;
 		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
 		if(dictionaryLanguage == DictionaryLanguage.GERMAN) {
-			queries = exactMatchesLangA.transform(phrase);
+			queries = indexManager.getExactMatchQueries(SearchDirection.GERMAN, phrase);
 		} else {
-			queries = exactMatchesLangB.transform(phrase);
+			queries = indexManager.getExactMatchQueries(SearchDirection.ROMANSH, phrase);
 		}
 		int pageSize = 120;
 		try {
@@ -250,33 +216,17 @@ public class LuceneIndex {
 	}
 
 	public Page<LemmaVersion> getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		String field = null;
-		String sortField = null;
-		List<Query> queries = null;
-		field = "RStichwort";
-		boolean firstLanguage = false;
+		String field = "RStichwort";
+		String sortField = "RStichwort_sort";
+		int pageSize = 120;
+
 		if (searchDirection == SearchDirection.GERMAN) {
 			field = "DStichwort";
-			firstLanguage = true;
+			sortField = "DStichwort_sort";
 		}
 
-		if(firstLanguage) {
-			queries = langAIndexBuilder.transform(prefix);
-			sortField = langAIndexBuilder.getIndexSortField();
-		} else {
-			queries = langBIndexBuilder.transform(prefix);
-			sortField = langBIndexBuilder.getIndexSortField();
-		}
-		int pageSize = 120;
 		try {
-			BooleanQuery query = new BooleanQuery(true);
-			for (Query q : queries) {
-				query.add(q, Occur.SHOULD);
-			}
-			BooleanQuery bc = new BooleanQuery();
-			bc.add(query, Occur.MUST);
-			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
-			query = bc;
+			Query query = indexManager.buildStartsWithQuery(searchDirection, prefix);
 			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
 					new DuplicateFilter(field), Integer.MAX_VALUE,
 					new Sort(new SortField(sortField, Type.STRING)));

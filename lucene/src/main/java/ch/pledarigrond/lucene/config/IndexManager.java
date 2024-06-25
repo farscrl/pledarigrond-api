@@ -291,6 +291,22 @@ public class IndexManager {
         return finalQuery;
     }
 
+    public Query buildStartsWithQuery(SearchDirection searchDirection, String prefix) {
+        List<Query> queries = builderRegistry.getStartsWithBuilder(searchDirection).transform(prefix);
+        BooleanQuery query = new BooleanQuery(true);
+        for (Query q : queries) {
+            query.add(q, BooleanClause.Occur.SHOULD);
+        }
+        BooleanQuery bc = new BooleanQuery();
+        bc.add(query, BooleanClause.Occur.MUST);
+        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+        return bc;
+    }
+
+    public List<Query> getExactMatchQueries(SearchDirection searchDirection, String value) {
+        return builderRegistry.getBuilder(searchDirection, SearchMethod.EXACT).transform(value);
+    }
+
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
         Document doc = new Document();
         Set<Map.Entry<String, String>> entries = lemmaVersion.getLemmaValues().entrySet();

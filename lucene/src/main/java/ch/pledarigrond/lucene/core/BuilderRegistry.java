@@ -94,6 +94,16 @@ public class BuilderRegistry {
         return List.of();
     }
 
+    public PgQueryBuilder getStartsWithBuilder(SearchDirection direction) {
+        if (direction == SearchDirection.ROMANSH) {
+            return builderMap.get("RStichwort_simple_prefix");
+        }
+        if (direction == SearchDirection.GERMAN) {
+            return builderMap.get("DStichwort_simple_prefix");
+        }
+        return null;
+    }
+
     public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RGenus_simple_prefix");
@@ -155,6 +165,10 @@ public class BuilderRegistry {
         // Search Tags
         builderMap.put("RTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("RTags"));
         builderMap.put("DTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("DTags"));
+
+        // Search words starting with
+        builderMap.put("DStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DStichwort"));
+        builderMap.put("RStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RStichwort"));
 
         // Search Gender
         builderMap.put("DGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGenus"));
