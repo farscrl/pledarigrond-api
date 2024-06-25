@@ -18,48 +18,37 @@ package ch.pledarigrond.common.data.lucene;
 import lombok.Data;
 
 /**
- * This class represents a mapping from a database column to a
- * lucene index field configuration. The field prefix will be
- * identical to the database column name, whereas the suffix
- * is a representation of the index field attributes.
- * 
- * @author sschwieb
- *
+ * This class represents an index field.
  */
 @Data
 public class IndexedColumn {
 
-	private String columnName;
-	
+	private String sourceColumnName;
 	private String indexFieldName;
-	
 	private boolean stored;
-	
 	private boolean analyzed;
-	
 	private FieldType type;
-
 	private boolean whitespaceAnalyzer;
-
 	private boolean lowerCase;
 
-	public IndexedColumn() {
+	public IndexedColumn(String sourceColumnName) {
+		this.sourceColumnName = sourceColumnName;
+		this.indexFieldName = sourceColumnName;
+		this.stored = true;
+		this.analyzed = false;
+		this.lowerCase = false;
+		this.type = FieldType.TEXT;
 	}
 
-	public IndexedColumn(String columnName) {
-		this.columnName = columnName;
-	}
-
-	public IndexedColumn(String columnName, FieldType type) {
-		this.columnName = columnName;
+	public IndexedColumn(String sourceColumnName, FieldType type) {
+		this(sourceColumnName);
 		this.type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "IndexedItem [source=" + columnName + ", dest=" + indexFieldName + ", stored="
-				+ stored + ", analyzed=" + analyzed + ", type=" + type
-				+ ", whitespaceAnalyzer=" + whitespaceAnalyzer + ", lowerCase="
-				+ lowerCase + "]";
+		return "IndexField [sourceColumnName=" + sourceColumnName + ", indexFieldName=" + indexFieldName +
+				", stored=" + stored + ", analyzed=" + analyzed + ", type=" + type + ", whitespaceAnalyzer="
+				+ whitespaceAnalyzer + ", lowerCase=" + lowerCase + "]";
 	}
 }

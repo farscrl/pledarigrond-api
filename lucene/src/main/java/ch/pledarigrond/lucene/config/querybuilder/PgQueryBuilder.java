@@ -76,13 +76,12 @@ public abstract class PgQueryBuilder {
 	 * @see LuceneHelper
 	 */
 	protected void registerFieldMapping(String name, boolean analyzed, FieldType type, boolean lowercase, boolean whitespace) {
-		IndexedColumn item = new IndexedColumn();
+		IndexedColumn item = new IndexedColumn(column);
 		item.setAnalyzed(analyzed);
 		item.setLowerCase(lowercase);
 		item.setStored(false);
 		item.setType(type);
 		item.setWhitespaceAnalyzer(whitespace);
-		item.setColumnName(column);
 		String destField = column + getFieldSuffix(analyzed, lowercase, whitespace, type);
 		finalFieldNames.put(name, destField);
 		item.setIndexFieldName(destField);

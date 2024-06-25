@@ -1,7 +1,6 @@
 package ch.pledarigrond.lucene.config;
 
 import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.config.querybuilder.FieldFactory;
@@ -85,7 +84,7 @@ public class IndexManager {
         logger.info("Generate list of all index-fields");
         Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
 
-        setDefaultValues(DatabaseFields.getDatabaseColumns(), finalColumnSet);
+        finalColumnSet.addAll(DatabaseFields.getDatabaseColumns());
         extractListOfAllColumns(finalColumnSet);
 
         // add fields for sorting used by query builders
@@ -97,10 +96,10 @@ public class IndexManager {
         for (IndexedColumn item : finalColumnSet) {
             logger.info("   " + item.toString());
             FieldFactory factory = new FieldFactory(item);
-            List<FieldFactory> factoriesBySource = fieldFactories.get(item.getColumnName());
+            List<FieldFactory> factoriesBySource = fieldFactories.get(item.getSourceColumnName());
             if(factoriesBySource == null) {
                 factoriesBySource = new ArrayList<FieldFactory>();
-                fieldFactories.put(item.getColumnName(), factoriesBySource);
+                fieldFactories.put(item.getSourceColumnName(), factoriesBySource);
             }
             factoriesBySource.add(factory);
         }
@@ -336,49 +335,10 @@ public class IndexManager {
         return lv;
     }
 
-
-    protected void setDefaultValues( List<IndexedColumn> databaseColumns, Set<IndexedColumn> finalColumnSet) {
-        // Set default values for all defined columns - they are used to store the values
-        // as they are, without any tokenization or modification.
-        for (IndexedColumn item : databaseColumns) {
-            item.setIndexFieldName(item.getColumnName());
-            item.setStored(true);
-            item.setAnalyzed(false);
-            item.setLowerCase(false);
-
-            if(item.getType() == null) {
-                item.setType(FieldType.TEXT);
-            } else {
-                if(item.getType() != FieldType.SEMICOLON_SEPERATED) {
-                    errors.add("Column '" + item.getColumnName() + "' should not explicitly define a 'type' unless it is 'SEMICOLON_SEPERATED'.");
-                }
-            }
-            boolean added = finalColumnSet.add(item);
-            if(!added) {
-                errors.add("Column '" + item.getColumnName() + "' was found more than once in the list of indexed columns.");
-            }
-            logger.info("Required default field: " + item);
-        }
-    }
-
-    protected IndexedColumn generateSortColumn(String mainColumn) {
-        IndexedColumn column = new IndexedColumn();
-        column.setColumnName(mainColumn + "_sort");
-        column.setIndexFieldName(mainColumn + "_sort");
-        column.setStored(true);
-        column.setAnalyzed(false);
-        column.setLowerCase(false);
-        column.setType(FieldType.INTEGER);
-
-        logger.info("Added sort field for " + mainColumn + ": " + column);
-
-        return column;
-    }
-
     protected void extractListOfAllColumns(Set<IndexedColumn> finalColumnSet) {
         Set<String> columnNames = new TreeSet<>();
         for (IndexedColumn item : finalColumnSet) {
-            columnNames.add(item.getColumnName());
+            columnNames.add(item.getSourceColumnName());
         }
 
         allColumns = columnNames.toArray(new String[0]);
