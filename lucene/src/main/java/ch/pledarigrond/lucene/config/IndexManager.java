@@ -4,9 +4,9 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
-import ch.pledarigrond.lucene.config.querybuilder.FieldFactory;
 import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.DatabaseFields;
+import ch.pledarigrond.lucene.util.IndexedColumnHelper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -23,18 +23,13 @@ public class IndexManager {
 
     protected String[] allColumns;
 
-    protected BuilderRegistry builderRegistry = new BuilderRegistry();
-
-    // the final set of columns, that should be added to the index
-
     /**
-     * The {@link FieldFactory}-objects required by the current search configuration.
-     * For each {@link IndexedColumn} defined in the configuration, one {@link FieldFactory}
-     * will be generated. Key of the map is the source attribute of the {@link IndexedColumn},
-     * value is the list of all {@link FieldFactory}-objects which referred to this source.
+     * On db field is sometimes mapped to multiple index fields. this map
+     * contains the mapping from db field to index fields.
      */
-    protected Map<String, List<FieldFactory>> fieldFactories = new HashMap<String, List<FieldFactory>>();
+    protected Map<String, List<IndexedColumn>> dbFieldMapping = new HashMap<>();
 
+    protected BuilderRegistry builderRegistry = new BuilderRegistry();
 
     /**
      * Contains all field names which are ignored when generating the index.
@@ -75,15 +70,12 @@ public class IndexManager {
         // Got all lucene fields, now create field factories to ensure that they will
         // be created and filled when a new entry is inserted.
         logger.info("Field analysis completed, index will contain the following fields:");
+
+
         for (IndexedColumn item : finalColumnSet) {
             logger.info("   " + item.toString());
-            FieldFactory factory = new FieldFactory(item);
-            List<FieldFactory> factoriesBySource = fieldFactories.get(item.getSourceColumnName());
-            if(factoriesBySource == null) {
-                factoriesBySource = new ArrayList<FieldFactory>();
-                fieldFactories.put(item.getSourceColumnName(), factoriesBySource);
-            }
-            factoriesBySource.add(factory);
+            List<IndexedColumn> fields = dbFieldMapping.computeIfAbsent(item.getSourceColumnName(), k -> new ArrayList<>());
+            fields.add(item);
         }
     }
 
@@ -160,11 +152,14 @@ public class IndexManager {
     }
 
     protected List<IndexableField> toField(String key, String value) {
-        List<FieldFactory> factories = fieldFactories.get(key);
-        if(factories == null || factories.isEmpty()) return null;
+        List<IndexedColumn> indexFields = dbFieldMapping.get(key);
+        if(indexFields == null || indexFields.isEmpty()) {
+            return null;
+        }
+
         List<IndexableField> fields = new ArrayList<IndexableField>();
-        for (FieldFactory factory : factories) {
-            List<IndexableField> field = factory.getFields(value);
+        for (IndexedColumn f : indexFields) {
+            List<IndexableField> field = IndexedColumnHelper.getFields(f, value);
             if(field != null) {
                 fields.addAll(field);
             }
