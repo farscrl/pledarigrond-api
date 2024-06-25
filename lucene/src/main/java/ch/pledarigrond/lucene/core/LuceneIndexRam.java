@@ -15,12 +15,12 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
+import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -54,7 +54,7 @@ import java.util.Set;
 	private static final Logger logger = LoggerFactory.getLogger(LuceneIndexRam.class);
 
 	private LuceneConfiguration luceneConfiguration;
-	private IndexManagerSurmiran indexManager;
+	private IndexManager indexManager;
 
 	private RAMDirectory ram;
 	private DirectoryReader reader;
@@ -68,7 +68,7 @@ import java.util.Set;
 
 	void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) {
 		this.luceneConfiguration = luceneConfiguration;
-		indexManager = IndexManagerSurmiran.getInstance();
+		indexManager = IndexManager.getInstance();
 	}
 
 	IndexSearcher getSearcher() throws NoIndexAvailableException {

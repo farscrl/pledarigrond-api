@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class IndexManager {
+public class IndexManager {
 
     protected static final Logger logger = LoggerFactory.getLogger(IndexManager.class);
 
@@ -65,18 +65,80 @@ public abstract class IndexManager {
      */
     private final Set<String> ignored = new HashSet<>();
 
+    private static IndexManager indexManagerInstance;
+
+    /**
+     * Returns the singleton instance of this class.
+     * @return IndexManagerSurmiran
+     */
+    public static synchronized IndexManager getInstance() {
+        if(indexManagerInstance == null) {
+            try {
+                indexManagerInstance = new IndexManager();
+            } catch (Exception e) {
+                logger.error("Failed to initialize IndexManager", e);
+                if(errors.size() > 0) {
+                    logger.error("The following errors were detected in the configuration:");
+                    for (String error : errors) {
+                        logger.error("   " + error);
+                    }
+                }
+                throw new RuntimeException(e);
+            }
+        }
+        return indexManagerInstance;
+    }
 
     public IndexManager() {
+        logger.info("Generate list of all index-fields used for surmiran");
+        setDefaultValues(getDatabaseColumns(), finalColumnSet);
+
+        // add sort fields
+        String firstLanguageMain = "DStichwort";
+        String secondLanguageMain = "RStichwort";
+
+        finalColumnSet.addAll(getDictionaryItem(firstLanguageMain));
+        finalColumnSet.addAll(getDictionaryItem(secondLanguageMain));
+
+        // Create fields required for suggestions
+        autoGenerateSuggestionsFields(finalColumnSet, getSuggestionsFields());
+
+        extractListOfAllColumns(finalColumnSet, firstLanguageMain, secondLanguageMain);
+
+        finalColumnSet.addAll(builderRegistry.getAllRegisteredColumns());
+
+        // Got all lucene fields, now create field factories to ensure that they will
+        // be created and filled when a new entry is inserted.
+        logger.info("Field analysis completed, index will contain the following fields:");
+        for (IndexedColumn item : finalColumnSet) {
+            logger.info("   " + item.toString());
+            FieldFactory factory = new FieldFactory(item);
+            List<FieldFactory> factoriesBySource = fieldFactories.get(item.getColumnName());
+            if(factoriesBySource == null) {
+                factoriesBySource = new ArrayList<FieldFactory>();
+                fieldFactories.put(item.getColumnName(), factoriesBySource);
+            }
+            factoriesBySource.add(factory);
+        }
+
+        if(errors.size() > 0) {
+            logger.error(errors.size() + " errors have been detected in the configuration:");
+            for (String error : errors) {
+                logger.error("   " + error);
+            }
+        } else {
+            logger.info("No errors have been detected in the configuration.");
+        }
     }
 
     public static IndexManager getInstance(Language language) {
         return switch (language) {
-            case PUTER -> IndexManagerSurmiran.getInstance();
-            case RUMANTSCHGRISCHUN -> IndexManagerSurmiran.getInstance();
-            case SURMIRAN -> IndexManagerSurmiran.getInstance();
-            case SURSILVAN -> IndexManagerSurmiran.getInstance();
-            case SUTSILVAN -> IndexManagerSurmiran.getInstance();
-            case VALLADER -> IndexManagerSurmiran.getInstance();
+            case PUTER -> IndexManager.getInstance();
+            case RUMANTSCHGRISCHUN -> IndexManager.getInstance();
+            case SURMIRAN -> IndexManager.getInstance();
+            case SURSILVAN -> IndexManager.getInstance();
+            case SUTSILVAN -> IndexManager.getInstance();
+            case VALLADER -> IndexManager.getInstance();
         };
     }
 
@@ -299,8 +361,12 @@ public abstract class IndexManager {
         return this.finalColumnSet;
     }
 
-    protected abstract List<String> getSuggestionsFields();
-
+    protected List<String> getSuggestionsFields() {
+        return Arrays.asList(
+                "DGrammatik", "DGenus", "DSubsemantik", "categories",
+                "RGrammatik", "RGenus", "RSubsemantik"
+        );
+    }
     protected void setDefaultValues( List<IndexedColumn> databaseColumns, Set<IndexedColumn> finalColumnSet) {
         // Set default values for all defined columns - they are used to store the values
         // as they are, without any tokenization or modification.
@@ -426,5 +492,157 @@ public abstract class IndexManager {
         lemmaVersion.putPgValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
         lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_TYPE, document.get(LemmaVersion.RM_INFLECTION_TYPE));
         lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE, document.get(LemmaVersion.RM_INFLECTION_SUBTYPE));
+    }
+
+    private List<IndexedColumn> getDatabaseColumns() {
+        return Arrays.asList(
+                new IndexedColumn("DStichwort"),
+                new IndexedColumn("DStichwort_sort"),
+                new IndexedColumn("DSemantik"),
+                new IndexedColumn("DSubsemantik"),
+                new IndexedColumn("DGrammatik"),
+                new IndexedColumn("DGenus"),
+                new IndexedColumn("DStatus"),
+                new IndexedColumn("DTags"),
+                new IndexedColumn("RStichwort"),
+                new IndexedColumn("RStichwort_sort"),
+                new IndexedColumn("RSemantik"),
+                new IndexedColumn("RSubsemantik"),
+                new IndexedColumn("RGrammatik"),
+                new IndexedColumn("RGenus"),
+                new IndexedColumn("RFlex"),
+                new IndexedColumn("RTags"),
+                new IndexedColumn("RInflectionType"),
+                new IndexedColumn("RInflectionSubtype"),
+                new IndexedColumn("categories", FieldType.SEMICOLON_SEPERATED),
+                new IndexedColumn("DRedirect"),
+                new IndexedColumn("RRedirect"),
+                new IndexedColumn("user_comment"),
+                new IndexedColumn("user_email"),
+                new IndexedColumn("REtymologie"),
+                new IndexedColumn("examples"),
+                new IndexedColumn("RPronunciation"),
+
+                // verbs
+                new IndexedColumn("irregular"),
+                new IndexedColumn("infinitiv"),
+                new IndexedColumn("preschentsing1"),
+                new IndexedColumn("preschentsing2"),
+                new IndexedColumn("preschentsing3"),
+                new IndexedColumn("preschentplural1"),
+                new IndexedColumn("preschentplural2"),
+                new IndexedColumn("preschentplural3"),
+                new IndexedColumn("imperfectsing1"),
+                new IndexedColumn("imperfectsing2"),
+                new IndexedColumn("imperfectsing3"),
+                new IndexedColumn("imperfectplural1"),
+                new IndexedColumn("imperfectplural2"),
+                new IndexedColumn("imperfectplural3"),
+                new IndexedColumn("conjunctivsing1"),
+                new IndexedColumn("conjunctivsing2"),
+                new IndexedColumn("conjunctivsing3"),
+                new IndexedColumn("conjunctivplural1"),
+                new IndexedColumn("conjunctivplural2"),
+                new IndexedColumn("conjunctivplural3"),
+                new IndexedColumn("conjunctiv2sing1"),
+                new IndexedColumn("conjunctiv2sing2"),
+                new IndexedColumn("conjunctiv2sing3"),
+                new IndexedColumn("conjunctiv2plural1"),
+                new IndexedColumn("conjunctiv2plural2"),
+                new IndexedColumn("conjunctiv2plural3"),
+                new IndexedColumn("cundizionalsing1"),
+                new IndexedColumn("cundizionalsing2"),
+                new IndexedColumn("cundizionalsing3"),
+                new IndexedColumn("cundizionalplural1"),
+                new IndexedColumn("cundizionalplural2"),
+                new IndexedColumn("cundizionalplural3"),
+                new IndexedColumn("cundizionalindirectsing1"),
+                new IndexedColumn("cundizionalindirectsing2"),
+                new IndexedColumn("cundizionalindirectsing3"),
+                new IndexedColumn("cundizionalindirectplural1"),
+                new IndexedColumn("cundizionalindirectplural2"),
+                new IndexedColumn("cundizionalindirectplural3"),
+                new IndexedColumn("participperfectms"),
+                new IndexedColumn("participperfectfs"),
+                new IndexedColumn("participperfectmp"),
+                new IndexedColumn("participperfectfp"),
+                new IndexedColumn("participperfectmspredicativ"),
+                new IndexedColumn("imperativ1"),
+                new IndexedColumn("imperativ2"),
+                new IndexedColumn("imperativ3"),
+                new IndexedColumn("imperativ4"),
+                new IndexedColumn("imperativ5"),
+                new IndexedColumn("imperativ6"),
+                new IndexedColumn("gerundium"),
+                new IndexedColumn("futursing1"),
+                new IndexedColumn("futursing2"),
+                new IndexedColumn("futursing3"),
+                new IndexedColumn("futurplural1"),
+                new IndexedColumn("futurplural2"),
+                new IndexedColumn("futurplural3"),
+                new IndexedColumn("futurdubitativsing1"),
+                new IndexedColumn("futurdubitativsing2"),
+                new IndexedColumn("futurdubitativsing3"),
+                new IndexedColumn("futurdubitativplural1"),
+                new IndexedColumn("futurdubitativplural2"),
+                new IndexedColumn("futurdubitativplural3"),
+
+                new IndexedColumn("preschentsing1enclitic"),
+                new IndexedColumn("preschentsing2enclitic"),
+                new IndexedColumn("preschentsing3encliticm"),
+                new IndexedColumn("preschentsing3encliticf"),
+                new IndexedColumn("preschentplural1enclitic"),
+                new IndexedColumn("preschentplural2enclitic"),
+                new IndexedColumn("preschentplural3enclitic"),
+                new IndexedColumn("imperfectsing1enclitic"),
+                new IndexedColumn("imperfectsing2enclitic"),
+                new IndexedColumn("imperfectsing3encliticm"),
+                new IndexedColumn("imperfectsing3encliticf"),
+                new IndexedColumn("imperfectplural1enclitic"),
+                new IndexedColumn("imperfectplural2enclitic"),
+                new IndexedColumn("imperfectplural3enclitic"),
+                new IndexedColumn("cundizionalsing1enclitic"),
+                new IndexedColumn("cundizionalsing2enclitic"),
+                new IndexedColumn("cundizionalsing3encliticm"),
+                new IndexedColumn("cundizionalsing3encliticf"),
+                new IndexedColumn("cundizionalplural1enclitic"),
+                new IndexedColumn("cundizionalplural2enclitic"),
+                new IndexedColumn("cundizionalplural3enclitic"),
+                new IndexedColumn("futursing1enclitic"),
+                new IndexedColumn("futursing2enclitic"),
+                new IndexedColumn("futursing3encliticm"),
+                new IndexedColumn("futursing3encliticf"),
+                new IndexedColumn("futurplural1enclitic"),
+                new IndexedColumn("futurplural2enclitic"),
+                new IndexedColumn("futurplural3enclitic"),
+                new IndexedColumn("futurdubitativsing1enclitic"),
+                new IndexedColumn("futurdubitativsing2enclitic"),
+                new IndexedColumn("futurdubitativsing3encliticm"),
+                new IndexedColumn("futurdubitativsing3encliticf"),
+                new IndexedColumn("futurdubitativplural1enclitic"),
+                new IndexedColumn("futurdubitativplural2enclitic"),
+                new IndexedColumn("futurdubitativplural3enclitic"),
+                new IndexedColumn("composedWith"),
+
+                // nouns
+                new IndexedColumn("mSingular"),
+                new IndexedColumn("fSingular"),
+                new IndexedColumn("mPlural"),
+                new IndexedColumn("fPlural"),
+                new IndexedColumn("pluralCollectiv"),
+
+                // other
+                new IndexedColumn("otherForm1"),
+                new IndexedColumn("otherForm2"),
+                new IndexedColumn("otherForm3"),
+                new IndexedColumn("otherForm4"),
+
+                // automatic generation of forms
+                new IndexedColumn(LemmaVersion.AUTOMATIC_CHANGE),
+
+                // contains all field-names of the current entry. This is used to search for non-existing fields:
+                // https://kuzminva.wordpress.com/2017/04/04/lucene-field-does-not-exist/
+                new IndexedColumn(LemmaVersion.FIELD_NAMES)
+        );
     }
 }

@@ -15,13 +15,13 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.core;
 
+import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.lucene.config.IndexManagerSurmiran;
+import ch.pledarigrond.lucene.config.IndexManager;
 import ch.pledarigrond.lucene.exceptions.IndexException;
-import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -50,7 +50,7 @@ class LuceneIndexFilesystem {
 	private NIOFSDirectory indexDirectory;
 	private Analyzer analyzer;
 	private final boolean tracing = logger.isTraceEnabled();
-	private IndexManagerSurmiran indexManager;
+	private IndexManager indexManager;
 
 	private Language language;
 
@@ -67,7 +67,7 @@ class LuceneIndexFilesystem {
 		resetIndexDirectory();
 //		analyzer = LuceneHelper.newAnalyzer();
 		analyzer = LuceneHelper.newWhitespaceAnalyzer();
-		indexManager = IndexManagerSurmiran.getInstance();
+		indexManager = IndexManager.getInstance();
 	}
 	
 	int addToIndex(final Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
