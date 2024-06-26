@@ -120,7 +120,6 @@ public class LuceneIndex {
 		Query query = buildQuery(searchCriteria);
 		TopDocs docs;
 
-		Sort sort = new Sort();
 
 		SortField[] fields = new SortField[3];
 		fields[0] = SortField.FIELD_SCORE;
@@ -131,7 +130,7 @@ public class LuceneIndex {
 			fields[1] = new SortField("DStichwort", Type.STRING);
 			fields[2] = new SortField("DStichwort_sort", Type.STRING);
 		}
-		sort.setSort(fields);
+		Sort sort = new Sort(fields);
 		Page<LemmaVersion> result;
 
 		int pageSize = pagination.getPageSize();

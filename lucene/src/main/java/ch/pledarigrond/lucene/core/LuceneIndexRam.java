@@ -30,9 +30,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.similarities.BasicStats;
 import org.apache.lucene.search.similarities.SimilarityBase;
-import org.apache.lucene.store.IOContext;
-import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.MMapDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +42,7 @@ import java.util.Set;
 
 /**
  * Helper class used by {@link LuceneIndex}. It manages the lucene index
- * kept in a {@link RAMDirectory}.
+ * kept in a {@link MMapDirectory}.
  *
  */
  class LuceneIndexRam {
@@ -55,7 +53,7 @@ import java.util.Set;
 	private LuceneConfiguration luceneConfiguration;
 	private IndexManager indexManager;
 
-	private RAMDirectory ram;
+	private MMapDirectory ram;
 	private DirectoryReader reader;
 
     public LuceneIndexRam(LuceneConfiguration luceneConfiguration) {
@@ -74,7 +72,7 @@ import java.util.Set;
 		return searcher;
 	}
 
-	synchronized void reloadIndex() throws NoIndexAvailableException {
+	synchronized void reloadIndex() throws NoIndexAvailableException, IOException {
 		searcher = null;
 		if(ram != null) {
 			ram.close();
@@ -86,8 +84,7 @@ import java.util.Set;
 		if (searcher == null) {
 			try {
                 logger.info("Loading index from directory {}", luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
-				NIOFSDirectory directory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
-				ram = new RAMDirectory(directory, new IOContext());
+				ram = new MMapDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
 				reader = DirectoryReader.open(ram);
 				searcher = new IndexSearcher(reader);
 				searcher.setSimilarity(new SimilarityBase() {
@@ -102,7 +99,6 @@ import java.util.Set;
 						return basicStats.getBoost();
 					}
 				});
-				directory.close();
 				logger.info("Index loaded.");
 			} catch (IOException e) {
 				throw new NoIndexAvailableException("Failed to load index", e);
