@@ -18,7 +18,6 @@ package ch.pledarigrond.lucene.util;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.util.Version;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -27,12 +26,10 @@ import java.io.StringReader;
  * Helper class to generate the needed Lucene Analyzers.
  */
 public class LuceneHelper {
-	
-	public final static Version CURRENT = Version.LUCENE_46;
-	
+
 	public static Analyzer newAnalyzer() {
 		try {
-			return new StandardAnalyzer(CURRENT, new StringReader(""));
+			return new StandardAnalyzer(new StringReader(""));
 		} catch (IOException e) {
 			throw new RuntimeException("IO-Exception while reading from in-memory-string...?", e);
 		}
@@ -40,6 +37,6 @@ public class LuceneHelper {
 
 	// For initial indexing (preserve special chars) to enable suggestion search
 	public static Analyzer newWhitespaceAnalyzer() {
-		return new WhitespaceAnalyzer(CURRENT);
+		return new WhitespaceAnalyzer();
 	}
 }

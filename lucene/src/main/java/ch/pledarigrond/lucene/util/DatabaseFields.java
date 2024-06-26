@@ -10,16 +10,16 @@ import java.util.List;
 public class DatabaseFields {
     public static List<IndexedColumn> getDatabaseColumns() {
         return Arrays.asList(
-                new IndexedColumn("DStichwort"),
-                new IndexedColumn("DStichwort_sort"),
+                new IndexedColumn("DStichwort", FieldType.STRING_SORTED),
+                new IndexedColumn("DStichwort_sort", FieldType.STRING_SORTED),
                 new IndexedColumn("DSemantik"),
                 new IndexedColumn("DSubsemantik"),
                 new IndexedColumn("DGrammatik"),
                 new IndexedColumn("DGenus"),
                 new IndexedColumn("DStatus"),
                 new IndexedColumn("DTags"),
-                new IndexedColumn("RStichwort"),
-                new IndexedColumn("RStichwort_sort"),
+                new IndexedColumn("RStichwort", FieldType.STRING_SORTED),
+                new IndexedColumn("RStichwort_sort", FieldType.STRING_SORTED),
                 new IndexedColumn("RSemantik"),
                 new IndexedColumn("RSubsemantik"),
                 new IndexedColumn("RGrammatik"),

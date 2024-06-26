@@ -40,7 +40,6 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -120,17 +119,15 @@ public class LuceneIndex {
 		TopDocs docs;
 
 		Sort sort = new Sort();
-		String[] items;
-		if(searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
-			items = new String[] { "RStichwort", "RStichwort_sort"};
-		} else {
-			items = new String[] { "DStichwort", "DStichwort_sort"};
-		}
-		SortField[] fields = new SortField[items.length+1];
+
+		SortField[] fields = new SortField[3];
 		fields[0] = SortField.FIELD_SCORE;
-		for(int i = 0; i < items.length; i++) {
-			String item = items[i];
-			fields[i+1] = new SortField(item, Type.STRING);
+		if(searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
+			fields[1] = new SortField("RStichwort", Type.STRING);
+			fields[2] = new SortField("RStichwort_sort", Type.STRING);
+		} else {
+			fields[1] = new SortField("DStichwort", Type.STRING);
+			fields[2] = new SortField("DStichwort_sort", Type.STRING);
 		}
 		sort.setSort(fields);
 		Page<LemmaVersion> result;
@@ -188,15 +185,15 @@ public class LuceneIndex {
 		return new PageImpl<>(results, pageable, docs.totalHits);
 	}
 
-	
 	public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		String sortField;
 		List<Query> queries;
-		sortField = dictionaryLanguage == DictionaryLanguage.GERMAN ? "DStichwort_sort" : "RStichwort_sort";
+		SortField sortField;
 		if(dictionaryLanguage == DictionaryLanguage.GERMAN) {
 			queries =  indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
+			sortField = new SortField("DStichwort_sort", Type.STRING);
 		} else {
 			queries =  indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
+			sortField = new SortField("RStichwort_sort", Type.STRING);
 		}
 		int pageSize = 120;
 		try {
@@ -208,7 +205,7 @@ public class LuceneIndex {
 			bc.add(query, Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
 			query = bc;
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, null, pageSize, new Sort(new SortField(sortField, Type.STRING)));
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, null, pageSize, new Sort(sortField));
 
 			return toLemmaVersionPagination(docs, 0, pageSize);
 		} catch (IOException e) {
@@ -219,20 +216,21 @@ public class LuceneIndex {
 	}
 
 	public Page<LemmaVersion> getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		String field = "RStichwort";
-		String sortField = "RStichwort_sort";
+		String field;
+		SortField sortField;
 		int pageSize = 120;
 
 		if (searchDirection == SearchDirection.GERMAN) {
 			field = "DStichwort";
-			sortField = "DStichwort_sort";
+			sortField = new SortField("DStichwort_sort", Type.STRING);
+		} else {
+			field = "RStichwort";
+			sortField = new SortField("RStichwort_sort", Type.STRING);
 		}
 
 		try {
 			Query query = buildStartsWithQuery(searchDirection, prefix);
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query,
-					new DuplicateFilter(field), Integer.MAX_VALUE,
-					new Sort(new SortField(sortField, Type.STRING)));
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE, new Sort(sortField));
 			return toLemmaVersionPagination(docs, page, pageSize);
 		} catch (IOException e) {
 			throw new BrokenIndexException("Broken index!", e);
@@ -512,7 +510,7 @@ public class LuceneIndex {
 
 		if (searchCriteria.getVerification() != null) {
 			try {
-				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer(Version.LUCENE_46));
+				QueryParser queryParser = new QueryParser(LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
 				finalQuery.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
@@ -522,7 +520,7 @@ public class LuceneIndex {
 
 		if (searchCriteria.getShowReviewLater() != null) {
 			try {
-				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.REVIEW_LATER, new StandardAnalyzer(Version.LUCENE_46));
+				QueryParser queryParser = new QueryParser(LemmaVersion.REVIEW_LATER, new StandardAnalyzer());
 				finalQuery.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -531,7 +529,7 @@ public class LuceneIndex {
 
 		if (searchCriteria.getOnlyAutomaticChanged()) {
 			try {
-				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+				QueryParser queryParser = new QueryParser(LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
 				finalQuery.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
@@ -541,7 +539,7 @@ public class LuceneIndex {
 
 		if (searchCriteria.getExcludeAutomaticChanged()) {
 			try {
-				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.FIELD_NAMES, new StandardAnalyzer(Version.LUCENE_46));
+				QueryParser queryParser = new QueryParser(LemmaVersion.FIELD_NAMES, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
 				finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
@@ -551,7 +549,7 @@ public class LuceneIndex {
 
 		if (searchCriteria.getAutomaticChangesType() != null && searchCriteria.getAutomaticChangesType() != AutomaticChangesType.ALL) {
 			try {
-				QueryParser queryParser = new QueryParser(Version.LUCENE_46, LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer(Version.LUCENE_46));
+				QueryParser queryParser = new QueryParser(LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
 				finalQuery.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {

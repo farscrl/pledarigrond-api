@@ -3,11 +3,9 @@ package ch.pledarigrond.lucene.util;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.IntField;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.util.BytesRef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,7 @@ public class IndexedColumnHelper {
         return switch (field.getType()) {
             case STRING -> List.of(new StringField(field.getIndexFieldName(), value, stored));
             case TEXT -> List.of(new TextField(field.getIndexFieldName(), value, stored));
+            case STRING_SORTED -> stringSorted(field.getIndexFieldName(), value, stored);
             case INTEGER -> List.of(new IntField(field.getIndexFieldName(), Integer.parseInt(value), stored));
             case SEMICOLON_SEPERATED -> semicolonFields(field.getIndexFieldName(), value, stored);
         };
@@ -41,6 +40,15 @@ public class IndexedColumnHelper {
             if(!part.trim().isEmpty()) {
                 fields.add(new StringField(name, part.trim(), stored));
             }
+        }
+        return fields;
+    }
+
+    private static List<IndexableField> stringSorted(String name, String value, Field.Store stored) {
+        List<IndexableField> fields = new ArrayList<>();
+        fields.add(new SortedDocValuesField(name, new BytesRef(value)));
+        if (stored == Field.Store.YES) {
+            fields.add(new StoredField(name, value));
         }
         return fields;
     }

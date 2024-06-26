@@ -16,7 +16,6 @@
 package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
-import ch.pledarigrond.lucene.util.LuceneHelper;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -76,7 +75,7 @@ public class DefaultQueryBuilderSplittingWhitespaces extends PgQueryBuilder {
 
 		 /* Must be a TextField to handle multi-word expressions. */
 		String textField = super.getFieldName("second");
-		QueryParser parser = new QueryParser(LuceneHelper.CURRENT, textField, analyzer);
+		QueryParser parser = new QueryParser(textField, analyzer);
 		try {
 			//match multi-word queries
 			value = value.replace(" ", " AND ");

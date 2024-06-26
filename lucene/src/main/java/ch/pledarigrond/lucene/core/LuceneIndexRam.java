@@ -86,7 +86,7 @@ import java.util.Set;
 		if (searcher == null) {
 			try {
                 logger.info("Loading index from directory {}", luceneConfiguration.getLuceneIndexDir().getAbsolutePath());
-				NIOFSDirectory directory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir());
+				NIOFSDirectory directory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
 				ram = new RAMDirectory(directory, new IOContext());
 				reader = DirectoryReader.open(ram);
 				searcher = new IndexSearcher(reader);
@@ -99,7 +99,7 @@ import java.util.Set;
 					
 					@Override
 					protected float score(BasicStats stats, float freq, float docLen) {
-						return stats.getTotalBoost();
+						return stats.getBoost();
 					}
 					
 					
@@ -116,7 +116,7 @@ import java.util.Set;
 		if (ram == null) {
 			this.loadIndex();
 		}
-		IndexWriterConfig writerConfig = new IndexWriterConfig(LuceneHelper.CURRENT, LuceneHelper.newAnalyzer());
+		IndexWriterConfig writerConfig = new IndexWriterConfig(LuceneHelper.newAnalyzer());
 		writerConfig.setOpenMode(OpenMode.APPEND);
 		writerConfig.setRAMBufferSizeMB(512.0);
         return new IndexWriter(ram, writerConfig);

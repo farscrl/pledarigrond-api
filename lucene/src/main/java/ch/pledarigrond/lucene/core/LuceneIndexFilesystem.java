@@ -89,12 +89,11 @@ class LuceneIndexFilesystem {
 		if(indexDirectory != null) {
 			indexDirectory.close();
 		}
-		indexDirectory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir());
+		indexDirectory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
 	}
 
 	private IndexWriter initIndexWriter() throws IOException {
-		IndexWriterConfig writerConfig = new IndexWriterConfig(
-				LuceneHelper.CURRENT, analyzer);
+		IndexWriterConfig writerConfig = new IndexWriterConfig(analyzer);
 		if (!indexAvailable()) {
 			writerConfig.setOpenMode(OpenMode.CREATE);
 		} else {
@@ -193,7 +192,7 @@ class LuceneIndexFilesystem {
 	}
 
 	public long getLastUpdated() {
-		File dir = indexDirectory.getDirectory();
+		File dir = indexDirectory.getDirectory().toFile();
 		long lastModified = 0;
 		File[] files = dir.listFiles();
         assert files != null;

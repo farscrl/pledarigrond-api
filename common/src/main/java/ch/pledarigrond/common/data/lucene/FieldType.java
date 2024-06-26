@@ -35,7 +35,13 @@ public enum FieldType {
 	 * A field that is indexed but not tokenized: the entire
 	 * String value is indexed as a single token.
 	 */
-	STRING, 
+	STRING,
+
+	/**
+	 * Since Lucene 5.0, a special field type is needed for sorting. This type adds two fields to the index, one
+	 * optimized for sorting and one for retrieving the original data.
+	 */
+	STRING_SORTED,
 	
 	/**
 	 * Field that indexes <code>int</code> values for efficient range filtering and sorting.
