@@ -28,7 +28,6 @@ public class IndexedColumnHelper {
             case STRING -> List.of(new StringField(field.getIndexFieldName(), value, stored));
             case TEXT -> List.of(new TextField(field.getIndexFieldName(), value, stored));
             case STRING_SORTED -> stringSorted(field.getIndexFieldName(), value, stored);
-            case INTEGER -> List.of(new IntField(field.getIndexFieldName(), Integer.parseInt(value), stored));
             case SEMICOLON_SEPERATED -> semicolonFields(field.getIndexFieldName(), value, stored);
         };
     }

@@ -20,6 +20,7 @@ import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -59,17 +60,21 @@ public class DefaultQueryBuilderSplittingWhitespaces extends PgQueryBuilder {
 	@Override
 	public List<Query> transform(String value) {
 		value = TokenizerHelper.tokenizeString(analyzer, value);
+
 		//match single word entries
-		TermQuery first = new TermQuery(new Term(super.getFieldName("first"), value));
-		first.setBoost(1000f);
+		Query first = new TermQuery(new Term(super.getFieldName("first"), value));
+		first = new BoostQuery(first, 1000f);
+
 		//match entries where searchphrase is followed by whitespace
-		TermQuery second = new TermQuery(new Term(super.getFieldName("second"), value));
-		second.setBoost(100f);
+		Query second = new TermQuery(new Term(super.getFieldName("second"), value));
+		second = new BoostQuery(second, 100f);
+
 		//also match prefix of StringFields ...
-		PrefixQuery third = new PrefixQuery(new Term(super.getFieldName("first"), value));
-		third.setBoost(10f);
+		Query third = new PrefixQuery(new Term(super.getFieldName("first"), value));
+		third = new BoostQuery(third, 10f);
+
 		//and of (analyzed) TextFields
-		PrefixQuery fourth = new PrefixQuery(new Term(super.getFieldName("second"), value));
+		Query fourth = new PrefixQuery(new Term(super.getFieldName("second"), value));
 
 		List<Query> toReturn = Arrays.asList(first,second,third,fourth);
 

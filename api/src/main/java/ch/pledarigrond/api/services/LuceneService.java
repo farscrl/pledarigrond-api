@@ -1,6 +1,9 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -16,18 +19,14 @@ import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public interface LuceneService {
 
     Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
 
     Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException;
-
-    Page<LemmaVersion> getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException;
 
     IndexStatistics getIndexStatistics(Language language);
 

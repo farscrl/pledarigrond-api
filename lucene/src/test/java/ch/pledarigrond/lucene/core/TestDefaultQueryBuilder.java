@@ -101,14 +101,6 @@ public class TestDefaultQueryBuilder {
 	}
 	
 	@Test
-	public void testAlphabeticalIndex() throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		Page<LemmaVersion> result = luceneIndex.getAllStartingWith(SearchDirection.GERMAN, "h", 0);
-		Set<String> found = getStrings("DStichwort", result);
-		String[] expected = new String[] {"heimwärts", "hausen", "Haushalt"};
-		validateResult(found, expected);
-	}
-	
-	@Test
 	public void testExactQuery() throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
 		Page<LemmaVersion> result = luceneIndex.queryExact("haus", DictionaryLanguage.GERMAN);
 		Set<String> found = getStrings("DStichwort", result);

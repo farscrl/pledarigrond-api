@@ -30,16 +30,18 @@ import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.sandbox.queries.DuplicateFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.SortField.Type;
+import org.apache.lucene.search.grouping.GroupDocs;
+import org.apache.lucene.search.grouping.GroupingSearch;
+import org.apache.lucene.search.grouping.TopGroups;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -197,41 +199,17 @@ public class LuceneIndex {
 		}
 		int pageSize = 120;
 		try {
-			BooleanQuery query = new BooleanQuery(true);
+			BooleanQuery.Builder qBuilder = new BooleanQuery.Builder();
 			for (Query q : queries) {
-				query.add(q, Occur.SHOULD);
+				qBuilder.add(q, Occur.SHOULD);
 			}
-			BooleanQuery bc = new BooleanQuery();
-			bc.add(query, Occur.MUST);
+			BooleanQuery.Builder bc = new BooleanQuery.Builder();
+			bc.add(qBuilder.build(), Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
-			query = bc;
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, null, pageSize, new Sort(sortField));
+			qBuilder = bc;
+			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
 
 			return toLemmaVersionPagination(docs, 0, pageSize);
-		} catch (IOException e) {
-			throw new BrokenIndexException("Broken index!", e);
-		} catch (InvalidTokenOffsetsException e) {
-			throw new InvalidQueryException("Highlighting failed", e);
-		}
-	}
-
-	public Page<LemmaVersion> getAllStartingWith(SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		String field;
-		SortField sortField;
-		int pageSize = 120;
-
-		if (searchDirection == SearchDirection.GERMAN) {
-			field = "DStichwort";
-			sortField = new SortField("DStichwort_sort", Type.STRING);
-		} else {
-			field = "RStichwort";
-			sortField = new SortField("RStichwort_sort", Type.STRING);
-		}
-
-		try {
-			Query query = buildStartsWithQuery(searchDirection, prefix);
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE, new Sort(sortField));
-			return toLemmaVersionPagination(docs, page, pageSize);
 		} catch (IOException e) {
 			throw new BrokenIndexException("Broken index!", e);
 		} catch (InvalidTokenOffsetsException e) {
@@ -286,25 +264,24 @@ public class LuceneIndex {
 	public ArrayList<String> getSuggestionsForField(String fieldName, String searchTerm, int limit) throws NoIndexAvailableException, IOException {
 		Query query = getSuggestionsQuery(fieldName, searchTerm);
         Set<String> allValues = new TreeSet<>();
-		ArrayList<String> fields = new ArrayList<>();
-		fields.add(fieldName);
-		for (String field : fields) {
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field), Integer.MAX_VALUE);
-			ScoreDoc[] scoreDocs = docs.scoreDocs;
-			for (int i = 0; i < scoreDocs.length; i++) {
-				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
-				IndexableField[] indexableFields = doc.getFields(field);
 
-				for (IndexableField indexedField : indexableFields) {
-					String[] parts = indexedField.stringValue().split("(; ?)|(, ?)");
-					for (String part : parts) {
-						if(part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
-							allValues.add(part);
-						}
-					}
+		GroupingSearch groupingSearch = new GroupingSearch(fieldName);
+		groupingSearch.setGroupDocsLimit(limit);
+		TopGroups<BytesRef> result = groupingSearch.search(luceneIndexRam.get(language).getSearcher(), query, 0, 10000);
+
+		GroupDocs<BytesRef>[] groups = result.groups;
+        for (GroupDocs<BytesRef> group : groups) {
+			if (group.groupValue == null) {
+				continue;
+			}
+			String fieldValue = group.groupValue.utf8ToString();
+			String[] parts = fieldValue.split("(; ?)|(, ?)");
+			for (String part : parts) {
+				if (part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
+					allValues.add(part);
 				}
 			}
-		}
+        }
 		return getLimitedResults(limit, allValues);
 	}
 
@@ -327,21 +304,24 @@ public class LuceneIndex {
 		}
 		Set<String> allValues = new TreeSet<>();
 		for (String[] field : fields) {
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(query, new DuplicateFilter(field[0]), Integer.MAX_VALUE);
-			ScoreDoc[] scoreDocs = docs.scoreDocs;
-			for (int i = 0; i < scoreDocs.length; i++) {
-				Document doc = luceneIndexRam.get(language).getSearcher().doc(scoreDocs[i].doc);
-				IndexableField[] indexableFields = doc.getFields(field[1]);
+			GroupingSearch groupingSearch = new GroupingSearch(field[1]);
+			groupingSearch.setGroupDocsLimit(limit);
+			TopGroups<BytesRef> result = groupingSearch.search(luceneIndexRam.get(language).getSearcher(), query, 0, 10000);
 
-				for (IndexableField indexedField : indexableFields) {
-					String[] parts = indexedField.stringValue().split("(; ?)|(, ?)");
-					for (String part : parts) {
-						if(part.toLowerCase().startsWith(value.toLowerCase())) {
-							allValues.add(part);
-						}
+			GroupDocs<BytesRef>[] groups = result.groups;
+            for (GroupDocs<BytesRef> group : groups) {
+				if (group.groupValue == null) {
+					continue;
+				}
+                String fieldValue = group.groupValue.utf8ToString();
+
+				String[] parts = fieldValue.split("(; ?)|(, ?)");
+				for (String part : parts) {
+					if (part.toLowerCase().startsWith(value.toLowerCase())) {
+						allValues.add(part);
 					}
 				}
-			}
+            }
 		}
 		return getLimitedResults(limit, allValues);
 	}
@@ -409,20 +389,19 @@ public class LuceneIndex {
 
 	private Query getSuggestionsQuery(String fieldName, String value) {
 		List<Query> parts = indexManager.getBuilderRegistry().getSuggestionQueries(fieldName, value);
-		BooleanQuery bq = new BooleanQuery(true);
+		BooleanQuery.Builder bqBuilder = new BooleanQuery.Builder();
 		for (Query part : parts) {
-			bq.add(part, BooleanClause.Occur.SHOULD);
+			bqBuilder.add(part, BooleanClause.Occur.SHOULD);
 		}
-		BooleanQuery bc = new BooleanQuery();
-		bc.add(bq, BooleanClause.Occur.MUST);
+		BooleanQuery.Builder bc = new BooleanQuery.Builder();
+		bc.add(bqBuilder.build(), BooleanClause.Occur.MUST);
 		bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-		bq = bc;
-		return bq;
+		return bc.build();
 	}
 
 	private Query buildQuery(SearchCriteria searchCriteria) {
 		long prepareStart = System.nanoTime();
-		BooleanQuery finalQuery = new BooleanQuery(true);
+		BooleanQuery.Builder finalQueryBuilder = new BooleanQuery.Builder();
 
 		if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().isEmpty()) {
 			List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
@@ -444,11 +423,11 @@ public class LuceneIndex {
 						indexManager.getBuilderRegistry().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
 				).flatMap(Collection::stream).collect(Collectors.toList());
 			};
-			BooleanQuery part = new BooleanQuery(true);
+			BooleanQuery.Builder part = new BooleanQuery.Builder();
 			for (Query tf : searchPhraseQueries) {
 				part.add(tf, BooleanClause.Occur.SHOULD);
 			}
-			finalQuery.add(part, BooleanClause.Occur.MUST);
+			finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
 		}
 
 		if (searchCriteria.getGender() != null) {
@@ -460,11 +439,11 @@ public class LuceneIndex {
 						indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
 				).flatMap(Collection::stream).collect(Collectors.toList());
 			};
-			BooleanQuery part = new BooleanQuery(true);
+			BooleanQuery.Builder part = new BooleanQuery.Builder();
 			for (Query tf : genderQueries) {
 				part.add(tf, BooleanClause.Occur.SHOULD);
 			}
-			finalQuery.add(part, BooleanClause.Occur.MUST);
+			finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
 		}
 
 		if (searchCriteria.getGrammar() != null) {
@@ -476,11 +455,11 @@ public class LuceneIndex {
 						indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
 				).flatMap(Collection::stream).collect(Collectors.toList());
 			};
-			BooleanQuery part = new BooleanQuery(true);
+			BooleanQuery.Builder part = new BooleanQuery.Builder();
 			for (Query tf : grammarQueries) {
 				part.add(tf, BooleanClause.Occur.SHOULD);
 			}
-			finalQuery.add(part, BooleanClause.Occur.MUST);
+			finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
 		}
 
 		if (searchCriteria.getSubSemantics() != null) {
@@ -492,27 +471,27 @@ public class LuceneIndex {
 						indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
 				).flatMap(Collection::stream).collect(Collectors.toList());
 			};
-			BooleanQuery part = new BooleanQuery(true);
+			BooleanQuery.Builder part = new BooleanQuery.Builder();
 			for (Query tf : subSemanticsQueries) {
 				part.add(tf, BooleanClause.Occur.SHOULD);
 			}
-			finalQuery.add(part, BooleanClause.Occur.MUST);
+			finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
 		}
 
 		if (searchCriteria.getCategory() != null) {
 			List<Query> categoryQueries = indexManager.getBuilderRegistry().getCategoryBuilder().transform(searchCriteria.getCategory());
-			BooleanQuery part = new BooleanQuery(true);
+			BooleanQuery.Builder part = new BooleanQuery.Builder();
 			for (Query tf : categoryQueries) {
 				part.add(tf, BooleanClause.Occur.SHOULD);
 			}
-			finalQuery.add(part, BooleanClause.Occur.MUST);
+			finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
 		}
 
 		if (searchCriteria.getVerification() != null) {
 			try {
 				QueryParser queryParser = new QueryParser(LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
-				finalQuery.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
+				finalQueryBuilder.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -521,7 +500,7 @@ public class LuceneIndex {
 		if (searchCriteria.getShowReviewLater() != null) {
 			try {
 				QueryParser queryParser = new QueryParser(LemmaVersion.REVIEW_LATER, new StandardAnalyzer());
-				finalQuery.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
+				finalQueryBuilder.add(queryParser.parse(searchCriteria.getShowReviewLater().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -531,7 +510,7 @@ public class LuceneIndex {
 			try {
 				QueryParser queryParser = new QueryParser(LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
-				finalQuery.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
+				finalQueryBuilder.add(queryParser.parse("*"), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -541,7 +520,7 @@ public class LuceneIndex {
 			try {
 				QueryParser queryParser = new QueryParser(LemmaVersion.FIELD_NAMES, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
-				finalQuery.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
+				finalQueryBuilder.add(queryParser.parse("* AND -" + LemmaVersion.AUTOMATIC_CHANGE), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -551,7 +530,7 @@ public class LuceneIndex {
 			try {
 				QueryParser queryParser = new QueryParser(LemmaVersion.AUTOMATIC_CHANGE, new StandardAnalyzer());
 				queryParser.setAllowLeadingWildcard(true);
-				finalQuery.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
+				finalQueryBuilder.add(queryParser.parse(searchCriteria.getAutomaticChangesType().toString()), BooleanClause.Occur.MUST);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -559,30 +538,30 @@ public class LuceneIndex {
 
 		// Unless a user wants to see unverified suggestions, each item returned must be verified.
 		if (!searchCriteria.getSuggestions()) {
-			BooleanQuery bc = new BooleanQuery();
-			bc.add(finalQuery, BooleanClause.Occur.MUST);
+			BooleanQuery.Builder bc = new BooleanQuery.Builder();
+			bc.add(finalQueryBuilder.build(), BooleanClause.Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-			finalQuery = bc;
+			finalQueryBuilder = bc;
 		}
 
 		long prepareEnd = System.nanoTime();
 		if(logger.isDebugEnabled()) {
-			logger.debug("Final query: " + finalQuery + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
+			logger.debug("Final query: " + finalQueryBuilder + " created in " + ((prepareEnd-prepareStart)/1000000D) + " ms.");
 		}
 
-		return finalQuery;
+		return finalQueryBuilder.build();
 	}
 
 	private Query buildStartsWithQuery(SearchDirection searchDirection, String prefix) {
 		List<Query> queries = indexManager.getBuilderRegistry().getStartsWithBuilder(searchDirection).transform(prefix);
-		BooleanQuery query = new BooleanQuery(true);
+		BooleanQuery.Builder qBuilder = new BooleanQuery.Builder();
 		for (Query q : queries) {
-			query.add(q, BooleanClause.Occur.SHOULD);
+			qBuilder.add(q, BooleanClause.Occur.SHOULD);
 		}
-		BooleanQuery bc = new BooleanQuery();
-		bc.add(query, BooleanClause.Occur.MUST);
+		BooleanQuery.Builder bc = new BooleanQuery.Builder();
+		bc.add(qBuilder.build(), BooleanClause.Occur.MUST);
 		bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-		return bc;
+		return bc.build();
 	}
 
 	private ArrayList<String> getLimitedResults(int limit, Set<String> allValues) {

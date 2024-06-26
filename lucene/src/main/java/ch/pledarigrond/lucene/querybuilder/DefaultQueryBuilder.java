@@ -19,6 +19,7 @@ import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.lucene.analyzers.CaseInsensitiveWhitespaceAnalyzer;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
@@ -52,14 +53,19 @@ public class DefaultQueryBuilder extends PgQueryBuilder {
 	@Override
 	public List<Query> transform(String value) {
 		value = TokenizerHelper.tokenizeString(new CaseInsensitiveWhitespaceAnalyzer(), value);
-		TermQuery first = new TermQuery(new Term(super.getFieldName("first"), value));
-		first.setBoost(1000f);
+
+		Query first = new TermQuery(new Term(super.getFieldName("first"), value));
+		first = new BoostQuery(first, 1000f);
+
 		//match entries where searchphrase is followed by whitespace
-		TermQuery second = new TermQuery(new Term(super.getFieldName("second"), value));
-		second.setBoost(100f);
-		PrefixQuery fourth = new PrefixQuery(new Term(super.getFieldName("first"), value));
-		fourth.setBoost(10f);
-		PrefixQuery fifth = new PrefixQuery(new Term(super.getFieldName("third"), value));
+		Query second = new TermQuery(new Term(super.getFieldName("second"), value));
+		second = new BoostQuery(second, 100f);
+
+		Query fourth = new PrefixQuery(new Term(super.getFieldName("first"), value));
+		fourth = new BoostQuery(fourth, 10f);
+
+		Query fifth = new PrefixQuery(new Term(super.getFieldName("third"), value));
+
 		return Arrays.asList(first,second,fourth, fifth);
 	}
 }

@@ -2,7 +2,10 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -22,7 +25,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LuceneServiceImpl implements LuceneService {
@@ -58,12 +64,6 @@ public class LuceneServiceImpl implements LuceneService {
             return clean(result);
         }
         return result;
-    }
-
-    @Override
-    public Page<LemmaVersion> getAllStartingWith(Language language, SearchDirection searchDirection, String prefix, int page) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-        Page<LemmaVersion> result = luceneIndexMap.get(language).getAllStartingWith(searchDirection, prefix, page);
-        return clean(result);
     }
 
     @Override

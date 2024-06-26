@@ -16,10 +16,11 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import org.junit.*;
-import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -98,10 +99,6 @@ public class TestIndexCRUD {
 		luceneIndex.reloadIndex();
 		IndexStatistics statistics = luceneIndex.getIndexStatistics();
 		Assert.assertEquals(entries.size(),statistics.getNumberOfEntries());
-		Page<LemmaVersion> results = luceneIndex.getAllStartingWith(SearchDirection.GERMAN, "a", 0);
-		Assert.assertTrue(results.getContent().size() > 0);
-		results = luceneIndex.getAllStartingWith(SearchDirection.ROMANSH, "x", 0);
-		Assert.assertEquals(0, results.getContent().size());
 	}
 	
 	@Test

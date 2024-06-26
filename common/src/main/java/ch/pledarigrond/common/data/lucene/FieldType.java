@@ -44,11 +44,6 @@ public enum FieldType {
 	STRING_SORTED,
 	
 	/**
-	 * Field that indexes <code>int</code> values for efficient range filtering and sorting.
-	 */
-	INTEGER, 
-	
-	/**
 	 * Multiple fields of type STRING, separated by semicolons.
 	 */
 	SEMICOLON_SEPERATED;

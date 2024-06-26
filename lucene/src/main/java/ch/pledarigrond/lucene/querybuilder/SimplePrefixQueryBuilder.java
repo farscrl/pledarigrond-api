@@ -45,7 +45,9 @@ public class SimplePrefixQueryBuilder extends PgQueryBuilder {
 	@Override
 	public List<Query> transform(String value) {
 		value = TokenizerHelper.tokenizeString(LuceneHelper.newWhitespaceAnalyzer(), value);
+
 		Query query = new PrefixQuery(new Term(getFieldName("first"), value.toLowerCase()));
+
 		return List.of(query);
 	}
 }
