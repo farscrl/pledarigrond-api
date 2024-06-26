@@ -91,18 +91,16 @@ import java.util.Set;
 				reader = DirectoryReader.open(ram);
 				searcher = new IndexSearcher(reader);
 				searcher.setSimilarity(new SimilarityBase() {
-					
+
 					@Override
 					public String toString() {
 						return "Constant Similarity";
 					}
-					
+
 					@Override
-					protected float score(BasicStats stats, float freq, float docLen) {
-						return stats.getBoost();
+					protected double score(BasicStats basicStats, double freq, double docLen) {
+						return basicStats.getBoost();
 					}
-					
-					
 				});
 				directory.close();
 				logger.info("Index loaded.");

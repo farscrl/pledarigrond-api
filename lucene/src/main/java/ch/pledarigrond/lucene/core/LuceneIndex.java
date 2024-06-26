@@ -184,7 +184,7 @@ public class LuceneIndex {
 		}
 
 		Pageable pageable = PageRequest.of(page, pageSize);
-		return new PageImpl<>(results, pageable, docs.totalHits);
+		return new PageImpl<>(results, pageable, docs.totalHits.value);
 	}
 
 	public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {

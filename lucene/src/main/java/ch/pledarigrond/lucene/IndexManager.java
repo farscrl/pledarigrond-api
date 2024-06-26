@@ -172,18 +172,6 @@ public class IndexManager {
         document.add(new StringField(LemmaVersion.ID, version.getInternalId()+"", Field.Store.YES));
         document.add(new StringField(LemmaVersion.VERIFICATION, version.getVerification().toString(), Field.Store.YES));
         document.add(new TextField(LemmaVersion.VERIFICATION + "_analyzed", version.getVerification().toString().toLowerCase(), Field.Store.NO));
-        if(version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE) != null) {
-            document.add(new StringField(LemmaVersion.RM_INFLECTION_TYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE), Field.Store.YES));
-        }
-        if(version.getEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE) != null) {
-            document.add(new StringField(LemmaVersion.RM_INFLECTION_SUBTYPE, version.getEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE), Field.Store.YES));
-        }
-        if (version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
-            document.add(new StringField(LemmaVersion.AUTOMATIC_CHANGE, version.getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE).toLowerCase(), Field.Store.YES));
-        }
-        if (version.getPgValues().get(LemmaVersion.REVIEW_LATER) != null) {
-            document.add(new StringField(LemmaVersion.REVIEW_LATER, version.getPgValues().get(LemmaVersion.REVIEW_LATER).toLowerCase(), Field.Store.YES));
-        }
     }
 
     /**
@@ -194,7 +182,5 @@ public class IndexManager {
         lemmaVersion.putPgValue(LemmaVersion.LEXENTRY_ID, document.get(LemmaVersion.LEXENTRY_ID));
         lemmaVersion.putPgValue(LemmaVersion.ID, document.get(LemmaVersion.ID));
         lemmaVersion.putPgValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
-        lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_TYPE, document.get(LemmaVersion.RM_INFLECTION_TYPE));
-        lemmaVersion.putEntryValue(LemmaVersion.RM_INFLECTION_SUBTYPE, document.get(LemmaVersion.RM_INFLECTION_SUBTYPE));
     }
 }
