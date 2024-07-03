@@ -146,7 +146,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (entry.getCurrent() != null) {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
-                RStichwort = WordNormalizer.normalizeWord(language, RStichwort);
+                RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
+                RStichwort = removeSuffixes(RStichwort);
                 if (isSingleWord(RStichwort)) {
                     Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
 
@@ -198,7 +199,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (entry.getCurrent() != null) {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
-                RStichwort = WordNormalizer.normalizeWord(language, RStichwort);
+                RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
+                RStichwort = removeSuffixes(RStichwort);
 
                 if (RStichwort != null && !RStichwort.isEmpty()) {
                     strings.add(RStichwort);
@@ -264,5 +266,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     private void uploadFileToBunny(File file, String fileName) {
         // todo: move file if already existing
         bunnyService.uploadFile(fileName, file);
+    }
+
+    public static String removeSuffixes(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        // Regular expressions to find suffixes in parentheses or square brackets
+        String regex = "\\s*[\\(\\[].*?[\\)\\]]";
+        return input.replaceAll(regex, "");
     }
 }

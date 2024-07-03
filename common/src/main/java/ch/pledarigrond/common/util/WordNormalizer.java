@@ -2,9 +2,20 @@ package ch.pledarigrond.common.util;
 
 import ch.pledarigrond.common.data.common.Language;
 
+/**
+ * This class provides methods to normalize words in different idioms. This means, frequent prefixes and suffixes are
+ * removed from the words.
+ * Depending on the usage of the method, the normalization can be more or less strict: e.g. for pure spell checking,
+ * the meaning of the word is irrelevant, so the normalization also change the meaning. For other use cases, the meaning
+ * should not be changed, so the normalization is stricter.
+ */
 public class WordNormalizer {
 
     public static String normalizeWord(Language language, String word) {
+        return normalizeWord(language, word, true);
+    }
+
+    public static String normalizeWord(Language language, String word, boolean allowChangeOfMeaning) {
         if (word == null) {
             return null;
         }
@@ -12,16 +23,21 @@ public class WordNormalizer {
         word = word.trim();
 
         return switch (language) {
-            case PUTER -> WordNormalizer.normalizeStringPuter(word);
-            case RUMANTSCHGRISCHUN -> WordNormalizer.normalizeStringRumantschGrischun(word);
-            case SURSILVAN -> WordNormalizer.normalizeStringSursilvan(word);
-            case SUTSILVAN -> WordNormalizer.normalizeStringSutsilvan(word);
-            case SURMIRAN -> WordNormalizer.normalizeStringSurmiran(word);
-            case VALLADER -> WordNormalizer.normalizeStringVallader(word);
+            case PUTER -> WordNormalizer.normalizeStringPuter(word, allowChangeOfMeaning);
+            case RUMANTSCHGRISCHUN -> WordNormalizer.normalizeStringRumantschGrischun(word, allowChangeOfMeaning);
+            case SURSILVAN -> WordNormalizer.normalizeStringSursilvan(word, allowChangeOfMeaning);
+            case SUTSILVAN -> WordNormalizer.normalizeStringSutsilvan(word, allowChangeOfMeaning);
+            case SURMIRAN -> WordNormalizer.normalizeStringSurmiran(word, allowChangeOfMeaning);
+            case VALLADER -> WordNormalizer.normalizeStringVallader(word, allowChangeOfMeaning);
             default -> word;
         };
     }
+
     public static String normalizeStringPuter(String input) {
+        return normalizeStringPuter(input, true);
+    }
+
+    public static String normalizeStringPuter(String input, boolean allowChangeOfMeaning) {
         if (input == null) {
             return null;
         }
@@ -52,7 +68,7 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
-        if (input.startsWith("fer ")) {
+        if (input.startsWith("fer ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
         if (input.startsWith("l'")) {
@@ -77,6 +93,10 @@ public class WordNormalizer {
     }
 
     public static String normalizeStringRumantschGrischun(String input) {
+        return normalizeStringRumantschGrischun(input, true);
+    }
+
+    public static String normalizeStringRumantschGrischun(String input, boolean allowChangeOfMeaning) {
         if (input == null) {
             return null;
         }
@@ -85,7 +105,7 @@ public class WordNormalizer {
         if (input.startsWith("cf. ")) {
             return null;
         }
-        if (input.startsWith("far ")) {
+        if (input.startsWith("far ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
         if (input.startsWith("l'")) {
@@ -142,11 +162,19 @@ public class WordNormalizer {
     }
 
     public static String normalizeStringSursilvan(String input) {
+        return normalizeStringSursilvan(input, true);
+    }
+
+    public static String normalizeStringSursilvan(String input, boolean allowChangeOfMeaning) {
         // TODO: implement me
         return input;
     }
 
     public static String normalizeStringSurmiran(String input) {
+        return normalizeStringSurmiran(input, true);
+    }
+
+    public static String normalizeStringSurmiran(String input, boolean allowChangeOfMeaning) {
         if (input == null) {
             return null;
         }
@@ -168,7 +196,7 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
-        if (input.startsWith("far ")) {
+        if (input.startsWith("far ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
         if (input.startsWith("l'")) {
@@ -196,6 +224,10 @@ public class WordNormalizer {
     }
 
     public static String normalizeStringSutsilvan(String input) {
+        return normalizeStringSutsilvan(input, true);
+    }
+
+    public static String normalizeStringSutsilvan(String input, boolean allowChangeOfMeaning) {
         if (input == null) {
             return null;
         }
@@ -220,7 +252,7 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
-        if (input.startsWith("far ")) {
+        if (input.startsWith("far ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
         if (input.startsWith("l'")) {
@@ -248,6 +280,10 @@ public class WordNormalizer {
     }
 
     public static String normalizeStringVallader(String input) {
+        return normalizeStringVallader(input, true);
+    }
+
+    public static String normalizeStringVallader(String input, boolean allowChangeOfMeaning) {
         if (input == null) {
             return null;
         }
@@ -269,7 +305,7 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
-        if (input.startsWith("far ")) {
+        if (input.startsWith("far ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
         if (input.startsWith("l'")) {
