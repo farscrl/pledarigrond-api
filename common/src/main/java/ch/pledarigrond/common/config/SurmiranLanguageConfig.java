@@ -143,6 +143,9 @@ public class SurmiranLanguageConfig extends LanguageConfig {
                 new IndexedColumn("otherForm3"),
                 new IndexedColumn("otherForm4"),
 
+                // pronunciation
+                new IndexedColumn("RPronunciation"),
+
                 // automatic generation of forms
                 new IndexedColumn(LemmaVersion.AUTOMATIC_CHANGE),
 
