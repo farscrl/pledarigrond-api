@@ -15,6 +15,8 @@ import java.net.UnknownHostException;
 public interface RegistrationService {
     public Page<Registration> getRegistrations(ListFilter filter, Pageable pageable);
 
+    public Registration getRegistration(String id);
+
     public Registration getNextRegistration();
 
     public Registration postponeRegistration(Registration registration);
@@ -24,6 +26,14 @@ public interface RegistrationService {
     public Registration rejectRegistration(Registration registration);
 
     public Registration postponeReviewRegistration(Registration registration);
+
+    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws UnknownHostException, DatabaseException;
+
+    public boolean didOrderRegistration(String lexEntryId);
+
+    public Registration order(Registration registration);
+
+    public void deleteRegistration(String id);
 
     public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 

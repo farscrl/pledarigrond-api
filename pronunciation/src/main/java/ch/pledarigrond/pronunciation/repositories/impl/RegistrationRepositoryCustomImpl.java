@@ -28,6 +28,10 @@ public class RegistrationRepositoryCustomImpl implements RegistrationRepositoryC
             query.addCriteria(Criteria.where("status").is(filter.getStatus()));
         }
 
+        if (filter.getSearchTerm() != null && !filter.getSearchTerm().isEmpty()) {
+            query.addCriteria(Criteria.where("rmStichwort").regex("^" + filter.getSearchTerm()));
+        }
+
         Sort.Direction direction = filter.isAscending() ? Sort.Direction.ASC : Sort.Direction.DESC;
         query.with(Sort.by(direction, "lastModifiedDate"));
 

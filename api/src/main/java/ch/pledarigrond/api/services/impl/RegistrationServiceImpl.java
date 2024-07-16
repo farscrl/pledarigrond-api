@@ -78,6 +78,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    public Registration getRegistration(String id) {
+        return registrationRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public Registration getNextRegistration() {
         Optional<Registration> registration = registrationRepository.findRandomRegistration();
         return registration.orElse(null);
@@ -93,7 +98,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration acceptRegistration(Registration registration) {
-        String id = activeProfile + "/" + registration.getId();
+        String id = generateRegistrationIdString(registration);
         registration.getLemmaIds().forEach(lemmaId -> {
             try {
                 updatePronunciationForLexEntry(RequestContext.getLanguage(), lemmaId, id);
@@ -116,6 +121,36 @@ public class RegistrationServiceImpl implements RegistrationService {
     public Registration postponeReviewRegistration(Registration registration) {
         registration.setStatus(RegistrationStatus.POSTPONED_REVIEW);
         return registrationRepository.save(registration);
+    }
+
+    @Override
+    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws UnknownHostException, DatabaseException {
+        String id = generateRegistrationIdString(registration);
+        if (registration.getStatus() == RegistrationStatus.COMPLETED) {
+            updatePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId, id);
+        } else {
+            registration.getLemmaIds().add(lexEntryId);
+            registrationRepository.save(registration);
+        }
+        return registration;
+    }
+
+    @Override
+    public boolean didOrderRegistration(String lexEntryId) {
+        List<Registration> registrations = registrationRepository.findByLemmaIdsContaining(lexEntryId);
+        return !registrations.isEmpty();
+    }
+
+    @Override
+    public Registration order(Registration registration) {
+        registration.setId(null);
+        registration.setStatus(RegistrationStatus.TODO);
+        return registrationRepository.save(registration);
+    }
+
+    @Override
+    public void deleteRegistration(String id) {
+        registrationRepository.deleteById(id);
     }
 
     @Override
@@ -310,5 +345,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String generateRegistrationIdString(Registration registration) {
+        return activeProfile + "/" + registration.getId();
     }
 }

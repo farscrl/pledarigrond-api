@@ -5,6 +5,7 @@ import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RegistrationRepository extends MongoRepository<Registration, String>, RegistrationRepositoryCustom {
@@ -15,4 +16,6 @@ public interface RegistrationRepository extends MongoRepository<Registration, St
     Optional<Registration> findRandomRegistration();
 
     int countByStatus(RegistrationStatus status);
+
+    List<Registration> findByLemmaIdsContaining(String lemmaId);
 }
