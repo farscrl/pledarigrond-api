@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -150,6 +151,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void deleteRegistration(String id) {
+        bunnyService.deleteFile(generateRegistrationPath(Objects.requireNonNull(registrationRepository.findById(id).orElse(null))) + ".wav");
+        bunnyService.deleteFile(generateRegistrationPath(Objects.requireNonNull(registrationRepository.findById(id).orElse(null))) + ".mp3");
         registrationRepository.deleteById(id);
     }
 
@@ -164,7 +167,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new IOException("Failed to convert wav to mp3");
         }
 
-        String path = "pronunciation/" + activeProfile + "/" + registration.getId() + "/" + registration.getId();
+        String path = generateRegistrationPath(registration);
 
         bunnyService.uploadFile(path + ".wav", tempWavFile);
         bunnyService.uploadFile(path + ".mp3", mp3File);
@@ -349,5 +352,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private String generateRegistrationIdString(Registration registration) {
         return activeProfile + "/" + registration.getId();
+    }
+
+    private String generateRegistrationPath(Registration registration) {
+        return "pronunciation/" + activeProfile + "/" + registration.getId() + "/" + registration.getId();
     }
 }

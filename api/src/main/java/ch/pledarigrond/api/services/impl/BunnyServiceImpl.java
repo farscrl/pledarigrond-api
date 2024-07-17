@@ -50,4 +50,26 @@ public class BunnyServiceImpl implements BunnyService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void deleteFile(String fileName) {
+        try {
+            String urlStr = "https://storage.bunnycdn.com/" + zoneName + "/" + fileName;
+
+            URL url = new URL(urlStr);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("DELETE");
+            connection.setRequestProperty("AccessKey", apiKey);
+
+            int responseCode = connection.getResponseCode();
+            String responseMsg = connection.getResponseMessage();
+            System.out.println("Response: " + responseCode + " " + responseMsg);
+
+            if (responseCode != 200) {
+                throw new RuntimeException("Failed to upload file: " + responseCode + " " + responseMsg);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
