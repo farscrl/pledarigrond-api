@@ -130,6 +130,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (registration.getStatus() == RegistrationStatus.COMPLETED) {
             updatePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId, id);
         } else {
+            removePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId);
             registration.getLemmaIds().add(lexEntryId);
             registrationRepository.save(registration);
         }
@@ -339,6 +340,30 @@ public class RegistrationServiceImpl implements RegistrationService {
                     entry.getCurrent().getLemmaValues().put("RPronunciation", pronunciation);
                 }
                 entry.getUnapprovedVersions().forEach(version -> version.getLemmaValues().put("RPronunciation", pronunciation));
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")), new Document(newObject), new ReplaceOptions().upsert(true));
+
+                luceneService.update(language, entry);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void removePronunciationForLexEntry(Language language, String id) throws DatabaseException, UnknownHostException {
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        Document query = new Document("_id", new ObjectId(id));
+        try (MongoCursor<Document> cursor = entryCollection.find(query).iterator()) {
+            while (cursor.hasNext()) {
+                DBObject object = new BasicDBObject(cursor.next());
+                LexEntry entry = Converter.convertToLexEntry(object);
+
+                if (entry.getCurrent() != null) {
+                    entry.getCurrent().getLemmaValues().remove("RPronunciation");
+                }
+                entry.getUnapprovedVersions().forEach(version -> version.getLemmaValues().remove("RPronunciation"));
 
                 BasicDBObject newObject = Converter.convertLexEntry(entry);
                 entryCollection.replaceOne(eq("_id", newObject.get("_id")), new Document(newObject), new ReplaceOptions().upsert(true));
