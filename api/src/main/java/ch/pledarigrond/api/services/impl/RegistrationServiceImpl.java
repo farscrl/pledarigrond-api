@@ -137,9 +137,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public boolean didOrderRegistration(String lexEntryId) {
+    public Registration getOrderedRegistration(String lexEntryId) {
         List<Registration> registrations = registrationRepository.findByLemmaIdsContaining(lexEntryId);
-        return !registrations.isEmpty();
+        return registrations.isEmpty() ? null : registrations.get(0);
     }
 
     @Override

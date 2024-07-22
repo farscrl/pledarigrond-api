@@ -78,7 +78,7 @@ public class RegistrationsController {
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/did_order/{lexEntryId}")
     ResponseEntity<?> didOrder(@PathVariable("language") Language language,  @PathVariable(value="lexEntryId") String lexEntryId) {
-        return ResponseEntity.ok(registrationService.didOrderRegistration(lexEntryId));
+        return ResponseEntity.ok(registrationService.getOrderedRegistration(lexEntryId));
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")

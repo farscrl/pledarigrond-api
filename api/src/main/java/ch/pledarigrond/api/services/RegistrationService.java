@@ -29,7 +29,7 @@ public interface RegistrationService {
 
     public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws UnknownHostException, DatabaseException;
 
-    public boolean didOrderRegistration(String lexEntryId);
+    public Registration getOrderedRegistration(String lexEntryId);
 
     public Registration order(Registration registration);
 
