@@ -336,7 +336,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 DBObject object = new BasicDBObject(cursor.next());
                 LexEntry entry = Converter.convertToLexEntry(object);
 
-                if (entry.getCurrent() == null) {
+                if (entry.getCurrent() != null) {
                     entry.getCurrent().getLemmaValues().put("RPronunciation", pronunciation);
                 }
                 entry.getUnapprovedVersions().forEach(version -> version.getLemmaValues().put("RPronunciation", pronunciation));
