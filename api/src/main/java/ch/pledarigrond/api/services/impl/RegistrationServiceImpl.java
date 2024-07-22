@@ -323,7 +323,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         // Regular expressions to find suffixes in parentheses or square brackets
-        String regex = "\\s*[\\(\\[].*?[\\)\\]]";
+        String regex = "\\s*[\\(\\[].*?[\\)\\]]\\s*$";
         return input.replaceAll(regex, "");
     }
 
