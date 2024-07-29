@@ -1,6 +1,8 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.BunnyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.net.URL;
 
 @Service
 public class BunnyServiceImpl implements BunnyService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BunnyServiceImpl.class);
 
     @Value("${bunny.zoneName}")
     private String zoneName;
@@ -62,11 +66,13 @@ public class BunnyServiceImpl implements BunnyService {
             connection.setRequestProperty("AccessKey", apiKey);
 
             int responseCode = connection.getResponseCode();
-            String responseMsg = connection.getResponseMessage();
-            System.out.println("Response: " + responseCode + " " + responseMsg);
 
             if (responseCode != 200) {
-                throw new RuntimeException("Failed to upload file: " + responseCode + " " + responseMsg);
+                if (responseCode == 404) {
+                    logger.info("File does not exist: {}", fileName);
+                } else {
+                    throw new RuntimeException("Failed to delete file: " + responseCode + " " + connection.getResponseMessage());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
