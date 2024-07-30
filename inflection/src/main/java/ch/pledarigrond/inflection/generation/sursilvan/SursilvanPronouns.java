@@ -5,6 +5,9 @@ import java.util.Map;
 
 public class SursilvanPronouns {
 
+	// Infinitiv
+	public static final String infinitiv = "infinitiv";
+
 	// Standard Conjugation
 	public static final String first_ps = "1ps";
 	public static final String second_ps = "2ps";
@@ -26,6 +29,7 @@ public class SursilvanPronouns {
 	public static final String pp_2 = "pp_2";
 	public static final String pp_3 = "pp_3";
 	public static final String pp_4 = "pp_4";
+	public static final String pp_5 = "pp_5";
 
 	// Imperativ
 	public static final String imperat_1 = "imperat_1";
@@ -51,13 +55,7 @@ public class SursilvanPronouns {
 	public static final String pron_conjunctiv_c = "che ";
 	public static final String pron_conjunctiv_v = "ch'";
 
-	// Particip Perfect Classification
 
-	// Normal Verbs
-
-	// Reflexives
-	public static final String pp_r1 = "haver";
-	public static final String pp_r2 = "esser";
 
 	public SursilvanPronouns() {
 		this.values = new HashMap<>();
@@ -71,6 +69,10 @@ public class SursilvanPronouns {
 
 	public void setValues(Map<String, String> values) {
 		this.values = values;
+	}
+
+	public String getInfinitiv() {
+		return values.get(infinitiv);
 	}
 
 	public String getFirstPs() {
@@ -137,6 +139,10 @@ public class SursilvanPronouns {
 		return values.get(pp_4);
 	}
 
+	public String getPp_5() {
+		return values.get(pp_5);
+	}
+
 	public String getImperat1() {
 		return values.get(imperat_1);
 	}
@@ -147,6 +153,10 @@ public class SursilvanPronouns {
 
 	public String getGer() {
 		return values.get(gerund);
+	}
+
+	public void setInfinitiv(String inf) {
+		values.put(infinitiv, inf);
 	}
 
 	public void setFirstPs(String fps) {
@@ -213,6 +223,10 @@ public class SursilvanPronouns {
 		values.put(pp_4, fp);
 	}
 
+	public void setPp_5(String fp) {
+		values.put(pp_5, fp);
+	}
+
 	public void setImperat1(String imp1) {
 		values.put(imperat_1, imp1);
 
@@ -230,46 +244,50 @@ public class SursilvanPronouns {
 
 	public String getValue(String key) {
 		switch (key) {
-		case first_ps:
-			return getFirstPs();
-		case second_ps:
-			return getSecondPs();
-		case third_ps:
-			return getThirdPs();
-		case first_pp:
-			return getFirstPp();
-		case second_pp:
-			return getSecondPp();
-		case third_pp:
-			return getThirdPp();
-		case first_ps_c:
-			return getFirstPsC();
-		case second_ps_c:
-			return getSecondPsC();
-		case third_ps_c:
-			return getThirdPsC();
-		case first_pp_c:
-			return getFirstPpC();
-		case second_pp_c:
-			return getSecondPpC();
-		case third_pp_c:
-			return getThirdPpC();
-		case pp_1:
-			return getPp_1();
-		case pp_2:
-			return getPp_2();
-		case pp_3:
-			return getPp_3();
-		case pp_4:
-			return getPp_4();
-		case imperat_1:
-			return getImperat1();
-		case imperat_2:
-			return getImperat2();
-		case gerund:
-			return getGer();
-		default:
-			break;
+			case infinitiv:
+				return getInfinitiv();
+			case first_ps:
+				return getFirstPs();
+			case second_ps:
+				return getSecondPs();
+			case third_ps:
+				return getThirdPs();
+			case first_pp:
+				return getFirstPp();
+			case second_pp:
+				return getSecondPp();
+			case third_pp:
+				return getThirdPp();
+			case first_ps_c:
+				return getFirstPsC();
+			case second_ps_c:
+				return getSecondPsC();
+			case third_ps_c:
+				return getThirdPsC();
+			case first_pp_c:
+				return getFirstPpC();
+			case second_pp_c:
+				return getSecondPpC();
+			case third_pp_c:
+				return getThirdPpC();
+			case pp_1:
+				return getPp_1();
+			case pp_2:
+				return getPp_2();
+			case pp_3:
+				return getPp_3();
+			case pp_4:
+				return getPp_4();
+			case pp_5:
+				return getPp_5();
+			case imperat_1:
+				return getImperat1();
+			case imperat_2:
+				return getImperat2();
+			case gerund:
+				return getGer();
+			default:
+				break;
 		}
 		return values.get(key);
 	}
