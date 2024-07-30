@@ -11,13 +11,10 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.common.util.PronunciationNormalizer;
-import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
 import ch.pledarigrond.inflection.model.InflectionResponse;
-import ch.pledarigrond.inflection.model.InflectionSubType;
 import ch.pledarigrond.inflection.model.InflectionType;
 import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
 import ch.pledarigrond.inflection.utils.PronounRemover;
@@ -43,13 +40,17 @@ import java.io.PrintWriter;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.pledarigrond.common.data.common.LemmaVersion.*;
+import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_SUBTYPE;
+import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_TYPE;
 import static com.mongodb.client.model.Filters.eq;
 
 @Service
@@ -1180,19 +1181,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 ).collect(Collectors.toList());
     }
 
-    private boolean areConjugationFormsEqual(InflectionResponse inflectionResponse, LemmaVersion lemma) {
-        for (String key : inflectionResponse.getInflectionValues().keySet()) {
-            if (key.equals("infinitiv") || key.equals("RInflectionSubtype") || key.equals("RInflectionType") || key.equals("RRegularInflection") || key.contains("conjunctivimperfect") || key.contains("cundizionalindirect") || key.contains("enclitic")) {
-                continue;
-            }
-
-            if (inflectionResponse.getInflectionValues().get(key) != null && !inflectionResponse.getInflectionValues().get(key).equals(lemma.getLemmaValues().get(key))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private LemmaVersion createNewLemmaVersion(LexEntry entry) {
         LemmaVersion newVersion = new LemmaVersion();
         newVersion.getLemmaValues().putAll(entry.getCurrent().getLemmaValues());
@@ -1201,57 +1189,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         newVersion.setTimestamp(System.currentTimeMillis());
         return newVersion;
     }
-
-    private LexEntry createNewLexEntry(LemmaVersion lemmaVersion) {
-        return new LexEntry(lemmaVersion);
-    }
-
-    /*
-    private void copyMissingForms(HashMap<String, String> inflectionValues, HashMap<String, String> mostRecent) {
-        // conjunctiv imperfect
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectsing1, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectsing1));
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectsing2, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectsing2));
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectsing3, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectsing3));
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectplural1, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectplural1));
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectplural2, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectplural2));
-        mostRecent.put(SutsilvanConjugationStructure.conjunctivimperfectplural3, inflectionValues.get(SutsilvanConjugationStructure.conjunctivimperfectplural3));
-
-        // cundiziunal indirect
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectsing1, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectsing1));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectsing2, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectsing2));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectsing3, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectsing3));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectplural1, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectplural1));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectplural2, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectplural2));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalindirectplural3, inflectionValues.get(SutsilvanConjugationStructure.cundizionalindirectplural3));
-
-        // preschent enclitic
-        mostRecent.put(SutsilvanConjugationStructure.preschentsing1enclitic, inflectionValues.get(SutsilvanConjugationStructure.preschentsing1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.preschentsing2enclitic, inflectionValues.get(SutsilvanConjugationStructure.preschentsing2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.preschentsing3encliticm, inflectionValues.get(SutsilvanConjugationStructure.preschentsing3encliticm));
-        mostRecent.put(SutsilvanConjugationStructure.preschentsing3encliticf, inflectionValues.get(SutsilvanConjugationStructure.preschentsing3encliticf));
-        mostRecent.put(SutsilvanConjugationStructure.preschentplural1enclitic, inflectionValues.get(SutsilvanConjugationStructure.preschentplural1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.preschentplural2enclitic, inflectionValues.get(SutsilvanConjugationStructure.preschentplural2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.preschentplural3enclitic, inflectionValues.get(SutsilvanConjugationStructure.preschentplural3enclitic));
-
-        // imperfect enclitic
-        mostRecent.put(SutsilvanConjugationStructure.imperfectsing1enclitic, inflectionValues.get(SutsilvanConjugationStructure.imperfectsing1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectsing2enclitic, inflectionValues.get(SutsilvanConjugationStructure.imperfectsing2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectsing3encliticm, inflectionValues.get(SutsilvanConjugationStructure.imperfectsing3encliticm));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectsing3encliticf, inflectionValues.get(SutsilvanConjugationStructure.imperfectsing3encliticf));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectplural1enclitic, inflectionValues.get(SutsilvanConjugationStructure.imperfectplural1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectplural2enclitic, inflectionValues.get(SutsilvanConjugationStructure.imperfectplural2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.imperfectplural3enclitic, inflectionValues.get(SutsilvanConjugationStructure.imperfectplural3enclitic));
-
-        // conjunctiv enclitic
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalsing1enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalsing1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalsing2enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalsing2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalsing3encliticm, inflectionValues.get(SutsilvanConjugationStructure.cundizionalsing3encliticm));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalsing3encliticf, inflectionValues.get(SutsilvanConjugationStructure.cundizionalsing3encliticf));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalplural1enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalplural1enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalplural2enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalplural2enclitic));
-        mostRecent.put(SutsilvanConjugationStructure.cundizionalplural3enclitic, inflectionValues.get(SutsilvanConjugationStructure.cundizionalplural3enclitic));
-    }
-    */
 
     private String convertToCSV(String[] data) {
         return Stream.of(data)
