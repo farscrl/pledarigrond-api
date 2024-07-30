@@ -72,6 +72,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a gidar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("gidau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("gidaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("gidada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("gidai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("gidadas", forms.getInflectionValues().get("participperfectfp"));
@@ -139,6 +140,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a clamar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("clamau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("clamaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("clamada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("clamai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("clamadas", forms.getInflectionValues().get("participperfectfp"));
@@ -205,6 +207,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a tschintschar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("tschintschau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("tschintschaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("tschintschada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("tschintschai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("tschintschadas", forms.getInflectionValues().get("participperfectfp"));
@@ -271,6 +274,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a purtar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("purtau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("purtaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("purtada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("purtai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("purtadas", forms.getInflectionValues().get("participperfectfp"));
@@ -337,6 +341,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a formar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("formau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("formaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("formada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("formai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("formadas", forms.getInflectionValues().get("participperfectfp"));
@@ -403,6 +408,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a mussar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("mussau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("mussaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("mussada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("mussai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("mussadas", forms.getInflectionValues().get("participperfectfp"));
@@ -469,6 +475,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a zavrar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("zavrau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("zavraus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("zavrada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("zavrai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("zavradas", forms.getInflectionValues().get("participperfectfp"));
@@ -535,6 +542,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a tedlar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("tedlau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("tedlaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("tedlada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("tedlai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("tedladas", forms.getInflectionValues().get("participperfectfp"));
@@ -601,6 +609,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a pinar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("pinau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("pinaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("pinada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("pinai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("pinadas", forms.getInflectionValues().get("participperfectfp"));
@@ -667,6 +676,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a ludar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("ludau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("ludaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("ludada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("ludai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("ludadas", forms.getInflectionValues().get("participperfectfp"));
@@ -733,6 +743,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a filtschar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("filtschau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("filtschaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("filtschada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("filtschai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("filtschadas", forms.getInflectionValues().get("participperfectfp"));
@@ -799,6 +810,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan ad alzar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("alzau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("alzaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("alzada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("alzai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("alzadas", forms.getInflectionValues().get("participperfectfp"));
@@ -865,6 +877,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan ad emparar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("emparau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("emparaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("emparada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("emparai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("emparadas", forms.getInflectionValues().get("participperfectfp"));
@@ -931,6 +944,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a serrar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("serrau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("serraus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("serrada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("serrai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("serradas", forms.getInflectionValues().get("participperfectfp"));
@@ -997,6 +1011,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a zanistrar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("zanistrau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("zanistraus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("zanistrada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("zanistrai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("zanistradas", forms.getInflectionValues().get("participperfectfp"));
@@ -1063,6 +1078,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan ad ugliar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("ugliau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("ugliaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("ugliada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("ugliai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("ugliadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1129,6 +1145,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a spitgar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("spitgau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("spitgaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("spitgada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("spitgai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("spitgadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1195,6 +1212,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a semiar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("semiau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("semiaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("semiada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("semiai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("semiadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1261,6 +1279,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a rischlar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("rischlau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("rischlaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("rischlada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("rischlai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("rischladas", forms.getInflectionValues().get("participperfectfp"));
@@ -1327,6 +1346,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a sbuserar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("sbuserau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("sbuseraus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("sbuserada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("sbuserai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("sbuseradas", forms.getInflectionValues().get("participperfectfp"));
@@ -1393,6 +1413,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a smarschanar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("smarschanau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("smarschanaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("smarschanada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("smarschanai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("smarschanadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1459,6 +1480,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a cuglienar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("cuglienau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("cuglienaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("cuglienada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("cuglienai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("cuglienadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1525,6 +1547,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a curclar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("curclau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("curclaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("curclada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("curclai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("curcladas", forms.getInflectionValues().get("participperfectfp"));
@@ -1591,6 +1614,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a suar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("suau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("suaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("suada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("suai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("suadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1657,6 +1681,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a cumandar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("cumandau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("cumandaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("cumandada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("cumandai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("cumandadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1723,6 +1748,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a dumignar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("dumignau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("dumignaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("dumignada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("dumignai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("dumignadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1789,6 +1815,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a rumplanar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("rumplanau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("rumplanaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("rumplanada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("rumplanai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("rumplanadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1855,6 +1882,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a murmignar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("murmignau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("murmignaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("murmignada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("murmignai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("murmignadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1921,6 +1949,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a buntganar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("buntganau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("buntganaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("buntganada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("buntganai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("buntganadas", forms.getInflectionValues().get("participperfectfp"));
@@ -1987,6 +2016,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a duvrar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("duvrau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("duvraus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("duvrada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("duvrai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("duvradas", forms.getInflectionValues().get("participperfectfp"));
@@ -2053,6 +2083,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a curdar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("curdau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("curdaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("curdada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("curdai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("curdadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2119,6 +2150,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a patertgar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("patertgau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("patertgaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("patertgada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("patertgai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("patertgadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2186,6 +2218,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a tschuffergnar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("tschuffergnau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("tschuffergnaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("tschuffergnada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("tschuffergnai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("tschuffergnadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2252,6 +2285,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a sgarflar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("sgarflau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("sgarflaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("sgarflada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("sgarflai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("sgarfladas", forms.getInflectionValues().get("participperfectfp"));
@@ -2318,6 +2352,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a sblundergiar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("sblundergiau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("sblundergiaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("sblundergiada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("sblundergiai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("sblundergiadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2384,6 +2419,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a barschar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("barschau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("barschaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("barschada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("barschai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("barschadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2450,6 +2486,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a furschar", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("furschau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("furschaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("furschada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("furschai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("furschadas", forms.getInflectionValues().get("participperfectfp"));
@@ -2516,6 +2553,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a temer", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("temiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("temius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("temida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("temi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("temidas", forms.getInflectionValues().get("participperfectfp"));
@@ -2582,6 +2620,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a guder", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("gudiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("gudius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("gudida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("gudi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("gudidas", forms.getInflectionValues().get("participperfectfp"));
@@ -2648,6 +2687,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a vender", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("vendiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("vendius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("vendida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("vendi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("vendidas", forms.getInflectionValues().get("participperfectfp"));
@@ -2714,6 +2754,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a volver", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("viult\nvulviu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("viults\nvulvius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("viulta\nvulvida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("viults\nvulvi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("viultas\nvulvidas", forms.getInflectionValues().get("participperfectfp"));
@@ -2780,6 +2821,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a rietscher", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("ritschiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("ritschius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("ritschida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("ritschi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("ritschidas", forms.getInflectionValues().get("participperfectfp"));
@@ -2847,6 +2889,7 @@ public class SursilvanConjugationTest {
 
         // TODO: check
         // Assert.assertEquals("claus", forms.getInflectionValues().get("participperfectms"));
+        // Assert.assertEquals("claus", forms.getInflectionValues().get("participperfectmspredicativ"));
         // Assert.assertEquals("claussa", forms.getInflectionValues().get("participperfectfs"));
         // Assert.assertEquals("claus", forms.getInflectionValues().get("participperfectmp"));
         // Assert.assertEquals("claussas", forms.getInflectionValues().get("participperfectfp"));
@@ -2914,6 +2957,7 @@ public class SursilvanConjugationTest {
 
         // TODO
         // Assert.assertEquals("entschiet", forms.getInflectionValues().get("participperfectms"));
+        // Assert.assertEquals("entschiets", forms.getInflectionValues().get("participperfectmspredicativ"));
         // Assert.assertEquals("entschatta", forms.getInflectionValues().get("participperfectfs"));
         // Assert.assertEquals("entschats", forms.getInflectionValues().get("participperfectmp"));
         // Assert.assertEquals("entschattas", forms.getInflectionValues().get("participperfectfp"));
@@ -2981,6 +3025,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a laguoter", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("laguttiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("laguttius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("laguttida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("lagutti", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("laguttidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3048,6 +3093,7 @@ public class SursilvanConjugationTest {
 
         // TODO
         // Assert.assertEquals("piars", forms.getInflectionValues().get("participperfectms"));
+        // Assert.assertEquals("piarss", forms.getInflectionValues().get("participperfectmspredicativ"));
         // Assert.assertEquals("piarsa", forms.getInflectionValues().get("participperfectfs"));
         // Assert.assertEquals("piars", forms.getInflectionValues().get("participperfectmp"));
         // Assert.assertEquals("piarsas", forms.getInflectionValues().get("participperfectfp"));
@@ -3114,6 +3160,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a sentir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("sentiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("sentius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("sentida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("senti", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("sentidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3180,6 +3227,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a durmir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("durmiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("durmius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("durmida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("durmi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("durmidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3246,6 +3294,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a durmir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("durmiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("durmius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("durmida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("durmi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("durmidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3312,6 +3361,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a burlir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("burliu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("burlius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("burlida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("burli", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("burlidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3378,6 +3428,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a burlir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("burliu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("burlius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("burlida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("burli", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("burlidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3445,6 +3496,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a embellir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("embelliu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("embellius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("embellida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("embelli", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("embellidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3511,6 +3563,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a bargir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("bargiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("bargius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("bargida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("bargi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("bargidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3578,6 +3631,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a capir", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("capiu", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("capius", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("capida", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("capi", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("capidas", forms.getInflectionValues().get("participperfectfp"));
@@ -3645,6 +3699,7 @@ public class SursilvanConjugationTest {
         Assert.assertEquals("els/ellas vegnan a gratular", forms.getInflectionValues().get("futurplural3"));
 
         Assert.assertEquals("gratulau", forms.getInflectionValues().get("participperfectms"));
+        Assert.assertEquals("gratulaus", forms.getInflectionValues().get("participperfectmspredicativ"));
         Assert.assertEquals("gratulada", forms.getInflectionValues().get("participperfectfs"));
         Assert.assertEquals("gratulai", forms.getInflectionValues().get("participperfectmp"));
         Assert.assertEquals("gratuladas", forms.getInflectionValues().get("participperfectfp"));
