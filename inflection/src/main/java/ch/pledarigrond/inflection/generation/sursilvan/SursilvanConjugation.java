@@ -428,7 +428,7 @@ public class SursilvanConjugation extends LanguageConjugation {
         setPreschent(cs);
         setImperfect(cs);
         setConjunctiv(cs);
-        setConjunctivImperfect(cs);
+        setConjunctiv2(cs);
         setCundizional(cs);
         setCundizionalIndirect(cs);
         setParticipPerfect(cs);
@@ -885,7 +885,7 @@ public class SursilvanConjugation extends LanguageConjugation {
         }
     }
 
-    private void setConjunctivImperfect(SursilvanConjugationStructure cs) {
+    private void setConjunctiv2(SursilvanConjugationStructure cs) {
         switch (cs.getConjugationclass().id) {
             case "1":
             case "1a":
@@ -924,13 +924,13 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "1ah":
             case "1ai":
             case "6":
-                cs.setConjunctivimperfectsing1(root + "avi");
-                cs.setConjunctivimperfectsing2(root + "avies");
-                cs.setConjunctivimperfectsing3(root + "avi");
+                cs.setConjunctiv2sing1(root + "avi");
+                cs.setConjunctiv2sing2(root + "avies");
+                cs.setConjunctiv2sing3(root + "avi");
 
-                cs.setConjunctivimperfectplural1(root + "avien");
-                cs.setConjunctivimperfectplural2(root + "avies");
-                cs.setConjunctivimperfectplural3(root + "avien");
+                cs.setConjunctiv2plural1(root + "avien");
+                cs.setConjunctiv2plural2(root + "avies");
+                cs.setConjunctiv2plural3(root + "avien");
                 break;
 
             case "2":
@@ -944,13 +944,13 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "4e":
             case "4f":
             case "5":
-                cs.setConjunctivimperfectsing1(root + "evi");
-                cs.setConjunctivimperfectsing2(root + "evies");
-                cs.setConjunctivimperfectsing3(root + "evi");
+                cs.setConjunctiv2sing1(root + "evi");
+                cs.setConjunctiv2sing2(root + "evies");
+                cs.setConjunctiv2sing3(root + "evi");
 
-                cs.setConjunctivimperfectplural1(root + "evien");
-                cs.setConjunctivimperfectplural2(root + "evies");
-                cs.setConjunctivimperfectplural3(root + "evien");
+                cs.setConjunctiv2plural1(root + "evien");
+                cs.setConjunctiv2plural2(root + "evies");
+                cs.setConjunctiv2plural3(root + "evien");
                 break;
 
             case "3a":
@@ -959,13 +959,13 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "3d":
             case "3e":
             case "3f":
-                cs.setConjunctivimperfectsing1(modRoot + "evi");
-                cs.setConjunctivimperfectsing2(modRoot + "evies");
-                cs.setConjunctivimperfectsing3(modRoot + "evi");
+                cs.setConjunctiv2sing1(modRoot + "evi");
+                cs.setConjunctiv2sing2(modRoot + "evies");
+                cs.setConjunctiv2sing3(modRoot + "evi");
 
-                cs.setConjunctivimperfectplural1(modRoot + "evien");
-                cs.setConjunctivimperfectplural2(modRoot + "evies");
-                cs.setConjunctivimperfectplural3(modRoot + "evien");
+                cs.setConjunctiv2plural1(modRoot + "evien");
+                cs.setConjunctiv2plural2(modRoot + "evies");
+                cs.setConjunctiv2plural3(modRoot + "evien");
                 break;
         }
     }
@@ -1560,12 +1560,12 @@ public class SursilvanConjugation extends LanguageConjugation {
         cs.setConjunctivplural3(pronouns.get(SursilvanPronouns.third_pp_c) + conjugation.get(SursilvanConjugationStructure.conjunctivplural3));
 
         // CONJUNCTIV IMPERFECT
-        cs.setConjunctivimperfectsing1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing1)));
-        cs.setConjunctivimperfectsing2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing2)));
-        cs.setConjunctivimperfectsing3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing3)));
-        cs.setConjunctivimperfectplural1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural1)));
-        cs.setConjunctivimperfectplural2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural2)));
-        cs.setConjunctivimperfectplural3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural3)));
+        cs.setConjunctiv2sing1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(pronouns.get(SursilvanPronouns.first_ps) + conjugation.get(SursilvanConjugationStructure.cundizionalsing1));
@@ -1641,12 +1641,12 @@ public class SursilvanConjugation extends LanguageConjugation {
         cs.setConjunctivplural3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp, conjugation.get(SursilvanConjugationStructure.conjunctivplural3)));
 
         // CONJUNCTIV IMPERFECT
-        cs.setConjunctivimperfectsing1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing1)));
-        cs.setConjunctivimperfectsing2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing2)));
-        cs.setConjunctivimperfectsing3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3ps, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectsing3)));
-        cs.setConjunctivimperfectplural1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural1)));
-        cs.setConjunctivimperfectplural2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural2)));
-        cs.setConjunctivimperfectplural3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp, conjugation.get(SursilvanConjugationStructure.conjunctivimperfectplural3)));
+        cs.setConjunctiv2sing1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing1)));
+        cs.setConjunctiv2sing2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing2)));
+        cs.setConjunctiv2sing3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3ps, conjugation.get(SursilvanConjugationStructure.conjunctiv2sing3)));
+        cs.setConjunctiv2plural1(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_1pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural1)));
+        cs.setConjunctiv2plural2(setPronoun(SursilvanPronouns.pron_conjunctiv_c + SursilvanPronouns.pron_2pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural2)));
+        cs.setConjunctiv2plural3(setPronoun(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp, conjugation.get(SursilvanConjugationStructure.conjunctiv2plural3)));
 
         // CUNDIZIONAL
         cs.setCundizionalsing1(SursilvanPronouns.pron_1ps + conjugation.get(SursilvanConjugationStructure.cundizionalsing1));
