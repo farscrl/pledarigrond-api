@@ -37,7 +37,9 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -66,13 +68,9 @@ public class ImportServiceImpl implements ImportService {
         Workbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+        // check if format is correct
+        int i = 0;
             Row row = sheet.getRow(i);
-            if (row == null) {
-                continue;
-            }
-
-            if (i == 1) {
                 if (!row.getCell(0).getRichStringCellValue().getString().equals("RStichwort")) throw new RuntimeException("Invalid format");
                 if (!row.getCell(1).getRichStringCellValue().getString().equals("RGenus")) throw new RuntimeException("Invalid format");
                 if (!row.getCell(2).getRichStringCellValue().getString().equals("RGrammatik")) throw new RuntimeException("Invalid format");
@@ -85,6 +83,12 @@ public class ImportServiceImpl implements ImportService {
                 if (!row.getCell(9).getRichStringCellValue().getString().equals("DGrammatik")) throw new RuntimeException("Invalid format");
                 if (!row.getCell(10).getRichStringCellValue().getString().equals("DSemantik")) throw new RuntimeException("Invalid format");
                 if (!row.getCell(11).getRichStringCellValue().getString().equals("categories")) throw new RuntimeException("Invalid format");
+
+        logger.info("File format seems correct, continuing with import");
+
+        for (i = 1; i <= sheet.getLastRowNum(); i++) {
+            row = sheet.getRow(i);
+            if (row == null) {
                 continue;
             }
 
