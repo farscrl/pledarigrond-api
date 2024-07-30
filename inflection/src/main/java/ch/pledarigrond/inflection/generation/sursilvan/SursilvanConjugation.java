@@ -1179,6 +1179,7 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "1ai":
             case "6":
                 cs.setParticipperfectms(root + "au");
+                cs.setParticipperfectmspredicativ(root + "aus");
                 cs.setParticipperfectfs(root + "ada");
                 cs.setParticipperfectmp(root + "ai");
                 cs.setParticipperfectfp(root + "adas");
@@ -1196,6 +1197,7 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "4f":
             case "5":
                 cs.setParticipperfectms(root + "iu");
+                cs.setParticipperfectmspredicativ(root + "ius");
                 cs.setParticipperfectfs(root + "ida");
                 cs.setParticipperfectmp(root + "i");
                 cs.setParticipperfectfp(root + "idas");
@@ -1203,6 +1205,7 @@ public class SursilvanConjugation extends LanguageConjugation {
 
             case "3a":
                 cs.setParticipperfectms(modRootAlternative + "t\n" + modRoot + "iu");
+                cs.setParticipperfectmspredicativ(modRootAlternative + "ts\n" + modRoot + "ius");
                 cs.setParticipperfectfs(modRootAlternative + "ta\n" + modRoot + "ida");
                 cs.setParticipperfectmp(modRootAlternative + "ts\n" + modRoot + "i");
                 cs.setParticipperfectfp(modRootAlternative + "tas\n" + modRoot + "idas");
@@ -1214,6 +1217,7 @@ public class SursilvanConjugation extends LanguageConjugation {
             case "3e":
             case "3f":
                 cs.setParticipperfectms(modRoot + "iu");
+                cs.setParticipperfectmspredicativ(modRoot + "ius");
                 cs.setParticipperfectfs(modRoot + "ida");
                 cs.setParticipperfectmp(modRoot + "i");
                 cs.setParticipperfectfp(modRoot + "idas");
@@ -1446,20 +1450,20 @@ public class SursilvanConjugation extends LanguageConjugation {
 
         if (conjugation.get(SursilvanConjugationStructure.reflexive).equals("true")) {
             if (verb.startsWith("se")) {
-            // Reflexive Verbs that start with Consonants
-            pronouns = pronounsForReflexiveConsonantalVerbs();
-            return addReflexivePronouns(conjugation, pronouns, subType);
+                // Reflexive Verbs that start with Consonants
+                pronouns = pronounsForReflexiveConsonantalVerbs();
+                return addReflexivePronouns(conjugation, pronouns, subType);
 
-        } else if (verb.startsWith("s'")) {
-            // Reflexive Verbs that start with Vocals
-            pronouns = pronounsForReflexiveVocalicVerbs();
-            return addReflexivePronouns(conjugation, pronouns, subType);
+            } else if (verb.startsWith("s'")) {
+                // Reflexive Verbs that start with Vocals
+                pronouns = pronounsForReflexiveVocalicVerbs();
+                return addReflexivePronouns(conjugation, pronouns, subType);
             }
         }
 
-            // Standard Verbs
-            return addStandardPronouns(conjugation, subType);
-        }
+        // Standard Verbs
+        return addStandardPronouns(conjugation, subType);
+    }
 
     private Map<String, String> pronounsForReflexiveConsonantalVerbs() {
         SursilvanPronouns pronouns = new SursilvanPronouns();
@@ -1483,8 +1487,11 @@ public class SursilvanConjugation extends LanguageConjugation {
         pronouns.setThirdPpC(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp + SursilvanPronouns.pron_r);
 
         // PARTICIP PERFECT
-        pronouns.setPp_1(SursilvanPronouns.pp_r1 + " " + SursilvanPronouns.pron_r);
-        pronouns.setPp_2(SursilvanPronouns.pp_r2 + " " + SursilvanPronouns.pron_r);
+        pronouns.setPp_1(SursilvanPronouns.pron_r);
+        pronouns.setPp_2(SursilvanPronouns.pron_r);
+        pronouns.setPp_3(SursilvanPronouns.pron_r);
+        pronouns.setPp_4(SursilvanPronouns.pron_r);
+        pronouns.setPp_5(SursilvanPronouns.pron_r);
 
         // IMPERATIV
         pronouns.setImperat1(SursilvanPronouns.pron_r);
@@ -1518,8 +1525,11 @@ public class SursilvanConjugation extends LanguageConjugation {
         pronouns.setThirdPpC(SursilvanPronouns.pron_conjunctiv_v + SursilvanPronouns.pron_3pp + SursilvanPronouns.pron_r_v);
 
         // PARTICIP PERFECT
-        pronouns.setPp_1(SursilvanPronouns.pp_r1 + " " + SursilvanPronouns.pron_r_v);
-        pronouns.setPp_2(SursilvanPronouns.pp_r2 + " " + SursilvanPronouns.pron_r_v);
+        pronouns.setPp_1(SursilvanPronouns.pron_r_v);
+        pronouns.setPp_2(SursilvanPronouns.pron_r_v);
+        pronouns.setPp_3(SursilvanPronouns.pron_r_v);
+        pronouns.setPp_4(SursilvanPronouns.pron_r_v);
+        pronouns.setPp_5(SursilvanPronouns.pron_r_v);
 
         // IMPERATIV
         pronouns.setImperat1(SursilvanPronouns.pron_r_v);
@@ -1593,8 +1603,11 @@ public class SursilvanConjugation extends LanguageConjugation {
         cs.setImperativ2(setPronoun(pronouns.get(SursilvanPronouns.imperat_2), conjugation.get(SursilvanConjugationStructure.imperativ2)));
 
         // PARTICIP_PERFECT
-        cs.setParticipperfectms(pronouns.get(SursilvanPronouns.pp_1) + conjugation.get(SursilvanConjugationStructure.participperfectms));
-        cs.setParticipperfectfs(pronouns.get(SursilvanPronouns.pp_2) + conjugation.get(SursilvanConjugationStructure.participperfectms) + "/" + conjugation.get(SursilvanConjugationStructure.participperfectfs));
+        cs.setParticipperfectms(setPronoun(pronouns.get(SursilvanPronouns.pp_1), conjugation.get(SursilvanConjugationStructure.participperfectms)));
+        cs.setParticipperfectfs(setPronoun(pronouns.get(SursilvanPronouns.pp_2), conjugation.get(SursilvanConjugationStructure.participperfectfs)));
+        cs.setParticipperfectmp(setPronoun(pronouns.get(SursilvanPronouns.pp_3), conjugation.get(SursilvanConjugationStructure.participperfectmp)));
+        cs.setParticipperfectfp(setPronoun(pronouns.get(SursilvanPronouns.pp_4), conjugation.get(SursilvanConjugationStructure.participperfectfp)));
+        cs.setParticipperfectmspredicativ(setPronoun(pronouns.get(SursilvanPronouns.pp_5), conjugation.get(SursilvanConjugationStructure.participperfectmspredicativ)));
 
         // GERUNDIUM
         cs.setGerundium(setPronoun(pronouns.get(SursilvanPronouns.gerund), conjugation.get(SursilvanConjugationStructure.gerundium)));
@@ -1678,6 +1691,7 @@ public class SursilvanConjugation extends LanguageConjugation {
         cs.setParticipperfectfs(conjugation.get(SursilvanConjugationStructure.participperfectfs));
         cs.setParticipperfectmp(conjugation.get(SursilvanConjugationStructure.participperfectmp));
         cs.setParticipperfectfp(conjugation.get(SursilvanConjugationStructure.participperfectfp));
+        cs.setParticipperfectmspredicativ(conjugation.get(SursilvanConjugationStructure.participperfectmspredicativ));
 
         // GERUNDIUM
         cs.setGerundium(conjugation.get(SursilvanConjugationStructure.gerundium));

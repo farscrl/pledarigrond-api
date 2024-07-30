@@ -60,6 +60,7 @@ public class SursilvanConjugationStructure {
 	public static final String participperfectfs = "participperfectfs";
 	public static final String participperfectmp = "participperfectmp";
 	public static final String participperfectfp = "participperfectfp";
+	public static final String participperfectmspredicativ = "participperfectmspredicativ";
 
 	public static final String imperativ1 = "imperativ1";
 	public static final String imperativ2 = "imperativ2";
@@ -86,7 +87,7 @@ public class SursilvanConjugationStructure {
 			cundizionalindirectsing1, cundizionalindirectsing2, cundizionalindirectsing3,
 			cundizionalindirectplural1, cundizionalindirectplural2, cundizionalindirectplural3,
 			participperfectms, participperfectfs, participperfectmp,
-			participperfectfp, imperativ1, imperativ2, gerundium, futursing1,
+			participperfectfp, participperfectmspredicativ, imperativ1, imperativ2, gerundium, futursing1,
 			futursing2, futursing3, futurplural1, futurplural2, futurplural3,
 			infinitiv
 	};
@@ -219,6 +220,7 @@ public class SursilvanConjugationStructure {
 	public String getConjunctivplural3() {
 		return values.get(conjunctivplural3);
 	}
+
 	public String getConjunctiv2sing1() {
 		return values.get(conjunctiv2sing1);
 	}
@@ -305,6 +307,10 @@ public class SursilvanConjugationStructure {
 
 	public String getParticipperfectfp() {
 		return values.get(participperfectfp);
+	}
+
+	public String getParticipperfectmspredicativ() {
+		return values.get(participperfectmspredicativ);
 	}
 
 	public String getImperativ1() {
@@ -527,6 +533,10 @@ public class SursilvanConjugationStructure {
 		values.put(participperfectfp, ppfp);
 	}
 
+	public void setParticipperfectmspredicativ(String ppms) {
+		values.put(participperfectmspredicativ, ppms);
+	}
+
 	public void setImperativ1(String imp1) {
 		values.put(imperativ1, imp1);
 	}
@@ -664,6 +674,8 @@ public class SursilvanConjugationStructure {
 				return getParticipperfectmp();
 			case participperfectfp:
 				return getParticipperfectfp();
+			case participperfectmspredicativ:
+				return getParticipperfectmspredicativ();
 			case imperativ1:
 				return getImperativ1();
 			case imperativ2:
