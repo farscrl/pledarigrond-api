@@ -52,12 +52,12 @@ public class SutsilvanConjugationStructure {
 	public static final String conjunctivplural2 = "conjunctivplural2";
 	public static final String conjunctivplural3 = "conjunctivplural3";
 
-	public static final String conjunctivimperfectsing1 = "conjunctivimperfectsing1";
-	public static final String conjunctivimperfectsing2 = "conjunctivimperfectsing2";
-	public static final String conjunctivimperfectsing3 = "conjunctivimperfectsing3";
-	public static final String conjunctivimperfectplural1 = "conjunctivimperfectplural1";
-	public static final String conjunctivimperfectplural2 = "conjunctivimperfectplural2";
-	public static final String conjunctivimperfectplural3 = "conjunctivimperfectplural3";
+	public static final String conjunctiv2sing1 = "conjunctiv2sing1";
+	public static final String conjunctiv2sing2 = "conjunctiv2sing2";
+	public static final String conjunctiv2sing3 = "conjunctiv2sing3";
+	public static final String conjunctiv2plural1 = "conjunctiv2plural1";
+	public static final String conjunctiv2plural2 = "conjunctiv2plural2";
+	public static final String conjunctiv2plural3 = "conjunctiv2plural3";
 
 	public static final String cundizionalsing1 = "cundizionalsing1";
 	public static final String cundizionalsing2 = "cundizionalsing2";
@@ -120,8 +120,8 @@ public class SutsilvanConjugationStructure {
 			imperfectplural1, imperfectplural2, imperfectplural3,
 			conjunctivsing1, conjunctivsing2, conjunctivsing3,
 			conjunctivplural1, conjunctivplural2, conjunctivplural3,
-			conjunctivimperfectsing1, conjunctivimperfectsing2, conjunctivimperfectsing3,
-			conjunctivimperfectplural1, conjunctivimperfectplural2, conjunctivimperfectplural3,
+			conjunctiv2sing1, conjunctiv2sing2, conjunctiv2sing3,
+			conjunctiv2plural1, conjunctiv2plural2, conjunctiv2plural3,
 			cundizionalsing1, cundizionalsing2, cundizionalsing3,
 			cundizionalplural1, cundizionalplural2, cundizionalplural3,
 			cundizionalindirectsing1, cundizionalindirectsing2, cundizionalindirectsing3,
@@ -269,27 +269,27 @@ public class SutsilvanConjugationStructure {
 	}
 
 	public String getConjunctivimperfectsing1() {
-		return values.get(conjunctivimperfectsing1);
+		return values.get(conjunctiv2sing1);
 	}
 
 	public String getConjunctivimperfectsing2() {
-		return values.get(conjunctivimperfectsing2);
+		return values.get(conjunctiv2sing2);
 	}
 
 	public String getConjunctivimperfectsing3() {
-		return values.get(conjunctivimperfectsing3);
+		return values.get(conjunctiv2sing3);
 	}
 
 	public String getConjunctivimperfectplural1() {
-		return values.get(conjunctivimperfectplural1);
+		return values.get(conjunctiv2plural1);
 	}
 
 	public String getConjunctivimperfectplural2() {
-		return values.get(conjunctivimperfectplural2);
+		return values.get(conjunctiv2plural2);
 	}
 
 	public String getConjunctivimperfectplural3() {
-		return values.get(conjunctivimperfectplural3);
+		return values.get(conjunctiv2plural3);
 	}
 
 
@@ -575,27 +575,27 @@ public class SutsilvanConjugationStructure {
 	}
 
 	public void setConjunctivimperfectsing1(String cs1) {
-		values.put(conjunctivimperfectsing1, cs1);
+		values.put(conjunctiv2sing1, cs1);
 	}
 
 	public void setConjunctivimperfectsing2(String cs2) {
-		values.put(conjunctivimperfectsing2, cs2);
+		values.put(conjunctiv2sing2, cs2);
 	}
 
 	public void setConjunctivimperfectsing3(String cs3) {
-		values.put(conjunctivimperfectsing3, cs3);
+		values.put(conjunctiv2sing3, cs3);
 	}
 
 	public void setConjunctivimperfectplural1(String cp1) {
-		values.put(conjunctivimperfectplural1, cp1);
+		values.put(conjunctiv2plural1, cp1);
 	}
 
 	public void setConjunctivimperfectplural2(String cp2) {
-		values.put(conjunctivimperfectplural2, cp2);
+		values.put(conjunctiv2plural2, cp2);
 	}
 
 	public void setConjunctivimperfectplural3(String cp3) {
-		values.put(conjunctivimperfectplural3, cp3);
+		values.put(conjunctiv2plural3, cp3);
 	}
 
 	public void setCundizionalsing1(String cus1) {
@@ -839,17 +839,17 @@ public class SutsilvanConjugationStructure {
 				return getConjunctivplural2();
 			case conjunctivplural3:
 				return getConjunctivplural3();
-			case conjunctivimperfectsing1:
+			case conjunctiv2sing1:
 				return getConjunctivimperfectsing1();
-			case conjunctivimperfectsing2:
+			case conjunctiv2sing2:
 				return getConjunctivimperfectsing2();
-			case conjunctivimperfectsing3:
+			case conjunctiv2sing3:
 				return getConjunctivimperfectsing3();
-			case conjunctivimperfectplural1:
+			case conjunctiv2plural1:
 				return getConjunctivimperfectplural1();
-			case conjunctivimperfectplural2:
+			case conjunctiv2plural2:
 				return getConjunctivimperfectplural2();
-			case conjunctivimperfectplural3:
+			case conjunctiv2plural3:
 				return getConjunctivimperfectplural3();
 			case cundizionalsing1:
 				return getCundizionalsing1();
@@ -1013,17 +1013,17 @@ public class SutsilvanConjugationStructure {
 		buffer.append("\n");
 
 		// Conjunctiv imperfect
-		buffer.append(values.get(conjunctivimperfectsing1));
+		buffer.append(values.get(conjunctiv2sing1));
 		buffer.append("\t");
-		buffer.append(values.get(conjunctivimperfectsing2));
+		buffer.append(values.get(conjunctiv2sing2));
 		buffer.append("\t");
-		buffer.append(values.get(conjunctivimperfectsing3));
+		buffer.append(values.get(conjunctiv2sing3));
 		buffer.append("\t");
-		buffer.append(values.get(conjunctivimperfectplural1));
+		buffer.append(values.get(conjunctiv2plural1));
 		buffer.append("\t");
-		buffer.append(values.get(conjunctivimperfectplural2));
+		buffer.append(values.get(conjunctiv2plural2));
 		buffer.append("\t");
-		buffer.append(values.get(conjunctivimperfectplural3));
+		buffer.append(values.get(conjunctiv2plural3));
 		buffer.append("\n");
 
 		// Cundizional

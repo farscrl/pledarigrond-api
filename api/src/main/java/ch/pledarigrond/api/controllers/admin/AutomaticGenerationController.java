@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -204,6 +206,24 @@ public class AutomaticGenerationController {
 
         if (!success) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during removing subst indication");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Move sutsilvan conjunctivimperfect verbs to conjunctiv2
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/move_conjunctiv_imperfect_to_conjunctiv_2")
+    ResponseEntity<?> moveConjunctivImperfectToConjunctiv2(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.SUTSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.moveConjunctivImperfectToConjunctiv2(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during verb moving from conjunctivimperfect to conjunctiv2");
         }
 
         return ResponseEntity.ok().build();

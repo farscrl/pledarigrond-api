@@ -53,12 +53,12 @@ public class ConjugationPrinter {
 
             out
                     .append("Conjunctiv imperfect").append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectsing1")).append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectsing2")).append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectsing3")).append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectplural1")).append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectplural2")).append("\n")
-                    .append(getValue(inflectionValues, "conjunctivimperfectplural3")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2sing1")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2sing2")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2sing3")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2plural1")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2plural2")).append("\n")
+                    .append(getValue(inflectionValues, "conjunctiv2plural3")).append("\n")
                     .append("\n");
 
             out

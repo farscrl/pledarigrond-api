@@ -1,7 +1,6 @@
 package ch.pledarigrond.inflection.generation.sutsilvan;
 
 import ch.pledarigrond.inflection.model.InflectionResponse;
-import ch.pledarigrond.inflection.utils.ConjugationPrinter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,12 +42,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus gideias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas gidian\nc'els/ellas gidan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou gidavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei gidavias\nca tei gidavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella gidavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus gidavian\nca nus gidavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus gidavias\nca vus gidavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas gidavian\nc'els/ellas gidavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou gidavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei gidavias\nca tei gidavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella gidavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus gidavian\nca nus gidavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus gidavias\nca vus gidavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas gidavian\nc'els/ellas gidavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou gidass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei gidassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -109,12 +108,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus tarleias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas tearlian\nc'els/ellas tearlan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou tarlavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei tarlavias\nca tei tarlavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella tarlavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus tarlavian\nca nus tarlavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus tarlavias\nca vus tarlavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas tarlavian\nc'els/ellas tarlavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou tarlavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei tarlavias\nca tei tarlavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella tarlavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus tarlavian\nca nus tarlavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus tarlavias\nca vus tarlavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas tarlavian\nc'els/ellas tarlavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou tarlass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei tarlassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -175,12 +174,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus paseias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas pesian\nc'els/ellas pesan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou pasavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei pasavias\nca tei pasavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella pasavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus pasavian\nca nus pasavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus pasavias\nca vus pasavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas pasavian\nc'els/ellas pasavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou pasavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei pasavias\nca tei pasavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella pasavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus pasavian\nca nus pasavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus pasavias\nca vus pasavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas pasavian\nc'els/ellas pasavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou pasass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei pasassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -241,12 +240,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus clameias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas clomian\nc'els/ellas cloman", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou clamavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei clamavias\nca tei clamavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella clamavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus clamavian\nca nus clamavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus clamavias\nca vus clamavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas clamavian\nc'els/ellas clamavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou clamavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei clamavias\nca tei clamavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella clamavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus clamavian\nca nus clamavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus clamavias\nca vus clamavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas clamavian\nc'els/ellas clamavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou clamass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei clamassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -307,12 +306,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus passanteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas passaintian\nc'els/ellas passaintan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou passantavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei passantavias\nca tei passantavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella passantavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus passantavian\nca nus passantavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus passantavias\nca vus passantavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas passantavian\nc'els/ellas passantavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou passantavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei passantavias\nca tei passantavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella passantavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus passantavian\nca nus passantavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus passantavias\nca vus passantavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas passantavian\nc'els/ellas passantavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou passantass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei passantassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -373,12 +372,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus irteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas iertian\nc'els/ellas iertan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou irtavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei irtavias\nca tei irtavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella irtavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus irtavian\nca nus irtavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus irtavias\nca vus irtavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas irtavian\nc'els/ellas irtavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou irtavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei irtavias\nca tei irtavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella irtavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus irtavian\nca nus irtavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus irtavias\nca vus irtavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas irtavian\nc'els/ellas irtavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou irtass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei irtassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -439,12 +438,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus fimeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas femian\nc'els/ellas feman", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou fimavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei fimavias\nca tei fimavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella fimavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus fimavian\nca nus fimavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus fimavias\nca vus fimavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas fimavian\nc'els/ellas fimavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou fimavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei fimavias\nca tei fimavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella fimavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus fimavian\nca nus fimavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus fimavias\nca vus fimavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas fimavian\nc'els/ellas fimavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou fimass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei fimassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -505,12 +504,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus scalineias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas scalegnian\nc'els/ellas scalegnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou scalinavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei scalinavias\nca tei scalinavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella scalinavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus scalinavian\nca nus scalinavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus scalinavias\nca vus scalinavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas scalinavian\nc'els/ellas scalinavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou scalinavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei scalinavias\nca tei scalinavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella scalinavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus scalinavian\nca nus scalinavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus scalinavias\nca vus scalinavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas scalinavian\nc'els/ellas scalinavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou scalinass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei scalinassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -571,12 +570,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus luvreias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas lavurian\nc'els/ellas lavuran", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou luvravi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei luvravias\nca tei luvravas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella luvravi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus luvravian\nca nus luvravan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus luvravias\nca vus luvravas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas luvravian\nc'els/ellas luvravan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou luvravi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei luvravias\nca tei luvravas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella luvravi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus luvravian\nca nus luvravan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus luvravias\nca vus luvravas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas luvravian\nc'els/ellas luvravan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou luvrass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei luvrassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -637,12 +636,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus purteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas portian\nc'els/ellas portan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou purtavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei purtavias\nca tei purtavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella purtavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus purtavian\nca nus purtavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus purtavias\nca vus purtavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas purtavian\nc'els/ellas purtavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou purtavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei purtavias\nca tei purtavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella purtavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus purtavian\nca nus purtavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus purtavias\nca vus purtavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas purtavian\nc'els/ellas purtavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou purtass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei purtassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -703,12 +702,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus tschaneias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas tschagnian\nc'els/ellas tschagnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou tschanavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei tschanavias\nca tei tschanavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella tschanavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus tschanavian\nca nus tschanavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus tschanavias\nca vus tschanavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas tschanavian\nc'els/ellas tschanavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou tschanavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei tschanavias\nca tei tschanavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella tschanavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus tschanavian\nca nus tschanavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus tschanavias\nca vus tschanavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas tschanavian\nc'els/ellas tschanavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou tschanass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei tschanassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -769,12 +768,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus planteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas plàntian\nc'els/ellas plàntan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou plantavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei plantavias\nca tei plantavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella plantavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus plantavian\nca nus plantavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus plantavias\nca vus plantavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas plantavian\nc'els/ellas plantavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou plantavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei plantavias\nca tei plantavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella plantavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus plantavian\nca nus plantavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus plantavias\nca vus plantavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas plantavian\nc'els/ellas plantavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou plantass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei plantassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -835,12 +834,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus suneias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sùnian\nc'els/ellas sùnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou sunavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei sunavias\nca tei sunavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella sunavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus sunavian\nca nus sunavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus sunavias\nca vus sunavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas sunavian\nc'els/ellas sunavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou sunavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei sunavias\nca tei sunavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella sunavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus sunavian\nca nus sunavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus sunavias\nca vus sunavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas sunavian\nc'els/ellas sunavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou sunass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei sunassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -901,12 +900,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus sfardeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sfredian\nc'els/ellas sfredan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou sfardavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei sfardavias\nca tei sfardavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella sfardavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus sfardavian\nca nus sfardavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus sfardavias\nca vus sfardavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas sfardavian\nc'els/ellas sfardavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou sfardavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei sfardavias\nca tei sfardavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella sfardavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus sfardavian\nca nus sfardavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus sfardavias\nca vus sfardavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas sfardavian\nc'els/ellas sfardavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou sfardass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei sfardassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -967,12 +966,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus sgarmeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sgromian\nc'els/ellas sgroman", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou sgarmavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei sgarmavias\nca tei sgarmavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella sgarmavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus sgarmavian\nca nus sgarmavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus sgarmavias\nca vus sgarmavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas sgarmavian\nc'els/ellas sgarmavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou sgarmavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei sgarmavias\nca tei sgarmavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella sgarmavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus sgarmavian\nca nus sgarmavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus sgarmavias\nca vus sgarmavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas sgarmavian\nc'els/ellas sgarmavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou sgarmass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei sgarmassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1033,12 +1032,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus sgarteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sgratian\nc'els/ellas sgratan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou sgartavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei sgartavias\nca tei sgartavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella sgartavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus sgartavian\nca nus sgartavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus sgartavias\nca vus sgartavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas sgartavian\nc'els/ellas sgartavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou sgartavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei sgartavias\nca tei sgartavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella sgartavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus sgartavian\nca nus sgartavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus sgartavias\nca vus sgartavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas sgartavian\nc'els/ellas sgartavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou sgartass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei sgartassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1099,12 +1098,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus canteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas tgàntian\nc'els/ellas tgàntan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou cantavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei cantavias\nca tei cantavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella cantavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus cantavian\nca nus cantavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus cantavias\nca vus cantavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas cantavian\nc'els/ellas cantavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou cantavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei cantavias\nca tei cantavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella cantavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus cantavian\nca nus cantavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus cantavias\nca vus cantavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas cantavian\nc'els/ellas cantavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou cantass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei cantassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1165,12 +1164,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus anganeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas angonian\nc'els/ellas angonan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou anganavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei anganavias\nca tei anganavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella anganavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus anganavian\nca nus anganavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus anganavias\nca vus anganavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas anganavian\nc'els/ellas anganavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou anganavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei anganavias\nca tei anganavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella anganavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus anganavian\nca nus anganavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus anganavias\nca vus anganavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas anganavian\nc'els/ellas anganavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou anganass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei anganassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1231,12 +1230,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus spargneias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas spargnian\nc'els/ellas spargnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou spargneavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei spargneavias\nca tei spargneavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella spargneavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus spargneavian\nca nus spargneavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus spargneavias\nca vus spargneavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas spargneavian\nc'els/ellas spargneavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou spargneavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei spargneavias\nca tei spargneavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella spargneavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus spargneavian\nca nus spargneavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus spargneavias\nca vus spargneavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas spargneavian\nc'els/ellas spargneavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou spargness", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei spargnessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1297,12 +1296,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus samtgeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas semtgian\nc'els/ellas semtgan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou samtgeavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei samtgeavias\nca tei samtgeavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella samtgeavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus samtgeavian\nca nus samtgeavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus samtgeavias\nca vus samtgeavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas samtgeavian\nc'els/ellas samtgeavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou samtgeavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei samtgeavias\nca tei samtgeavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella samtgeavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus samtgeavian\nca nus samtgeavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus samtgeavias\nca vus samtgeavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas samtgeavian\nc'els/ellas samtgeavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou samtgess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei samtgessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1363,12 +1362,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus spitgeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas spetgian\nc'els/ellas spetgan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou spitgeavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei spitgeavias\nca tei spitgeavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella spitgeavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus spitgeavian\nca nus spitgeavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus spitgeavias\nca vus spitgeavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas spitgeavian\nc'els/ellas spitgeavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou spitgeavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei spitgeavias\nca tei spitgeavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella spitgeavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus spitgeavian\nca nus spitgeavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus spitgeavias\nca vus spitgeavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas spitgeavian\nc'els/ellas spitgeavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou spitgess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei spitgessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1429,12 +1428,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus cuptgeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas coptgian\nc'els/ellas coptgan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou cuptgeavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei cuptgeavias\nca tei cuptgeavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella cuptgeavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus cuptgeavian\nca nus cuptgeavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus cuptgeavias\nca vus cuptgeavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas cuptgeavian\nc'els/ellas cuptgeavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou cuptgeavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei cuptgeavias\nca tei cuptgeavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella cuptgeavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus cuptgeavian\nca nus cuptgeavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus cuptgeavias\nca vus cuptgeavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas cuptgeavian\nc'els/ellas cuptgeavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou cuptgess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei cuptgessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1495,12 +1494,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus tschartgeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas tscheartgian\nc'els/ellas tscheartgan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou tschartgeavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei tschartgeavias\nca tei tschartgeavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella tschartgeavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus tschartgeavian\nca nus tschartgeavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus tschartgeavias\nca vus tschartgeavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas tschartgeavian\nc'els/ellas tschartgeavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou tschartgeavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei tschartgeavias\nca tei tschartgeavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella tschartgeavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus tschartgeavian\nca nus tschartgeavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus tschartgeavias\nca vus tschartgeavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas tschartgeavian\nc'els/ellas tschartgeavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou tschartgess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei tschartgessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1561,12 +1560,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus svaglieias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sveglian", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou svaglieavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei svaglieavias\nca tei svaglieavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella svaglieavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus svaglieavian\nca nus svaglieavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus svaglieavias\nca vus svaglieavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas svaglieavian\nc'els/ellas svaglieavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou svaglieavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei svaglieavias\nca tei svaglieavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella svaglieavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus svaglieavian\nca nus svaglieavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus svaglieavias\nca vus svaglieavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas svaglieavian\nc'els/ellas svaglieavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou svagliess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei svagliessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1627,12 +1626,12 @@ public class SutsilvanConjugationTest {
         //Assert.assertEquals("ca vus spassegeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas spassegian", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou spassageavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei spassageavias\nca tei spassageavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella spassageavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus spassageavian\nca nus spassageavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus spassageavias\nca vus spassageavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas spassageavian\nc'els/ellas spassageavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou spassageavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei spassageavias\nca tei spassageavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella spassageavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus spassageavian\nca nus spassageavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus spassageavias\nca vus spassageavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas spassageavian\nc'els/ellas spassageavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou spassagess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei spassagessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1693,12 +1692,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus zambargeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas zambregian", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou zambargeavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei zambargeavias\nca tei zambargeavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella zambargeavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus zambargeavian\nca nus zambargeavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus zambargeavias\nca vus zambargeavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas zambargeavian\nc'els/ellas zambargeavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou zambargeavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei zambargeavias\nca tei zambargeavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella zambargeavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus zambargeavian\nca nus zambargeavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus zambargeavias\nca vus zambargeavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas zambargeavian\nc'els/ellas zambargeavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou zambargess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei zambargessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1759,12 +1758,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus proponeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas proponian\nc'els/ellas proponan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou proponevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei proponevias\nca tei proponevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella proponevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus proponevian\nca nus proponevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus proponevias\nca vus proponevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas proponevian\nc'els/ellas proponevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou proponevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei proponevias\nca tei proponevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella proponevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus proponevian\nca nus proponevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus proponevias\nca vus proponevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas proponevian\nc'els/ellas proponevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou proponess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei proponessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1825,12 +1824,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus vandeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas vendian\nc'els/ellas vendan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou vandevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei vandevias\nca tei vandevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella vandevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus vandevian\nca nus vandevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus vandevias\nca vus vandevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas vandevian\nc'els/ellas vandevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou vandevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei vandevias\nca tei vandevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella vandevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus vandevian\nca nus vandevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus vandevias\nca vus vandevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas vandevian\nc'els/ellas vandevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou vandess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei vandessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1891,12 +1890,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus dezideias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas dezedian\nc'els/ellas dezedan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou dezidevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei dezidevias\nca tei dezidevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella dezidevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus dezidevian\nca nus dezidevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus dezidevias\nca vus dezidevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas dezidevian\nc'els/ellas dezidevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou dezidevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei dezidevias\nca tei dezidevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella dezidevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus dezidevian\nca nus dezidevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus dezidevias\nca vus dezidevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas dezidevian\nc'els/ellas dezidevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou dezidess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei dezidessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -1957,12 +1956,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus pardeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas peardian\nc'els/ellas peardan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou pardevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei pardevias\nca tei pardevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella pardevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus pardevian\nca nus pardevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus pardevias\nca vus pardevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas pardevian\nc'els/ellas pardevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou pardevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei pardevias\nca tei pardevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella pardevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus pardevian\nca nus pardevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus pardevias\nca vus pardevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas pardevian\nc'els/ellas pardevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou pardess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei pardessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2026,12 +2025,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus tanscheias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas tànschian\nc'els/ellas tànschan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou tanschevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei tanschevias\nca tei tanschevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella tanschevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus tanschevian\nca nus tanschevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus tanschevias\nca vus tanschevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas tanschevian\nc'els/ellas tanschevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou tanschevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei tanschevias\nca tei tanschevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella tanschevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus tanschevian\nca nus tanschevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus tanschevias\nca vus tanschevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas tanschevian\nc'els/ellas tanschevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou tanschess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei tanschessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2092,12 +2091,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus purscheias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas porschian\nc'els/ellas porschan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou purschevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei purschevias\nca tei purschevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella purschevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus purschevian\nca nus purschevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus purschevias\nca vus purschevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas purschevian\nc'els/ellas purschevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou purschevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei purschevias\nca tei purschevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella purschevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus purschevian\nca nus purschevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus purschevias\nca vus purschevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas purschevian\nc'els/ellas purschevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou purschess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei purschessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2158,12 +2157,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus ligeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas ligian", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou ligevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei ligevias\nca tei ligevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella ligevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus ligevian\nca nus ligevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus ligevias\nca vus ligevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas ligevian\nc'els/ellas ligevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou ligevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei ligevias\nca tei ligevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella ligevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus ligevian\nca nus ligevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus ligevias\nca vus ligevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas ligevian\nc'els/ellas ligevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou ligess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei ligessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2224,12 +2223,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus parteias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas partian\nc'els/ellas partan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou partevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei partevias\nca tei partevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella partevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus partevian\nca nus partevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus partevias\nca vus partevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas partevian\nc'els/ellas partevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou partevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei partevias\nca tei partevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella partevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus partevian\nca nus partevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus partevias\nca vus partevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas partevian\nc'els/ellas partevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou partess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei partessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2290,12 +2289,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus santeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas saintian\nc'els/ellas saintan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou santevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei santevias\nca tei santevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella santevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus santevian\nca nus santevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus santevias\nca vus santevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas santevian\nc'els/ellas santevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou santevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei santevias\nca tei santevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella santevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus santevian\nca nus santevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus santevias\nca vus santevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas santevian\nc'els/ellas santevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou santess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei santessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2356,12 +2355,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus sgrigneias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas sgregnian\nc'els/ellas sgregnan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou sgrignevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei sgrignevias\nca tei sgrignevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella sgrignevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus sgrignevian\nca nus sgrignevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus sgrignevias\nca vus sgrignevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas sgrignevian\nc'els/ellas sgrignevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou sgrignevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei sgrignevias\nca tei sgrignevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella sgrignevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus sgrignevian\nca nus sgrignevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus sgrignevias\nca vus sgrignevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas sgrignevian\nc'els/ellas sgrignevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou sgrigness", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei sgrignessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2422,12 +2421,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus udeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas odian\nc'els/ellas odan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou udevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei udevias\nca tei udevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella udevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus udevian\nca nus udevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus udevias\nca vus udevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas udevian\nc'els/ellas udevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou udevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei udevias\nca tei udevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella udevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus udevian\nca nus udevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus udevias\nca vus udevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas udevian\nc'els/ellas udevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou udess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei udessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2488,12 +2487,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus bargeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas bragian", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou bargevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei bargevias\nca tei bargevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella bargevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus bargevian\nca nus bargevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus bargevias\nca vus bargevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas bargevian\nc'els/ellas bargevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou bargevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei bargevias\nca tei bargevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella bargevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus bargevian\nca nus bargevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus bargevias\nca vus bargevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas bargevian\nc'els/ellas bargevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou bargess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei bargessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2554,12 +2553,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus ancureias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas anquierian\nc'els/ellas anquieran", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou ancurevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei ancurevias\nca tei ancurevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella ancurevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus ancurevian\nca nus ancurevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus ancurevias\nca vus ancurevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas ancurevian\nc'els/ellas ancurevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou ancurevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei ancurevias\nca tei ancurevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella ancurevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus ancurevian\nca nus ancurevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus ancurevias\nca vus ancurevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas ancurevian\nc'els/ellas ancurevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou ancuress", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei ancuressas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2623,12 +2622,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus gratuleias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas gratuleschian\nc'els/ellas gratuleschan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou gratulavi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei gratulavias\nca tei gratulavas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella gratulavi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus gratulavian\nca nus gratulavan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus gratulavias\nca vus gratulavas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas gratulavian\nc'els/ellas gratulavan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou gratulavi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei gratulavias\nca tei gratulavas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella gratulavi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus gratulavian\nca nus gratulavan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus gratulavias\nca vus gratulavas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas gratulavian\nc'els/ellas gratulavan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou gratulass", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei gratulassas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2689,12 +2688,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus inditgeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas inditgeschian\nc'els/ellas inditgeschan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou inditgevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei inditgevias\nca tei inditgevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella inditgevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus inditgevian\nca nus inditgevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus inditgevias\nca vus inditgevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas inditgevian\nc'els/ellas inditgevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou inditgevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei inditgevias\nca tei inditgevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella inditgevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus inditgevian\nca nus inditgevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus inditgevias\nca vus inditgevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas inditgevian\nc'els/ellas inditgevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou inditgess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei inditgessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2755,12 +2754,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus capeias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas capeschian\nc'els/ellas capeschan", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou capevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei capevias\nca tei capevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella capevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus capevian\nca nus capevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus capevias\nca vus capevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas capevian\nc'els/ellas capevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou capevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei capevias\nca tei capevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella capevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus capevian\nca nus capevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus capevias\nca vus capevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas capevian\nc'els/ellas capevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou capess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei capessas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2821,12 +2820,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus pareias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas parian\nc'els/ellas paran", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou parevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei parevias\nca tei parevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella parevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus parevian\nca nus parevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus parevias\nca vus parevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas parevian\nc'els/ellas parevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou parevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei parevias\nca tei parevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella parevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus parevian\nca nus parevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus parevias\nca vus parevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas parevian\nc'els/ellas parevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou paress", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei paressas", forms.getInflectionValues().get("cundizionalsing2"));
@@ -2887,12 +2886,12 @@ public class SutsilvanConjugationTest {
         Assert.assertEquals("ca vus tameias", forms.getInflectionValues().get("conjunctivplural2"));
         Assert.assertEquals("c'els/ellas temian\nc'els/ellas teman", forms.getInflectionValues().get("conjunctivplural3"));
 
-        Assert.assertEquals("ca jou tamevi", forms.getInflectionValues().get("conjunctivimperfectsing1"));
-        Assert.assertEquals("ca tei tamevias\nca tei tamevas", forms.getInflectionValues().get("conjunctivimperfectsing2"));
-        Assert.assertEquals("c'el/ella tamevi", forms.getInflectionValues().get("conjunctivimperfectsing3"));
-        Assert.assertEquals("ca nus tamevian\nca nus tamevan", forms.getInflectionValues().get("conjunctivimperfectplural1"));
-        Assert.assertEquals("ca vus tamevias\nca vus tamevas", forms.getInflectionValues().get("conjunctivimperfectplural2"));
-        Assert.assertEquals("c'els/ellas tamevian\nc'els/ellas tamevan", forms.getInflectionValues().get("conjunctivimperfectplural3"));
+        Assert.assertEquals("ca jou tamevi", forms.getInflectionValues().get("conjunctiv2sing1"));
+        Assert.assertEquals("ca tei tamevias\nca tei tamevas", forms.getInflectionValues().get("conjunctiv2sing2"));
+        Assert.assertEquals("c'el/ella tamevi", forms.getInflectionValues().get("conjunctiv2sing3"));
+        Assert.assertEquals("ca nus tamevian\nca nus tamevan", forms.getInflectionValues().get("conjunctiv2plural1"));
+        Assert.assertEquals("ca vus tamevias\nca vus tamevas", forms.getInflectionValues().get("conjunctiv2plural2"));
+        Assert.assertEquals("c'els/ellas tamevian\nc'els/ellas tamevan", forms.getInflectionValues().get("conjunctiv2plural3"));
 
         Assert.assertEquals("jou tamess", forms.getInflectionValues().get("cundizionalsing1"));
         Assert.assertEquals("tei tamessas", forms.getInflectionValues().get("cundizionalsing2"));

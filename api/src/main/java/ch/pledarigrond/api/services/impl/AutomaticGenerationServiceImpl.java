@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -583,6 +584,57 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         logger.error("number of cases: " + counter);
+
+        return true;
+    }
+
+    public boolean moveConjunctivImperfectToConjunctiv2(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            AtomicBoolean didChange = new AtomicBoolean(false);
+            entry.getVersionHistory().forEach(lv -> {
+                if (lv.getLemmaValues().get("conjunctivimperfectsing1") != null) {
+                    lv.getLemmaValues().put("conjunctiv2sing1", lv.getLemmaValues().get("conjunctivimperfectsing1"));
+                    lv.getLemmaValues().remove("conjunctivimperfectsing1");
+                    didChange.set(true);
+                }
+                if (lv.getLemmaValues().get("conjunctivimperfectsing2") != null) {
+                    lv.getLemmaValues().put("conjunctiv2sing2", lv.getLemmaValues().get("conjunctivimperfectsing2"));
+                    lv.getLemmaValues().remove("conjunctivimperfectsing2");
+                }
+                if (lv.getLemmaValues().get("conjunctivimperfectsing3") != null) {
+                    lv.getLemmaValues().put("conjunctiv2sing3", lv.getLemmaValues().get("conjunctivimperfectsing3"));
+                    lv.getLemmaValues().remove("conjunctivimperfectsing3");
+                }
+                if (lv.getLemmaValues().get("conjunctivimperfectplural1") != null) {
+                    lv.getLemmaValues().put("conjunctiv2plural1", lv.getLemmaValues().get("conjunctivimperfectplural1"));
+                    lv.getLemmaValues().remove("conjunctivimperfectplural1");
+                }
+                if (lv.getLemmaValues().get("conjunctivimperfectplural2") != null) {
+                    lv.getLemmaValues().put("conjunctiv2plural2", lv.getLemmaValues().get("conjunctivimperfectplural2"));
+                    lv.getLemmaValues().remove("conjunctivimperfectplural2");
+                }
+                if (lv.getLemmaValues().get("conjunctivimperfectplural3") != null) {
+                    lv.getLemmaValues().put("conjunctiv2plural3", lv.getLemmaValues().get("conjunctivimperfectplural3"));
+                    lv.getLemmaValues().remove("conjunctivimperfectplural3");
+                }
+            });
+
+            if (didChange.get()) {
+                counter++;
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        logger.error("number of verbs updated: " + counter);
 
         return true;
     }
