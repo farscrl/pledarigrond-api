@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version>
+			<version>2.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -88,7 +88,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>1.12.274</version>
+			<version>1.12.765</version>
 		</dependency>
         <dependency>
             <groupId>ch.pledarigrond</groupId>
