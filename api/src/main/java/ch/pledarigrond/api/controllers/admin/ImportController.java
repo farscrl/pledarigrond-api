@@ -51,30 +51,4 @@ public class ImportController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
-    /**
-     * Allows to import the data for puter or vallader. data has to be in the project folder, it is not uploaded
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/import_ladin")
-    ResponseEntity<?> importLadin(@PathVariable("language") Language language, HttpServletRequest request) throws DatabaseException, UnknownHostException {
-        if (language != Language.PUTER && language != Language.VALLADER) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-
-        try {
-            boolean success = importService.importLadinData(language, request);
-            if (!success) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during import of ladin data");
-            }
-
-            return ResponseEntity.ok().build();
-        } catch (DatabaseException | IOException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (XMLStreamException | JAXBException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
 }
