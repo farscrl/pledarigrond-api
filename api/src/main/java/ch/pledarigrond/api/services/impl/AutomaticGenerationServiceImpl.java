@@ -45,8 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -674,13 +672,13 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if lemma has already new version
-            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+            if (!entry.getUnapprovedVersions().isEmpty() || entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
                 continue;
             }
 
             // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
             // adding user ID
-            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().isEmpty()) {
                 entry.getCurrent().setUserId("admin");
             }
 
@@ -712,40 +710,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 continue;
             }
             if (inflectionResponse == null) {
-                if (language == Language.PUTER || language == Language.VALLADER) {
-
-                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
-                    List<Pattern> patterns = new ArrayList<>();
-                    patterns.add(Pattern.compile("^([\\p{L}]+) \\(([\\p{L}]+), pl\\); [\\p{L}]+ \\([\\p{L}]+, pl\\)$")); //impiegà (impiegạts, pl); impiegạda (impiegạdas, pl)
-                    patterns.add(Pattern.compile("^([\\p{L}]+) \\(([\\p{L}]+), pl\\)$")); // grà (grads, pl)
-                    patterns.add(Pattern.compile("^([\\p{L}]+) \\([\\p{L}. ]+\\)()$")); // duọnna (dna.)
-                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // oboịst, oboịsta
-
-                    for (Pattern pattern: patterns) {
-                        Matcher matcher = pattern.matcher(RStichwort);
-                        if (matcher.matches()) {
-                            String base = matcher.group(1);
-                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
-                            try {
-                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, base, mostRecent.getLemmaValues().get("RGenus"), plural);
-                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
-                                // do nothing
-                            }
-
-                            if (inflectionResponse != null) {
-                                break;
-                            }
-                        }
-                    }
-
-                    if (inflectionResponse == null) {
-                        noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
-                        continue;
-                    }
-                } else {
-                    noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
-                    continue;
-                }
+                noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                continue;
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
@@ -809,12 +775,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if lemma has already new version
-            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+            if (!entry.getUnapprovedVersions().isEmpty() || entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
                 continue;
             }
 
             // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
-            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().isEmpty()) {
                 entry.getCurrent().setUserId("admin");
             }
 
@@ -846,37 +812,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 continue;
             }
             if (inflectionResponse == null) {
-                if (language == Language.PUTER || language == Language.VALLADER) {
-
-                    // list of patterns, has to generate two match groups: the base form and a inflection form (can be empty string)
-                    List<Pattern> patterns = new ArrayList<>();
-                    patterns.add(Pattern.compile("^([\\p{L}]+), ([\\p{L}]+)$")); // furbạz, furbạzza
-
-                    for (Pattern pattern: patterns) {
-                        Matcher matcher = pattern.matcher(RStichwort);
-                        if (matcher.matches()) {
-                            String base = matcher.group(1);
-                            String plural = "".equals(matcher.group(2)) ? null : matcher.group(2);
-                            try {
-                                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, base, mostRecent.getLemmaValues().get("RGenus"), plural);
-                            } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
-                                // do nothing
-                            }
-
-                            if (inflectionResponse != null) {
-                                break;
-                            }
-                        }
-                    }
-
-                    if (inflectionResponse == null) {
-                        noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
-                        continue;
-                    }
-                } else {
-                    noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
-                    continue;
-                }
+                noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "null" });
+                continue;
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
@@ -935,12 +872,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if lemma has already new version
-            if (entry.getUnapprovedVersions().size() > 0 && entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
+            if (!entry.getUnapprovedVersions().isEmpty() || entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
                 continue;
             }
 
             // there are entries, that are not valid, as not all data is complete. this data has to be fixed here.
-            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().equals("")) {
+            if (entry.getCurrent().getUserId() == null || entry.getCurrent().getUserId().isEmpty()) {
                 entry.getCurrent().setUserId("admin");
             }
 
@@ -999,74 +936,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     public static List<String> getGenderValues(Language language) {
-        if (language == Language.PUTER) {
-            return Stream.of(
-                    "(m)",
-                    "f",
-                    "f ",
-                    "f (fpl)",
-                    "f(pl)",
-                    "f/m",
-                    "f/m/n",
-                    "f/n",
-                    "ff",
-                    "fpl",
-                    "m",
-                    "m  ",
-                    "m(f)",
-                    "m/f",
-                    "m/mpl",
-                    "m/n",
-                    "m/n                                                                                                                                       ",
-                    "m/pl",
-                    "mpl",
-                    "n/f",
-                    "n/m",
-                    "npl",
-                    "pl",
-                    "pl/npl"
-            ).collect(Collectors.toList());
-        }
-
-        if (language == Language.VALLADER) {
-            return Stream.of(
-                    "(f)",
-                    "(m)",
-                    "f",
-                    "f ",
-                    "f  ",
-                    "f (pl)",
-                    "f coll",
-                    "f pl",
-                    "f(m)",
-                    "f/m",
-                    "f/m/n",
-                    "f/n",
-                    "ff",
-                    "fm",
-                    "fpl",
-                    "m",
-                    "m ",
-                    "m (-)",
-                    "m(n",
-                    "m(pl)",
-                    "m.f",
-                    "m/f",
-                    "m/fpl",
-                    "m/n",
-                    "m/npl",
-                    "mf",
-                    "mfpl",
-                    "ml",
-                    "mpl",
-                    "n",
-                    "n/f",
-                    "n/m",
-                    "npl",
-                    "pl"
-            ).collect(Collectors.toList());
-        }
-
         return Stream.of(
                 "(coll)m",
                 "(f)m",
@@ -1108,94 +977,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
     
     public static List<String> getGrammarValuesForAdjective(Language language) {
-        if (language == Language.PUTER) {
-            return Stream.of(
-                    "I. adj",
-                    "I. adj cump",
-                    "I. adj invar",
-                    "I. adj pred",
-                    "I. adj/adv",
-                    "I. adj/pron",
-                    "I. adj/pron poss",
-                    "I. num/adj",
-                    "II. adj",
-                    "II. adj attr",
-                    "II. adj pred",
-                    "II. adj/adv",
-                    "II. adj/pron dem",
-                    "II. num/adj",
-                    "III. adj",
-                    "adj",
-                    "adj (pred)",
-                    "adj f",
-                    "adj indef",
-                    "adj invar",
-                    "adj invar / num",
-                    "adj invar/adv",
-                    "adj m",
-                    "adj mpl",
-                    "adj pred",
-                    "adj pred f",
-                    "adj pred invar",
-                    "adj pred invar / adv",
-                    "adj pred/adv",
-                    "adj/adv",
-                    "adj/adv cump",
-                    "adj/cj",
-                    "adj/num",
-                    "adj/pp",
-                    "adj/pron",
-                    "adj/pron dem",
-                    "adj/pron dem fpl",
-                    "adj/pron dem mpl",
-                    "adj/pron dem pl f",
-                    "adj/pron f",
-                    "adj/pron indef",
-                    "adj/pron indef f",
-                    "adj/pron poss",
-                    "adj/pron poss fpl",
-                    "adjf",
-                    "num/adj",
-                    "num/adj f",
-                    "pron/adj",
-                    "pron/adj dem",
-                    "pron/adj dem dat"
-            ).collect(Collectors.toList());
-        }
-
-        if (language == Language.VALLADER) {
-            return Stream.of(
-                    "I. adj",
-                    "I. adj invar",
-                    "I. adj/adv",
-                    "I. adj/pron",
-                    "II. adj",
-                    "II. adj attr",
-                    "II. adj inv.",
-                    "II. adj/adj",
-                    "II. adj/adv",
-                    "II. adj/pron",
-                    "III. adj",
-                    "aadj",
-                    "adj",
-                    "adj attr",
-                    "adj invar",
-                    "adj poss f",
-                    "adj poss m",
-                    "adj pred",
-                    "adj.",
-                    "adj./pron.poss",
-                    "adj.f",
-                    "adj.inv",
-                    "adj.inv/adv",
-                    "adj/adv",
-                    "adj/num",
-                    "adj/pp",
-                    "adj/pron",
-                    "adj/pron.indef"
-            ).collect(Collectors.toList());
-        }
-
         return Stream.of(
                 "adj",
                 "adj (nur präd. +adv)",

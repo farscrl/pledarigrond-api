@@ -29,7 +29,7 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_noun_forms")
     ResponseEntity<?> generateNounForms(@PathVariable("language")Language language) {
-        if (language != Language.PUTER && language != Language.VALLADER) {
+        if (language != Language.SURSILVAN) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
         boolean success = automaticGenerationService.generateNounForms(language);
@@ -44,7 +44,7 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_adjective_forms")
     ResponseEntity<?> generateAdjectiveForms(@PathVariable("language")Language language) {
-        if (language != Language.PUTER && language != Language.VALLADER) {
+        if (language != Language.SURSILVAN) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
         boolean success = automaticGenerationService.generateAdjectiveForms(language);
@@ -59,7 +59,7 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_verb_forms")
     ResponseEntity<?> generateVerbForms(@PathVariable("language")Language language) {
-        if (language != Language.PUTER && language != Language.VALLADER) {
+        if (language != Language.SURSILVAN) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
         boolean success = automaticGenerationService.generateVerbForms(language);
