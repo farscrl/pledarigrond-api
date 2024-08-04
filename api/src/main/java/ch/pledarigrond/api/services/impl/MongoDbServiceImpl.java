@@ -88,6 +88,9 @@ public class MongoDbServiceImpl implements MongoDbService {
         luceneService.update(language, modified);
     }
 
+    // attention: this update function creates a suggestion, not a direct update, it is currently used for public
+    // suggestion creation. There is also the function 'suggestUpdate', maybe the two can be merged.
+    // If you need to update and accept, use the 'acceptAfterUpdate' function.
     @Override
     public void update(Language language, LexEntry lexEntry, LemmaVersion newVersion) throws Exception {
         if(newVersion == null) throw new InvalidEntryException("Lemma must not be null!");
