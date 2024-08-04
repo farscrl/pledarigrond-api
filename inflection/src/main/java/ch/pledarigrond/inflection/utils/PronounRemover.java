@@ -3,6 +3,7 @@ package ch.pledarigrond.inflection.utils;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.inflection.generation.puter.PuterConjugationPronouns;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
+import ch.pledarigrond.inflection.generation.sursilvan.SursilvanPronouns;
 import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationPronouns;
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ public class PronounRemover {
     List<String> surmiranPrefixes = new ArrayList<>();
     List<String> puterPrefixes = new ArrayList<>();
     List<String> valladerPrefixes = new ArrayList<>();
+    List<String> sursilvanPrefixes = new ArrayList<>();
 
     public PronounRemover() {
         setUpSurmiranPrefixes();
         setUpPuterPrefixes();
         setUpValladerPrefixes();
+        setUpSursilvanPrefixes();
     }
 
     public String removePronouns(Language language, String value) {
@@ -37,10 +40,13 @@ public class PronounRemover {
         if (language == Language.VALLADER) {
             prefixes = valladerPrefixes;
         }
+        if (language == Language.SURSILVAN) {
+            prefixes = sursilvanPrefixes;
+        }
 
         String[] singleForms = value.split("\\R");
         for (int i = 0; i < singleForms.length; i++) {
-            if (singleForms[i].equals("")) {
+            if (singleForms[i].isEmpty()) {
                 continue;
             }
             boolean enclosedInBrackets = false;
@@ -157,6 +163,22 @@ public class PronounRemover {
                 ValladerConjugationPronouns.imperativ_refl_pl_vowel,
                 ValladerConjugationPronouns.imperativ_polite_sg,
                 ValladerConjugationPronouns.imperativ_polite_pl
+        );
+    }
+
+    private void setUpSursilvanPrefixes() {
+        Collections.addAll(sursilvanPrefixes,
+                // has to be upfront, as other pronouns may follow
+                SursilvanPronouns.pron_conjunctiv_c,
+                SursilvanPronouns.pron_conjunctiv_v,
+
+                SursilvanPronouns.pron_1ps,
+                SursilvanPronouns.pron_2ps,
+                SursilvanPronouns.pron_3ps,
+                SursilvanPronouns.pron_3ps_impers,
+                SursilvanPronouns.pron_1pp,
+                SursilvanPronouns.pron_2pp,
+                SursilvanPronouns.pron_3pp
         );
     }
 }

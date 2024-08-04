@@ -4,6 +4,7 @@ src/main/resources/application-prod.properties
 src/main/resources/application-ladin-test.properties
 src/main/resources/application-ladin.properties
 src/main/resources/ladin/
+src/main/resources/sursilvan/
 
 
 HELP.md

@@ -4,6 +4,8 @@ import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.api.services.MongoDbService;
+import ch.pledarigrond.api.utils.InflectionResultDto;
+import ch.pledarigrond.api.utils.SursilvanInflectionComparatorUtil;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -68,6 +70,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Autowired
     private PgEnvironment pgEnvironment;
+
+    @Autowired
+    private SursilvanInflectionComparatorUtil sursilvanInflectionComparatorUtil;
+
+    private PronounRemover pronounRemover = new PronounRemover();
+
 
     public boolean generateNounForms(Language language) {
         StopWatch watch = new StopWatch();
@@ -857,6 +865,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             return false;
         }
 
+        int correct = 0;
+        int nuncorrect = 0;
         for (int i = 0; i < lemmas.getContent().size(); i++) {
             LemmaVersion lemma = lemmas.getContent().get(i);
             logger.debug(lemma.toString());
@@ -901,24 +911,31 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             LemmaVersion mostRecent = createNewLemmaVersion(entry);
             entry.addLemma(mostRecent);
 
-            InflectionResponse inflectionResponse = null;
+            InflectionResultDto inflection = null;
             try {
-                inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+                // inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+                inflection = sursilvanInflectionComparatorUtil.getInflection(mostRecent.getLemmaValues().get("RStichwort"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
-            if (inflectionResponse == null) {
+            if (inflection.getInflectionResponse() == null) {
                 continue;
             }
 
 
-            for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
+            for(Map.Entry<String, String> el : inflection.getInflectionResponse().getInflectionValues().entrySet()) {
                 mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
             }
 
             mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.VERBS.toString());
             mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
-            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            if (inflection.isCorrect()) {
+                correct++;
+                mostRecent.setVerification(LemmaVersion.Verification.ACCEPTED);
+            } else {
+                nuncorrect++;
+                mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            }
             mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
 
             mostRecent.setTimestamp(0L);
@@ -932,85 +949,41 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
         }
 
+        logger.warn("Generated verbs for grammar value: " + grammarValue + ". Correct: " + correct + " / Not correct: " + nuncorrect);
         return true;
     }
 
     public static List<String> getGenderValues(Language language) {
         return Stream.of(
-                "(coll)m",
-                "(f)m",
-                "(f)pl",
-                "(m)f",
-                "(pl)f",
-                "M",
-                "col",
-                "coll",
-                "colectiv",
-                "f",
-                "f (m)",
-                "f(m)",
-                "f(n)",
-                "f(pl)",
-                "f.(pl)",
-                "f.pl",
-                "f/m",
-                "f/m.pl",
-                "f/n",
                 "m",
-                "m(f)",
-                "m(f).pl",
-                "m(f)f",
-                "m(f)pl",
-                "m(n)",
-                "m(pl)",
-                "m.(pl)",
-                "m.n",
+                "f",
                 "m.pl",
-                "m/f",
-                "m/f.pl",
-                "m/n",
-                "n",
-                "n(f)",
-                "n(pl)",
-                "pl"
+                "f.pl",
+                "pl",
+                "f.coll"
         ).collect(Collectors.toList());
     }
     
     public static List<String> getGrammarValuesForAdjective(Language language) {
         return Stream.of(
                 "adj",
-                "adj (nur präd. +adv)",
-                "adj inv/adv",
-                "adj(adv)",
-                "adj.",
-                "adj.f",
-                "adj.inv",
-                "adj.inv/adv",
-                "adj.m",
-                "adj.poss.f",
-                "adj.poss.pl",
-                "adj.sup",
-                "adj/adv",
-                "adj/pron indef"
+                "adv",
+                "interj",
+                "m",
+                "sm",
+                "f",
+                "f.pl",
+                "interj.",
+                "pron",
+                "num",
+                "pron."
         ).collect(Collectors.toList());
     }
 
     public static List<String> getGrammarValuesForVerbs(Language language) {
         return Stream.of(
-                "(refl) tr",
-                "(refl)tr",
-                "(tr) int",
-                "3.sg.",
-                "int",
-                "konj",
-                "refl",
-                "refl. impers",
                 "tr",
-                "tr +",
-                "tr+",
-                "tr/int",
-                "tr/int/impers",
-                "tr/refl"
+                "intr"
                 ).collect(Collectors.toList());
     }
 
