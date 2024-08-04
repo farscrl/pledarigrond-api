@@ -4,6 +4,7 @@ import ch.pledarigrond.api.dtos.FieldsList;
 import ch.pledarigrond.api.dtos.LemmaVersionList;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -37,6 +38,9 @@ public class EditorController {
 
     @Autowired
     private PgEnvironment pgEnvironment;
+
+    @Autowired
+    private SursilvanVerbService verbService;
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/lex_entries")
@@ -275,6 +279,20 @@ public class EditorController {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
+
+    @PreAuthorize("hasPermission(#language, 'editor')")
+    @GetMapping("/reference_inflection")
+    public ResponseEntity<?> getReferenceInflection(@PathVariable("language") Language language, String searchTerm) {
+        if (language != Language.SURSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+
+        if (searchTerm.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no value sent");
+        }
+
+        return ResponseEntity.ok(verbService.getVerb(searchTerm));
     }
 
     private void stream(HttpServletResponse response, File export) throws IOException {
