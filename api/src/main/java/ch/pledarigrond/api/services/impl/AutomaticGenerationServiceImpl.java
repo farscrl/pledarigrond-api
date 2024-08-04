@@ -708,7 +708,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             LemmaVersion newVersion = createNewLemmaVersion(entry);
-            entry.addLemma(newVersion);
+            // entry.addLemma(newVersion);
 
             InflectionResponse inflectionResponse = null;
             try {
@@ -732,7 +732,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
             newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
-            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.setStatus(LemmaVersion.Status.NEW_MODIFICATION);
 
             newVersion.setTimestamp(0L);
             newVersion.setUserId(null);
@@ -810,7 +810,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             LemmaVersion newVersion = createNewLemmaVersion(entry);
-            entry.addLemma(newVersion);
+            // entry.addLemma(newVersion);
 
             InflectionResponse inflectionResponse = null;
             try {
@@ -831,7 +831,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
             newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
-            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.setStatus(LemmaVersion.Status.NEW_MODIFICATION);
 
             newVersion.setTimestamp(0L);
             newVersion.setUserId(null);
@@ -909,7 +909,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             LemmaVersion newVersion = createNewLemmaVersion(entry);
-            entry.addLemma(newVersion);
+            // entry.addLemma(newVersion);
 
             InflectionResultDto inflection = null;
             try {
@@ -936,13 +936,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 nuncorrect++;
                 newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
             }
-            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.setStatus(LemmaVersion.Status.NEW_MODIFICATION);
 
             newVersion.setTimestamp(0L);
             newVersion.setUserId(null);
 
             try {
-                mongoDbService.update(language, entry, newVersion);
+                if (inflection.isCorrect()) {
+                    mongoDbService.acceptAfterUpdate(language, entry, entry.getCurrent(), newVersion);
+                } else {
+                    mongoDbService.update(language, entry, newVersion);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
