@@ -707,12 +707,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
 
-            LemmaVersion mostRecent = createNewLemmaVersion(entry);
-            entry.addLemma(mostRecent);
+            LemmaVersion newVersion = createNewLemmaVersion(entry);
+            entry.addLemma(newVersion);
 
             InflectionResponse inflectionResponse = null;
             try {
-                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.NOUN, newVersion.getLemmaValues().get("RStichwort"), newVersion.getLemmaValues().get("RGenus"), newVersion.getLemmaValues().get("RFlex"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
@@ -723,22 +723,22 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
-                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+                newVersion.getLemmaValues().put(el.getKey(), el.getValue());
             }
 
-            if (mostRecent.getLemmaValues().get("RGrammatik") == null || "".equals(mostRecent.getLemmaValues().get("RGrammatik"))) {
-                mostRecent.getLemmaValues().put("RGrammatik", "subst");
+            if (newVersion.getLemmaValues().get("RGrammatik") == null || "".equals(newVersion.getLemmaValues().get("RGrammatik"))) {
+                newVersion.getLemmaValues().put("RGrammatik", "subst");
             }
-            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
-            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
-            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
-            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.NOUNS.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
 
-            mostRecent.setTimestamp(0L);
-            mostRecent.setUserId(null);
+            newVersion.setTimestamp(0L);
+            newVersion.setUserId(null);
 
             try {
-                mongoDbService.update(language, entry, mostRecent);
+                mongoDbService.update(language, entry, newVersion);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -809,12 +809,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
 
-            LemmaVersion mostRecent = createNewLemmaVersion(entry);
-            entry.addLemma(mostRecent);
+            LemmaVersion newVersion = createNewLemmaVersion(entry);
+            entry.addLemma(newVersion);
 
             InflectionResponse inflectionResponse = null;
             try {
-                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
+                inflectionResponse = inflectionService.guessInflection(language, InflectionType.ADJECTIVE, newVersion.getLemmaValues().get("RStichwort"), newVersion.getLemmaValues().get("RGenus"), newVersion.getLemmaValues().get("RFlex"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
@@ -825,19 +825,19 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             for(Map.Entry<String, String> el : inflectionResponse.getInflectionValues().entrySet()) {
-                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+                newVersion.getLemmaValues().put(el.getKey(), el.getValue());
             }
 
-            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
-            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
-            mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
-            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.ADJECTIVES.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
+            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
 
-            mostRecent.setTimestamp(0L);
-            mostRecent.setUserId(null);
+            newVersion.setTimestamp(0L);
+            newVersion.setUserId(null);
 
             try {
-                mongoDbService.update(language, entry, mostRecent);
+                mongoDbService.update(language, entry, newVersion);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -908,13 +908,13 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 }
             }
 
-            LemmaVersion mostRecent = createNewLemmaVersion(entry);
-            entry.addLemma(mostRecent);
+            LemmaVersion newVersion = createNewLemmaVersion(entry);
+            entry.addLemma(newVersion);
 
             InflectionResultDto inflection = null;
             try {
-                // inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, mostRecent.getLemmaValues().get("RStichwort"), mostRecent.getLemmaValues().get("RGenus"), mostRecent.getLemmaValues().get("RFlex"));
-                inflection = sursilvanInflectionComparatorUtil.getInflection(mostRecent.getLemmaValues().get("RStichwort"));
+                // inflectionResponse = inflectionService.guessInflection(language, InflectionType.V, newVersion.getLemmaValues().get("RStichwort"), newVersion.getLemmaValues().get("RGenus"), newVersion.getLemmaValues().get("RFlex"));
+                inflection = sursilvanInflectionComparatorUtil.getInflection(newVersion.getLemmaValues().get("RStichwort"));
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
@@ -924,25 +924,25 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
 
             for(Map.Entry<String, String> el : inflection.getInflectionResponse().getInflectionValues().entrySet()) {
-                mostRecent.getLemmaValues().put(el.getKey(), el.getValue());
+                newVersion.getLemmaValues().put(el.getKey(), el.getValue());
             }
 
-            mostRecent.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.VERBS.toString());
-            mostRecent.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
+            newVersion.getPgValues().put(LemmaVersion.AUTOMATIC_CHANGE, AutomaticChangesType.VERBS.toString());
+            newVersion.getPgValues().put(LemmaVersion.REVIEW_LATER, "false");
             if (inflection.isCorrect()) {
                 correct++;
-                mostRecent.setVerification(LemmaVersion.Verification.ACCEPTED);
+                newVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
             } else {
                 nuncorrect++;
-                mostRecent.setVerification(LemmaVersion.Verification.UNVERIFIED);
+                newVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
             }
-            mostRecent.setStatus(LemmaVersion.Status.UNDEFINED);
+            newVersion.setStatus(LemmaVersion.Status.UNDEFINED);
 
-            mostRecent.setTimestamp(0L);
-            mostRecent.setUserId(null);
+            newVersion.setTimestamp(0L);
+            newVersion.setUserId(null);
 
             try {
-                mongoDbService.update(language, entry, mostRecent);
+                mongoDbService.update(language, entry, newVersion);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
