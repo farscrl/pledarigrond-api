@@ -23,7 +23,6 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.model.DatabaseStatistics;
-import ch.pledarigrond.mongodb.model.PgUser;
 import ch.pledarigrond.mongodb.util.MongoHelper;
 import ch.pledarigrond.mongodb.util.Validator;
 import com.mongodb.BasicDBList;
@@ -201,15 +200,15 @@ public class Database {
 		logger.info("ACCEPTED: {}/{}", toLogString(entry.getCurrent()), entry.getId());
 	}
 
-	public void acceptAfterUpdate(LexEntry entry, LemmaVersion suggestion, LemmaVersion modified)
+	public void acceptAfterUpdate(LexEntry entry, LemmaVersion baseVersion, LemmaVersion modified)
 			throws InvalidEntryException {
 		Validator.validate(entry);
-		suggestion.setVerification(LemmaVersion.Verification.OUTDATED);
+		baseVersion.setVerification(LemmaVersion.Verification.OUTDATED);
 		modified.setTimestamp(System.currentTimeMillis());
-		modified.setUserId(suggestion.getUserId());
-		modified.setIP(suggestion.getIP());
+		modified.setUserId(baseVersion.getUserId());
+		modified.setIP(baseVersion.getIP());
 		modified.setVerification(LemmaVersion.Verification.ACCEPTED);
-		modified.setCreatorRole(suggestion.getCreatorRole());
+		modified.setCreatorRole(baseVersion.getCreatorRole());
 		modified.setStatus(LemmaVersion.Status.NEW_MODIFICATION);
 		entry.addLemma(modified);
 		entry.setCurrent(modified);

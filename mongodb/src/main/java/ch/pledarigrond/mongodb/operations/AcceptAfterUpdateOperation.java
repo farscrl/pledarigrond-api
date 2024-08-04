@@ -30,11 +30,11 @@ public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOper
 
 	private final LexEntry entry;
 	private final LemmaVersion modified;
-	private final LemmaVersion suggested;
+	private final LemmaVersion baseVersion;
 
-	public AcceptAfterUpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) {
+	public AcceptAfterUpdateOperation(PgEnvironment pgEnvironment, Language language, LexEntry entry, LemmaVersion baseVersion, LemmaVersion modified) {
 		this.entry = entry;
-		this.suggested = suggested;
+		this.baseVersion = baseVersion;
 		this.modified = modified;
 		this.language = language;
 		this.pgEnvironment = pgEnvironment;
@@ -53,10 +53,10 @@ public class AcceptAfterUpdateOperation extends BaseOperation implements IDBOper
 			entry.getUnapprovedVersions().forEach(version -> {
 				version.setVerification(LemmaVersion.Verification.OUTDATED);
 			});
-			suggested.setVerifierId(getUserId());
+			baseVersion.setVerifierId(getUserId());
 			modified.setVerification(LemmaVersion.Verification.ACCEPTED);
 			modified.setVerifierId(getUserId());
-			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).acceptAfterUpdate(entry, suggested, modified);
+			Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).acceptAfterUpdate(entry, baseVersion, modified);
 			DictionaryStatistics.userSuggestionAccepted(approved);
 		} catch (NoDatabaseAvailableException e) {
 			throw new OperationRejectedException(e);
