@@ -64,6 +64,16 @@ public class SursilvanNounGuessingTest {
     }
 
     @Test
+    public void testRule7NotSingleSyllable() {
+        forms = generator.guessInflection("advocat", null, null);
+        Assert.assertEquals(forms.getInflectionSubType().id, "3");
+        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "advocat");
+        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "advocata");
+        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "advocats");
+        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "advocatas");
+    }
+
+    @Test
     public void testRule8() {
         forms = generator.guessInflection("quinau", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "8");

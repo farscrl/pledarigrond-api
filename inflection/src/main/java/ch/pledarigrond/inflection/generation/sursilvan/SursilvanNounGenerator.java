@@ -145,7 +145,11 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
         // last 2 characters
         String lastTwoCharacters = baseForm.substring(length - 2);
         if (lastTwoCharacters.equals("at")) {
-            return generateForms("7", baseForm);
+            // only for words like tat or mat.
+            if (isSingleSyllable(baseForm)) {
+                return generateForms("7", baseForm);
+            }
+            // regular for advocat, advocata
         }
         if (lastTwoCharacters.equals("au")) {
             return generateForms("8", baseForm);
