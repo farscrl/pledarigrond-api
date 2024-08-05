@@ -13,7 +13,6 @@ public class SursilvanAdjectiveClasses {
                     new InflectionSubType("2", "finiziun sin «-el»","p.ex. ventireivel -> ventireivels, ventireivla, ventireivels, ventireivlas"),
                     new InflectionSubType("3", "finiziun sin «-al»","p.ex. viscal -> viscals, viscla, viscals, visclas"),
                     new InflectionSubType("4", "finiziun sin «-en»","p.ex. giuven -> giuvens, giuvna, giuvens, giuvnas"),
-                    new InflectionSubType("5", "finiziun sin «-an»","p.ex. ierfan -> orfans, orfna, orfans, orfnas"),
                     new InflectionSubType("6", "finiziun sin «-er»","p.ex. pauper -> paupers, paupra, paupers, paupras"),
                     new InflectionSubType("7", "finiziun sen «-iu»","p.ex. bugliu – buglius, buglida, buglius, buglidas"),
                     new InflectionSubType("8", "finiziun sen «-au»","p.ex. barsau – barsaus, barsada, barsaus, barsada"),

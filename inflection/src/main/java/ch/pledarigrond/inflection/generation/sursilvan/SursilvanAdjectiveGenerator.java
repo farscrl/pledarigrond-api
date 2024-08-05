@@ -65,8 +65,6 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
                     return generateForms("3", baseForm);
                 case "en":
                     return generateForms("4", baseForm);
-                case "an":
-                    return generateForms("5", baseForm);
                 case "er":
                     return generateForms("6", baseForm);
                 case "iu":
@@ -94,9 +92,6 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
         }
         if (lastTwoCharacters.equals("en")) {
             return generateForms("4", baseForm);
-        }
-        if (lastTwoCharacters.equals("an")) {
-            return generateForms("5", baseForm);
         }
         if (lastTwoCharacters.equals("er")) {
             return generateForms("6", baseForm);
@@ -137,7 +132,6 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
             case "2":
             case "3":
             case "4":
-            case "5":
             case "6":
             case "7":
             case "8":
@@ -211,12 +205,6 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
             case "en":
                 as.setMSingular(root + "en");
                 as.setPredicative(root + "ens");
-                as.setFSingular(root + "na");
-                break;
-
-            case "an":
-                as.setMSingular(root + "an");
-                as.setPredicative(root + "ans");
                 as.setFSingular(root + "na");
                 break;
 

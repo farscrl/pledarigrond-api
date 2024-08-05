@@ -60,17 +60,6 @@ public class SursilvanAdjectiveGeneratorTest {
     }
 
     @Test
-    public void testRule5() {
-        forms = generator.generateForms("5", "orfan"); // wrong, would be 'ierfan', but is irregular
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "orfan");
-        Assert.assertEquals(forms.getInflectionValues().get("predicative"), "orfans");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "orfna");
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "orfans");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "orfnas");
-        Assert.assertEquals(forms.getInflectionValues().get("adverbialForm"), "orfnamein");
-    }
-
-    @Test
     public void testRule6() {
         forms = generator.generateForms("6", "pauper");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "pauper");
