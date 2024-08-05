@@ -45,7 +45,8 @@ public class SursilvanAdjectiveGeneratorTest {
         Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "viscla");
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "viscals");
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "visclas");
-        // Assert.assertEquals(forms.getInflectionValues().get("adverbialForm"), "visclamein");
+        // exception, as accent is on the first syllable. Correct would be visclamein, but checking the regular pattern
+        Assert.assertEquals(forms.getInflectionValues().get("adverbialForm"), "viscalmein");
     }
 
     @Test
@@ -101,5 +102,16 @@ public class SursilvanAdjectiveGeneratorTest {
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "tschufs");
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "tschuffas");
         Assert.assertEquals(forms.getInflectionValues().get("adverbialForm"), "tschuffamein");
+    }
+
+    @Test
+    public void testRuleSpecialAdverbial() {
+        forms = generator.generateForms("1", "final");
+        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "final");
+        Assert.assertEquals(forms.getInflectionValues().get("predicative"), "finals");
+        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "finala");
+        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "finals");
+        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "finalas");
+        Assert.assertEquals(forms.getInflectionValues().get("adverbialForm"), "finalmein");
     }
 }
