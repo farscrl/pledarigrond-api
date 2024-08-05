@@ -970,17 +970,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     
     public static List<String> getGrammarValuesForAdjective(Language language) {
         return Stream.of(
-                "adj",
-                "adv",
-                "interj",
-                "m",
-                "sm",
-                "f",
-                "f.pl",
-                "interj.",
-                "pron",
-                "num",
-                "pron."
+                "adj"
         ).collect(Collectors.toList());
     }
 
