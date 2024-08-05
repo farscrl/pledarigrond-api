@@ -56,7 +56,7 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             return null;
         }
 
-        if (baseForm.matches(".*, -(bla|alla|astra|ta|atta|ada|edra|na|ra|iala|idra|ola|tra|occa|utta|essa|cra|vla)$")) {
+        if (baseForm.matches(".*, -(bla|alla|astra|ta|atta|ada|edra|na|ra|idra|tra|occa|utta|essa|cra|vla)$")) {
             String[] parts = baseForm.split(", -");
             baseForm = parts[0];
 
@@ -76,12 +76,8 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
                     return generateForms("10", baseForm);
                 case "ra":
                     return generateForms("11", baseForm);
-                case "iala":
-                    return generateForms("12", baseForm);
                 case "idra":
                     return generateForms("13", baseForm);
-                case "ola":
-                    return generateForms("14", baseForm);
                 case "tra":
                     return generateForms("15", baseForm);
                 case "occa":
@@ -139,9 +135,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
         if (lastThreeCharacters.equals("bel")) {
             return generateForms("4", baseForm);
         }
-        if (lastThreeCharacters.equals("iel")) {
-            return generateForms("14", baseForm);
-        }
         if (lastThreeCharacters.equals("ter")) {
             return generateForms("15", baseForm);
         }
@@ -174,11 +167,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
         }
         if (lastTwoCharacters.equals("un")) {
             return generateForms("18", baseForm);
-        }
-
-        // last characters
-        if (baseForm.substring(length - 1).equals("i")) {
-            return generateForms("12", baseForm);
         }
 
         return generateForms("3", baseForm);
@@ -219,7 +207,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
                 return maleSingularForm.substring(0, maleSingularForm.length() - 4);
 
             case "4":
-            case "14":
             case "15":
             case "20":
                 if (maleSingularForm.length() < 3) {
@@ -236,10 +223,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             case "17":
                 ending = maleSingularForm.substring(maleSingularForm.length() - 2);
                 return maleSingularForm.substring(0, maleSingularForm.length() - 2);
-
-            case "12":
-                ending = maleSingularForm.substring(maleSingularForm.length() - 1);
-                return maleSingularForm.substring(0, maleSingularForm.length() - 1);
 
             case "18":
                 if (maleSingularForm.endsWith("t")) {
@@ -384,19 +367,9 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
                 ns.setFSingular(root + "ra");
                 break;
 
-            case "i":
-                ns.setMSingular(root + "i");
-                ns.setFSingular(root + "iala");
-                break;
-
             case "ider":
                 ns.setMSingular(root + "ider");
                 ns.setFSingular(root + "idra");
-                break;
-
-            case "iel":
-                ns.setMSingular(root + "iel");
-                ns.setFSingular(root + "ola");
                 break;
 
             case "ter":

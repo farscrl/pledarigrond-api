@@ -96,30 +96,12 @@ public class SursilvanNounGeneratorTest {
     }
 
     @Test
-    public void testRule12() {
-        forms = generator.generateForms("12", "vadi");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "vadi");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "vadiala");
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "vadials");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "vadialas");
-    }
-
-    @Test
     public void testRule13() {
         forms = generator.generateForms("13", "vendider");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "vendider");
         Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "vendidra");
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "vendiders");
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "vendidras");
-    }
-
-    @Test
-    public void testRule14() {
-        forms = generator.generateForms("14", "ansiel");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "ansiel");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "ansola");
-        // Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "ansiels");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "ansolas");
     }
 
     @Test

@@ -104,16 +104,6 @@ public class SursilvanNounGuessingTest {
     }
 
     @Test
-    public void testRule12() {
-        forms = generator.guessInflection("vadi", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "12");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "vadi");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "vadiala");
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "vadials");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "vadialas");
-    }
-
-    @Test
     public void testRule13() {
         forms = generator.guessInflection("vendider", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "13");
@@ -121,16 +111,6 @@ public class SursilvanNounGuessingTest {
         Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "vendidra");
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "vendiders");
         Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "vendidras");
-    }
-
-    @Test
-    public void testRule14() {
-        forms = generator.guessInflection("ansiel", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "14");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "ansiel");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "ansola");
-        // Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "ansiels");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "ansolas");
     }
 
     @Test
@@ -256,21 +236,9 @@ public class SursilvanNounGuessingTest {
     }
 
     @Test
-    public void testWithEndingIndicationIala() {
-        forms = generator.guessInflection("vadi, -iala", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "12");
-    }
-
-    @Test
     public void testWithEndingIndicationIdra() {
         forms = generator.guessInflection("vendider, -idra", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "13");
-    }
-
-    @Test
-    public void testWithEndingIndicationOla() {
-        forms = generator.guessInflection("ansiel, -ola", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "14");
     }
 
     @Test
