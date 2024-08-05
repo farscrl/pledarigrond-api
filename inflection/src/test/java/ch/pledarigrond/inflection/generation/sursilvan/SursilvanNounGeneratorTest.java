@@ -287,6 +287,10 @@ public class SursilvanNounGeneratorTest {
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "fiep");
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "fops");
 
+        forms = generator.generateForms("1", "paliet");
+        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "paliet");
+        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "paliats");
+
         forms = generator.generateForms("1", "iert");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "iert");
         Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "orts");

@@ -305,15 +305,27 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             return base.substring(0, base.length() - 3) + "euls";
         }
 
-        Pattern pattern = Pattern.compile(".*ie([b-df-hj-np-tv-z]+)$");
-        Matcher matcher = pattern.matcher(base);
-        if (matcher.matches()) {
-            String consonant = matcher.group(1);
-            if (base.endsWith("schie" + consonant) || base.endsWith("gnie" + consonant)) {
-                return base.substring(0, base.length() - 2 - consonant.length()) + "a" + consonant + "s";
+        if (isSingleSyllable(base)) {
+            // for single syllable fiep -> fops
+            Pattern pattern = Pattern.compile(".*ie([b-df-hj-np-tv-z]+)$");
+            Matcher matcher = pattern.matcher(base);
+            if (matcher.matches()) {
+                String consonant = matcher.group(1);
+                if (base.endsWith("schie" + consonant) || base.endsWith("gnie" + consonant)) {
+                    return base.substring(0, base.length() - 2 - consonant.length()) + "a" + consonant + "s";
+                }
+                return base.substring(0, base.length() - 2 - consonant.length()) + "o" + consonant + "s";
             }
-            return base.substring(0, base.length() - 2 - consonant.length()) + "o" + consonant + "s";
+        } else {
+            // for multi syllable paliet -> paliats
+            Pattern pattern = Pattern.compile(".*ie([b-df-hj-np-tv-z]+)$");
+            Matcher matcher = pattern.matcher(base);
+            if (matcher.matches()) {
+                String consonant = matcher.group(1);
+                return base.substring(0, base.length() - 2 - consonant.length()) + "ia" + consonant + "s";
+            }
         }
+
 
         if (l1.equals("s")) {
             return base;
