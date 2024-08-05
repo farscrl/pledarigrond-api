@@ -1,9 +1,7 @@
 package ch.pledarigrond.api.services.impl;
 
-import ch.pledarigrond.api.services.AutomaticGenerationService;
-import ch.pledarigrond.api.services.EditorService;
-import ch.pledarigrond.api.services.InflectionService;
-import ch.pledarigrond.api.services.MongoDbService;
+import ch.pledarigrond.api.dtos.VerbDto;
+import ch.pledarigrond.api.services.*;
 import ch.pledarigrond.api.utils.InflectionResultDto;
 import ch.pledarigrond.api.utils.SursilvanInflectionComparatorUtil;
 import ch.pledarigrond.common.config.PgEnvironment;
@@ -39,13 +37,11 @@ import org.springframework.util.StopWatch;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,8 +70,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     @Autowired
     private SursilvanInflectionComparatorUtil sursilvanInflectionComparatorUtil;
 
-    private PronounRemover pronounRemover = new PronounRemover();
-
+    @Autowired
+    private SursilvanVerbService sursilvanVerbService;
 
     public boolean generateNounForms(Language language) {
         StopWatch watch = new StopWatch();
@@ -643,6 +639,31 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         logger.error("number of verbs updated: " + counter);
 
         return true;
+    }
+
+    public String getVerbListWithConjugationClass(Language language) {
+        List<VerbDto> sursilvanVerbs = sursilvanVerbService.getAllVerbs();
+
+        List<String[]> data = new ArrayList<>();
+        data.add(new String[]{"Verb", "Class", "Accurracy"});
+
+        for (VerbDto verb : sursilvanVerbs) {
+            InflectionResultDto result = sursilvanInflectionComparatorUtil.getInflection(verb.getRmStichwort());
+            InflectionResponse response = result.getInflectionResponse();
+            Integer errorCount = result.getErrorCount();
+            data.add(new String[]{verb.getRmStichwort(), response != null ? response.getInflectionSubType().id : "-", errorCount != null ? errorCount.toString() : "222"});
+        }
+
+        data.sort(Comparator.comparing(o -> o[0]));
+
+        StringWriter writer = new StringWriter();
+        PrintWriter csvWriter = new PrintWriter(writer);
+        for (String[] row : data) {
+            csvWriter.println(String.join(",", row));
+        }
+        csvWriter.flush();
+
+        return writer.toString();
     }
 
     private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,5 +35,9 @@ public class SursilvanVerbServiceImpl implements SursilvanVerbService {
 
     public VerbDto getVerb(String verb) {
         return verbsMap.get(verb);
+    }
+
+    public List<VerbDto> getAllVerbs() {
+        return new ArrayList<>(verbsMap.values());
     }
 }

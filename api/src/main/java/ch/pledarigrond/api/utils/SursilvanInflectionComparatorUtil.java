@@ -39,13 +39,13 @@ public class SursilvanInflectionComparatorUtil {
 
         if (referenceVerb == null) {
             InflectionResponse inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.V, baseForm, null, null);
-            return new InflectionResultDto(inflectionResponse, false);
+            return new InflectionResultDto(inflectionResponse, false, null);
         }
 
         generateAllInflections();
         if (allInflections.isEmpty()) {
             InflectionResponse inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.V, baseForm, null, null);
-            return new InflectionResultDto(inflectionResponse, false);
+            return new InflectionResultDto(inflectionResponse, false, null);
         }
 
         validateInflections();
@@ -183,9 +183,9 @@ public class SursilvanInflectionComparatorUtil {
 
         assert minEntry != null;
         if (minEntry.getValue().getNbrWrongForms() == 0) {
-            return new InflectionResultDto(minEntry.getValue().getInflectionResponse(), true);
+            return new InflectionResultDto(minEntry.getValue().getInflectionResponse(), true, minEntry.getValue().nbrWrongForms);
         } else {
-            return new InflectionResultDto(minEntry.getValue().getInflectionResponse(), false);
+            return new InflectionResultDto(minEntry.getValue().getInflectionResponse(), false, minEntry.getValue().nbrWrongForms);
         }
     }
 

@@ -6,6 +6,7 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -227,5 +228,23 @@ public class AutomaticGenerationController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Get verb list with probable conjugation class
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/verb_list_conjugation_class")
+    ResponseEntity<?> getVerbListWithConjugationClass(@PathVariable("language")Language language) {
+        if (language != Language.SURSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        String data = automaticGenerationService.getVerbListWithConjugationClass(language);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=conjugacziuns_sursilvan.csv");
+        headers.add("Content-Type", "text/csv");
+
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 }

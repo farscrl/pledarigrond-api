@@ -7,9 +7,11 @@ import lombok.Data;
 public class InflectionResultDto {
     InflectionResponse inflectionResponse;
     boolean isCorrect;
+    Integer errorCount;
 
-    InflectionResultDto(InflectionResponse inflectionResponse, boolean isCorrect) {
+    InflectionResultDto(InflectionResponse inflectionResponse, boolean isCorrect, Integer errorCount) {
         this.inflectionResponse = inflectionResponse;
         this.isCorrect = isCorrect;
+        this.errorCount = errorCount;
     }
 }
