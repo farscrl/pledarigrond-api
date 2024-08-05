@@ -42,16 +42,6 @@ public class SursilvanNounGeneratorTest {
     }
 
     @Test
-    public void testRule5() {
-        forms = generator.generateForms("5", "cavagl");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "cavagl");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "cavalla");
-        // irregular, wrong form, correct would be 'cavals'
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "cavagls");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "cavallas");
-    }
-
-    @Test
     public void testRule6() {
         forms = generator.generateForms("6", "figliaster");
         Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "figliaster");

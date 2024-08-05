@@ -63,8 +63,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             switch (parts[1]) {
                 case "bla":
                     return generateForms("4", baseForm);
-                case "alla":
-                    return generateForms("5", baseForm);
                 case "astra":
                     return generateForms("6", baseForm);
                 case "ta":
@@ -140,9 +138,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
         String lastThreeCharacters = baseForm.substring(length - 3);
         if (lastThreeCharacters.equals("bel")) {
             return generateForms("4", baseForm);
-        }
-        if (lastThreeCharacters.equals("agl")) {
-            return generateForms("5", baseForm);
         }
         if (lastThreeCharacters.equals("iel")) {
             return generateForms("14", baseForm);
@@ -224,7 +219,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
                 return maleSingularForm.substring(0, maleSingularForm.length() - 4);
 
             case "4":
-            case "5":
             case "14":
             case "15":
             case "20":
@@ -358,11 +352,6 @@ public class SursilvanNounGenerator extends LanguageNounGeneration {
             case "bel":
                 ns.setMSingular(root + "bel");
                 ns.setFSingular(root + "bla");
-                break;
-
-            case "agl":
-                ns.setMSingular(root + "agl");
-                ns.setFSingular(root + "alla");
                 break;
 
             case "aster":

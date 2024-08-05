@@ -44,17 +44,6 @@ public class SursilvanNounGuessingTest {
     }
 
     @Test
-    public void testRule5() {
-        forms = generator.guessInflection("cavagl", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "5");
-        Assert.assertEquals(forms.getInflectionValues().get("mSingular"), "cavagl");
-        Assert.assertEquals(forms.getInflectionValues().get("fSingular"), "cavalla");
-        // irregular, wrong form, correct would be 'cavals'
-        Assert.assertEquals(forms.getInflectionValues().get("mPlural"), "cavagls");
-        Assert.assertEquals(forms.getInflectionValues().get("fPlural"), "cavallas");
-    }
-
-    @Test
     public void testRule6() {
         forms = generator.guessInflection("figliaster", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "6");
@@ -225,12 +214,6 @@ public class SursilvanNounGuessingTest {
     public void testWithEndingIndicationBla() {
         forms = generator.guessInflection("responsabel, -bla", null, null);
         Assert.assertEquals(forms.getInflectionSubType().id, "4");
-    }
-
-    @Test
-    public void testWithEndingIndicationAlla() {
-        forms = generator.guessInflection("cavagl, -alla", null, null);
-        Assert.assertEquals(forms.getInflectionSubType().id, "5");
     }
 
     @Test

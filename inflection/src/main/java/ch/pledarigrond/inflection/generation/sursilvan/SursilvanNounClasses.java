@@ -13,7 +13,6 @@ public class SursilvanNounClasses {
                     new InflectionSubType("2", "mo feminin", "p.ex. la dunna"),
                     new InflectionSubType("3", "regular", "p.ex. scolast – scolasta"),
                     new InflectionSubType("4", "bel -> bla", "p.ex. responsabel – responsabla"),
-                    new InflectionSubType("5", "agl -> alla", "p.ex. cavagl – cavalla"),
                     new InflectionSubType("6", "aster -> astra", "p.ex. figliaster – figliastra"),
                     new InflectionSubType("7", "at -> atta", "p.ex. tat – tatta"),
                     new InflectionSubType("8", "au -> ada", "p.ex. quinau – quinada"),
