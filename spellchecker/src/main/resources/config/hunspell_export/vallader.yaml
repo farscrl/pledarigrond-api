@@ -1,0 +1,10 @@
+vallader:
+  language_code: "rm-vallader"
+  firefox:
+    id: "rm-vallader@dictionaries.addons.mozilla.org"
+    name: "Spellchecker Rumantsch Vallader"
+  libreoffice:
+    id: "ch.pledarigrond.vallader"
+    description_en: "Romansh Vallader: Spellchecker"
+    description_rm: "Rumantsch Vallader: Correctura ortografica"
+    description_de: "Rumantsch Vallader: Rechtschreibekorrektur"

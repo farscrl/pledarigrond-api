@@ -1,0 +1,10 @@
+puter:
+  language_code: "rm-puter"
+  firefox:
+    id: "rm-puter@dictionaries.addons.mozilla.org"
+    name: "Spellchecker Rumauntsch Puter"
+  libreoffice:
+    id: "ch.pledarigrond.puter"
+    description_en: "Romansh Puter: Spellchecker"
+    description_rm: "Rumauntsch Puter: Correctura ortografica"
+    description_de: "Rumauntsch Puter: Rechtschreibekorrektur"

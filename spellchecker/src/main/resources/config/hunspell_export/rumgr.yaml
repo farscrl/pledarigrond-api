@@ -1,0 +1,10 @@
+rumgr:
+  language_code: "rm-rumgr"
+  firefox:
+    id: "rm@dictionaries.addons.mozilla.org"
+    name: "Spellchecker Rumantsch Grischun"
+  libreoffice:
+    id: "ch.pledarigrond.rumgr"
+    description_en: "Rumantsch Grischun: Spellchecker"
+    description_rm: "Rumantsch Grischun: Correctura ortografica"
+    description_de: "Rumantsch Grischun: Rechtschreibekorrektur"

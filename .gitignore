@@ -4,6 +4,12 @@
 /data/export_tmp
 /data/db_dump
 /data/db_restore
+/data/hunspell/puter/
+/data/hunspell/rumantschgrischun/
+/data/hunspell/surmiran/
+/data/hunspell/sursilvan/
+/data/hunspell/sutsilvan/
+/data/hunspell/vallader/
 
 # macOS
 .DS_Store

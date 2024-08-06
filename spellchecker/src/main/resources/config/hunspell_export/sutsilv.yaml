@@ -1,0 +1,10 @@
+sutsilv:
+  language_code: "rm-sutsilv"
+  firefox:
+    id: "rm-sutsilv@dictionaries.addons.mozilla.org"
+    name: "Spellchecker Rumantsch Sutsilvan"
+  libreoffice:
+    id: "ch.pledarigrond.sutsilvan"
+    description_en: "Romansh Sutsilvan: Spellchecker"
+    description_rm: "Rumantsch Sutsilvan: Correctura ortografica"
+    description_de: "Rumantsch Sutsilvan: Rechtschreibekorrektur"

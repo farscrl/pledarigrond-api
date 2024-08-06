@@ -22,6 +22,10 @@ import org.bson.Document;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,27 +38,32 @@ abstract public class HunspellGenerator {
 
     private final List<Name> names;
 
-    public HunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    private final Language language;
+
+    private Path basePath;
+
+    public HunspellGenerator(Language language, PgEnvironment pgEnvironment, List<Name> names) {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
+        this.language = language;
+        basePath = Paths.get(System.getProperty("user.dir"), "data", "hunspell", language.getName()).normalize();
     }
 
-    public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
-        File dir = new File(pgEnvironment.getTempExportLocation());
-        dir.mkdirs();
-
+    public String generateHunspell() throws NoDatabaseAvailableException, IOException {
         // create dicFile
         Set<String> words = getAllValidWords(language);
-        File dicFile = new File(dir, "rm-" + language.getSubtag() + ".dic");
+        File dicFile = new File(basePath.toFile(), "rm-" + language.getSubtag() + ".dic");
         writeSetToHunspell(dicFile, words);
 
-        // load aff file
-        ClassPathResource resource = new ClassPathResource(language.getName() + "/rm-" + language.getSubtag() + ".aff");
-        File aff = resource.getFile();
+        // copy aff file
+        ClassPathResource affFileResource = new ClassPathResource(language.getName() + "/rm-" + language.getSubtag() + ".aff");
+        try (InputStream inputStream = affFileResource.getInputStream()) {
+            Files.copy(inputStream, basePath.resolve("rm-" + language.getSubtag() + ".aff"), StandardCopyOption.REPLACE_EXISTING);
+        }
 
         // create version file
-        File versionFile = new File(dir, "rm-" + language.getSubtag()+ "_version.txt");
-        String versionAndBuild = "";
+        File versionFile = new File(basePath.toFile(), "rm-" + language.getSubtag()+ "_version.txt");
+        String versionAndBuild;
         try {
             SimpleDateFormat buildDateFormat = new SimpleDateFormat("yyMMdd.HHmmss");
             Date now = new Date();
@@ -75,7 +84,7 @@ abstract public class HunspellGenerator {
         }
 
         // create licence file
-        File licenceFile = new File(dir, "rm-" + language.getSubtag()+ "_LICENSE.txt");
+        File licenceFile = new File(basePath.toFile(), "rm-" + language.getSubtag()+ "_LICENSE.txt");
         try {
             SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
             Date now = new Date();
@@ -91,6 +100,20 @@ abstract public class HunspellGenerator {
         } catch (TemplateException e) {
             throw new RuntimeException(e);
         }
+
+        return versionAndBuild;
+    }
+
+    public File exportHunspell() throws NoDatabaseAvailableException, IOException {
+        String versionAndBuild = generateHunspell();
+
+        File dir = new File(pgEnvironment.getTempExportLocation());
+        dir.mkdirs();
+
+        File aff = basePath.resolve("rm-" + language.getSubtag() + ".aff").toFile();
+        File dicFile = basePath.resolve("rm-" + language.getSubtag() + ".dic").toFile();
+        File versionFile = basePath.resolve("rm-" + language.getSubtag() + "_version.txt").toFile();
+        File licenceFile = basePath.resolve("rm-" + language.getSubtag() + "_LICENSE.txt").toFile();
 
         // write Zip
         List<File> files = new ArrayList<>();

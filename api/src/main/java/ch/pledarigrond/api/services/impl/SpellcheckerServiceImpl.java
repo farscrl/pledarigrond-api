@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
         List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
-        return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell(language);
+        return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell();
     }
 
     public File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException {

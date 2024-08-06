@@ -1,0 +1,10 @@
+surmiran:
+  language_code: "rm-surmiran"
+  firefox:
+    id: "rm-surmiran@dictionaries.addons.mozilla.org"
+    name: "Spellchecker Rumantsch Surmiran"
+  libreoffice:
+    id: "ch.pledarigrond.surmiran"
+    description_en: "Romansh Surmiran: Spellchecker"
+    description_rm: "Rumantsch Surmiran: Correctura ortografica"
+    description_de: "Rumantsch Surmiran: Rechtschreibekorrektur"

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SursilvanHunspellGenerator extends HunspellGenerator {
     public SursilvanHunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
-        super(pgEnvironment, names);
+        super(Language.SURSILVAN, pgEnvironment, names);
     }
 
     @Override

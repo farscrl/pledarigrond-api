@@ -1,6 +1,7 @@
 package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.names.entities.Name;
@@ -16,7 +17,7 @@ import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
 
 public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
     public RumantschgrischunHunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
-        super(pgEnvironment, names);
+        super(Language.RUMANTSCHGRISCHUN, pgEnvironment, names);
     }
 
     @Override
