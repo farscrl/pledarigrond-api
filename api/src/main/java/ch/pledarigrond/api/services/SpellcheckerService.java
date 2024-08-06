@@ -8,5 +8,6 @@ import java.io.IOException;
 
 public interface SpellcheckerService {
     File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException;
+    void generateAndCommit() throws NoDatabaseAvailableException, IOException;
     File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException;
 }

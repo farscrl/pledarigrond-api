@@ -9,13 +9,17 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
 import ch.pledarigrond.spellchecker.generator.pos.*;
+import ch.pledarigrond.spellchecker.model.GitDataDto;
+import ch.pledarigrond.spellchecker.utils.GitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,11 +34,55 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Autowired
     private NameService nameService;
 
+
+    @Value("${git.hunspell.repo.path}")
+    private String repoPath;
+
+    @Value("${git.hunspell.remote.url}")
+    private String remoteUrl;
+
+    @Value("${git.hunspell.remote.branch}")
+    private String remoteBranch;
+
+    @Value("${git.hunspell.token}")
+    private String gitToken;
+
+    @Override
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
         List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
         return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell();
     }
 
+    @Override
+    public void generateAndCommit() throws NoDatabaseAvailableException, IOException {
+        long startTime = System.currentTimeMillis();
+
+        List<Language> activeLanguages = new ArrayList<>(List.of(new Language[]{
+                // Language.PUTER,
+                Language.RUMANTSCHGRISCHUN,
+                Language.SURMIRAN,
+                // Language.SURSILVAN,
+                Language.SUTSILVAN,
+                // Language.VALLADER
+        }));
+        List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
+
+        for (Language language : activeLanguages) {
+            HunspellGenerator generator = getGeneratorForLanguage(language, names);
+            generator.generateHunspell();
+        }
+
+        GitDataDto gitData = new GitDataDto(repoPath, remoteUrl, remoteBranch, gitToken);
+
+        GitUtil gitUtil = new GitUtil(activeLanguages);
+        gitUtil.commit(gitData);
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = (endTime - startTime) / 1000;
+        logger.info("Execution time: {}s", executionTime);
+    }
+
+    @Override
     public File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException {
         List<Name> names = nameService.getAllNames(new Pagination(100000, 0), null, null).stream().toList();
         return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language);

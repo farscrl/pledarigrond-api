@@ -6,6 +6,7 @@ import ch.pledarigrond.common.data.common.Language;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,18 @@ public class SpellcheckerController {
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
             stream(response, export);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/generate_hunspell")
+    ResponseEntity<Void> generateHunspell(@PathVariable("language")Language language, HttpServletResponse response) {
+        try {
+            spellcheckerService.generateAndCommit();
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
