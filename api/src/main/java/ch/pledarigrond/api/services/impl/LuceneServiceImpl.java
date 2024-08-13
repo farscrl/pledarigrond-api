@@ -11,7 +11,7 @@ import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.lucene.core.LuceneIndex;
+import ch.pledarigrond.lucene.core.LuceneIndexManager;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
@@ -36,16 +36,16 @@ public class LuceneServiceImpl implements LuceneService {
     @Autowired
     private PgEnvironment pgEnvironment;
 
-    private final Map<Language, LuceneIndex> luceneIndexMap = new HashMap<>();
+    private final Map<Language, LuceneIndexManager> luceneIndexMap = new HashMap<>();
 
     @PostConstruct
     public void initialize() throws IOException {
-        luceneIndexMap.put(Language.PUTER, new LuceneIndex(pgEnvironment.getLuceneConfigPuter()));
-        luceneIndexMap.put(Language.RUMANTSCHGRISCHUN, new LuceneIndex(pgEnvironment.getLuceneConfigRumantschgrischun()));
-        luceneIndexMap.put(Language.SURMIRAN, new LuceneIndex(pgEnvironment.getLuceneConfigSurmiran()));
-        luceneIndexMap.put(Language.SURSILVAN, new LuceneIndex(pgEnvironment.getLuceneConfigSursilvan()));
-        luceneIndexMap.put(Language.SUTSILVAN, new LuceneIndex(pgEnvironment.getLuceneConfigSutsilvan()));
-        luceneIndexMap.put(Language.VALLADER, new LuceneIndex(pgEnvironment.getLuceneConfigVallader()));
+        luceneIndexMap.put(Language.PUTER, new LuceneIndexManager(pgEnvironment.getLuceneConfigPuter()));
+        luceneIndexMap.put(Language.RUMANTSCHGRISCHUN, new LuceneIndexManager(pgEnvironment.getLuceneConfigRumantschgrischun()));
+        luceneIndexMap.put(Language.SURMIRAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSurmiran()));
+        luceneIndexMap.put(Language.SURSILVAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSursilvan()));
+        luceneIndexMap.put(Language.SUTSILVAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSutsilvan()));
+        luceneIndexMap.put(Language.VALLADER, new LuceneIndexManager(pgEnvironment.getLuceneConfigVallader()));
     }
 
     @Override

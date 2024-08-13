@@ -21,7 +21,7 @@ import java.util.*;
 
 public class TestDefaultQueryBuilder {
 	
-	private LuceneIndex luceneIndex;
+	private LuceneIndexManager luceneIndexManager;
 
 	private File indexDir;
 
@@ -34,7 +34,7 @@ public class TestDefaultQueryBuilder {
 		indexDir.mkdir();
 		file.deleteOnExit();
 		LuceneConfiguration luceneConfiguration = new LuceneConfiguration(language, indexDir.getAbsolutePath());
-		luceneIndex = new LuceneIndex(luceneConfiguration);
+		luceneIndexManager = new LuceneIndexManager(luceneConfiguration);
 		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("dictionary.tsv");
 		BufferedReader br = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
 		String line = null;
@@ -52,7 +52,7 @@ public class TestDefaultQueryBuilder {
 			counter++;
 			entries.add(entry);
 		}
-		luceneIndex.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.iterator());
 	}
 	
 	@After
@@ -62,7 +62,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testPrefixQuery() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndex.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.PREFIX, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.PREFIX, "haus"), getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"hausen", "Haushalt", "Haus"};
 		validateResult(found, expected);
@@ -70,7 +70,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testInfixQuery() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndex.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.INTERN, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.INTERN, "haus"), getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"nach Hause", "Das Haus brennt", "Flohausstellung", "hausen", "Haushalt", "zu Hause", "Wohnhaus", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -78,7 +78,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testSuffix() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndex.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.SUFFIX, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.SUFFIX, "haus"), getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Wohnhaus", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -86,7 +86,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testExact() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndex.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.EXACT, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.EXACT, "haus"), getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Haus"};
 		validateResult(found, expected);
@@ -94,7 +94,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testDefault() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndex.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.NORMAL, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.NORMAL, "haus"), getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Das Haus brennt", "hausen", "Haushalt", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -102,7 +102,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testExactQuery() throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
-		Page<LemmaVersion> result = luceneIndex.queryExact("haus", DictionaryLanguage.GERMAN);
+		Page<LemmaVersion> result = luceneIndexManager.queryExact("haus", DictionaryLanguage.GERMAN);
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Haus"};
 		validateResult(found, expected);
