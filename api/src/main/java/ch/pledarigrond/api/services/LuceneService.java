@@ -30,8 +30,6 @@ public interface LuceneService {
 
     IndexStatistics getIndexStatistics(Language language);
 
-    void reloadIndex(Language language) throws NoIndexAvailableException;
-
     void dropIndex(Language language) throws IndexException;
 
     void addToIndex(Language language, Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException;

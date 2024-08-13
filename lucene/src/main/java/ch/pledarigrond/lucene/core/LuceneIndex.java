@@ -77,8 +77,6 @@ public class LuceneIndex {
 
 	private final NumberFormat formatter;
 
-	private final Map<Language, LuceneIndexRam> luceneIndexRam = new HashMap<>();
-
 	private final Map<Language, LuceneIndexFilesystem> luceneIndexFilesystem = new HashMap<>();
 
 	private IndexManager indexManager;
@@ -95,7 +93,6 @@ public class LuceneIndex {
 	}
 
 	public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) throws IOException {
-		luceneIndexRam.put(this.language, new LuceneIndexRam(luceneConfiguration));
 		luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
 		luceneIndexFilesystem.get(this.language).initialize();
 		luceneIndexFilesystem.get(this.language).resetIndexDirectory();
@@ -138,7 +135,7 @@ public class LuceneIndex {
 		long e1 = System.nanoTime();
 		try {
 			long s2 = System.nanoTime();
-			docs = luceneIndexRam.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
+			docs = luceneIndexFilesystem.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
 			long e2 = System.nanoTime();
 			result = toLemmaVersionPagination(docs, pageNr, pageSize);
 			if(logger.isDebugEnabled()) {
@@ -175,7 +172,7 @@ public class LuceneIndex {
 	private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
 		final ArrayList<LemmaVersion> results = new ArrayList<>(pageSize);
 		final ScoreDoc[] scoreDocs = docs.scoreDocs;
-		IndexSearcher searcher = luceneIndexRam.get(language).getSearcher();
+		IndexSearcher searcher = luceneIndexFilesystem.get(language).getSearcher();
 		for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
 			Document doc = searcher.doc(scoreDocs[i].doc);
 			LemmaVersion e = indexManager.getLemmaVersion(doc);
@@ -206,7 +203,7 @@ public class LuceneIndex {
 			bc.add(qBuilder.build(), Occur.MUST);
 			bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())),Occur.MUST);
 			qBuilder = bc;
-			TopDocs docs = luceneIndexRam.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
+			TopDocs docs = luceneIndexFilesystem.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
 
 			return toLemmaVersionPagination(docs, 0, pageSize);
 		} catch (IOException e) {
@@ -220,11 +217,11 @@ public class LuceneIndex {
 		final IndexStatistics statistics = new IndexStatistics();
 		try {
 			queue.push(language -> {
-                int all = luceneIndexRam.get(language).getSearcher().getIndexReader().numDocs();
+                int all = luceneIndexFilesystem.get(language).getSearcher().getIndexReader().numDocs();
                 int unverified = 0;
                 int approved = 0;
                 int unknown = 0;
-                IndexReader reader = luceneIndexRam.get(language).getSearcher().getIndexReader();
+                IndexReader reader = luceneIndexFilesystem.get(language).getSearcher().getIndexReader();
                 HashMap<String, Integer> byInflectionType = new HashMap<>();
                 for (int i = 0; i < all; i++) {
                     Document document = reader.document(i);
@@ -266,7 +263,7 @@ public class LuceneIndex {
 
 		GroupingSearch groupingSearch = new GroupingSearch(fieldName);
 		groupingSearch.setGroupDocsLimit(limit);
-		TopGroups<BytesRef> result = groupingSearch.search(luceneIndexRam.get(language).getSearcher(), query, 0, 10000);
+		TopGroups<BytesRef> result = groupingSearch.search(luceneIndexFilesystem.get(language).getSearcher(), query, 0, 10000);
 
 		GroupDocs<BytesRef>[] groups = result.groups;
         for (GroupDocs<BytesRef> group : groups) {
@@ -305,7 +302,7 @@ public class LuceneIndex {
 		for (String[] field : fields) {
 			GroupingSearch groupingSearch = new GroupingSearch(field[1]);
 			groupingSearch.setGroupDocsLimit(limit);
-			TopGroups<BytesRef> result = groupingSearch.search(luceneIndexRam.get(language).getSearcher(), query, 0, 10000);
+			TopGroups<BytesRef> result = groupingSearch.search(luceneIndexFilesystem.get(language).getSearcher(), query, 0, 10000);
 
 			GroupDocs<BytesRef>[] groups = result.groups;
             for (GroupDocs<BytesRef> group : groups) {
@@ -323,18 +320,6 @@ public class LuceneIndex {
             }
 		}
 		return getLimitedResults(limit, allValues);
-	}
-
-	public void reloadIndex() throws NoIndexAvailableException {
-		try {
-			queue.push(language -> {
-                logger.info("Reloading index...");
-                luceneIndexRam.get(language).reloadIndex();
-                logger.info("Index reloaded");
-            });
-		} catch (Exception e) {
-			throw new NoIndexAvailableException(e);
-		}
 	}
 
 	public void addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
@@ -360,7 +345,6 @@ public class LuceneIndex {
 			queue.push(language -> {
                 long start = System.currentTimeMillis();
                 luceneIndexFilesystem.get(language).update(entry);
-                luceneIndexRam.get(language).update(entry);
                 long end = System.currentTimeMillis();
                 logger.info("Index update for entry " + entry.getId()
                         + " completed after " + (end - start) + " ms.");
@@ -378,7 +362,6 @@ public class LuceneIndex {
 				@Override
 				public void execute(Language language) throws Exception {
 					luceneIndexFilesystem.get(language).delete(entry);
-					luceneIndexRam.get(language).delete(entry);
 				}
 			});
 		} catch (Exception e) {

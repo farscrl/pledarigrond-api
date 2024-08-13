@@ -82,7 +82,6 @@ public class TestIndexCRUD {
 	@Test
 	public void testDropIndex() throws Exception  {
 		luceneIndex.dropIndex();
-		luceneIndex.reloadIndex();
 		IndexStatistics statistics = luceneIndex.getIndexStatistics();
 		Assert.assertEquals(0, statistics.getNumberOfEntries());
 	}
@@ -96,7 +95,6 @@ public class TestIndexCRUD {
 			entries.add(generateValidEntry());
 		}
 		luceneIndex.addToIndex(entries.iterator());
-		luceneIndex.reloadIndex();
 		IndexStatistics statistics = luceneIndex.getIndexStatistics();
 		Assert.assertEquals(entries.size(),statistics.getNumberOfEntries());
 	}
@@ -110,7 +108,6 @@ public class TestIndexCRUD {
 			entries.add(generateValidEntry());
 		}
 		luceneIndex.addToIndex(entries.iterator());
-		luceneIndex.reloadIndex();
 		IndexStatistics afterUpdate = luceneIndex.getIndexStatistics();
 		Assert.assertEquals(afterUpdate.getNumberOfEntries(), beforeUpdate.getNumberOfEntries() * 2);
 	}

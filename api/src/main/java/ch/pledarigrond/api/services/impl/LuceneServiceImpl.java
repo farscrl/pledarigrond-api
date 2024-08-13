@@ -72,11 +72,6 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public void reloadIndex(Language language) throws NoIndexAvailableException {
-        luceneIndexMap.get(language).reloadIndex();
-    }
-
-    @Override
     public void dropIndex(Language language) throws IndexException {
         luceneIndexMap.get(language).dropIndex();
     }

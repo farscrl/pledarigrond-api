@@ -20,14 +20,19 @@ import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.IndexException;
+import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.similarities.BasicStats;
+import org.apache.lucene.search.similarities.SimilarityBase;
+import org.apache.lucene.store.MMapDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,15 +43,19 @@ import java.util.*;
 
 /**
  * Helper class used by {@link LuceneIndex}. It manages the lucene index
- * held in a {@link NIOFSDirectory}.
+ * held in a {@link MMapDirectory}.
  *
  */
 class LuceneIndexFilesystem {
 
+	private static final Logger logger = LoggerFactory.getLogger(LuceneIndexFilesystem.class);
+
 	private LuceneConfiguration luceneConfiguration;
 
-	private static final Logger logger = LoggerFactory.getLogger(LuceneIndexFilesystem.class);
-	private NIOFSDirectory indexDirectory;
+	private IndexSearcher searcher;
+
+	private MMapDirectory indexDirectory;
+	private DirectoryReader reader;
 	private Analyzer analyzer;
 	private final boolean tracing = logger.isTraceEnabled();
 	private IndexManager indexManager;
@@ -65,7 +74,39 @@ class LuceneIndexFilesystem {
 		analyzer = LuceneHelper.newWhitespaceAnalyzer();
 		indexManager = IndexManager.getInstance();
 	}
-	
+
+	IndexSearcher getSearcher() throws NoIndexAvailableException {
+		if (searcher == null) {
+			createSearcher();
+		}
+		return searcher;
+	}
+
+	private synchronized void createSearcher() throws NoIndexAvailableException {
+		if (searcher == null) {
+			try {
+				reader = DirectoryReader.open(indexDirectory);
+				searcher = new IndexSearcher(reader);
+				searcher.setSimilarity(new SimilarityBase() {
+
+					@Override
+					public String toString() {
+						return "Constant Similarity";
+					}
+
+					@Override
+					protected double score(BasicStats basicStats, double freq, double docLen) {
+						return basicStats.getBoost();
+					}
+				});
+				logger.info("Searcher created.");
+			} catch (IOException e) {
+				throw new NoIndexAvailableException("Failed to load index", e);
+			}
+		}
+	}
+
+
 	int addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
 		logger.info("Indexing...");
 		int counter = 0;
@@ -89,7 +130,7 @@ class LuceneIndexFilesystem {
 		if(indexDirectory != null) {
 			indexDirectory.close();
 		}
-		indexDirectory = new NIOFSDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
+		indexDirectory = new MMapDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
 	}
 
 	private IndexWriter initIndexWriter() throws IOException {
@@ -180,7 +221,12 @@ class LuceneIndexFilesystem {
 				writer.addDocument(document);
 			}
 		}
+		writer.commit();
 		writer.close();
+
+		reader.close();
+		reader = DirectoryReader.open(indexDirectory);
+		searcher = new IndexSearcher(reader);
 	}
 
 	void delete(LexEntry entry) throws IOException {
@@ -189,6 +235,10 @@ class LuceneIndexFilesystem {
 		writer.deleteDocuments(queryTerm);
 		writer.commit();
 		writer.close();
+
+		reader.close();
+		reader = DirectoryReader.open(indexDirectory);
+		searcher = new IndexSearcher(reader);
 	}
 
 	public long getLastUpdated() {

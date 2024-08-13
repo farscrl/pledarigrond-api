@@ -65,9 +65,7 @@ public class AdminServiceImpl implements AdminService {
         Iterator<LexEntry> iterator = db.getEntries();
         luceneService.dropIndex(language);
         luceneService.addToIndex(language, iterator);
-        logger.info("Index has been created, swapping to RAM...");
-        luceneService.reloadIndex(language);
-        logger.info("RAM-Index updated!");
+        logger.info("Index has been created");
     }
 
     @Override
