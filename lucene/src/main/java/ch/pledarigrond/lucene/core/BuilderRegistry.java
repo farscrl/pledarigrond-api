@@ -13,13 +13,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Querying the index is done by using prepared query builders. This
+ * registry contains all query builders which are used to generate
+ * the queries.
+ */
 public class BuilderRegistry {
     private static final Logger logger = LoggerFactory.getLogger(BuilderRegistry.class);
 
     private final Map<String, AbstractQueryBuilder> builderMap = new HashMap<>();
 
-    public BuilderRegistry() {
+    private static BuilderRegistry instance;
+
+    private BuilderRegistry() {
         this.init();
+    }
+
+    public static BuilderRegistry getInstance() {
+        if (instance == null) {
+            instance = new BuilderRegistry();
+        }
+        return instance;
     }
 
     public AbstractQueryBuilder getBuilder(SearchDirection direction, SearchMethod method) {

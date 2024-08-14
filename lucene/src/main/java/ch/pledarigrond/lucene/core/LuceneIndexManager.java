@@ -167,10 +167,10 @@ public class LuceneIndexManager {
         List<Query> queries;
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
-            queries = indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
+            queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
             sortField = new SortField("DStichwort_sort", Type.INT);
         } else {
-            queries = indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
+            queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
             sortField = new SortField("RStichwort_sort", Type.INT);
         }
         int pageSize = 120;
@@ -311,7 +311,7 @@ public class LuceneIndexManager {
     }
 
     private Query getSuggestionsQuery(String fieldName, String value) {
-        List<Query> parts = indexManager.getBuilderRegistry().getSuggestionQueries(fieldName, value);
+        List<Query> parts = BuilderRegistry.getInstance().getSuggestionQueries(fieldName, value);
         return createSimpleQuery(parts);
     }
 
@@ -322,21 +322,21 @@ public class LuceneIndexManager {
         if (searchCriteria.getSearchPhrase() != null && !searchCriteria.getSearchPhrase().isEmpty()) {
             List<Query> searchPhraseQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN -> Stream.of(
-                        indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                        BuilderRegistry.getInstance().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
                 case ROMANSH -> Stream.of(
-                        indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                        BuilderRegistry.getInstance().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
 
                 case BOTH -> Stream.of(
-                        indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
-                        indexManager.getBuilderRegistry().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
+                        BuilderRegistry.getInstance().getBuilder(SearchDirection.GERMAN, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getBuilder(SearchDirection.ROMANSH, searchCriteria.getSearchMethod()).transform(searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getTagQueries(SearchDirection.GERMAN, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getTagQueries(SearchDirection.ROMANSH, searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase()),
+                        BuilderRegistry.getInstance().getEtymologyQueries(searchCriteria.getSearchMethod(), searchCriteria.getSearchPhrase())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery.Builder part = new BooleanQuery.Builder();
@@ -349,12 +349,12 @@ public class LuceneIndexManager {
         if (searchCriteria.getGender() != null) {
             List<Query> genderQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN ->
-                        indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
+                        BuilderRegistry.getInstance().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender());
                 case ROMANSH ->
-                        indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
+                        BuilderRegistry.getInstance().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender());
                 case BOTH -> Stream.of(
-                        indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()),
-                        indexManager.getBuilderRegistry().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
+                        BuilderRegistry.getInstance().getGenderBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGender()),
+                        BuilderRegistry.getInstance().getGenderBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGender())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery.Builder part = new BooleanQuery.Builder();
@@ -367,12 +367,12 @@ public class LuceneIndexManager {
         if (searchCriteria.getGrammar() != null) {
             List<Query> grammarQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN ->
-                        indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
+                        BuilderRegistry.getInstance().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar());
                 case ROMANSH ->
-                        indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
+                        BuilderRegistry.getInstance().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar());
                 case BOTH -> Stream.of(
-                        indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()),
-                        indexManager.getBuilderRegistry().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
+                        BuilderRegistry.getInstance().getGrammarBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getGrammar()),
+                        BuilderRegistry.getInstance().getGrammarBuilder(SearchDirection.GERMAN).transform(searchCriteria.getGrammar())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery.Builder part = new BooleanQuery.Builder();
@@ -385,12 +385,12 @@ public class LuceneIndexManager {
         if (searchCriteria.getSubSemantics() != null) {
             List<Query> subSemanticsQueries = switch (searchCriteria.getSearchDirection()) {
                 case GERMAN ->
-                        indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
+                        BuilderRegistry.getInstance().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics());
                 case ROMANSH ->
-                        indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
+                        BuilderRegistry.getInstance().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics());
                 case BOTH -> Stream.of(
-                        indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()),
-                        indexManager.getBuilderRegistry().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
+                        BuilderRegistry.getInstance().getSubSemanticsBuilder(SearchDirection.ROMANSH).transform(searchCriteria.getSubSemantics()),
+                        BuilderRegistry.getInstance().getSubSemanticsBuilder(SearchDirection.GERMAN).transform(searchCriteria.getSubSemantics())
                 ).flatMap(Collection::stream).collect(Collectors.toList());
             };
             BooleanQuery.Builder part = new BooleanQuery.Builder();
@@ -401,7 +401,7 @@ public class LuceneIndexManager {
         }
 
         if (searchCriteria.getCategory() != null) {
-            List<Query> categoryQueries = indexManager.getBuilderRegistry().getCategoryBuilder().transform(searchCriteria.getCategory());
+            List<Query> categoryQueries = BuilderRegistry.getInstance().getCategoryBuilder().transform(searchCriteria.getCategory());
             BooleanQuery.Builder part = new BooleanQuery.Builder();
             for (Query tf : categoryQueries) {
                 part.add(tf, BooleanClause.Occur.SHOULD);
@@ -475,7 +475,7 @@ public class LuceneIndexManager {
     }
 
     private Query buildStartsWithQuery(SearchDirection searchDirection, String prefix) {
-        List<Query> queries = indexManager.getBuilderRegistry().getStartsWithBuilder(searchDirection).transform(prefix);
+        List<Query> queries = BuilderRegistry.getInstance().getStartsWithBuilder(searchDirection).transform(prefix);
         return createSimpleQuery(queries);
     }
 

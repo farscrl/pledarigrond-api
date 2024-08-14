@@ -27,13 +27,6 @@ public class IndexManager {
     protected Map<String, List<IndexedColumn>> dbFieldMapping = new HashMap<>();
 
     /**
-     * Querying the index is done by using prepared query builders. This
-     * registry contains all query builders which are used to generate
-     * the queries.
-     */
-    protected BuilderRegistry builderRegistry = new BuilderRegistry();
-
-    /**
      * Contains all field names which are ignored when generating the index.
      * A field is ignored if it has not been set up in the indexConfiguration-
      * section of the search configuration. For each ignored field, a warning
@@ -72,7 +65,7 @@ public class IndexManager {
         allColumns = extractListOfAllColumns(finalColumnSet);
 
         // add fields for sorting used by query builders
-        finalColumnSet.addAll(builderRegistry.getAllRegisteredColumns());
+        finalColumnSet.addAll(BuilderRegistry.getInstance().getAllRegisteredColumns());
 
         // Got all lucene fields, now create field factories to ensure that they will
         // be created and filled when a new entry is inserted.
@@ -84,10 +77,6 @@ public class IndexManager {
             List<IndexedColumn> fields = dbFieldMapping.computeIfAbsent(item.getSourceColumnName(), k -> new ArrayList<>());
             fields.add(item);
         }
-    }
-
-    public BuilderRegistry getBuilderRegistry() {
-        return builderRegistry;
     }
 
     public Document getDocument(LexEntry lexEntry, LemmaVersion lemmaVersion) {
