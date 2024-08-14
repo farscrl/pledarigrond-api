@@ -11,7 +11,7 @@ public class DatabaseFields {
     public static List<IndexedColumn> getDatabaseColumns() {
         return Arrays.asList(
                 new IndexedColumn("DStichwort", FieldType.STRING_SORTED),
-                new IndexedColumn("DStichwort_sort", FieldType.STRING_SORTED),
+                new IndexedColumn("DStichwort_sort", FieldType.INTEGER_SORTED),
                 new IndexedColumn("DSemantik"),
                 new IndexedColumn("DSubsemantik"),
                 new IndexedColumn("DGrammatik", FieldType.STRING_SORTED),
@@ -19,7 +19,7 @@ public class DatabaseFields {
                 new IndexedColumn("DStatus"),
                 new IndexedColumn("DTags"),
                 new IndexedColumn("RStichwort", FieldType.STRING_SORTED),
-                new IndexedColumn("RStichwort_sort", FieldType.STRING_SORTED),
+                new IndexedColumn("RStichwort_sort", FieldType.INTEGER_SORTED),
                 new IndexedColumn("RSemantik"),
                 new IndexedColumn("RSubsemantik"),
                 new IndexedColumn("RGrammatik", FieldType.STRING_SORTED),

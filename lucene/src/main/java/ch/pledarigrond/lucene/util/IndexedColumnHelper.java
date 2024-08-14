@@ -28,6 +28,7 @@ public class IndexedColumnHelper {
             case STRING -> List.of(new StringField(field.getIndexFieldName(), value, stored));
             case TEXT -> List.of(new TextField(field.getIndexFieldName(), value, stored));
             case STRING_SORTED -> stringSorted(field.getIndexFieldName(), value, stored);
+            case INTEGER_SORTED -> integerSorted(field.getIndexFieldName(), value, stored);
             case SEMICOLON_SEPERATED -> semicolonFields(field.getIndexFieldName(), value, stored);
         };
     }
@@ -48,6 +49,24 @@ public class IndexedColumnHelper {
         fields.add(new SortedDocValuesField(name, new BytesRef(value)));
         if (stored == Field.Store.YES) {
             fields.add(new StoredField(name, value));
+        }
+        return fields;
+    }
+
+    private static List<IndexableField> integerSorted(String name, String value, Field.Store stored) {
+        // fields copied from old filemaker solutions contain strings and not integers.
+        // all fields are set to 0 (only in the lucene index) if the value is not an integer.
+        int val = 0;
+        try {
+            val = Integer.parseInt(value);
+        } catch(NumberFormatException e){
+            //ignore
+        }
+
+        List<IndexableField> fields = new ArrayList<>();
+        fields.add(new NumericDocValuesField(name, val));
+        if (stored == Field.Store.YES) {
+            fields.add(new StoredField(name, val));
         }
         return fields;
     }

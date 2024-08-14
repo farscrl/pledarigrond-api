@@ -38,10 +38,18 @@ public enum FieldType {
 	STRING,
 
 	/**
-	 * Since Lucene 5.0, a special field type is needed for sorting. This type adds two fields to the index, one
+	 * A special field type is needed for sorting, as this type adds two fields to the index, one
 	 * optimized for sorting and one for retrieving the original data.
+	 * This type is used to sort strings.
 	 */
 	STRING_SORTED,
+
+	/**
+	 * A special field type is needed for sorting, as this type adds two fields to the index, one
+	 * optimized for sorting and one for retrieving the original data.
+	 * This type is used to sort integers.
+	 */
+	INTEGER_SORTED,
 	
 	/**
 	 * Multiple fields of type STRING, separated by semicolons.

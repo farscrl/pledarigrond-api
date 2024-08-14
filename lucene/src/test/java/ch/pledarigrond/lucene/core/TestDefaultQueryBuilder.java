@@ -3,8 +3,6 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -62,7 +60,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testPrefixQuery() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.PREFIX, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.GERMAN, SearchMethod.PREFIX, "haus"), IndexTestHelpers.getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"hausen", "Haushalt", "Haus"};
 		validateResult(found, expected);
@@ -70,7 +68,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testInfixQuery() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.INTERN, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.GERMAN, SearchMethod.INTERN, "haus"), IndexTestHelpers.getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"nach Hause", "Das Haus brennt", "Flohausstellung", "hausen", "Haushalt", "zu Hause", "Wohnhaus", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -78,7 +76,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testSuffix() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.SUFFIX, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.GERMAN, SearchMethod.SUFFIX, "haus"), IndexTestHelpers.getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Wohnhaus", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -86,7 +84,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testExact() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.EXACT, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.GERMAN, SearchMethod.EXACT, "haus"), IndexTestHelpers.getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Haus"};
 		validateResult(found, expected);
@@ -94,7 +92,7 @@ public class TestDefaultQueryBuilder {
 	
 	@Test
 	public void testDefault() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
-		Page<LemmaVersion> result = luceneIndexManager.query(getSearchCriteria(SearchDirection.GERMAN, SearchMethod.NORMAL, "haus"), getPagination());
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.GERMAN, SearchMethod.NORMAL, "haus"), IndexTestHelpers.getPagination());
 		Set<String> found = getStrings("DStichwort", result);
 		String[] expected = new String[] {"Das Haus brennt", "hausen", "Haushalt", "Haus", "Kranken(haus)"};
 		validateResult(found, expected);
@@ -118,17 +116,7 @@ public class TestDefaultQueryBuilder {
 		return toReturn;
 	}
 
-	private SearchCriteria getSearchCriteria(SearchDirection direction, SearchMethod method, String searchPhrase) {
-		SearchCriteria query = new SearchCriteria();
-		query.setSearchDirection(direction);
-		query.setSearchMethod(method);
-		query.setSearchPhrase(searchPhrase);
-		return query;
-	}
 
-	private Pagination getPagination() {
-		return new Pagination();
-	}
 
 	private void validateResult(Set<String> found, String[] expected) {
 		List<String> expectedList = Arrays.asList(expected);

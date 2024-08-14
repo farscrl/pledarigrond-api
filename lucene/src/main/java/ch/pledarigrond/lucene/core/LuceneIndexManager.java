@@ -100,10 +100,10 @@ public class LuceneIndexManager {
         fields[0] = SortField.FIELD_SCORE;
         if (searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
             fields[1] = new SortField("RStichwort", Type.STRING);
-            fields[2] = new SortField("RStichwort_sort", Type.STRING);
+            fields[2] = new SortField("RStichwort_sort", Type.INT);
         } else {
             fields[1] = new SortField("DStichwort", Type.STRING);
-            fields[2] = new SortField("DStichwort_sort", Type.STRING);
+            fields[2] = new SortField("DStichwort_sort", Type.INT);
         }
         Sort sort = new Sort(fields);
         Page<LemmaVersion> result;
@@ -168,10 +168,10 @@ public class LuceneIndexManager {
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
             queries = indexManager.getBuilderRegistry().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("DStichwort_sort", Type.STRING);
+            sortField = new SortField("DStichwort_sort", Type.INT);
         } else {
             queries = indexManager.getBuilderRegistry().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("RStichwort_sort", Type.STRING);
+            sortField = new SortField("RStichwort_sort", Type.INT);
         }
         int pageSize = 120;
         try {

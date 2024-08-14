@@ -1,14 +1,13 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.data.domain.Page;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class TestIndexCRUD {
 	public void beforeTest() throws Exception {
 		Language language = Language.SURMIRAN;
 		File file = File.createTempFile("pledarigrond", "test");
-		indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID().toString() + "_idx");
+		indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID() + "_idx");
 		Assert.assertFalse(indexDir.exists());
 		indexDir.mkdir();
 		file.deleteOnExit();
@@ -35,14 +34,15 @@ public class TestIndexCRUD {
 	}
 	
 	@After
-	public void afterTest() throws Exception {
+	public void afterTest() {
 		deleteRecursive(indexDir);
 	}
 	
 	private void deleteRecursive(File fileOrDir) {
 		if(fileOrDir.isDirectory()) {
 			File[] files = fileOrDir.listFiles();
-			for (File file : files) {
+            assert files != null;
+            for (File file : files) {
 				deleteRecursive(file);
 			}
 		} else {
@@ -77,7 +77,7 @@ public class TestIndexCRUD {
 	@Test
 	public void testCreateIndex() throws Exception  {
 		testDropIndex();
-		List<LexEntry> entries = new ArrayList<LexEntry>();
+		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
 		}
@@ -90,12 +90,37 @@ public class TestIndexCRUD {
 	public void testUpdateIndex() throws Exception  {
 		testCreateIndex();
 		IndexStatistics beforeUpdate = luceneIndexManager.getIndexStatistics();
-		List<LexEntry> entries = new ArrayList<LexEntry>();
+		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
 		}
 		luceneIndexManager.addToIndex(entries.iterator());
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
 		Assert.assertEquals(afterUpdate.getNumberOfEntries(), beforeUpdate.getNumberOfEntries() * 2);
+	}
+
+	@Test
+	public void testSortOrder() throws Exception {
+		// The number must be greater than 10 to cover the case with several digits.
+		int numberOfEntries = 12;
+
+		testDropIndex();
+		List<LexEntry> entries = new ArrayList<>();
+		for(int i = 0;  i < numberOfEntries; i++) {
+			LexEntry entry = generateValidEntry();
+			entry.getCurrent().putEntryValue("DStichwort", "a" + i);
+			entry.getCurrent().putEntryValue("RStichwort", "b");
+			entry.getCurrent().putEntryValue("RStichwort_sort", String.valueOf(numberOfEntries + 1 - i));
+			entries.add(entry);
+		}
+		luceneIndexManager.addToIndex(entries.iterator());
+
+		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.NORMAL, "b"), IndexTestHelpers.getPagination());
+
+		Assert.assertEquals(numberOfEntries, result.getTotalElements());
+
+		for(int i = 0;  i < numberOfEntries; i++) {
+			Assert.assertEquals("a" + (numberOfEntries - i - 1), result.getContent().get(i).getLemmaValues().get("DStichwort"));
+		}
 	}
 }
