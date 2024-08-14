@@ -17,12 +17,16 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("editor/names")
 public class NamesController {
+
     @Autowired
     private NameService nameService;
 
@@ -89,7 +93,8 @@ public class NamesController {
     @PostMapping("/import")
     void importAction(HttpServletRequest request) throws IOException {
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
-        MultipartFile multipartFile = (MultipartFile) dmhsRequest.getFile("file");
+        MultipartFile multipartFile = dmhsRequest.getFile("file");
+        assert multipartFile != null;
         InputStream in = multipartFile.getInputStream();
 
         nameService.importAllNames(in);

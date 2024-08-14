@@ -1,7 +1,6 @@
 package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.BackupService;
-import ch.pledarigrond.common.exception.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,16 +32,13 @@ public class BackupController {
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{db}/dump")
-    void dumbDb(@PathVariable("db") String db, HttpServletRequest request, HttpServletResponse response) {
+    void dumbDb(@PathVariable("db") String db, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             response.setContentType("application/zip");
             String pattern = "yyyy-MM-dd_HH-mm-ss";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            String fileName = "pledarigrond_db_dump-" +
-                    db +
-                    "-" +
-                    simpleDateFormat.format(new Date());
+            String fileName = "pledarigrond_db_dump-" + db + "-" + simpleDateFormat.format(new Date());
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".zip");
             boolean success = backupService.dumbDb(db, response.getOutputStream());
             if (!success) {
@@ -59,11 +54,10 @@ public class BackupController {
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{db}/restore")
-    ResponseEntity<?> restoreDb(@PathVariable("db") String db, HttpServletRequest request) throws DatabaseException, UnknownHostException {
-
+    ResponseEntity<?> restoreDb(@PathVariable("db") String db, HttpServletRequest request) {
         try {
             StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
-            MultipartFile multipartFile = (MultipartFile) dmhsRequest.getFile("file");
+            MultipartFile multipartFile = dmhsRequest.getFile("file");
             assert multipartFile != null;
             InputStream in = multipartFile.getInputStream();
 

@@ -51,7 +51,7 @@ public class BunnyServiceImpl implements BunnyService {
                 throw new RuntimeException("Failed to upload file: " + responseCode + " " + responseMsg);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to upload file", e);
         }
     }
 
@@ -75,7 +75,7 @@ public class BunnyServiceImpl implements BunnyService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to delete file", e);
         }
     }
 }

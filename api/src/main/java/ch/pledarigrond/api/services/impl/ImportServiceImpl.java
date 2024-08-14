@@ -26,7 +26,7 @@ import java.io.IOException;
 @Service
 public class ImportServiceImpl implements ImportService {
 
-    private final Logger logger = LoggerFactory.getLogger(ImportService.class);
+    private final Logger logger = LoggerFactory.getLogger(ImportServiceImpl.class);
 
     @Autowired
     private PgEnvironment pgEnvironment;

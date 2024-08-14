@@ -28,7 +28,7 @@ import java.io.IOException;
 @RequestMapping("{language}/user/search")
 public class SearchController {
 
-    Logger logger = LoggerFactory.getLogger(SearchController.class);
+    private final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
     private LuceneService luceneService;
@@ -42,21 +42,9 @@ public class SearchController {
         try {
             Page<LemmaVersion> result = luceneService.query(language, searchCriteria, pagination, true);
              return ResponseEntity.ok(result);
-        } catch (InvalidQueryException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid query.");
-        } catch (NoIndexAvailableException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No index.");
-        } catch (BrokenIndexException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Broken index.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "IO Exception.");
-        } catch (InvalidTokenOffsetsException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid token offset.");
+        } catch (InvalidQueryException | BrokenIndexException | NoIndexAvailableException | IOException | InvalidTokenOffsetsException e) {
+            logger.error("Error while searching", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

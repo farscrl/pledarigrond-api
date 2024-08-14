@@ -1,9 +1,10 @@
 package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.SpellcheckerService;
-import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,10 @@ import java.io.InputStream;
 @RequestMapping("{language}/admin/spellchecker")
 public class SpellcheckerController {
 
-    @Autowired
-    private SpellcheckerService spellcheckerService;
+    private final Logger logger = LoggerFactory.getLogger(SpellcheckerController.class);
 
     @Autowired
-    private PgEnvironment pgEnvironment;
+    private SpellcheckerService spellcheckerService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/export_hunspell")
@@ -40,19 +40,19 @@ public class SpellcheckerController {
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
             stream(response, export);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while exporting hunspell", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/generate_hunspell")
-    ResponseEntity<Void> generateHunspell(@PathVariable("language")Language language, HttpServletResponse response) {
+    ResponseEntity<Void> generateHunspell() {
         try {
             spellcheckerService.generateAndCommit();
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while generating hunspell", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -67,7 +67,7 @@ public class SpellcheckerController {
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
             stream(response, export);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while exporting ms wordlist", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

@@ -10,6 +10,8 @@ import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,8 @@ import java.io.InputStream;
 @RestController
 @RequestMapping("{language}/editor")
 public class EditorController {
+
+    private final Logger logger = LoggerFactory.getLogger(EditorController.class);
 
     @Autowired
     private EditorService editorService;
@@ -50,8 +54,8 @@ public class EditorController {
             return ResponseEntity.ok(list);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while fetching lex entries", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -61,8 +65,8 @@ public class EditorController {
         try {
             return ResponseEntity.ok(editorService.getLexEntry(language, id));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while fetching lex entry", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,8 +81,8 @@ public class EditorController {
             return ResponseEntity.ok(editorService.insert(language, lexEntry));
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while inserting lex entry", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -92,8 +96,8 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.accept(language, entry, version));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while accepting version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -107,8 +111,8 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.reject(language, entry, version));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while rejecting version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -125,8 +129,8 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.drop(language, entry));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while dropping entry", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -141,8 +145,8 @@ public class EditorController {
             LemmaVersion baseVersion = entry.getMostRecent();
             return ResponseEntity.ok(editorService.acceptAfterUpdate(language, entry, baseVersion, modifiedVersion));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while modifying and accepting version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -156,8 +160,8 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.update(language, entry, modifiedVersion));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while modifying version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -171,8 +175,8 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.reviewLater(language, entry));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while moving version to review later", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -186,19 +190,19 @@ public class EditorController {
             }
             return ResponseEntity.ok(editorService.dropOutdatedHistory(language, entry));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while dropping outdated history", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/search")
-    ResponseEntity<?> searchLexEntries(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
+    ResponseEntity<?> searchLemmaVersions(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
         try {
             return ResponseEntity.ok(editorService.search(language, searchCriteria, pagination));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while searching lemma versions", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -208,8 +212,8 @@ public class EditorController {
         try {
             return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, lemmaVersionList.lemmas));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while reordering lex entries", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -219,8 +223,8 @@ public class EditorController {
         try {
             return ResponseEntity.ok(editorService.getOrder(language, lemma, dictionaryLanguage));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while fetching lex entries order", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -235,8 +239,8 @@ public class EditorController {
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
             stream(response, export);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while exporting lex entries by search query", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -251,8 +255,8 @@ public class EditorController {
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
             stream(response, export);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while exporting lex entries by editor query", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -262,8 +266,8 @@ public class EditorController {
         try {
             return ResponseEntity.ok(editorService.getSuggestionsForFields(language));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while fetching search suggestions choice", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -276,8 +280,8 @@ public class EditorController {
         try {
             return ResponseEntity.ok(luceneService.getSuggestionsForField(language, field, searchTerm, 10));
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("Error while fetching search suggestions", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

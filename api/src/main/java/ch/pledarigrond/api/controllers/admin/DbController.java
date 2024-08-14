@@ -6,8 +6,9 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,8 @@ import java.util.Date;
 @RequestMapping("{language}/admin/db")
 public class DbController {
 
+    private final Logger logger = LoggerFactory.getLogger(DbController.class);
+
     @Autowired
     private AdminService adminService;
 
@@ -41,7 +44,7 @@ public class DbController {
         try {
             adminService.dropDatabase(language);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            logger.error("Error while dropping database", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -52,10 +55,10 @@ public class DbController {
         try {
             adminService.importDatabase(language, request);
         } catch (DatabaseException | IOException e) {
-            e.printStackTrace();
+            logger.error("Error while importing database", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (XMLStreamException | JAXBException e) {
-            e.printStackTrace();
+            logger.error("Error while importing database, malformed data", e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -87,21 +90,21 @@ public class DbController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         fileName.append(simpleDateFormat.format(new Date()));
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".zip");
-        ServletOutputStream out = null;
+        ServletOutputStream out;
         try {
             out = response.getOutputStream();
             adminService.exportData(language, includeVersionHistory, anonymizeData, out, fileName.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while exporting database. Error writing.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error writing.");
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.error("Error while exporting database. Jaxb exception.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Jaxb exception.");
         } catch (NoDatabaseAvailableException e) {
-            e.printStackTrace();
+            logger.error("Error while exporting database. No database available.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not found.");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            logger.error("Error while exporting database. No such algorithm.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No such algorithm.");
         }
     }
@@ -149,14 +152,14 @@ public class DbController {
             adminService.rebuildIndex(language);
             return ResponseEntity.ok().build();
         } catch (NoIndexAvailableException e) {
-            e.printStackTrace();
+            logger.error("Error while rebuilding index. Index not found.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Index not found.");
         } catch (IndexException e) {
-            e.printStackTrace();
+            logger.error("Error while rebuilding index. Index error.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Index error.");
         } catch (NoDatabaseAvailableException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not avaliable.");
+            logger.error("Error while rebuilding index. Database not found.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not found.");
         }
     }
 

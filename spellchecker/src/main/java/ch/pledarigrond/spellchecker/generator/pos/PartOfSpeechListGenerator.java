@@ -9,8 +9,8 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.names.entities.Name;
-import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
+import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -71,7 +71,7 @@ public abstract class PartOfSpeechListGenerator {
                 notFound.add(word);
             }
         }
-        logger.error("Missing words: " + String.join(", ", notFound));
+        logger.error("Missing words: {}", String.join(", ", notFound));
 
         List<File> files = new ArrayList<>();
         for (Map.Entry<PartOfSpeechTag, Set<String>> entry : baseForms.entrySet()) {
@@ -90,7 +90,7 @@ public abstract class PartOfSpeechListGenerator {
 
         // create version file
         File versionFile = new File(dir, "_VERSION.txt");
-        String versionAndBuild = "";
+        String versionAndBuild;
         try {
             SimpleDateFormat buildDateFormat = new SimpleDateFormat("yyMMdd.HHmmss");
             Date now = new Date();
@@ -178,14 +178,14 @@ public abstract class PartOfSpeechListGenerator {
             }
 
             RStichwort = normalizeString(RStichwort);
-            if (RStichwort == null || RStichwort.equals("") || blocklist.contains(RStichwort)) {
+            if (RStichwort == null || RStichwort.isEmpty() || blocklist.contains(RStichwort)) {
                 continue;
             }
             if (RGrammatik == null) {
                 String RGenus = current.getEntryValue("RGenus");
-                if (RGenus != null && !RGenus.equals("")) {
+                if (RGenus != null && !RGenus.isEmpty()) {
                     RGrammatik = "nomen";
-                } else if (DGrammatik != null && !"".equals(DGrammatik)) {
+                } else if (DGrammatik != null && !DGrammatik.isEmpty()) {
                     // using german grammar
                     RGrammatik = DGrammatik;
                 } else {
@@ -235,7 +235,7 @@ public abstract class PartOfSpeechListGenerator {
 
     private void addForms(Set<String> baseForms, Set<String> inflections, LemmaVersion current, String RStichwort) {
         String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
-        if (inflectionType == null || inflectionType.equals("")) {
+        if (inflectionType == null || inflectionType.isEmpty()) {
             extractDefault(baseForms, inflections, current, RStichwort);
         } else if (inflectionType.equals("V")) {
             extractVerbs(baseForms, inflections, current, RStichwort);
@@ -275,7 +275,7 @@ public abstract class PartOfSpeechListGenerator {
 
             bf.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while writing word list to file", e);
         }
     }
 
