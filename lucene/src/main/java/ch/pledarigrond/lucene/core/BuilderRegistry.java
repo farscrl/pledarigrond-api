@@ -65,7 +65,7 @@ public class BuilderRegistry {
     }
 
     public List<Query> getSuggestionQueries(String field, String searchTerm) {
-        switch (field) {
+        return switch (field) {
             case "DGrammatik" -> builderMap.get("DGrammatik_default").transform(searchTerm);
             case "DGenus" -> builderMap.get("DGenus_default").transform(searchTerm);
             case "DSubsemantik" -> builderMap.get("DSubsemantik_default").transform(searchTerm);
@@ -73,8 +73,8 @@ public class BuilderRegistry {
             case "RGrammatik" -> builderMap.get("RGrammatik_default").transform(searchTerm);
             case "RGenus" -> builderMap.get("RGenus_default").transform(searchTerm);
             case "RSubsemantik" -> builderMap.get("RSubsemantik_default").transform(searchTerm);
-        }
-        return List.of();
+            default -> List.of();
+        };
     }
 
     public AbstractQueryBuilder getStartsWithBuilder(SearchDirection direction) {
