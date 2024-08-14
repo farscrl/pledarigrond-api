@@ -3,6 +3,7 @@ package ch.pledarigrond.lucene.core;
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
+import ch.pledarigrond.common.data.lucene.SuggestionField;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -122,5 +123,95 @@ public class TestIndexCRUD {
 		for(int i = 0;  i < numberOfEntries; i++) {
 			Assert.assertEquals("a" + (numberOfEntries - i - 1), result.getContent().get(i).getLemmaValues().get("DStichwort"));
 		}
+	}
+
+	@Test
+	public void testSubSemanticSuggestion() throws Exception {
+		int numberOfEntries = 36;
+
+		testDropIndex();
+		List<LexEntry> entries = new ArrayList<>();
+		for(int i = 0;  i < numberOfEntries; i++) {
+			LexEntry entry = generateValidEntry();
+			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
+			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
+			entry.getCurrent().putEntryValue("DSubsemantik", "d" + i % 12);
+			entry.getCurrent().putEntryValue("RSubsemantik", "r" + i % 12);
+			entries.add(entry);
+		}
+		luceneIndexManager.addToIndex(entries.iterator());
+
+		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
+		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 36);
+
+		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("DSubsemantik", "d", 10);
+
+		Assert.assertEquals(10, result.size());
+
+		Assert.assertEquals("d0", result.get(0));
+		Assert.assertEquals("d1", result.get(1));
+		Assert.assertEquals("d10", result.get(2));
+		Assert.assertEquals("d11", result.get(3));
+		Assert.assertEquals("d2", result.get(4));
+		Assert.assertEquals("d3", result.get(5));
+		Assert.assertEquals("d4", result.get(6));
+		Assert.assertEquals("d5", result.get(7));
+		Assert.assertEquals("d6", result.get(8));
+		Assert.assertEquals("d7", result.get(9));
+
+		result = luceneIndexManager.getSuggestionsForField("RSubsemantik", "r", 5);
+
+		Assert.assertEquals(5, result.size());
+
+		Assert.assertEquals("r0", result.get(0));
+		Assert.assertEquals("r1", result.get(1));
+		Assert.assertEquals("r10", result.get(2));
+		Assert.assertEquals("r11", result.get(3));
+		Assert.assertEquals("r2", result.get(4));
+	}
+
+	@Test
+	public void testGrammarSuggestion() throws Exception {
+		int numberOfEntries = 36;
+
+		testDropIndex();
+		List<LexEntry> entries = new ArrayList<>();
+		for(int i = 0;  i < numberOfEntries; i++) {
+			LexEntry entry = generateValidEntry();
+			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
+			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
+			entry.getCurrent().putEntryValue("DGrammatik", "d" + i % 12);
+			entry.getCurrent().putEntryValue("RGrammatik", "r" + i % 12);
+			entries.add(entry);
+		}
+		luceneIndexManager.addToIndex(entries.iterator());
+
+		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
+		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 36);
+
+		ArrayList<String> result = luceneIndexManager.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "d", 10);
+
+		Assert.assertEquals(10, result.size());
+
+		Assert.assertEquals("d0", result.get(0));
+		Assert.assertEquals("d1", result.get(1));
+		Assert.assertEquals("d10", result.get(2));
+		Assert.assertEquals("d11", result.get(3));
+		Assert.assertEquals("d2", result.get(4));
+		Assert.assertEquals("d3", result.get(5));
+		Assert.assertEquals("d4", result.get(6));
+		Assert.assertEquals("d5", result.get(7));
+		Assert.assertEquals("d6", result.get(8));
+		Assert.assertEquals("d7", result.get(9));
+
+		result = luceneIndexManager.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "r", 5);
+
+		Assert.assertEquals(5, result.size());
+
+		Assert.assertEquals("r0", result.get(0));
+		Assert.assertEquals("r1", result.get(1));
+		Assert.assertEquals("r10", result.get(2));
+		Assert.assertEquals("r11", result.get(3));
+		Assert.assertEquals("r2", result.get(4));
 	}
 }
