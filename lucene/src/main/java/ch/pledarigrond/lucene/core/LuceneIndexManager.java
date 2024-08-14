@@ -195,41 +195,47 @@ public class LuceneIndexManager {
         final IndexStatistics statistics = new IndexStatistics();
         try {
             queue.push(language -> {
-                int all = luceneIndexFilesystem.get(language).getSearcher().getIndexReader().numDocs();
-                int unverified = 0;
-                int approved = 0;
-                int unknown = 0;
                 IndexReader reader = luceneIndexFilesystem.get(language).getSearcher().getIndexReader();
-                HashMap<String, Integer> byInflectionType = new HashMap<>();
-				StoredFields storedFields = reader.storedFields();
+                IndexSearcher searcher = new IndexSearcher(reader);
 
-                for (int i = 0; i < all; i++) {
-					Document document = storedFields.document(i);
-                    String verification = document.get(LemmaVersion.VERIFICATION);
-                    try {
-                        if (LemmaVersion.Verification.ACCEPTED.equals(LemmaVersion.Verification.valueOf(verification))) {
-                            approved++;
-                        } else if (LemmaVersion.Verification.UNVERIFIED.equals(LemmaVersion.Verification.valueOf(verification))) {
-                            unverified++;
-                        } else {
-                            unknown++;
-                        }
-                    } catch (Exception e) {
-                        unknown++;
-                    }
-                    String flexType = document.get(LemmaVersion.RM_INFLECTION_TYPE);
-                    if (flexType != null) {
-                        Integer old = byInflectionType.get(flexType);
-                        if (old == null) old = 0;
-                        byInflectionType.put(flexType, old + 1);
-                    }
-                }
-                statistics.setInflectionCount(byInflectionType);
-                statistics.setNumberOfEntries(all);
-                statistics.setUnverifiedEntries(unverified);
-                statistics.setApprovedEntries(approved);
-                statistics.setUnknown(unknown);
+                // Find total number of entries
+                statistics.setNumberOfEntries(reader.maxDoc());
+
+                // Find accepted values
+                Term term = new Term("verification", "ACCEPTED");
+                Query query = new TermQuery(term);
+                TopDocs results = searcher.search(query, Integer.MAX_VALUE);
+                statistics.setApprovedEntries((int) results.totalHits.value);
+
+                // Find unverified values
+                term = new Term("verification", "UNVERIFIED");
+                query = new TermQuery(term);
+                results = searcher.search(query, Integer.MAX_VALUE);
+                statistics.setUnverifiedEntries((int) results.totalHits.value);
+
+                // Find unknown values
+                TermQuery acceptedQuery = new TermQuery(new Term("verification", "ACCEPTED"));
+                TermQuery unverifiedQuery = new TermQuery(new Term("verification", "UNVERIFIED"));
+                BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
+                booleanQueryBuilder.add(acceptedQuery, BooleanClause.Occur.MUST_NOT);
+                booleanQueryBuilder.add(unverifiedQuery, BooleanClause.Occur.MUST_NOT);
+                query = booleanQueryBuilder.build();
+                results = searcher.search(query, Integer.MAX_VALUE);
+                statistics.setUnknown((int) results.totalHits.value);
+
+                // Find last updated
                 statistics.setLastUpdated(luceneIndexFilesystem.get(language).getLastUpdated());
+
+                // Find inflection count
+                HashMap<String, Integer> inflectionCount = new HashMap<>();
+                String[] inflectionTypes = new String[]{"NOUN", "V", "ADJECTIVE", "PRONOUN", "OTHER"};
+                for (String inflectionType : inflectionTypes) {
+                    term = new Term("RInflectionType", inflectionType);
+                    query = new TermQuery(term);
+                    results = searcher.search(query, Integer.MAX_VALUE);
+                    inflectionCount.put(inflectionType, (int) results.totalHits.value);
+                }
+                statistics.setInflectionCount(inflectionCount);
             });
             return statistics;
         } catch (Exception e) {
