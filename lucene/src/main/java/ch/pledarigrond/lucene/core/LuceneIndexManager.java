@@ -74,7 +74,7 @@ public class LuceneIndexManager {
         luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
         luceneIndexFilesystem.get(this.language).initialize();
         luceneIndexFilesystem.get(this.language).resetIndexDirectory();
-        indexManager = IndexManager.getInstance(this.language);
+        indexManager = IndexManager.getInstance();
     }
 
     public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {

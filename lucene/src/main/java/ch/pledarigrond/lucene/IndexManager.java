@@ -1,6 +1,5 @@
 package ch.pledarigrond.lucene;
 
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
@@ -52,8 +51,6 @@ public class IndexManager {
 
     /**
      * Returns the singleton instance of this class.
-     *
-     * @return IndexManager
      */
     public static synchronized IndexManager getInstance() {
         if (indexManagerInstance == null) {
@@ -87,17 +84,6 @@ public class IndexManager {
             List<IndexedColumn> fields = dbFieldMapping.computeIfAbsent(item.getSourceColumnName(), k -> new ArrayList<>());
             fields.add(item);
         }
-    }
-
-    public static IndexManager getInstance(Language language) {
-        return switch (language) {
-            case PUTER -> IndexManager.getInstance();
-            case RUMANTSCHGRISCHUN -> IndexManager.getInstance();
-            case SURMIRAN -> IndexManager.getInstance();
-            case SURSILVAN -> IndexManager.getInstance();
-            case SUTSILVAN -> IndexManager.getInstance();
-            case VALLADER -> IndexManager.getInstance();
-        };
     }
 
     public BuilderRegistry getBuilderRegistry() {
