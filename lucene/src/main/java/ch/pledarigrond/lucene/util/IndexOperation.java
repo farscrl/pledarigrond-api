@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package ch.pledarigrond.lucene.core;
+package ch.pledarigrond.lucene.util;
 
 
 import ch.pledarigrond.common.data.common.Language;
