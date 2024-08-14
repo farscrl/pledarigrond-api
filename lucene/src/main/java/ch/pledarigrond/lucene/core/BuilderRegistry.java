@@ -16,13 +16,13 @@ import java.util.Map;
 public class BuilderRegistry {
     private static final Logger logger = LoggerFactory.getLogger(BuilderRegistry.class);
 
-    private final Map<String, PgQueryBuilder> builderMap = new HashMap<>();
+    private final Map<String, AbstractQueryBuilder> builderMap = new HashMap<>();
 
     public BuilderRegistry() {
         this.init();
     }
 
-    public PgQueryBuilder getBuilder(SearchDirection direction, SearchMethod method) {
+    public AbstractQueryBuilder getBuilder(SearchDirection direction, SearchMethod method) {
         if (direction == SearchDirection.ROMANSH) {
             return switch (method) {
                 case NORMAL -> builderMap.get("RStichwort_normal");
@@ -77,7 +77,7 @@ public class BuilderRegistry {
         return List.of();
     }
 
-    public PgQueryBuilder getStartsWithBuilder(SearchDirection direction) {
+    public AbstractQueryBuilder getStartsWithBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RStichwort_simple_prefix");
         }
@@ -87,7 +87,7 @@ public class BuilderRegistry {
         return null;
     }
 
-    public PgQueryBuilder getGenderBuilder(SearchDirection direction) {
+    public AbstractQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RGenus_simple_prefix");
         }
@@ -97,7 +97,7 @@ public class BuilderRegistry {
         return null;
     }
 
-    public PgQueryBuilder getGrammarBuilder(SearchDirection direction) {
+    public AbstractQueryBuilder getGrammarBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("RGrammatik_simple_prefix");
         }
@@ -107,7 +107,7 @@ public class BuilderRegistry {
         return null;
     }
 
-    public PgQueryBuilder getSubSemanticsBuilder(SearchDirection direction) {
+    public AbstractQueryBuilder getSubSemanticsBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
             return builderMap.get("DSubsemantik_infix");
         }
@@ -117,13 +117,13 @@ public class BuilderRegistry {
         return null;
     }
 
-    public PgQueryBuilder getCategoryBuilder() {
+    public AbstractQueryBuilder getCategoryBuilder() {
         return builderMap.get("categories_infix");
     }
 
     public List<IndexedColumn> getAllRegisteredColumns() {
         List<IndexedColumn> returnValue = new ArrayList<>();
-        for(PgQueryBuilder builder : builderMap.values()) {
+        for(AbstractQueryBuilder builder : builderMap.values()) {
             returnValue.addAll(builder.getRegisteredColumns());
         }
 

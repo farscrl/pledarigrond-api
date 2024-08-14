@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2013 Sprachliche Informationsverarbeitung, University of Cologne
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
@@ -28,32 +13,24 @@ import java.util.List;
 
 /**
  * A query builder for 'prefix' queries.
- * <strong>Note: The transformation of the field names is proprietary.</strong>
- * This means, that using this query builder requires a lucene index which
- * defines fields with special naming conventions. 
- * <br>
- * See {@link PgQueryBuilder} and {@link DefaultQueryBuilder} for details.
- * @author sschwieb
- *
  */
-public class PrefixQueryBuilder extends PgQueryBuilder {
-	
-	
-	@Override
-	protected void buildColumnToFieldsMapping() {
-		registerFieldMapping("first", false, FieldType.STRING, true, false);
-		registerFieldMapping("second",true, FieldType.STRING, false, false);
-	}
+public class PrefixQueryBuilder extends AbstractQueryBuilder {
 
-	@Override
-	public List<Query> transform(String value) {
-		value = TokenizerHelper.tokenizeString(analyzer, value);
+    @Override
+    protected void buildColumnToFieldsMapping() {
+        registerFieldMapping("first", false, FieldType.STRING, true, false);
+        registerFieldMapping("second", true, FieldType.STRING, false, false);
+    }
 
-		Query q1 = new TermQuery(new Term(getFieldName("first"), value));
-		q1 = new BoostQuery(q1, 1000f);
+    @Override
+    public List<Query> transform(String value) {
+        value = TokenizerHelper.tokenizeString(analyzer, value);
 
-		Query q2 = new PrefixQuery(new Term(getFieldName("second"), value));
+        Query q1 = new TermQuery(new Term(getFieldName("first"), value));
+        q1 = new BoostQuery(q1, 1000f);
 
-		return Arrays.asList(q1, q2);
-	}
+        Query q2 = new PrefixQuery(new Term(getFieldName("second"), value));
+
+        return Arrays.asList(q1, q2);
+    }
 }
