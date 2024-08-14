@@ -7,7 +7,6 @@ import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
-import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
@@ -57,7 +56,7 @@ public class LuceneIndexManager {
 
     private final Map<Language, LuceneIndexFilesystem> luceneIndexFilesystem = new HashMap<>();
 
-    private IndexManager indexManager;
+    private FieldManager fieldManager;
 
     private final IndexCommandQueue queue;
 
@@ -74,7 +73,7 @@ public class LuceneIndexManager {
         luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
         luceneIndexFilesystem.get(this.language).initialize();
         luceneIndexFilesystem.get(this.language).resetIndexDirectory();
-        indexManager = IndexManager.getInstance();
+        fieldManager = FieldManager.getInstance();
     }
 
     public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
@@ -155,7 +154,7 @@ public class LuceneIndexManager {
         for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
 
             Document doc = storedFields.document(scoreDocs[i].doc);
-            LemmaVersion e = indexManager.getLemmaVersion(doc);
+            LemmaVersion e = fieldManager.getLemmaVersion(doc);
             results.add(e);
         }
 

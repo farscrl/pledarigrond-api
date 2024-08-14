@@ -3,7 +3,6 @@ package ch.pledarigrond.lucene.core;
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.lucene.IndexManager;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.lucene.util.LuceneHelper;
@@ -42,7 +41,7 @@ class LuceneIndexFilesystem {
     private DirectoryReader reader;
     private Analyzer analyzer;
     private final boolean tracing = logger.isTraceEnabled();
-    private IndexManager indexManager;
+    private FieldManager fieldManager;
 
     public LuceneIndexFilesystem(LuceneConfiguration luceneConfiguration) {
         setLuceneConfiguration(luceneConfiguration);
@@ -56,7 +55,7 @@ class LuceneIndexFilesystem {
         resetIndexDirectory();
 //		analyzer = LuceneHelper.newAnalyzer();
         analyzer = LuceneHelper.newWhitespaceAnalyzer();
-        indexManager = IndexManager.getInstance();
+        fieldManager = FieldManager.getInstance();
     }
 
     IndexSearcher getSearcher() throws NoIndexAvailableException {
@@ -187,7 +186,7 @@ class LuceneIndexFilesystem {
         }
         versions.addAll(lexEntry.getUnapprovedVersions());
         for (LemmaVersion version : versions) {
-            Document doc = indexManager.getDocument(lexEntry, version);
+            Document doc = fieldManager.getDocument(lexEntry, version);
             docs.add(doc);
         }
         return docs;

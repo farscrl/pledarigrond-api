@@ -1,9 +1,8 @@
-package ch.pledarigrond.lucene;
+package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
-import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.DatabaseFields;
 import ch.pledarigrond.lucene.util.IndexedColumnHelper;
 import org.apache.lucene.document.Document;
@@ -16,9 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class IndexManager {
+public class FieldManager {
 
-    protected static final Logger logger = LoggerFactory.getLogger(IndexManager.class);
+    protected static final Logger logger = LoggerFactory.getLogger(FieldManager.class);
 
     /**
      * On db field is sometimes mapped to multiple index fields. this map
@@ -40,24 +39,24 @@ public class IndexManager {
      */
     protected String[] allColumns;
 
-    private static IndexManager indexManagerInstance;
+    private static FieldManager fieldManagerInstance;
 
     /**
      * Returns the singleton instance of this class.
      */
-    public static synchronized IndexManager getInstance() {
-        if (indexManagerInstance == null) {
+    public static synchronized FieldManager getInstance() {
+        if (fieldManagerInstance == null) {
             try {
-                indexManagerInstance = new IndexManager();
+                fieldManagerInstance = new FieldManager();
             } catch (Exception e) {
                 logger.error("Failed to initialize IndexManager", e);
                 throw new RuntimeException(e);
             }
         }
-        return indexManagerInstance;
+        return fieldManagerInstance;
     }
 
-    public IndexManager() {
+    public FieldManager() {
         logger.info("Generate list of all index-fields");
         Set<IndexedColumn> finalColumnSet = new TreeSet<>(Comparator.comparing(IndexedColumn::getIndexFieldName));
 
