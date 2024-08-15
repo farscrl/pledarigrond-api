@@ -199,7 +199,7 @@ public class LuceneIndexManager {
                 IndexSearcher searcher = new IndexSearcher(reader);
 
                 // Find total number of entries
-                statistics.setNumberOfEntries(reader.maxDoc());
+                statistics.setNumberOfEntries(reader.numDocs());
 
                 // Find accepted values
                 Term term = new Term("verification", "ACCEPTED");
