@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.nio.file.Paths;
+
 @SpringBootApplication(scanBasePackages = { "ch.pledarigrond" })
 @EnableConfigurationProperties({PgEnvironment.class})
 @EnableScheduling
@@ -13,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class ApiApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Current working directory: " + Paths.get("").toAbsolutePath().toString());
 		SpringApplication.run(ApiApplication.class, args);
 	}
-
 }
