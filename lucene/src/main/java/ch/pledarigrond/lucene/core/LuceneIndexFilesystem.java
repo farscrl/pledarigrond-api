@@ -194,6 +194,14 @@ class LuceneIndexFilesystem {
     void dropIndex() throws IndexException {
         try (IndexWriter writer = initIndexWriter()) {
             writer.deleteAll();
+            writer.commit();
+            writer.close();
+
+            if (reader != null) {
+                reader.close();
+                reader = DirectoryReader.open(indexDirectory);
+                searcher = new IndexSearcher(reader);
+            }
         } catch (IOException e) {
             throw new IndexException(e);
         }

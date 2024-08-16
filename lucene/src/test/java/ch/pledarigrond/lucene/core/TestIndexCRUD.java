@@ -30,6 +30,18 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		luceneIndexManager.dropIndex();
 		IndexStatistics statistics = luceneIndexManager.getIndexStatistics();
 		Assert.assertEquals(0, statistics.getNumberOfEntries());
+
+		List<LexEntry> entries = new ArrayList<>();
+		for(int i = 0;  i < 5; i++) {
+			entries.add(generateValidEntry());
+		}
+		luceneIndexManager.addToIndex(entries.iterator());
+		statistics = luceneIndexManager.getIndexStatistics();
+		Assert.assertEquals(entries.size(),statistics.getNumberOfEntries());
+
+		luceneIndexManager.dropIndex();
+		statistics = luceneIndexManager.getIndexStatistics();
+		Assert.assertEquals(0, statistics.getNumberOfEntries());
 	}
 	
 	

@@ -25,14 +25,14 @@ public abstract class BaseLuceneIndexTest {
         indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID() + "_idx");
         Assert.assertFalse(indexDir.exists());
         indexDir.mkdir();
-        // file.deleteOnExit();
+        file.deleteOnExit();
         luceneConfiguration = new LuceneConfiguration(language, indexDir.getAbsolutePath());
         luceneIndexManager = new LuceneIndexManager(luceneConfiguration);
     }
 
     @After
     public void afterTest() {
-        // deleteRecursive(indexDir);
+        deleteRecursive(indexDir);
     }
 
     private void deleteRecursive(File fileOrDir) {
