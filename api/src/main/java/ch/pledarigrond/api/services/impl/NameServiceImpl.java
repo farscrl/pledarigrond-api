@@ -112,7 +112,7 @@ public class NameServiceImpl implements NameService {
 
     private Mono<List<String>> getWordForLanguageFromApi(Language language) {
         return this.getWebClient().get()
-                .uri("/editor/names/language/" + language.getName())  // Endpoint path
+                .uri(language.getName() + "/user/export/names")
                 .retrieve()
                 .bodyToMono(String[].class)
                 .map(Arrays::asList);
