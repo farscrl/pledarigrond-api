@@ -3,7 +3,6 @@ package ch.pledarigrond.spellchecker.generator.pos;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.util.WordNormalizer;
-import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 
@@ -13,7 +12,7 @@ import java.util.Set;
 
 public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator {
 
-    public SurmiranPartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public SurmiranPartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<String> names) {
         super(pgEnvironment, names);
 
         posLookupTable = new HashMap<>() {{

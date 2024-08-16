@@ -8,7 +8,6 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
@@ -36,13 +35,13 @@ abstract public class HunspellGenerator {
 
     PgEnvironment pgEnvironment;
 
-    private final List<Name> names;
+    private final List<String> names;
 
     private final Language language;
 
     private Path basePath;
 
-    public HunspellGenerator(Language language, PgEnvironment pgEnvironment, List<Name> names) {
+    public HunspellGenerator(Language language, PgEnvironment pgEnvironment, List<String> names) {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
         this.language = language;
@@ -182,8 +181,8 @@ abstract public class HunspellGenerator {
         }
 
         if (names != null) {
-            names.forEach(name -> {
-                extractName(hunspellList, language, name);
+            names.forEach(word -> {
+                hunspellList.addWord(word, new HunspellRules[]{}, false);
             });
         }
 
@@ -213,17 +212,7 @@ abstract public class HunspellGenerator {
 
     abstract protected String normalizeString(String input);
 
-    private void extractName(HunspellList list, Language language, Name name) {
-        String rm = WordListUtils.getRomanshNameForLanguage(language, name);
-        if (rm != null) {
-            list.addWord(rm, new HunspellRules[]{}, false);
-        }
 
-        String de = WordListUtils.getGermanNameForLanguage(language, name);
-        if (de != null) {
-            list.addWord(de, new HunspellRules[]{}, false);
-        }
-    }
 
     private void loadWordsToAdd(Language language, HunspellList list) throws IOException {
         ClassPathResource resource = new ClassPathResource(language.getName() + "/missing_words.txt");

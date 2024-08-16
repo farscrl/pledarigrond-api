@@ -1,12 +1,10 @@
 package ch.pledarigrond.spellchecker.generator;
 
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.inflection.generation.puter.PuterConjugationPronouns;
 import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunPronouns;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
 import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanPronouns;
 import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationPronouns;
-import ch.pledarigrond.names.entities.Name;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -316,34 +314,7 @@ public class WordListUtils {
         return input;
     }
 
-    public static String getRomanshNameForLanguage(Language language, Name name) {
-        String languageLemma = getLanguageLemma(language, name);
-        if (languageLemma != null && !languageLemma.equals("")) {
-            return languageLemma;
-        } else {
-            return name.getNameRumantschGrischun();
-        }
 
-    }
-
-    public static String getGermanNameForLanguage(Language language, Name name) {
-        if (name.getNameGerman() != null && !name.getNameGerman().equals("")) {
-            return name.getNameGerman();
-        }
-
-        return null;
-    }
-
-    private static String getLanguageLemma(Language language, Name name) {
-        return switch (language) {
-            case SURSILVAN -> name.getNameSursilvan();
-            case SUTSILVAN -> name.getNameSutsilvan();
-            case SURMIRAN -> name.getNameSurmiran();
-            case PUTER -> name.getNamePuter();
-            case VALLADER -> name.getNameVallader();
-            case RUMANTSCHGRISCHUN -> name.getNameRumantschGrischun();
-        };
-    }
 
     public static void writeFilesToZip(File zipFile, List<File> filesToZip) {
         ZipOutputStream zos = null;

@@ -8,7 +8,6 @@ import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
@@ -41,9 +40,9 @@ public abstract class PartOfSpeechListGenerator {
 
     private Set<String> missingGrammar;
 
-    private final List<Name> names;
+    private final List<String> names;
 
-    public PartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public PartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<String> names) {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
     }
@@ -214,22 +213,6 @@ public abstract class PartOfSpeechListGenerator {
                 }
                 foundWords.add(RStichwort);
             }
-        }
-
-        if (names != null && baseForms.get(PartOfSpeechTag.NOUN) != null) {
-            names.forEach(name -> {
-                String rm = WordListUtils.getRomanshNameForLanguage(language, name);
-                if (rm != null) {
-                    baseForms.get(PartOfSpeechTag.NOUN).add(rm);
-                    inflections.get(PartOfSpeechTag.NOUN).add(rm);
-                }
-
-                String de = WordListUtils.getGermanNameForLanguage(language, name);
-                if (de != null) {
-                    baseForms.get(PartOfSpeechTag.NOUN).add(de);
-                    inflections.get(PartOfSpeechTag.NOUN).add(de);
-                }
-            });
         }
     }
 

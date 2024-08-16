@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.NameService;
+import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.names.entities.Category;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -98,6 +100,12 @@ public class NamesController {
         InputStream in = multipartFile.getInputStream();
 
         nameService.importAllNames(in);
+    }
+
+    @GetMapping("/language/{language}")
+    ResponseEntity<?> exportForLanguageAction(@PathVariable Language language) {
+        List<String> names = nameService.getWordsForLanguage(language);
+        return ResponseEntity.ok(names);
     }
 
     private void stream(HttpServletResponse response, File export) throws IOException {

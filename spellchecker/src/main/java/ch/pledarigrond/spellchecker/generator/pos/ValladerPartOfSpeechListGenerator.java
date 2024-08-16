@@ -2,7 +2,6 @@ package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.names.entities.Name;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Set;
 
 public class ValladerPartOfSpeechListGenerator extends PartOfSpeechListGenerator {
 
-    public ValladerPartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public ValladerPartOfSpeechListGenerator(PgEnvironment pgEnvironment, List<String> names) {
         super(pgEnvironment, names);
 
         posLookupTable = new HashMap<>() {{

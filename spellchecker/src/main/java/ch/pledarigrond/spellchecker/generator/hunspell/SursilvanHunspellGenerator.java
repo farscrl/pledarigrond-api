@@ -3,13 +3,12 @@ package ch.pledarigrond.spellchecker.generator.hunspell;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 
 import java.util.List;
 
 public class SursilvanHunspellGenerator extends HunspellGenerator {
-    public SursilvanHunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public SursilvanHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) {
         super(Language.SURSILVAN, pgEnvironment, names);
     }
 

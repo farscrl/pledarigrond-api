@@ -4,7 +4,6 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.util.WordNormalizer;
-import ch.pledarigrond.names.entities.Name;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
@@ -15,7 +14,7 @@ import java.util.List;
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
 
 public class SurmiranHunspellGenerator extends HunspellGenerator {
-    public SurmiranHunspellGenerator(PgEnvironment pgEnvironment, List<Name> names) {
+    public SurmiranHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) {
         super(Language.SURMIRAN, pgEnvironment, names);
     }
 
