@@ -87,7 +87,7 @@ public class SuggestionsIndex {
      * the following rules are taken into account:
      * - If the search word starts with "tg" and the suggestion starts with "ch", the suggestion is prioritized.
      */
-    private static List<String> prioritizeSuggestions(String searchWord, String[] suggestions) {
+    static List<String> prioritizeSuggestions(String searchWord, String[] suggestions) {
         List<String> prioritized = new ArrayList<>();
         List<String> others = new ArrayList<>();
 
