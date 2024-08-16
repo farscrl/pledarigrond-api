@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 
 @Service
 @Data
@@ -117,6 +116,15 @@ public class PgEnvironment {
 
 	@Value("${pg.s3.region}")
 	private String s3Region;
+
+	@Value("${pg.hunspell.location}")
+	private String hunspellLocation;
+
+	@Value("${pg.export.dump_location}")
+	private String dumpLocation;
+
+	@Value("${pg.export.restore_location}")
+	private String restoreLocation;
 
 	private LuceneConfiguration luceneConfigPuter;
 	private LuceneConfiguration luceneConfigRumantschgrischun;

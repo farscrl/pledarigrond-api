@@ -8,13 +8,14 @@ import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
 
 public class SurmiranHunspellGenerator extends HunspellGenerator {
-    public SurmiranHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) {
+    public SurmiranHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) throws IOException {
         super(Language.SURMIRAN, pgEnvironment, names);
     }
 

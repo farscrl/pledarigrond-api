@@ -41,11 +41,12 @@ abstract public class HunspellGenerator {
 
     private Path basePath;
 
-    public HunspellGenerator(Language language, PgEnvironment pgEnvironment, List<String> names) {
+    public HunspellGenerator(Language language, PgEnvironment pgEnvironment, List<String> names) throws IOException {
         this.pgEnvironment = pgEnvironment;
         this.names = names;
         this.language = language;
-        basePath = Paths.get(System.getProperty("user.dir"), "data", "hunspell", language.getName()).normalize();
+        basePath = Paths.get(pgEnvironment.getHunspellLocation()).resolve(language.getName());
+        Files.createDirectories(basePath);
     }
 
     public String generateHunspell() throws NoDatabaseAvailableException, IOException {

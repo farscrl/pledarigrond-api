@@ -36,7 +36,7 @@ public class GitUtil {
             Git git = getRepository(repoDir);
             changeToBranch(git, credentialsProvider, gitData.getRemoteBranch());
             pull(git, credentialsProvider);
-            boolean didChange = copyFiles(git);
+            boolean didChange = copyFiles(git, gitData.getHunspellLocation());
             if (didChange) {
                 commitAndPush(git, credentialsProvider);
                 logger.info("Changes committed and pushed");
@@ -55,11 +55,18 @@ public class GitUtil {
     private File checkOutRepository(GitDataDto gitData, UsernamePasswordCredentialsProvider credentialsProvider) throws GitAPIException {
         File repoDir = new File(gitData.getRepoPath());
         if (!repoDir.exists()) {
-            Git.cloneRepository()
-                    .setURI(gitData.getRemoteUrl())
-                    .setDirectory(repoDir)
-                    .setCredentialsProvider(credentialsProvider)
-                    .call();
+            logger.info("Cloning repository");
+            try {
+                Git.cloneRepository()
+                        .setURI(gitData.getRemoteUrl())
+                        .setDirectory(repoDir)
+                        .setCredentialsProvider(credentialsProvider)
+                        .call();
+            } catch (GitAPIException e) {
+                logger.error("Error while cloning repository", e);
+                throw new RuntimeException(e);
+            }
+
         }
         return repoDir;
     }
@@ -86,9 +93,11 @@ public class GitUtil {
         git.pull().setCredentialsProvider(credentialsProvider).call();
     }
 
-    private boolean copyFiles(Git git) {
+    private boolean copyFiles(Git git, String hunspellPath) throws IOException {
         AtomicBoolean didChange = new AtomicBoolean(false);
-        Path basePath = Paths.get(System.getProperty("user.dir"), "data", "hunspell").normalize();
+        Path basePath = Paths.get(hunspellPath);
+        Files.createDirectories(basePath);
+
         activeLanguages.forEach(language -> {
             File aff = basePath.resolve(language.getName() + "/rm-" + language.getSubtag() + ".aff").toFile();
             File dicFile = basePath.resolve(language.getName() + "/rm-" + language.getSubtag() + ".dic").toFile();

@@ -5,10 +5,11 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SursilvanHunspellGenerator extends HunspellGenerator {
-    public SursilvanHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) {
+    public SursilvanHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) throws IOException {
         super(Language.SURSILVAN, pgEnvironment, names);
     }
 

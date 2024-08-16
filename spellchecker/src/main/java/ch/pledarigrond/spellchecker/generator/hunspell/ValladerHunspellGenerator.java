@@ -8,6 +8,7 @@ import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 
+import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 import static ch.pledarigrond.spellchecker.model.HunspellRules.*;
 
 public class ValladerHunspellGenerator extends HunspellGenerator {
-    public ValladerHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) {
+    public ValladerHunspellGenerator(PgEnvironment pgEnvironment, List<String> names) throws IOException {
         super(Language.VALLADER, pgEnvironment, names);
     }
 

@@ -34,17 +34,20 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     private NameService nameService;
 
 
-    @Value("${git.hunspell.repo.path}")
+    @Value("${pg.hunspell.git.path}")
     private String repoPath;
 
-    @Value("${git.hunspell.remote.url}")
+    @Value("${pg.hunspell.git.url}")
     private String remoteUrl;
 
-    @Value("${git.hunspell.remote.branch}")
+    @Value("${pg.hunspell.git.branch}")
     private String remoteBranch;
 
-    @Value("${git.hunspell.token}")
+    @Value("${pg.hunspell.git.token}")
     private String gitToken;
+
+    @Value("${pg.hunspell.location}")
+    private String hunspellLocation;
 
     @Scheduled(cron = "${pg.hunspell.cron}")
     private void export() throws IOException, NoDatabaseAvailableException {
@@ -81,7 +84,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
             generator.generateHunspell();
         }
 
-        GitDataDto gitData = new GitDataDto(repoPath, remoteUrl, remoteBranch, gitToken);
+        GitDataDto gitData = new GitDataDto(repoPath, remoteUrl, remoteBranch, gitToken, hunspellLocation);
 
         GitUtil gitUtil = new GitUtil(activeLanguages);
         gitUtil.commit(gitData);
@@ -97,7 +100,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language);
     }
 
-    private HunspellGenerator getGeneratorForLanguage(Language language, List<String> names) {
+    private HunspellGenerator getGeneratorForLanguage(Language language, List<String> names) throws IOException {
         return switch (language) {
             case PUTER -> new PuterHunspellGenerator(pgEnvironment, names);
             case RUMANTSCHGRISCHUN -> new RumantschgrischunHunspellGenerator(pgEnvironment, names);

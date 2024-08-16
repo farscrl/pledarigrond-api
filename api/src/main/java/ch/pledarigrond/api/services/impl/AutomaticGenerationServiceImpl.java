@@ -34,12 +34,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -88,9 +88,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         try {
-            Files.createDirectories(Paths.get("data/export"));
-            File csvOutputFile = new File("data/export/" + language.getName() + "/nouns-without-inflection.csv");
-            try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            Path exportPath = Paths.get(pgEnvironment.getExportLocation()).resolve(language.getName());
+            Files.createDirectories(exportPath);
+            Path csvOutputFile = exportPath.resolve("nouns-without-inflection.csv");
+            try (PrintWriter pw = new PrintWriter(csvOutputFile.toFile())) {
                 noInflectionList.stream()
                         .map(this::convertToCSV)
                         .forEach(pw::println);
@@ -120,9 +121,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
 
         try {
-            Files.createDirectories(Paths.get("data/export"));
-            File csvOutputFile = new File("data/export/" + language.getName() + "/adjectives-without-inflection.csv");
-            try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            Path exportPath = Paths.get(pgEnvironment.getExportLocation()).resolve(language.getName());
+            Files.createDirectories(exportPath);
+            Path csvOutputFile = exportPath.resolve("adjectives-without-inflection.csv");
+            try (PrintWriter pw = new PrintWriter(csvOutputFile.toFile())) {
                 noInflectionList.stream()
                         .map(this::convertToCSV)
                         .forEach(pw::println);
