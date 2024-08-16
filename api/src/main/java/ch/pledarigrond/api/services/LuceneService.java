@@ -1,9 +1,6 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.DictionaryLanguage;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -43,4 +40,8 @@ public interface LuceneService {
     List<String> getSuggestionsForField(Language language, String field, String searchTerm, int limit) throws NoIndexAvailableException, IOException, QueryNodeException, ParseException;
 
     List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
+
+    void regenerateSuggestionIndex(Language language) throws Exception;
+
+    String[] getSuggestionForWord(Language language, String word, int numSuggestions, SearchDirection searchDirection) throws Exception;
 }

@@ -69,6 +69,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public void rebuildSuggestionsIndex(Language language) throws Exception {
+        logger.info("Rebuilding suggestions index...");
+        luceneService.regenerateSuggestionIndex(language);
+        logger.info("Suggestions index has been rebuild");
+    }
+
+    @Override
     public DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException {
         DatabaseStatistics statistics = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getStatistics();
         logger.info(statistics.toString());

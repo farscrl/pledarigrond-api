@@ -163,6 +163,18 @@ public class DbController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/rebuild_suggestions_index")
+    ResponseEntity<?> rebuildSuggestionsIndex(@PathVariable("language")Language language) {
+        try {
+            adminService.rebuildSuggestionsIndex(language);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("Error while rebuilding suggestion index. Index error.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     private void stream(HttpServletResponse response, File export) throws IOException {
         InputStream is = new FileInputStream(export);
         IOUtils.copy(is, response.getOutputStream());

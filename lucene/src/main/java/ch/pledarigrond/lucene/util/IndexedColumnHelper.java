@@ -47,8 +47,19 @@ public class IndexedColumnHelper {
     private static List<IndexableField> stringSorted(String name, String value, Field.Store stored) {
         List<IndexableField> fields = new ArrayList<>();
         fields.add(new SortedDocValuesField(name, new BytesRef(value)));
-        if (stored == Field.Store.YES) {
-            fields.add(new StoredField(name, value));
+        fields.add(new TextField(name, value, stored));
+
+        if (name.equals("DStichwort")) {
+            String valueDict = normalizeDictionaryEntries(value);
+            if (!valueDict.isEmpty()) {
+                fields.add(new StringField("DStichwort_dict", value, stored));
+            }
+        }
+        if (name.equals("RStichwort")) {
+            String valueDict = normalizeDictionaryEntries(value);
+            if (!valueDict.isEmpty()) {
+                fields.add(new StringField("RStichwort_dict", value, stored));
+            }
         }
         return fields;
     }
@@ -84,5 +95,32 @@ public class IndexedColumnHelper {
             return PronunciationNormalizer.normalizePronunciation(value);
         }
         return value;
+    }
+
+    private static String normalizeDictionaryEntries(String value) {
+        value = value.replaceAll("ạ", "a");
+        value = value.replaceAll("ạ̀", "a");
+        value = value.replaceAll("Ạ", "A");
+        value = value.replaceAll("ẹ", "e");
+        value = value.replaceAll("ẹ̀", "e");
+        value = value.replaceAll("ẹ́", "e");
+        value = value.replaceAll("ệ", "e");
+        value = value.replaceAll("Ẹ", "E");
+        value = value.replaceAll("ị", "i");
+        value = value.replaceAll("ị̈", "i");
+        value = value.replaceAll("Ị", "I");
+        value = value.replaceAll("ọ", "o");
+        value = value.replaceAll("ọ̈", "ö");
+        value = value.replaceAll("ộ", "o");
+        value = value.replaceAll("ọ̀", "o");
+        value = value.replaceAll("Ọ", "O");
+        value = value.replaceAll("Ọ̈", "Ö");
+        value = value.replaceAll("ụ", "u");
+        value = value.replaceAll("ụ̈", "ü");
+        value = value.replaceAll("Ụ", "U");
+        value = value.replaceAll("Ụ̈", "Ü");
+        value = value.replaceAll("ṣ", "s");
+        value = value.replaceAll("Ṣ", "S");
+        return value.replaceAll("[-.,/&%*\"+$!^`?«»_]", "");
     }
 }

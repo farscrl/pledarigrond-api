@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.controllers.user;
 
+import ch.pledarigrond.api.dtos.PageDto;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
@@ -41,9 +42,24 @@ public class SearchController {
     ) {
         try {
             Page<LemmaVersion> result = luceneService.query(language, searchCriteria, pagination, true);
-             return ResponseEntity.ok(result);
+
+            if (!result.isEmpty()) {
+                return ResponseEntity.ok(result);
+            }
+            String[] suggestions = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, searchCriteria.getSearchDirection());
+            PageDto<LemmaVersion> suggestionPage = new PageDto<>(
+                    result.getContent(),
+                    result.getPageable(),
+                    result.getTotalElements(),
+                    suggestions
+            );
+            return ResponseEntity.ok(suggestionPage);
+
         } catch (InvalidQueryException | BrokenIndexException | NoIndexAvailableException | IOException | InvalidTokenOffsetsException e) {
             logger.error("Error while searching", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("Error while generating suggestions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

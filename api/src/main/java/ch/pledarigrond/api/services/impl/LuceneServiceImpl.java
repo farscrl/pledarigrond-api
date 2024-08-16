@@ -2,22 +2,17 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.DictionaryLanguage;
-import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.core.LuceneIndexManager;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+import ch.pledarigrond.lucene.suggestions.SuggestionsIndex;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +33,8 @@ public class LuceneServiceImpl implements LuceneService {
 
     private final Map<Language, LuceneIndexManager> luceneIndexMap = new HashMap<>();
 
+    private final Map<Language, SuggestionsIndex> luceneSuggestionsIndexMap = new HashMap<>();
+
     @PostConstruct
     public void initialize() throws IOException {
         luceneIndexMap.put(Language.PUTER, new LuceneIndexManager(pgEnvironment.getLuceneConfigPuter()));
@@ -46,10 +43,17 @@ public class LuceneServiceImpl implements LuceneService {
         luceneIndexMap.put(Language.SURSILVAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSursilvan()));
         luceneIndexMap.put(Language.SUTSILVAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSutsilvan()));
         luceneIndexMap.put(Language.VALLADER, new LuceneIndexManager(pgEnvironment.getLuceneConfigVallader()));
+
+        luceneSuggestionsIndexMap.put(Language.PUTER, new SuggestionsIndex(pgEnvironment.getLuceneConfigPuter()));
+        luceneSuggestionsIndexMap.put(Language.RUMANTSCHGRISCHUN, new SuggestionsIndex(pgEnvironment.getLuceneConfigRumantschgrischun()));
+        luceneSuggestionsIndexMap.put(Language.SURMIRAN, new SuggestionsIndex(pgEnvironment.getLuceneConfigSurmiran()));
+        luceneSuggestionsIndexMap.put(Language.SURSILVAN, new SuggestionsIndex(pgEnvironment.getLuceneConfigSursilvan()));
+        luceneSuggestionsIndexMap.put(Language.SUTSILVAN, new SuggestionsIndex(pgEnvironment.getLuceneConfigSutsilvan()));
+        luceneSuggestionsIndexMap.put(Language.VALLADER, new SuggestionsIndex(pgEnvironment.getLuceneConfigVallader()));
     }
 
     @Override
-    public Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+    public Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
         Page<LemmaVersion> result = luceneIndexMap.get(language).query(searchCriteria, pagination);
         if (removeInternalData) {
             return clean(result);
@@ -58,7 +62,7 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, IOException, InvalidTokenOffsetsException {
+    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
         Page<LemmaVersion> result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
         if (removeInternalData) {
             return clean(result);
@@ -77,7 +81,7 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public void addToIndex(Language language, Iterator<LexEntry> iterator) throws NoDatabaseAvailableException, IndexException {
+    public void addToIndex(Language language, Iterator<LexEntry> iterator) throws IndexException {
         luceneIndexMap.get(language).addToIndex(iterator);
     }
 
@@ -99,13 +103,23 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public List<String> getSuggestionsForField(Language language, String field, String searchTerm, int limit) throws NoIndexAvailableException, IOException, QueryNodeException, ParseException {
+    public List<String> getSuggestionsForField(Language language, String field, String searchTerm, int limit) throws NoIndexAvailableException, IOException {
         return luceneIndexMap.get(language).getSuggestionsForField(field, searchTerm, limit);
     }
 
     @Override
     public List<String> getSuggestionsForFieldChoice(Language language, SuggestionField suggestionField, String query, int limit) throws NoIndexAvailableException, IOException {
         return luceneIndexMap.get(language).getSuggestionsForFieldChoice(suggestionField, query, limit);
+    }
+
+    @Override
+    public void regenerateSuggestionIndex(Language language) throws Exception {
+        luceneSuggestionsIndexMap.get(language).reIndex();
+    }
+
+    @Override
+    public String[] getSuggestionForWord(Language language, String word, int numSuggestions, SearchDirection searchDirection) throws Exception {
+        return luceneSuggestionsIndexMap.get(language).suggestSimilar(word, numSuggestions, searchDirection);
     }
 
     private Page<LemmaVersion> clean(Page<LemmaVersion> result) {
@@ -116,11 +130,10 @@ public class LuceneServiceImpl implements LuceneService {
         return result;
     }
 
-    private LemmaVersion clean(LemmaVersion lemma) {
+    private void clean(LemmaVersion lemma) {
         lemma.getPgValues().keySet().retainAll(LemmaVersion.PUBLIC_PG_KEYS);
         lemma.getLemmaValues().remove(LemmaVersion.COMMENT);
         lemma.getLemmaValues().remove(LemmaVersion.EMAIL);
         lemma.getLemmaValues().remove(LemmaVersion.IP_ADDRESS);
-        return lemma;
     }
 }

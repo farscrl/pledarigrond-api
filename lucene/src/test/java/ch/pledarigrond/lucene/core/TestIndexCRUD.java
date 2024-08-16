@@ -1,70 +1,23 @@
 package ch.pledarigrond.lucene.core;
 
-import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.SearchMethod;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
-public class TestIndexCRUD {
+public class TestIndexCRUD extends BaseLuceneIndexTest {
 
-	private LuceneIndexManager luceneIndexManager;
 
-	private File indexDir;
-	
-	@Before
-	public void beforeTest() throws Exception {
-		Language language = Language.SURMIRAN;
-		File file = File.createTempFile("pledarigrond", "test");
-		indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID() + "_idx");
-		Assert.assertFalse(indexDir.exists());
-		indexDir.mkdir();
-		file.deleteOnExit();
-		LuceneConfiguration luceneConfiguration = new LuceneConfiguration(language, indexDir.getAbsolutePath());
-		luceneIndexManager = new LuceneIndexManager(luceneConfiguration);
-	}
-	
-	@After
-	public void afterTest() {
-		deleteRecursive(indexDir);
-	}
-	
-	private void deleteRecursive(File fileOrDir) {
-		if(fileOrDir.isDirectory()) {
-			File[] files = fileOrDir.listFiles();
-            assert files != null;
-            for (File file : files) {
-				deleteRecursive(file);
-			}
-		} else {
-			fileOrDir.delete();
-		}
-	}
-
-	private LexEntry generateValidEntry() {
-		LemmaVersion lv = new LemmaVersion();
-		lv.putEntryValue("DStichwort", "a" + UUID.randomUUID());
-		lv.putEntryValue("RStichwort", "b" + UUID.randomUUID());
-		return generateValidEntryFromLemmaVersion(lv);
-	}
-
-	private LexEntry generateValidEntryFromLemmaVersion(LemmaVersion lv) {
-		LexEntry entry = new LexEntry(lv);
-		lv.setVerification(LemmaVersion.Verification.ACCEPTED);
-		entry.setId(UUID.randomUUID().toString());
-		return entry;
-	}
 
 	@Test
 	public void testGetStatistics() {
@@ -82,7 +35,7 @@ public class TestIndexCRUD {
 	
 	@Test
 	public void testCreateIndex() throws Exception  {
-		testDropIndex();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
@@ -107,8 +60,7 @@ public class TestIndexCRUD {
 
 	@Test
 	public void testUpdateEntityIndex() throws Exception  {
-		testDropIndex();
-		IndexStatistics beforeUpdate = luceneIndexManager.getIndexStatistics();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			LexEntry entry = generateValidEntry();
@@ -175,8 +127,7 @@ public class TestIndexCRUD {
 
 	@Test
 	public void testDeleteEntryFromIndex() throws Exception  {
-		testDropIndex();
-		IndexStatistics beforeUpdate = luceneIndexManager.getIndexStatistics();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			LexEntry entry = generateValidEntry();
@@ -210,7 +161,7 @@ public class TestIndexCRUD {
 		// The number must be greater than 10 to cover the case with several digits.
 		int numberOfEntries = 12;
 
-		testDropIndex();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
 			LexEntry entry = generateValidEntry();
@@ -234,7 +185,7 @@ public class TestIndexCRUD {
 	public void testSubSemanticSuggestion() throws Exception {
 		int numberOfEntries = 36;
 
-		testDropIndex();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
 			LexEntry entry = generateValidEntry();
@@ -279,7 +230,7 @@ public class TestIndexCRUD {
 	public void testGrammarSuggestion() throws Exception {
 		int numberOfEntries = 36;
 
-		testDropIndex();
+		luceneIndexManager.dropIndex();
 		List<LexEntry> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
 			LexEntry entry = generateValidEntry();

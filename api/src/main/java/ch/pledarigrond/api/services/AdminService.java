@@ -24,6 +24,8 @@ public interface AdminService {
 
     void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException;
 
+    void rebuildSuggestionsIndex(Language language) throws Exception;
+
     DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException;
 
     IndexStatistics getIndexStats(Language language) throws NoIndexAvailableException;
