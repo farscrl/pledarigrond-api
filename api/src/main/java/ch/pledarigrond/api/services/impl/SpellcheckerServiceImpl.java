@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -44,6 +45,16 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
     @Value("${git.hunspell.token}")
     private String gitToken;
+
+    @Scheduled(cron = "${pg.hunspell.cron}")
+    private void export() throws IOException, NoDatabaseAvailableException {
+        logger.info("Scheduled export of Hunspell spellchecker files");
+
+        generateAndCommit();
+
+        logger.info("Export of Hunspell spellchecker files finished");
+    }
+
 
     @Override
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
