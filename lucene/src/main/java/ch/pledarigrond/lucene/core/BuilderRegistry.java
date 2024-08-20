@@ -146,14 +146,14 @@ public class BuilderRegistry {
 
     private void init() {
         // Search RStichwort
-        builderMap.put("RStichwort_normal", new DefaultQueryBuilder().setColumn("RStichwort"));
+        builderMap.put("RStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("RStichwort"));
         builderMap.put("RStichwort_intern", new InfixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_prefix", new PrefixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_suffix", new SuffixQueryBuilder().setColumn("RStichwort"));
         builderMap.put("RStichwort_exact", new ExactMatchQueryBuilder().setColumn("RStichwort"));
 
         // Search DStichwort
-        builderMap.put("DStichwort_normal", new DefaultQueryBuilder().setColumn("DStichwort"));
+        builderMap.put("DStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("DStichwort"));
         builderMap.put("DStichwort_intern", new InfixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_prefix", new PrefixQueryBuilder().setColumn("DStichwort"));
         builderMap.put("DStichwort_suffix", new SuffixQueryBuilder().setColumn("DStichwort"));
