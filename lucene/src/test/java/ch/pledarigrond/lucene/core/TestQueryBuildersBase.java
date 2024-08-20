@@ -36,7 +36,7 @@ public abstract class TestQueryBuildersBase {
 			throw new Exception("Could not create index directory");
 		}
 
-		// file.deleteOnExit();
+		file.deleteOnExit();
 		LuceneConfiguration luceneConfiguration = new LuceneConfiguration(language, indexDir.getAbsolutePath());
 		luceneIndexManager = new LuceneIndexManager(luceneConfiguration);
 		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("dictionary.tsv");
@@ -64,7 +64,7 @@ public abstract class TestQueryBuildersBase {
 	
 	@After
 	public void afterTest() {
-		// deleteRecursive(indexDir);
+		deleteRecursive(indexDir);
 	}
 
 	protected String[] getStrings(String key, Page<LemmaVersion> result) {
