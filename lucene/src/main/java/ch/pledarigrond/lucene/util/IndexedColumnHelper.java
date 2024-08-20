@@ -46,7 +46,8 @@ public class IndexedColumnHelper {
 
     private static List<IndexableField> stringSorted(String name, String value, Field.Store stored) {
         List<IndexableField> fields = new ArrayList<>();
-        fields.add(new SortedDocValuesField(name, new BytesRef(value)));
+        // we store the lower case value for sorting, otherwise Uppercase words will be sorted before lowercase words
+        fields.add(new SortedDocValuesField(name, new BytesRef(value.toLowerCase())));
         fields.add(new TextField(name, value, stored));
 
         if (name.equals("DStichwort")) {
