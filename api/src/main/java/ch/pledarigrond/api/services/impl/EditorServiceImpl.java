@@ -133,7 +133,7 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception {
-        return new ArrayList<LemmaVersion>(index.queryExact(language, lemma, dictionaryLanguage, false).getContent());
+        return new ArrayList<>(index.searchExactMatches(language, lemma, dictionaryLanguage, false).getContent());
     }
 
     @Override

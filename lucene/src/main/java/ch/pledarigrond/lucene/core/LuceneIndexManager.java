@@ -160,7 +160,7 @@ public class LuceneIndexManager {
         return new PageImpl<>(results, pageable, docs.totalHits.value);
     }
 
-    public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException {
+    public Page<LemmaVersion> searchExactMatches(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException {
         List<Query> queries;
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {

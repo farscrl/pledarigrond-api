@@ -61,8 +61,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws NoIndexAvailableException, BrokenIndexException {
-        Page<LemmaVersion> result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
+    public Page<LemmaVersion> searchExactMatches(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws NoIndexAvailableException, BrokenIndexException {
+        Page<LemmaVersion> result = luceneIndexMap.get(language).searchExactMatches(phrase, dictionaryLanguage);
         if (removeInternalData) {
             return clean(result);
         }
