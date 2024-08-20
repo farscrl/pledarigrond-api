@@ -9,7 +9,6 @@ import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,7 @@ public class SearchController {
             );
             return ResponseEntity.ok(suggestionPage);
 
-        } catch (InvalidQueryException | BrokenIndexException | NoIndexAvailableException | IOException | InvalidTokenOffsetsException e) {
+        } catch (InvalidQueryException | BrokenIndexException | NoIndexAvailableException | IOException e) {
             logger.error("Error while searching", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {

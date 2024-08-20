@@ -3,16 +3,10 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.springframework.data.domain.Page;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,5 +44,5 @@ public interface EditorService {
 
     String export(Language language, Set<String> selected, SearchCriteria query) throws Exception;
 
-    SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException;
+    SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException;
 }

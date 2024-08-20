@@ -13,7 +13,6 @@ import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.lucene.suggestions.SuggestionsIndex;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
+    public Page<LemmaVersion> query(Language language, SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
         Page<LemmaVersion> result = luceneIndexMap.get(language).query(searchCriteria, pagination);
         if (removeInternalData) {
             return clean(result);
@@ -62,7 +61,7 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
+    public Page<LemmaVersion> queryExact(Language language, String phrase, DictionaryLanguage dictionaryLanguage, boolean removeInternalData) throws NoIndexAvailableException, BrokenIndexException {
         Page<LemmaVersion> result = luceneIndexMap.get(language).queryExact(phrase, dictionaryLanguage);
         if (removeInternalData) {
             return clean(result);

@@ -26,7 +26,6 @@ import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.grouping.GroupDocs;
 import org.apache.lucene.search.grouping.GroupingSearch;
 import org.apache.lucene.search.grouping.TopGroups;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,7 @@ public class LuceneIndexManager {
         luceneIndexFilesystem.get(this.language).resetIndexDirectory();
     }
 
-    public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
+    public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
         long start = System.nanoTime();
 
         // normalize setSearchPhrase (we remove pronunciation marks)
@@ -145,7 +144,7 @@ public class LuceneIndexManager {
         }
     }
 
-    private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException, InvalidTokenOffsetsException {
+    private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException {
         final ArrayList<LemmaVersion> results = new ArrayList<>(pageSize);
         final ScoreDoc[] scoreDocs = docs.scoreDocs;
         IndexSearcher searcher = luceneIndexFilesystem.get(language).getSearcher();
@@ -161,7 +160,7 @@ public class LuceneIndexManager {
         return new PageImpl<>(results, pageable, docs.totalHits.value);
     }
 
-    public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException, InvalidQueryException {
+    public Page<LemmaVersion> queryExact(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException {
         List<Query> queries;
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
@@ -186,8 +185,6 @@ public class LuceneIndexManager {
             return toLemmaVersionPagination(docs, 0, pageSize);
         } catch (IOException e) {
             throw new BrokenIndexException("Broken index!", e);
-        } catch (InvalidTokenOffsetsException e) {
-            throw new InvalidQueryException("Highlighting failed", e);
         }
     }
 

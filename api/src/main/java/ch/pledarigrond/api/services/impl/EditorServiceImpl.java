@@ -18,9 +18,6 @@ import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.model.PgUser;
 import org.apache.commons.io.IOUtils;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,7 +197,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, QueryNodeException, IOException, ParseException {
+    public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException {
         SearchSuggestions suggestions = new SearchSuggestions();
         suggestions.setGrammar(index.getSuggestionsForFieldChoice(language, SuggestionField.GRAMMAR, "", 10000));
         suggestions.setGender(index.getSuggestionsForFieldChoice(language, SuggestionField.GENDER, "", 10000));
@@ -252,7 +249,7 @@ public class EditorServiceImpl implements EditorService {
         writer.close();
     }
 
-    public void export(Language language, Set<String> fields, SearchCriteria query, File dest) throws IOException, InvalidQueryException, NoIndexAvailableException, BrokenIndexException, InvalidTokenOffsetsException {
+    public void export(Language language, Set<String> fields, SearchCriteria query, File dest) throws IOException, InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
         Pagination pagination = new Pagination();
         pagination.setPageSize(100);
 
