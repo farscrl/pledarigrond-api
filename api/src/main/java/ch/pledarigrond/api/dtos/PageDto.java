@@ -11,15 +11,18 @@ import java.util.List;
 @Getter
 public class PageDto<T> extends PageImpl<T> {
 
-    private String[] suggestions;
+    private String[] suggestionsRm;
+    private String[] suggestionsDe;
 
-    public PageDto(List<T> content, Pageable pageable, long total, String[] suggestions) {
+    public PageDto(List<T> content, Pageable pageable, long total, String[] suggestionsRm, String[] suggestionsDe) {
         super(content, pageable, total);
-        this.suggestions = suggestions;
+        this.suggestionsRm = suggestionsRm;
+        this.suggestionsDe = suggestionsDe;
     }
 
-    public PageDto(List<T> content, String[] suggestions) {
+    public PageDto(List<T> content, String[] suggestionsRm, String[] suggestionsDe) {
         super(content);
-        this.suggestions = suggestions;
+        this.suggestionsRm = suggestionsRm;
+        this.suggestionsDe = suggestionsDe;
     }
 }

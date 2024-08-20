@@ -4,6 +4,7 @@ import ch.pledarigrond.api.dtos.PageDto;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -45,12 +46,14 @@ public class SearchController {
             if (!result.isEmpty()) {
                 return ResponseEntity.ok(result);
             }
-            String[] suggestions = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, searchCriteria.getSearchDirection());
+            String[] suggestionsRm = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
+            String[] suggestionsDe = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
             PageDto<LemmaVersion> suggestionPage = new PageDto<>(
                     result.getContent(),
                     result.getPageable(),
                     result.getTotalElements(),
-                    suggestions
+                    suggestionsRm,
+                    suggestionsDe
             );
             return ResponseEntity.ok(suggestionPage);
 

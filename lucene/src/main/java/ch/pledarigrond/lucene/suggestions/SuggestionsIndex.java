@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SuggestionsIndex {
@@ -25,54 +26,69 @@ public class SuggestionsIndex {
     protected static final Logger logger = LoggerFactory.getLogger(SuggestionsIndex.class);
 
     private final LuceneConfiguration luceneConfiguration;
-    private final Directory spellIndexDirectory;
-    private IndexReader reader;
-    private SpellChecker spellChecker;
+    private final Directory spellIndexDirectoryRm;
+    private final Directory spellIndexDirectoryDe;
+    private SpellChecker spellCheckerRm;
+    private SpellChecker spellCheckerDe;
+    private IndexReader readerRm;
+    private IndexReader readerDe;
 
     public SuggestionsIndex(LuceneConfiguration luceneConfiguration) throws IOException {
         this.luceneConfiguration = luceneConfiguration;
-        spellIndexDirectory = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDir().toPath());
-        spellChecker = new SpellChecker(spellIndexDirectory);
-        reader = DirectoryReader.open(spellIndexDirectory);
+
+        spellIndexDirectoryRm = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDirRm().toPath());
+        spellIndexDirectoryDe = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDirDe().toPath());
+
+        spellCheckerRm = new SpellChecker(spellIndexDirectoryRm);
+        spellCheckerDe = new SpellChecker(spellIndexDirectoryDe);
+
+        readerRm = DirectoryReader.open(spellIndexDirectoryRm);
+        readerDe = DirectoryReader.open(spellIndexDirectoryDe);
+
         logger.info("Initialized suggestions index.");
     }
 
     public void reIndex() throws IOException {
-
-        // delete current content
-        Directory suggestionsDirectory = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDir().toPath());
-        IndexWriterConfig config = new IndexWriterConfig();
-        IndexWriter writer = new IndexWriter(suggestionsDirectory, config);
-        writer.deleteDocuments(new MatchAllDocsQuery());
-        writer.commit();
-        writer.close();
-        logger.info("Deleted current content of index.");
+        deleteCurrentIndexContents();
 
         // Open the main index reader
         Directory indexDirectory = FSDirectory.open(luceneConfiguration.getLuceneIndexDir().toPath());
         IndexReader reader = DirectoryReader.open(indexDirectory);
 
-        spellChecker.indexDictionary(new LuceneDictionary(reader, "DStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
-        spellChecker.indexDictionary(new LuceneDictionary(reader, "RStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "DStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "RStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
 
         logIndexedWords(false);
 
         // Close resources
-        spellChecker.close();
+        spellCheckerRm.close();
+        spellCheckerDe.close();
         reader.close();
-        this.reader.close();
+        this.readerRm.close();
+        this.readerDe.close();
 
-        spellChecker = new SpellChecker(spellIndexDirectory);
-        this.reader = DirectoryReader.open(spellIndexDirectory);
+        spellCheckerRm = new SpellChecker(spellIndexDirectoryRm);
+        spellCheckerDe = new SpellChecker(spellIndexDirectoryDe);
+        this.readerRm = DirectoryReader.open(spellIndexDirectoryRm);
+        this.readerDe = DirectoryReader.open(spellIndexDirectoryDe);
     }
 
     public String[] suggestSimilar(String word, int numSuggestions, SearchDirection direction) throws IOException {
-        return prioritizeSuggestions(word, spellChecker.suggestSimilar(word, numSuggestions, 0.5F)).toArray(new String[0]);
+        if (direction == SearchDirection.GERMAN) {
+            return spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F);
+        } else if (direction == SearchDirection.ROMANSH) {
+            return prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)).toArray(new String[0]);
+        } else {
+            List<String> suggestions = new ArrayList<>();
+            suggestions.addAll(Arrays.asList(spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F)));
+            suggestions.addAll(prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)));
+            return suggestions.toArray(new String[0]);
+        }
     }
 
     private void logIndexedWords(boolean includeDetails) throws IOException {
-        try (IndexReader spellIndexReader = DirectoryReader.open(spellIndexDirectory)) {
-            logger.info("Total number of documents in spell index: " + spellIndexReader.numDocs());
+        try (IndexReader spellIndexReader = DirectoryReader.open(spellIndexDirectoryRm)) {
+            logger.info("Total number of documents in RM spell index: " + spellIndexReader.numDocs());
             if (includeDetails) {
                 for (int i = 0; i < spellIndexReader.maxDoc(); i++) {
                     Document doc = spellIndexReader.document(i);
@@ -80,6 +96,37 @@ public class SuggestionsIndex {
                 }
             }
         }
+
+        try (IndexReader spellIndexReader = DirectoryReader.open(spellIndexDirectoryDe)) {
+            logger.info("Total number of documents in DE spell index: " + spellIndexReader.numDocs());
+            if (includeDetails) {
+                for (int i = 0; i < spellIndexReader.maxDoc(); i++) {
+                    Document doc = spellIndexReader.document(i);
+                    logger.info("  Indexed word: " + doc.get("word"));
+                }
+            }
+        }
+    }
+
+    private void deleteCurrentIndexContents() throws IOException {
+        // delete current content
+        Directory suggestionsDirectoryRm = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDirRm().toPath());
+        Directory suggestionsDirectoryDe = FSDirectory.open(luceneConfiguration.getLuceneSuggestionIndexDirDe().toPath());
+
+        IndexWriterConfig configRm = new IndexWriterConfig();
+        IndexWriterConfig configDe = new IndexWriterConfig();
+
+        IndexWriter writerRm = new IndexWriter(suggestionsDirectoryRm, configRm);
+        writerRm.deleteDocuments(new MatchAllDocsQuery());
+        writerRm.commit();
+        writerRm.close();
+
+        IndexWriter writerDe = new IndexWriter(suggestionsDirectoryDe, configDe);
+        writerDe.deleteDocuments(new MatchAllDocsQuery());
+        writerDe.commit();
+        writerDe.close();
+
+        logger.info("Deleted current content of index.");
     }
 
     /**

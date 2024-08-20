@@ -41,7 +41,7 @@ public class SuggestionsIndexTest extends BaseLuceneIndexTest {
         SuggestionsIndex suggestionsIndex = new SuggestionsIndex(luceneConfiguration);
         suggestionsIndex.reIndex();
 
-        String[] suggestions = suggestionsIndex.suggestSimilar("Testt", 1, SearchDirection.ROMANSH);
+        String[] suggestions = suggestionsIndex.suggestSimilar("Testt", 1, SearchDirection.GERMAN);
         Assert.assertEquals(1, suggestions.length);
         Assert.assertEquals("Test", suggestions[0]);
 
@@ -49,7 +49,7 @@ public class SuggestionsIndexTest extends BaseLuceneIndexTest {
         Assert.assertEquals(1, suggestions.length);
         Assert.assertEquals("test", suggestions[0]);
 
-        suggestions = suggestionsIndex.suggestSimilar("löwe", 1, SearchDirection.ROMANSH);
+        suggestions = suggestionsIndex.suggestSimilar("löwe", 1, SearchDirection.GERMAN);
         Assert.assertEquals(1, suggestions.length);
         Assert.assertEquals("Löwe", suggestions[0]);
 

@@ -19,7 +19,8 @@ public class LuceneConfiguration {
 
 	private File indexDir;
 
-	private File suggestionIndexDir;
+	private File suggestionIndexDirRm;
+	private File suggestionIndexDirDe;
 
 	@Getter
     private final Language language;
@@ -37,8 +38,12 @@ public class LuceneConfiguration {
 		return indexDir;
 	}
 
-	public File getLuceneSuggestionIndexDir() {
-		return suggestionIndexDir;
+	public File getLuceneSuggestionIndexDirRm() {
+		return suggestionIndexDirRm;
+	}
+
+	public File getLuceneSuggestionIndexDirDe() {
+		return suggestionIndexDirDe;
 	}
 
 	private void setBaseDirectory(String luceneDir) {
@@ -49,10 +54,16 @@ public class LuceneConfiguration {
             logger.warn("Could not create index directory: {}", this.indexDir);
 		}
 
-		this.suggestionIndexDir = new File(lucenePath + "/" + language.getName() + "_suggestions/");
-		success = this.suggestionIndexDir.mkdirs();
+		this.suggestionIndexDirRm = new File(lucenePath + "/" + language.getName() + "_suggestions_rm/");
+		success = this.suggestionIndexDirRm.mkdirs();
 		if (!success) {
-            logger.warn("Could not create suggestion index directory: {}", this.suggestionIndexDir);
+            logger.warn("Could not create suggestion index directory RM: {}", this.suggestionIndexDirRm);
+		}
+
+		this.suggestionIndexDirDe = new File(lucenePath + "/" + language.getName() + "_suggestions_de/");
+		success = this.suggestionIndexDirDe.mkdirs();
+		if (!success) {
+			logger.warn("Could not create suggestion index directory DE: {}", this.suggestionIndexDirDe);
 		}
 	}
 }
