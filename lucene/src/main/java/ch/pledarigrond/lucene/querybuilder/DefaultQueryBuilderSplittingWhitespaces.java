@@ -24,8 +24,6 @@ import java.util.List;
  * This is a special case of the DefaultQueryBuilder, used for the fields
  * containing additional search terms. As those additional terms are not
  * seperated by any symbol (e.g. a comma), we use whitespaces to separate them.
- * This is internally by using both {@link TermQuery} and {@link PrefixQuery},
- * and by modifying the field names which are searched by lucene.
  */
 public class DefaultQueryBuilderSplittingWhitespaces extends AbstractQueryBuilder {
 
@@ -67,7 +65,7 @@ public class DefaultQueryBuilderSplittingWhitespaces extends AbstractQueryBuilde
             Query query = parser.parse(value);
             toReturn = Collections.singletonList(query);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Could not parse query: {}", value, e);
         }
         return toReturn;
     }

@@ -7,6 +7,8 @@ import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.search.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -24,6 +26,8 @@ import java.util.*;
  * to build the lucene query string.
  */
 public abstract class AbstractQueryBuilder {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected final Analyzer analyzer = LuceneHelper.newAnalyzer();
     protected String column;

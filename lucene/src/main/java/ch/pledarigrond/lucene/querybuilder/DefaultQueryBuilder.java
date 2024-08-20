@@ -18,9 +18,7 @@ import java.util.List;
  * the results of a query:
  * If a user searches for a term (for instance, 'car'), all exact
  * translations should be listed before any translation which contains
- * the term among others ('car insurance', 'car crash', etc.). This is
- * realized by using both {@link TermQuery} and {@link PrefixQuery},
- * and by modifying the field names which are searched by lucene.
+ * the term among others ('car insurance', 'car crash', etc.).
  */
 public class DefaultQueryBuilder extends AbstractQueryBuilder {
 

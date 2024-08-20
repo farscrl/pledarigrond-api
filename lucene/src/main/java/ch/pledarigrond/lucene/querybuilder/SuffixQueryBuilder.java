@@ -26,13 +26,13 @@ public class SuffixQueryBuilder extends AbstractQueryBuilder {
     public List<Query> transform(String value) {
         value = TokenizerHelper.tokenizeString(analyzer, value);
 
+        // exact match is on top
         Query q1 = new TermQuery(new Term(getFieldName("first"), value));
         q1 = new BoostQuery(q1, 1000f);
 
+        // all words ending with the given value
         Query q2 = new RegexpQuery(new Term(getFieldName("second"), ".*" + value));
 
-        Query q3 = new TermQuery(new Term(getFieldName("first"), ".*" + value));
-
-        return Arrays.asList(q1, q2, q3);
+        return Arrays.asList(q1, q2);
     }
 }

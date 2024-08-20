@@ -26,9 +26,11 @@ public class PrefixQueryBuilder extends AbstractQueryBuilder {
     public List<Query> transform(String value) {
         value = TokenizerHelper.tokenizeString(analyzer, value);
 
+        // Exact corresponding results are boosted
         Query q1 = new TermQuery(new Term(getFieldName("first"), value));
         q1 = new BoostQuery(q1, 1000f);
 
+        // All words starting with the given value afterwards
         Query q2 = new PrefixQuery(new Term(getFieldName("second"), value));
 
         return Arrays.asList(q1, q2);
