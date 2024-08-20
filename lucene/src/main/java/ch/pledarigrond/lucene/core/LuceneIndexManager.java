@@ -95,7 +95,16 @@ public class LuceneIndexManager {
 
         SortField[] fields = new SortField[3];
         fields[0] = SortField.FIELD_SCORE;
-        if (searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
+
+        if (searchCriteria.getSortBy() == null) {
+            if (searchCriteria.getSearchDirection() == SearchDirection.ROMANSH) {
+                searchCriteria.setSortBy(SortBy.ROMANSH);
+            } else {
+                searchCriteria.setSortBy(SortBy.GERMAN);
+            }
+        }
+
+        if (searchCriteria.getSortBy() == SortBy.ROMANSH) {
             fields[1] = new SortField("RStichwort", Type.STRING);
             fields[2] = new SortField("RStichwort_sort", Type.INT);
         } else {
