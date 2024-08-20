@@ -56,15 +56,17 @@ public abstract class AbstractQueryBuilder {
      * was created for.
      */
     protected void registerFieldMapping(String name, boolean analyzed, FieldType type, boolean lowercase, boolean whitespace) {
+        String destField = column + getFieldSuffix(analyzed, lowercase, whitespace, type);
+        finalFieldNames.put(name, destField);
+
         IndexedColumn item = new IndexedColumn(column);
         item.setAnalyzed(analyzed);
         item.setLowerCase(lowercase);
         item.setStored(false);
         item.setType(type);
         item.setWhitespaceAnalyzer(whitespace);
-        String destField = column + getFieldSuffix(analyzed, lowercase, whitespace, type);
-        finalFieldNames.put(name, destField);
         item.setIndexFieldName(destField);
+
         columns.add(item);
     }
 
