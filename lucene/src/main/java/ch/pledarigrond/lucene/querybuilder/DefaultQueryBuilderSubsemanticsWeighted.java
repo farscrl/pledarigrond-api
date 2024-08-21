@@ -44,7 +44,7 @@ public class DefaultQueryBuilderSubsemanticsWeighted extends AbstractQueryBuilde
         BooleanQuery.Builder firstQueryBuilder = new BooleanQuery.Builder();
         firstQueryBuilder.add(new TermQuery(new Term(super.getFieldName("first"), value)), BooleanClause.Occur.MUST);
         firstQueryBuilder.add(new TermRangeQuery(subsemanticsField, null, null, true, true), BooleanClause.Occur.MUST_NOT);
-        Query first = new BoostQuery(firstQueryBuilder.build(), 1000);
+        Query first = new BoostQuery(firstQueryBuilder.build(), 100000f);
 
         // Entries with searchField equal to passed value and subsemantics set but not equal to vulgar words
         BooleanQuery.Builder secondQueryBuilder = new BooleanQuery.Builder();
@@ -54,7 +54,7 @@ public class DefaultQueryBuilderSubsemanticsWeighted extends AbstractQueryBuilde
             notVulgarQuery.add(new TermQuery(new Term(subsemanticsField, vulgarWord)), BooleanClause.Occur.MUST_NOT);
         }
         secondQueryBuilder.add(notVulgarQuery.build(), BooleanClause.Occur.MUST);
-        Query second = new BoostQuery(secondQueryBuilder.build(), 100);
+        Query second = new BoostQuery(secondQueryBuilder.build(), 10000f);
 
 
         // Entries with searchField equal to passed value and subsemantics equal to one of the vulgar words
@@ -65,7 +65,7 @@ public class DefaultQueryBuilderSubsemanticsWeighted extends AbstractQueryBuilde
             vulgarQuery.add(new TermQuery(new Term(subsemanticsField, vulgarWord)), BooleanClause.Occur.SHOULD);
         }
         thirdQueryBuilder.add(vulgarQuery.build(), BooleanClause.Occur.MUST);
-        Query third = new BoostQuery(thirdQueryBuilder.build(), 10);
+        Query third = new BoostQuery(thirdQueryBuilder.build(), 1000f);
 
         // match entries where search phrase is followed by whitespace
         Query fourth = new TermQuery(new Term(super.getFieldName("second"), value));
