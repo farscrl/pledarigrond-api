@@ -52,7 +52,7 @@
         </http>
         <format>
             <label>
-                <pattern>app=PLEDARIGROND,profile=${spring.profiles.active:dev},host=${HOSTNAME},level=%level</pattern>
+                <pattern>app=PLEDARIGROND,profile=${spring.profiles.active},host=${HOSTNAME},level=%level</pattern>
             </label>
         </format>
         <batchMaxItems>1000</batchMaxItems>
