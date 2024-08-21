@@ -1,46 +1,29 @@
-# Pledari Grond - API
+## Pledari Grond - Java API
 
-This repository contains the code for the Java-API of the Pledari Grond. 
+This repository contains the code for the Java API of Pledari Grond, a Romansh language dictionary and grammar resource.
 
-The code in this repository is a big refactoring of the [old code of the Pledari Grond](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran), witch was based on [Maalr](https://spinfo.phil-fak.uni-koeln.de/forschung/abgeschlossene-forschungsprojekte/maalr-a-modern-approach-to-aggregate-lexical-resources). 
+The code represents a significant refactoring of the [original Pledari Grond code](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran), which was based on the [Maalr project](https://spinfo.phil-fak.uni-koeln.de/forschung/abgeschlossene-forschungsprojekte/maalr-a-modern-approach-to-aggregate-lexical-resources).
 
-## Running the project
-To run the Pledari Grond application, you must run a MongoDB. For local development, you can run the `docker-compose.yaml`. This starts a docker container with a mongodb.
+## Running the Project
 
-All the project configuration can be done in the `application.properties` of the API module. There you can also define the password of the admin user. 
+### Prerequisites:
 
-## Project structure
+* **MongoDB:** A running instance of MongoDB is required. For local development, you can use `docker-compose.yaml` to start a Docker container with MongoDB.
 
-It consists of the following modules: 
+### Configuration:
 
-### api
-The API-module is a Spring Boot application. It handles the Web-Requests to the API. 
+Project configuration is located in the `application.properties` file within the API module. This file also allows you to set the admin user password.
 
-### common
-The common module contains data definitions used by different modules.
 
-### inflection
-The inflection module has the logic to inflect words (conjugate, create plural forms...) in different Romansh idioms.
+## Project Structure
 
-The generation of the conjugations is partially based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.conjugator) module.
+The repository consists of several modules:
 
-### lucene
-The lucene module creates Lucene Indexes of all entries of the dictionary. It is used to perform the searches on.
-
-There are two lucene indexes that are created: one on the hard disk and another one just in RAM. Searches are always executed on the index in RAM. When the application starts, the index of the hard disk is loaded into RAM. 
-
-This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.lucene) module.
-
-### mongodb
-The mongodb module handles the persistent storage of the dictionary data in a MongoDB.
-
-This module is heavily based on a copy of this [Maalr](https://github.com/plattafurma-libra/pledari-grond/tree/surmiran/maalr.mongo) module.
-
-### names
-The names module handles the storage of Names (typical romansh firstnames, lastnames, geographical names,...) used for the spellcheckers.
-
-### parent
-The parent-module is parent for all modules in this repository and allows defining common pom entries.
-
-### spellchecker
-The spellchecker module handles the generation of the spellchecker files.
+* **api:** Spring Boot application handling web requests to the API.
+* **common:** Data definitions used across different modules.
+* **inflection:** Logic for inflecting words (conjugation, pluralization) in various Romansh idioms. Conjugation generation partially relies on a copy of the Maalr's `maalr.conjugator` module.
+* **lucene:** Creates Apache Lucene indexes for dictionary data. This includes one main index and two suggestion indexes (German and Romansh) for cases where no exact search results are found.
+* **mongodb:** Handles persistent storage of dictionary data in MongoDB. This module heavily utilizes a copy of Maalr's `maalr.mongo` module.
+* **names:** Manages storage of names (typical Romansh first/last names, geographical names, etc.) used by spellcheckers.
+* **parent:** Parent module for all project modules, defining common pom entries.
+* **spellchecker:** Handles generation of spellchecker files.
