@@ -21,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -33,13 +34,10 @@ public class ScheduledDumpService {
     @Autowired
     private PgEnvironment pgEnvironment;
 
-    public File getJsonExportFile(Language language) {
+    public File getJsonExportFile(Language language) throws IOException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         File dir = new File(pgEnvironment.getExportLocation() + dbName + "/");
-        boolean success = dir.mkdirs();
-        if (!success) {
-            return null;
-        }
+        Files.createDirectories(dir.toPath());
 
         if (Objects.requireNonNull(dir.listFiles()).length > 0) {
             return Objects.requireNonNull(dir.listFiles(pathname -> pathname.getName().endsWith(".zip")))[0];
@@ -60,11 +58,7 @@ public class ScheduledDumpService {
     private void exportDataForLanguage(Language language) throws IOException, NoDatabaseAvailableException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         File exportDir = new File(pgEnvironment.getExportLocation() + dbName + "/");
-        boolean success = exportDir.mkdirs();
-        if (!success) {
-            logger.error("Could not create export directory");
-            return;
-        }
+        Files.createDirectories(exportDir.toPath());
 
         String fileName = getExportFileName(language);
         File file = new File(exportDir, fileName + ".zip");
