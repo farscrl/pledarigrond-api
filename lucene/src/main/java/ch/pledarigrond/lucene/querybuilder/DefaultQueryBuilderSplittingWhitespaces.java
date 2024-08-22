@@ -61,7 +61,11 @@ public class DefaultQueryBuilderSplittingWhitespaces extends AbstractQueryBuilde
             //match multi-word queries
             value = value.replace(" ", " AND ");
             //append wildcard (cf. PrefixQueries)
-            value += "*";
+            if (!value.trim().isEmpty()) {
+                // only append wildcard if the query is not empty,
+                // as only a wildcard query is not a valid query
+                value += "*";
+            }
             Query query = parser.parse(value);
             toReturn = Collections.singletonList(query);
         } catch (ParseException e) {
