@@ -100,7 +100,7 @@ public class HunspellList {
             return result;
         } else {
             if (str.contains("(") || str.contains(")")) {
-                LOG.error("Could not parse: {}", str);
+                LOG.info("Could not parse: {}", str);
             }
             return List.of(str.replace("(", "").replace(")", ""));
         }
@@ -129,7 +129,7 @@ public class HunspellList {
             return result;
         } else {
             if (str.contains("[") || str.contains("]")) {
-                LOG.error("Could not parse: {}", str);
+                LOG.info("Could not parse: {}", str);
             }
             return List.of(str.replace("[", "").replace("]", ""));
         }
