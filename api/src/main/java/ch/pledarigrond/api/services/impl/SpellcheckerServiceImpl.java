@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SpellcheckerServiceImpl implements SpellcheckerService {
@@ -49,6 +51,17 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Value("${pg.hunspell.location}")
     private String hunspellLocation;
 
+    @Value("${pg.activeLanguages}")
+    private String[] activeLanguagesArray;
+    private List<Language> activeLanguages;
+
+    @PostConstruct
+    public void init() {
+        this.activeLanguages = Arrays.stream(activeLanguagesArray)
+                .map(Language::valueOf)
+                .collect(Collectors.toList());
+    }
+
     @Scheduled(cron = "${pg.hunspell.cron}")
     private void export() throws IOException, NoDatabaseAvailableException {
         logger.info("Scheduled export of Hunspell spellchecker files");
@@ -68,15 +81,6 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Override
     public void generateAndCommit() throws NoDatabaseAvailableException, IOException {
         long startTime = System.currentTimeMillis();
-
-        List<Language> activeLanguages = new ArrayList<>(List.of(new Language[]{
-                // Language.PUTER,
-                Language.RUMANTSCHGRISCHUN,
-                Language.SURMIRAN,
-                // Language.SURSILVAN,
-                Language.SUTSILVAN,
-                // Language.VALLADER
-        }));
 
         for (Language language : activeLanguages) {
             List<String> names = nameService.getWordsForLanguage(language);
