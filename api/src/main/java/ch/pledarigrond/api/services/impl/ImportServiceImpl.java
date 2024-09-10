@@ -105,7 +105,7 @@ public class ImportServiceImpl implements ImportService {
                     lv.getLemmaValues().put("RPhonetics", row.getCell(3).getRichStringCellValue().getString());
                 }
                 if (row.getCell(4) != null) {
-                    lv.getLemmaValues().put("RSemantik", row.getCell(4).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("RSubsemantik", row.getCell(4).getRichStringCellValue().getString());
                 }
                 if (row.getCell(5) != null) {
                     lv.getLemmaValues().put("REtymologie", row.getCell(5).getRichStringCellValue().getString());
@@ -123,7 +123,7 @@ public class ImportServiceImpl implements ImportService {
                     lv.getLemmaValues().put("DGrammatik", row.getCell(9).getRichStringCellValue().getString());
                 }
                 if (row.getCell(10) != null) {
-                    lv.getLemmaValues().put("DSemantik", row.getCell(10).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("DSubsemantik", row.getCell(10).getRichStringCellValue().getString());
                 }
                 if (row.getCell(11) != null) {
                     lv.getLemmaValues().put("categories", row.getCell(11).getRichStringCellValue().getString());
