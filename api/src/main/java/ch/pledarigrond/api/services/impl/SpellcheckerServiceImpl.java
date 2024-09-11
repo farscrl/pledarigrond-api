@@ -83,9 +83,13 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         long startTime = System.currentTimeMillis();
 
         for (Language language : activeLanguages) {
+            long languageStartTime = System.currentTimeMillis();
+            logger.info("Generating Hunspell for language {}", language);
             List<String> names = nameService.getWordsForLanguage(language);
             HunspellGenerator generator = getGeneratorForLanguage(language, names);
             generator.generateHunspell();
+            long executionTime = (System.currentTimeMillis() - languageStartTime) / 1000;
+            logger.info("Execution time for language {}: {}s", language, executionTime);
         }
 
         GitDataDto gitData = new GitDataDto(repoPath, remoteUrl, remoteBranch, gitToken, hunspellLocation);
@@ -95,7 +99,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
         long endTime = System.currentTimeMillis();
         long executionTime = (endTime - startTime) / 1000;
-        logger.info("Execution time: {}s", executionTime);
+        logger.info("Execution time for hunspell generation: {}s", executionTime);
     }
 
     @Override
