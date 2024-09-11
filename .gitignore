@@ -12,6 +12,7 @@
 /data/hunspell/vallader/
 /data/hunspell/git/
 /logs/app.log
+/api/logs/app.log
 
 # macOS
 .DS_Store
