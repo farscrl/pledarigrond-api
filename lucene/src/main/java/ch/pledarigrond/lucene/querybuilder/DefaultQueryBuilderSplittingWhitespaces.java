@@ -69,7 +69,7 @@ public class DefaultQueryBuilderSplittingWhitespaces extends AbstractQueryBuilde
             Query query = parser.parse(value);
             toReturn = Collections.singletonList(query);
         } catch (ParseException e) {
-            logger.error("Could not parse query: {}", value, e);
+            // for not composed queries, we expect the parsing to fail, then the default queries are used
         }
         return toReturn;
     }
