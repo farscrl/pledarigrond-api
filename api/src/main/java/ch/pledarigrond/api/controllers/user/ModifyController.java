@@ -53,7 +53,7 @@ public class ModifyController {
             LexEntry updatedEntry = Converter.convertToLexEntry(updated);
             return ResponseEntity.ok(updatedEntry);
         } catch (Exception e) {
-            logger.error("Error while suggesting modification", e);
+            logger.error("Error while suggesting modification for id: {}", id, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
