@@ -15,8 +15,8 @@
  ******************************************************************************/
 package ch.pledarigrond.lucene.util;
 
+import ch.pledarigrond.lucene.analyzers.ApostropheAndWhitespaceAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.io.IOException;
@@ -37,6 +37,6 @@ public class LuceneHelper {
 
 	// For initial indexing (preserve special chars) to enable suggestion search
 	public static Analyzer newWhitespaceAnalyzer() {
-		return new WhitespaceAnalyzer();
+		return new ApostropheAndWhitespaceAnalyzer();
 	}
 }
