@@ -253,8 +253,7 @@ public class LuceneIndexManager {
         Query query = getSuggestionsQuery(fieldName, searchTerm);
         Set<String> allValues = new TreeSet<>();
 
-        GroupingSearch groupingSearch = new GroupingSearch(fieldName);
-        getGroupingResults(searchTerm, limit, query, allValues, groupingSearch);
+        getSortedResults(searchTerm, limit, query, allValues, fieldName);
         return getLimitedResults(limit, allValues);
     }
 
@@ -513,6 +512,25 @@ public class LuceneIndexManager {
             for (String part : parts) {
                 if (part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
                     allValues.add(part);
+                }
+            }
+        }
+    }
+
+    private void getSortedResults(String searchTerm, int limit, Query query, Set<String> allValues, String field) throws IOException, NoIndexAvailableException {
+        TopDocs topDocs = luceneIndexFilesystem.get(language).getSearcher().search(query, limit);
+
+        StoredFields storedFields = luceneIndexFilesystem.get(language).getSearcher().getIndexReader().storedFields();
+        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+            Document document = storedFields.document(scoreDoc.doc);
+
+            String fieldValue = document.get(field);
+            if (fieldValue != null) {
+                String[] parts = fieldValue.split("(; ?)|(, ?)");
+                for (String part : parts) {
+                    if (part.toLowerCase().startsWith(searchTerm.toLowerCase())) {
+                        allValues.add(part);
+                    }
                 }
             }
         }
