@@ -218,14 +218,14 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 
 		Assert.assertEquals("d0", result.get(0));
 		Assert.assertEquals("d1", result.get(1));
-		Assert.assertEquals("d10", result.get(2));
-		Assert.assertEquals("d11", result.get(3));
-		Assert.assertEquals("d2", result.get(4));
-		Assert.assertEquals("d3", result.get(5));
-		Assert.assertEquals("d4", result.get(6));
-		Assert.assertEquals("d5", result.get(7));
-		Assert.assertEquals("d6", result.get(8));
-		Assert.assertEquals("d7", result.get(9));
+		Assert.assertEquals("d2", result.get(2));
+		Assert.assertEquals("d3", result.get(3));
+		Assert.assertEquals("d4", result.get(4));
+		Assert.assertEquals("d5", result.get(5));
+		Assert.assertEquals("d6", result.get(6));
+		Assert.assertEquals("d7", result.get(7));
+		Assert.assertEquals("d8", result.get(8));
+		Assert.assertEquals("d9", result.get(9));
 
 		result = luceneIndexManager.getSuggestionsForField("RSubsemantik", "r", 5);
 
@@ -233,9 +233,42 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 
 		Assert.assertEquals("r0", result.get(0));
 		Assert.assertEquals("r1", result.get(1));
-		Assert.assertEquals("r10", result.get(2));
-		Assert.assertEquals("r11", result.get(3));
-		Assert.assertEquals("r2", result.get(4));
+		Assert.assertEquals("r2", result.get(2));
+		Assert.assertEquals("r3", result.get(3));
+		Assert.assertEquals("r4", result.get(4));
+	}
+
+	@Test
+	public void testCategorySuggestions() throws Exception {
+
+		luceneIndexManager.dropIndex();
+		List<LexEntry> entries = new ArrayList<>();
+
+		LexEntry entry1 = generateValidEntry();
+		entry1.getCurrent().putEntryValue("DStichwort", "d" + 1);
+		entry1.getCurrent().putEntryValue("RStichwort", "r" + 1);
+		entry1.getCurrent().putEntryValue("categories", "stringA, stringB, stringC");
+		entries.add(entry1);
+
+		LexEntry entry2 = generateValidEntry();
+		entry2.getCurrent().putEntryValue("DStichwort", "d" + 2);
+		entry2.getCurrent().putEntryValue("RStichwort", "r" + 2);
+		entry2.getCurrent().putEntryValue("categories", "stringB, stringC, stringD");
+		entries.add(entry2);
+
+		luceneIndexManager.addToIndex(entries.iterator());
+
+		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
+		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 2);
+
+		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("categories", "s", 10);
+
+		Assert.assertEquals(4, result.size());
+
+		Assert.assertEquals("stringA", result.get(0));
+		Assert.assertEquals("stringB", result.get(1));
+		Assert.assertEquals("stringC", result.get(2));
+		Assert.assertEquals("stringD", result.get(3));
 	}
 
 	@Test
