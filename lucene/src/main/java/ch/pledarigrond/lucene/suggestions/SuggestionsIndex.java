@@ -73,16 +73,21 @@ public class SuggestionsIndex {
         this.readerDe = DirectoryReader.open(spellIndexDirectoryDe);
     }
 
-    public String[] suggestSimilar(String word, int numSuggestions, SearchDirection direction) throws IOException {
-        if (direction == SearchDirection.GERMAN) {
-            return spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F);
-        } else if (direction == SearchDirection.ROMANSH) {
-            return prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)).toArray(new String[0]);
-        } else {
-            List<String> suggestions = new ArrayList<>();
-            suggestions.addAll(Arrays.asList(spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F)));
-            suggestions.addAll(prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)));
-            return suggestions.toArray(new String[0]);
+    public String[] suggestSimilar(String word, int numSuggestions, SearchDirection direction) {
+        try {
+            if (direction == SearchDirection.GERMAN) {
+                return spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F);
+            } else if (direction == SearchDirection.ROMANSH) {
+                return prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)).toArray(new String[0]);
+            } else {
+                List<String> suggestions = new ArrayList<>();
+                suggestions.addAll(Arrays.asList(spellCheckerDe.suggestSimilar(word, numSuggestions, 0.6F)));
+                suggestions.addAll(prioritizeSuggestions(word, spellCheckerRm.suggestSimilar(word, numSuggestions, 0.6F)));
+                return suggestions.toArray(new String[0]);
+            }
+        } catch (IOException | AlreadyClosedException e) {
+            logger.error("Error while suggesting similar words: {}", e.getMessage());
+            return new String[0];
         }
     }
 
