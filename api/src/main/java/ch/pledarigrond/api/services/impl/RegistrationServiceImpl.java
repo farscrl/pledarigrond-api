@@ -201,12 +201,13 @@ public class RegistrationServiceImpl implements RegistrationService {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
                 RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
+                RStichwort = removeRegularPlural(RStichwort);
                 RStichwort = removeSuffixes(RStichwort);
                 if (isSingleWord(RStichwort)) {
                     Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
 
                     if (existingRegistration.isEmpty()) {
-                        logger.warn("registration added: " + RStichwort);
+                        // logger.info("registration added: " + RStichwort);
                         Registration registration = new Registration();
                         registration.getLemmaIds().add(entry.getId());
                         registration.setStatus(RegistrationStatus.TODO);
@@ -222,8 +223,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                         registration.setRmInflectionSubtype(current.getLemmaValues().get("RInflectionSubtype"));
                         registrationRepository.save(registration);
                     } else {
+                        // logger.info("registration already exists: " + RStichwort);
                         existingRegistration.get().getLemmaIds().add(entry.getId());
-                        logger.info("registration already exists: " + RStichwort);
                         registrationRepository.save(existingRegistration.get());
                     }
                 }
@@ -254,6 +255,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 LemmaVersion current = entry.getCurrent();
                 String RStichwort = current.getLemmaValues().get("RStichwort");
                 RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
+                RStichwort = removeRegularPlural(RStichwort);
                 RStichwort = removeSuffixes(RStichwort);
 
                 if (RStichwort != null && !RStichwort.isEmpty()) {
@@ -289,7 +291,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             return false; // Consider empty or null input as not a single word
         }
         String[] words = input.trim().split("\\s+");
-        return words.length == 1;
+        return words.length == 1 || (words.length == 2 && words[0].equals("as")) || (words.length == 2 && words[0].equals("sa"));
     }
 
     private File convertWavToMp3(File wavFile) {
@@ -381,5 +383,34 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private String generateRegistrationPath(Registration registration) {
         return "pronunciation/" + activeProfile + "/" + registration.getId() + "/" + registration.getId();
+    }
+
+    private static String removeRegularPlural(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        String[] parts = input.split(",\\s*");
+
+        if (parts.length != 2) {
+            return input;
+        }
+
+        String pattern = parts[0];
+        String possiblePatternWithA = parts[1];
+
+        if (possiblePatternWithA.equals(pattern + "a")) {
+            return pattern;
+        } else if (possiblePatternWithA.equals(pattern + "ada")) { // (curvato, -ada)
+            return pattern;
+        } else if (pattern.length() > 1 && possiblePatternWithA.equals(pattern.substring(0, pattern.length() - 1) + "ada")) { //(adato, adatada)
+            return pattern;
+        } else if (pattern.length() > 3 && possiblePatternWithA.equals(pattern.substring(0, pattern.length() - 3) + "ida")) { // (repetieu, repetida)
+            return pattern;
+        } else if (pattern.length() > 2 && possiblePatternWithA.equals(pattern.substring(0, pattern.length() - 2) + "la")) { // (duvrevel, duvrevla)
+            return pattern;
+        } else {
+            return input;
+        }
     }
 }

@@ -47,11 +47,53 @@ public class WordNormalizer {
             return null;
         }
 
-        if (input.endsWith(" da")) {
-            input = input.substring(0, input.length() - 3);
+        if (input.endsWith(" ...")) {
+            input = input.substring(0, input.length() - 4);
         }
-        if (input.endsWith(" a")) {
-            input = input.substring(0, input.length() - 2);
+        if (input.startsWith("... ")) {
+            input = input.substring(4);
+        }
+        if (input.endsWith(" a qchs / qchn")) {
+            input = input.substring(0, input.length() - 14);
+        }
+        if (input.endsWith(" da qchs / qchn")) {
+            input = input.substring(0, input.length() - 15);
+        }
+        if (input.endsWith(" sün qchs / qchn")) {
+            input = input.substring(0, input.length() - 16);
+        }
+        if (input.endsWith(" per qchs / qchn")) {
+            input = input.substring(0, input.length() - 16);
+        }
+        if (input.endsWith(" qchs / qchn")) {
+            input = input.substring(0, input.length() - 12);
+        }
+        if (input.endsWith(" qchs/a qchn")) {
+            input = input.substring(0, input.length() - 12);
+        }
+        if (input.endsWith("da qchn")) {
+            input = input.substring(0, input.length() - 7);
+        }
+        if (input.endsWith("qchs da qchn")) {
+            input = input.substring(0, input.length() - 12);
+        }
+        if (input.endsWith(" cun qchn")) {
+            input = input.substring(0, input.length() - 9);
+        }
+        if (input.endsWith(" sün qchn")) {
+            input = input.substring(0, input.length() - 9);
+        }
+        if (input.endsWith(" tar qchn")) {
+            input = input.substring(0, input.length() - 9);
+        }
+        if (input.endsWith(" sü per qchn")) {
+            input = input.substring(0, input.length() - 12);
+        }
+        if (input.endsWith(" our")) {
+            input = input.substring(0, input.length() - 4);
+        }
+        if (input.endsWith(" qchn / qchs")) {
+            input = input.substring(0, input.length() - 12);
         }
         if (input.endsWith(" qchs / a qchn")) {
             input = input.substring(0, input.length() - 14);
@@ -68,8 +110,21 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
+        if (input.endsWith(" da")) {
+            input = input.substring(0, input.length() - 3);
+        }
+        if (input.endsWith(" a")) {
+            input = input.substring(0, input.length() - 2);
+        }
+        if (input.endsWith(", -a")) {
+            input = input.substring(0, input.length() - 4);
+        }
+
         if (input.startsWith("fer ") && allowChangeOfMeaning) {
             input = input.substring(4);
+        }
+        if (input.startsWith("as ") && allowChangeOfMeaning) {
+            input = input.substring(3);
         }
         if (input.startsWith("l'")) {
             input = input.substring(2);
@@ -89,6 +144,13 @@ public class WordNormalizer {
         if (input.startsWith("üna ")) {
             input = input.substring(4);
         }
+        if (input.startsWith("a/que ")) {
+            input = input.substring(6);
+        }
+        if (input.startsWith("as ") && allowChangeOfMeaning) {
+            input = input.substring(3);
+        }
+
         return input;
     }
 
@@ -184,6 +246,24 @@ public class WordNormalizer {
             return null;
         }
 
+        if (input.endsWith(", -a")) {
+            input = input.substring(0, input.length() - 4);
+        }
+        if (input.endsWith(", -ada")) {
+            input = input.substring(0, input.length() - 6);
+        }
+        if (input.endsWith(", -eida")) {
+            input = input.substring(0, input.length() - 7);
+        }
+        if (input.endsWith(", -bla")) {
+            input = input.substring(0, input.length() - 6);
+        }
+        if (input.endsWith(", -dra")) {
+            input = input.substring(0, input.length() - 6);
+        }
+        if (input.endsWith(" or")) {
+            input = input.substring(0, input.length() - 3);
+        }
         if (input.endsWith(" da")) {
             input = input.substring(0, input.length() - 3);
         }
@@ -252,6 +332,15 @@ public class WordNormalizer {
         if (input.endsWith("?")) {
             input = input.substring(0, input.length() - 1);
         }
+        if (input.endsWith(" anzatgi")) {
+            input = input.substring(0, input.length() - 8);
+        }
+        if (input.endsWith(" par anzatgi")) {
+            input = input.substring(0, input.length() - 12);
+        }
+        if (input.endsWith(" ad anzatgi")) {
+            input = input.substring(0, input.length() - 11);
+        }
         if (input.startsWith("far ") && allowChangeOfMeaning) {
             input = input.substring(4);
         }
@@ -293,6 +382,45 @@ public class WordNormalizer {
             return null;
         }
 
+        if (input.endsWith(", ...")) {
+            input = input.substring(0, input.length() - 5);
+        }
+        if (input.endsWith(" ...")) {
+            input = input.substring(0, input.length() - 4);
+        }
+        if (input.endsWith(" per qchs / qchn")) {
+            input = input.substring(0, input.length() - 16);
+        }
+        if (input.endsWith(" a qchs / a qchn")) {
+            input = input.substring(0, input.length() - 16);
+        }
+        if (input.endsWith(" qchs / a qchn")) {
+            input = input.substring(0, input.length() - 14);
+        }
+        if (input.endsWith(" a qchn")) {
+            input = input.substring(0, input.length() - 7);
+        }
+        if (input.endsWith(" da qchs / da qchn")) {
+            input = input.substring(0, input.length() - 18);
+        }
+        if (input.endsWith(" qchs da qchn")) {
+            input = input.substring(0, input.length() - 13);
+        }
+        if (input.endsWith(" da qchs")) {
+            input = input.substring(0, input.length() - 8);
+        }
+        if (input.endsWith(" da qchs / da qchn")) {
+            input = input.substring(0, input.length() - 18);
+        }
+        if (input.endsWith(" a qchs")) {
+            input = input.substring(0, input.length() - 7);
+        }
+        if (input.endsWith(" cun qchn")) {
+            input = input.substring(0, input.length() - 9);
+        }
+        if (input.endsWith(" qchs")) {
+            input = input.substring(0, input.length() - 5);
+        }
         if (input.endsWith(" da")) {
             input = input.substring(0, input.length() - 3);
         }
@@ -316,6 +444,9 @@ public class WordNormalizer {
         }
         if (input.startsWith("la ")) {
             input = input.substring(3);
+        }
+        if (input.startsWith("el/ella ")) {
+            input = input.substring(8);
         }
         if (input.startsWith("ün ")) {
             input = input.substring(3);
