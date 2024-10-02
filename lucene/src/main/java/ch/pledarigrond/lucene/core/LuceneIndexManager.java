@@ -132,7 +132,7 @@ public class LuceneIndexManager {
         double time = (end - start) / 1000000D;
         // Warn if query takes more than 100 ms.
         if (time > 100) {
-            logger.warn("Slow query: {} ms for {}", formatter.format(time), searchCriteria);
+            logger.info("Slow query: {} ms for {}", formatter.format(time), searchCriteria);
         } else if (logger.isDebugEnabled()) {
             logger.debug("Processed query in {} ms :{}", formatter.format(time), searchCriteria);
         }
