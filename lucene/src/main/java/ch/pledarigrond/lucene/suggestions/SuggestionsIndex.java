@@ -3,7 +3,6 @@ package ch.pledarigrond.lucene.suggestions;
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.lucene.analyzers.CaseInsensitiveStandardTokenizer;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -11,8 +10,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +28,6 @@ public class SuggestionsIndex {
     private final Directory spellIndexDirectoryDe;
     private SpellChecker spellCheckerRm;
     private SpellChecker spellCheckerDe;
-    private IndexReader readerRm;
-    private IndexReader readerDe;
 
     public SuggestionsIndex(LuceneConfiguration luceneConfiguration) throws IOException {
         this.luceneConfiguration = luceneConfiguration;
@@ -42,19 +38,28 @@ public class SuggestionsIndex {
         spellCheckerRm = new SpellChecker(spellIndexDirectoryRm);
         spellCheckerDe = new SpellChecker(spellIndexDirectoryDe);
 
-        readerRm = DirectoryReader.open(spellIndexDirectoryRm);
-        readerDe = DirectoryReader.open(spellIndexDirectoryDe);
-
         logger.info("Initialized suggestions index.");
     }
 
     public void reIndex() throws IOException {
         deleteCurrentIndexContents();
 
+        // release locks if present
+        releaseLocksIfPresent(spellIndexDirectoryRm);
+        releaseLocksIfPresent(spellIndexDirectoryDe);
+
+        // Re-initialize SpellChecker instances and readers for the newly created suggestion index
+        spellCheckerRm = new SpellChecker(spellIndexDirectoryRm);
+        spellCheckerDe = new SpellChecker(spellIndexDirectoryDe);
+
         // Open the main index reader
         Directory indexDirectory = FSDirectory.open(luceneConfiguration.getLuceneIndexDir().toPath());
         IndexReader reader = DirectoryReader.open(indexDirectory);
 
+        IndexReader readerRm = DirectoryReader.open(spellIndexDirectoryRm);
+        IndexReader readerDe = DirectoryReader.open(spellIndexDirectoryDe);
+
+        // Use the SpellChecker's indexDictionary method to build the suggestion index
         spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "DStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
         spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "RStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
 
@@ -64,13 +69,11 @@ public class SuggestionsIndex {
         spellCheckerRm.close();
         spellCheckerDe.close();
         reader.close();
-        this.readerRm.close();
-        this.readerDe.close();
+        readerRm.close();
+        readerDe.close();
 
         spellCheckerRm = new SpellChecker(spellIndexDirectoryRm);
         spellCheckerDe = new SpellChecker(spellIndexDirectoryDe);
-        this.readerRm = DirectoryReader.open(spellIndexDirectoryRm);
-        this.readerDe = DirectoryReader.open(spellIndexDirectoryDe);
     }
 
     public String[] suggestSimilar(String word, int numSuggestions, SearchDirection direction) {
@@ -141,5 +144,16 @@ public class SuggestionsIndex {
 
         prioritized.addAll(others);
         return prioritized;
+    }
+
+    private static void releaseLocksIfPresent(Directory directory) {
+        try {
+            Lock lock = directory.obtainLock(IndexWriter.WRITE_LOCK_NAME);
+            lock.close();
+        } catch (LockObtainFailedException e) {
+            logger.error("Lock not obtained: {}", e.getMessage());
+        } catch (IOException e) {
+            logger.error("IOException: {}", e.getMessage());
+        }
     }
 }
