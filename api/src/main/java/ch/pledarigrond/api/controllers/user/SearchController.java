@@ -42,10 +42,7 @@ public class SearchController {
     ) {
         try {
             Page<LemmaVersion> result = luceneService.query(language, searchCriteria, pagination, true);
-
-            if (!result.isEmpty()) {
-                return ResponseEntity.ok(result);
-            }
+            
             String[] suggestionsRm = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
             String[] suggestionsDe = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
             PageDto<LemmaVersion> suggestionPage = new PageDto<>(
