@@ -58,7 +58,7 @@ public class SuggestionsIndex {
         spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "DStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
         spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "RStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
 
-        logIndexedWords(false);
+        logIndexedWords();
 
         // Close resources
         spellCheckerRm.close();
@@ -86,25 +86,13 @@ public class SuggestionsIndex {
         }
     }
 
-    private void logIndexedWords(boolean includeDetails) throws IOException {
+    private void logIndexedWords() throws IOException {
         try (IndexReader spellIndexReader = DirectoryReader.open(spellIndexDirectoryRm)) {
             logger.info("Total number of documents in RM spell index: " + spellIndexReader.numDocs());
-            if (includeDetails) {
-                for (int i = 0; i < spellIndexReader.maxDoc(); i++) {
-                    Document doc = spellIndexReader.document(i);
-                    logger.info("  Indexed word: " + doc.get("word"));
-                }
-            }
         }
 
         try (IndexReader spellIndexReader = DirectoryReader.open(spellIndexDirectoryDe)) {
             logger.info("Total number of documents in DE spell index: " + spellIndexReader.numDocs());
-            if (includeDetails) {
-                for (int i = 0; i < spellIndexReader.maxDoc(); i++) {
-                    Document doc = spellIndexReader.document(i);
-                    logger.info("  Indexed word: " + doc.get("word"));
-                }
-            }
         }
     }
 
