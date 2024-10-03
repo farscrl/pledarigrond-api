@@ -28,6 +28,7 @@
         <module>../names</module>
         <module>../spellchecker</module>
         <module>../pronunciation</module>
+        <module>../corpus</module>
     </modules>
 
     <profiles>

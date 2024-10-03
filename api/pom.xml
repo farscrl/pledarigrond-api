@@ -56,6 +56,12 @@
 		</dependency>
 		<dependency>
 			<groupId>ch.pledarigrond</groupId>
+			<artifactId>corpus</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.pledarigrond</groupId>
 			<artifactId>spellchecker</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>

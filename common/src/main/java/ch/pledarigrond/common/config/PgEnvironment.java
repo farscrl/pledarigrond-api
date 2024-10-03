@@ -63,6 +63,9 @@ public class PgEnvironment {
 	@Value( "${pg.lucene.baseFolder}")
 	private String luceneBaseFolder;
 
+	@Value( "${pg.corpus.baseFolder}")
+	private String corpusBaseFolder;
+
 	@Value( "${pg.admin.user}")
 	private String adminUsername;
 
