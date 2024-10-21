@@ -49,14 +49,15 @@ public class ImportServiceImpl implements ImportService {
         if (!row.getCell(1).getRichStringCellValue().getString().equals("RGenus")) throw new RuntimeException("Invalid format");
         if (!row.getCell(2).getRichStringCellValue().getString().equals("RGrammatik")) throw new RuntimeException("Invalid format");
         if (!row.getCell(3).getRichStringCellValue().getString().equals("RPhonetics")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(4).getRichStringCellValue().getString().equals("RSemantik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(5).getRichStringCellValue().getString().equals("REtymologie")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(6).getRichStringCellValue().getString().equals("RSynonym")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(7).getRichStringCellValue().getString().equals("DStichwort")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(8).getRichStringCellValue().getString().equals("DGenus")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(9).getRichStringCellValue().getString().equals("DGrammatik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(10).getRichStringCellValue().getString().equals("DSemantik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(11).getRichStringCellValue().getString().equals("categories")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(4).getRichStringCellValue().getString().equals("RSemantikVis")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(5).getRichStringCellValue().getString().equals("RSemantik")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(6).getRichStringCellValue().getString().equals("REtymologie")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(7).getRichStringCellValue().getString().equals("RSynonym")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(8).getRichStringCellValue().getString().equals("DStichwort")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(9).getRichStringCellValue().getString().equals("DGenus")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(10).getRichStringCellValue().getString().equals("DGrammatik")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(11).getRichStringCellValue().getString().equals("DSemantik")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(12).getRichStringCellValue().getString().equals("categories")) throw new RuntimeException("Invalid format");
 
         logger.info("File format seems correct, continuing with import");
 
@@ -69,9 +70,9 @@ public class ImportServiceImpl implements ImportService {
             }
 
             if (isYellowCell(row.getCell(0))) {
-                if (row.getCell(0) != null && row.getCell(7) != null) {
+                if (row.getCell(0) != null && row.getCell(8) != null) {
                     String exampleRm = row.getCell(0).getRichStringCellValue().getString();
-                    String exampleDe = row.getCell(7).getRichStringCellValue().getString();
+                    String exampleDe = row.getCell(8).getRichStringCellValue().getString();
                     if (lv == null) {
                         throw new RuntimeException("No lemma found for example: " + exampleRm);
                     }
@@ -93,7 +94,14 @@ public class ImportServiceImpl implements ImportService {
                 }
                 lv = new LemmaVersion();
                 if (row.getCell(0) != null) {
-                    lv.getLemmaValues().put("RStichwort", row.getCell(0).getRichStringCellValue().getString());
+                    String RStichwort = row.getCell(0).getRichStringCellValue().getString();
+                    if (RStichwort.startsWith("# ")) {
+                        RStichwort = RStichwort.substring(2);
+                        lv.getLemmaValues().put("RRedirect", RStichwort);
+                        lv.getLemmaValues().put("RStichwort", "cf. " + RStichwort);
+                    } else {
+                        lv.getLemmaValues().put("RStichwort", RStichwort);
+                    }
                 }
                 if (row.getCell(1) != null) {
                     lv.getLemmaValues().put("RGenus", row.getCell(1).getRichStringCellValue().getString());
@@ -108,25 +116,35 @@ public class ImportServiceImpl implements ImportService {
                     lv.getLemmaValues().put("RSubsemantik", row.getCell(4).getRichStringCellValue().getString());
                 }
                 if (row.getCell(5) != null) {
-                    lv.getLemmaValues().put("REtymologie", row.getCell(5).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("RSemantik", row.getCell(5).getRichStringCellValue().getString());
                 }
                 if (row.getCell(6) != null) {
-                    lv.getLemmaValues().put("RSynonym", row.getCell(6).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("REtymologie", row.getCell(6).getRichStringCellValue().getString());
                 }
                 if (row.getCell(7) != null) {
-                    lv.getLemmaValues().put("DStichwort", row.getCell(7).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("RSynonym", row.getCell(7).getRichStringCellValue().getString());
                 }
                 if (row.getCell(8) != null) {
-                    lv.getLemmaValues().put("DGenus", row.getCell(8).getRichStringCellValue().getString());
+                    String DStichwort = row.getCell(8).getRichStringCellValue().getString();
+                    if (DStichwort.startsWith("# ")) {
+                        DStichwort = DStichwort.substring(2);
+                        lv.getLemmaValues().put("DRedirect", DStichwort);
+                        lv.getLemmaValues().put("DStichwort", "cf. " + DStichwort);
+                    } else {
+                        lv.getLemmaValues().put("DStichwort", DStichwort);
+                    }
                 }
                 if (row.getCell(9) != null) {
-                    lv.getLemmaValues().put("DGrammatik", row.getCell(9).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("DGenus", row.getCell(9).getRichStringCellValue().getString());
                 }
                 if (row.getCell(10) != null) {
-                    lv.getLemmaValues().put("DSubsemantik", row.getCell(10).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("DGrammatik", row.getCell(10).getRichStringCellValue().getString());
                 }
                 if (row.getCell(11) != null) {
-                    lv.getLemmaValues().put("categories", row.getCell(11).getRichStringCellValue().getString());
+                    lv.getLemmaValues().put("DSubsemantik", row.getCell(11).getRichStringCellValue().getString());
+                }
+                if (row.getCell(12) != null) {
+                    lv.getLemmaValues().put("categories", row.getCell(12).getRichStringCellValue().getString());
                 }
             }
         }
