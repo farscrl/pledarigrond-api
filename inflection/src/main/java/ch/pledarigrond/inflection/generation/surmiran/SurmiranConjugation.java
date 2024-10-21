@@ -1467,7 +1467,12 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setFuturplural2(SurmiranPronouns.pron_2pp + conjugation.get(SurmiranConjugationStructure.futurplural2));
         cs.setFuturplural3(SurmiranPronouns.pron_3pp + conjugation.get(SurmiranConjugationStructure.futurplural3));
 
-        copyEncliticForms(conjugation, cs);
+        if (verb.startsWith("sa ")) {
+            addReflexivePronounsAndCopyEncliticForms(conjugation, cs, false);
+
+        } else if (verb.startsWith("s'")) {
+            addReflexivePronounsAndCopyEncliticForms(conjugation, cs, true);
+        }
 
         return cs.getAllFormValues();
     }
@@ -1566,6 +1571,68 @@ public class SurmiranConjugation extends LanguageConjugation {
         cs.setCundizionalplural2Enclitic(conjugation.get(SurmiranConjugationStructure.cundizionalplural2enclitic));
         cs.setCundizionalplural3Enclitic(conjugation.get(SurmiranConjugationStructure.cundizionalplural3enclitic));
 
+        cs.setFutursing1Enclitic(conjugation.get(SurmiranConjugationStructure.futursing1enclitic));
+        cs.setFutursing2Enclitic(conjugation.get(SurmiranConjugationStructure.futursing2enclitic));
+        cs.setFutursing3EncliticM(conjugation.get(SurmiranConjugationStructure.futursing3encliticm));
+        cs.setFutursing3EncliticF(conjugation.get(SurmiranConjugationStructure.futursing3encliticf));
+        cs.setFuturplural1Enclitic(conjugation.get(SurmiranConjugationStructure.futurplural1enclitic));
+        cs.setFuturplural2Enclitic(conjugation.get(SurmiranConjugationStructure.futurplural2enclitic));
+        cs.setFuturplural3Enclitic(conjugation.get(SurmiranConjugationStructure.futurplural3enclitic));
+    }
+
+    private void addReflexivePronounsAndCopyEncliticForms(Map<String, String> conjugation, SurmiranConjugationStructure cs, boolean isVowel) {
+        if (isVowel) {
+            cs.setPreschentsing1Enclitic(SurmiranPronouns.pron_r_v_1ps + conjugation.get(SurmiranConjugationStructure.preschentsing1enclitic));
+            cs.setPreschentsing2Enclitic(SurmiranPronouns.pron_r_v_2ps + conjugation.get(SurmiranConjugationStructure.preschentsing2enclitic));
+            cs.setPreschentsing3EncliticM(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.preschentsing3encliticm));
+            cs.setPreschentsing3EncliticF(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.preschentsing3encliticf));
+            cs.setPreschentplural1Enclitic(SurmiranPronouns.pron_r_v_1pp + conjugation.get(SurmiranConjugationStructure.preschentplural1enclitic));
+            cs.setPreschentplural2Enclitic(SurmiranPronouns.pron_r_v_2pp + conjugation.get(SurmiranConjugationStructure.preschentplural2enclitic));
+            cs.setPreschentplural3Enclitic(SurmiranPronouns.pron_r_v_3pp + conjugation.get(SurmiranConjugationStructure.preschentplural3enclitic));
+
+            cs.setImperfectsing1Enclitic(SurmiranPronouns.pron_r_v_1ps + conjugation.get(SurmiranConjugationStructure.imperfectsing1enclitic));
+            cs.setImperfectsing2Enclitic(SurmiranPronouns.pron_r_v_2ps + conjugation.get(SurmiranConjugationStructure.imperfectsing2enclitic));
+            cs.setImperfectsing3EncliticM(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.imperfectsing3encliticm));
+            cs.setImperfectsing3EncliticF(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.imperfectsing3encliticf));
+            cs.setImperfectplural1Enclitic(SurmiranPronouns.pron_r_v_1pp + conjugation.get(SurmiranConjugationStructure.imperfectplural1enclitic));
+            cs.setImperfectplural2Enclitic(SurmiranPronouns.pron_r_v_2pp + conjugation.get(SurmiranConjugationStructure.imperfectplural2enclitic));
+            cs.setImperfectplural3Enclitic(SurmiranPronouns.pron_r_v_3pp + conjugation.get(SurmiranConjugationStructure.imperfectplural3enclitic));
+
+            cs.setCundizionalsing1Enclitic(SurmiranPronouns.pron_r_v_1ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing1enclitic));
+            cs.setCundizionalsing2Enclitic(SurmiranPronouns.pron_r_v_2ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing2enclitic));
+            cs.setCundizionalsing3EncliticM(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing3encliticm));
+            cs.setCundizionalsing3EncliticF(SurmiranPronouns.pron_r_v_3ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing3encliticf));
+            cs.setCundizionalplural1Enclitic(SurmiranPronouns.pron_r_v_1pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural1enclitic));
+            cs.setCundizionalplural2Enclitic(SurmiranPronouns.pron_r_v_2pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural2enclitic));
+            cs.setCundizionalplural3Enclitic(SurmiranPronouns.pron_r_v_3pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural3enclitic));
+        } else {
+            cs.setPreschentsing1Enclitic(SurmiranPronouns.pron_r_1ps + conjugation.get(SurmiranConjugationStructure.preschentsing1enclitic));
+            cs.setPreschentsing2Enclitic(SurmiranPronouns.pron_r_2ps + conjugation.get(SurmiranConjugationStructure.preschentsing2enclitic));
+            cs.setPreschentsing3EncliticM(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.preschentsing3encliticm));
+            cs.setPreschentsing3EncliticF(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.preschentsing3encliticf));
+            cs.setPreschentplural1Enclitic(SurmiranPronouns.pron_r_1pp + conjugation.get(SurmiranConjugationStructure.preschentplural1enclitic));
+            cs.setPreschentplural2Enclitic(SurmiranPronouns.pron_r_2pp + conjugation.get(SurmiranConjugationStructure.preschentplural2enclitic));
+            cs.setPreschentplural3Enclitic(SurmiranPronouns.pron_r_3pp + conjugation.get(SurmiranConjugationStructure.preschentplural3enclitic));
+
+            cs.setImperfectsing1Enclitic(SurmiranPronouns.pron_r_1ps + conjugation.get(SurmiranConjugationStructure.imperfectsing1enclitic));
+            cs.setImperfectsing2Enclitic(SurmiranPronouns.pron_r_2ps + conjugation.get(SurmiranConjugationStructure.imperfectsing2enclitic));
+            cs.setImperfectsing3EncliticM(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.imperfectsing3encliticm));
+            cs.setImperfectsing3EncliticF(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.imperfectsing3encliticf));
+            cs.setImperfectplural1Enclitic(SurmiranPronouns.pron_r_1pp + conjugation.get(SurmiranConjugationStructure.imperfectplural1enclitic));
+            cs.setImperfectplural2Enclitic(SurmiranPronouns.pron_r_2pp + conjugation.get(SurmiranConjugationStructure.imperfectplural2enclitic));
+            cs.setImperfectplural3Enclitic(SurmiranPronouns.pron_r_3pp + conjugation.get(SurmiranConjugationStructure.imperfectplural3enclitic));
+
+            cs.setCundizionalsing1Enclitic(SurmiranPronouns.pron_r_1ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing1enclitic));
+            cs.setCundizionalsing2Enclitic(SurmiranPronouns.pron_r_2ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing2enclitic));
+            cs.setCundizionalsing3EncliticM(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing3encliticm));
+            cs.setCundizionalsing3EncliticF(SurmiranPronouns.pron_r_3ps + conjugation.get(SurmiranConjugationStructure.cundizionalsing3encliticf));
+            cs.setCundizionalplural1Enclitic(SurmiranPronouns.pron_r_1pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural1enclitic));
+            cs.setCundizionalplural2Enclitic(SurmiranPronouns.pron_r_2pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural2enclitic));
+            cs.setCundizionalplural3Enclitic(SurmiranPronouns.pron_r_3pp + conjugation.get(SurmiranConjugationStructure.cundizionalplural3enclitic));
+        }
+
+
+        // futur forms already have the reflexive pronouns
         cs.setFutursing1Enclitic(conjugation.get(SurmiranConjugationStructure.futursing1enclitic));
         cs.setFutursing2Enclitic(conjugation.get(SurmiranConjugationStructure.futursing2enclitic));
         cs.setFutursing3EncliticM(conjugation.get(SurmiranConjugationStructure.futursing3encliticm));
