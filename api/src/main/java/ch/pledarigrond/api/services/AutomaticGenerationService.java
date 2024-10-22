@@ -40,4 +40,6 @@ public interface AutomaticGenerationService {
     boolean moveConjunctivImperfectToConjunctiv2(Language language) throws DatabaseException, UnknownHostException;
 
     String getVerbListWithConjugationClass(Language language);
+
+    boolean fixEncliticFormsForSurmiran(Language language) throws DatabaseException, UnknownHostException;
 }

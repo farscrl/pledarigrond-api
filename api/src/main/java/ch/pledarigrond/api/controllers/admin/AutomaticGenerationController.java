@@ -247,4 +247,22 @@ public class AutomaticGenerationController {
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
+    /**
+     * During automatic generation of surmiran enclitic forms for reflexive verbs, the pronoun was not generated correctly. This method fixes the issue.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_enclitic_forms_surmiran")
+    ResponseEntity<?> fixEncliticFormsSurmiran(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
+        if (language != Language.SURMIRAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+        boolean success = automaticGenerationService.fixEncliticFormsForSurmiran(language);
+
+        if (!success) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during fixing enclitic forms for surmiran");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

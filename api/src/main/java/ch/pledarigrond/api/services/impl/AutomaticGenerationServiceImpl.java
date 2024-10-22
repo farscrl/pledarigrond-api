@@ -14,6 +14,7 @@ import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
+import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionType;
 import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
@@ -668,6 +669,34 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return writer.toString();
     }
 
+    public boolean fixEncliticFormsForSurmiran(Language language) throws DatabaseException, UnknownHostException {
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
+
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+           LemmaVersion lv = entry.getCurrent();
+
+            if (lv != null && "V".equals(lv.getEntryValue(RM_INFLECTION_TYPE))) {
+                String RStichwort = lv.getEntryValue("RStichwort");
+                if (RStichwort.startsWith("sa ")) {
+                    addReflexivePronounsAndCopyEncliticForms(lv, false);
+
+                } else if (RStichwort.startsWith("s'")) {
+                    addReflexivePronounsAndCopyEncliticForms(lv, true);
+                }
+
+                BasicDBObject newObject = Converter.convertLexEntry(entry);
+                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
+            }
+        }
+
+        return true;
+    }
+
     private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
@@ -1030,5 +1059,106 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             escapedData = "\"" + data + "\"";
         }
         return escapedData;
+    }
+
+    private void addReflexivePronounsAndCopyEncliticForms(LemmaVersion lv, boolean isVowel) {
+
+        String preschentsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing1enclitic);
+        String preschentsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing2enclitic);
+        String preschentsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing3encliticm);
+        String preschentsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing3encliticf);
+        String preschentplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural1enclitic);
+        String preschentplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural2enclitic);
+        String preschentplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural3enclitic);
+
+        String imperfectsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing1enclitic);
+        String imperfectsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing2enclitic);
+        String imperfectsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing3encliticm);
+        String imperfectsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing3encliticf);
+        String imperfectplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural1enclitic);
+        String imperfectplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural2enclitic);
+        String imperfectplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural3enclitic);
+
+        String cundizionalsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing1enclitic);
+        String cundizionalsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing2enclitic);
+        String cundizionalsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing3encliticm);
+        String cundizionalsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing3encliticf);
+        String cundizionalplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural1enclitic);
+        String cundizionalplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural2enclitic);
+        String cundizionalplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural3enclitic);
+
+        String futursing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing1enclitic);
+        String futursing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing2enclitic);
+        String futursing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing3encliticm);
+        String futursing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing3encliticf);
+        String futurplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural1enclitic);
+        String futurplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural2enclitic);
+        String futurplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural3enclitic);
+
+        if (isVowel) {
+            if (preschentsing1enclitic != null && !preschentsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing1enclitic, SurmiranPronouns.pron_r_v_1ps + preschentsing1enclitic); }
+            if (preschentsing2enclitic != null && !preschentsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing2enclitic, SurmiranPronouns.pron_r_v_2ps + preschentsing2enclitic); }
+            if (preschentsing3encliticm != null && !preschentsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticm, SurmiranPronouns.pron_r_v_3ps + preschentsing3encliticm); }
+            if (preschentsing3encliticf != null && !preschentsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticf, SurmiranPronouns.pron_r_v_3ps + preschentsing3encliticf); }
+            if (preschentplural1enclitic != null && !preschentplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural1enclitic, SurmiranPronouns.pron_r_v_1pp + preschentplural1enclitic); }
+            if (preschentplural2enclitic != null && !preschentplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural2enclitic, SurmiranPronouns.pron_r_v_2pp + preschentplural2enclitic); }
+            if (preschentplural3enclitic != null && !preschentplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural3enclitic, SurmiranPronouns.pron_r_v_3pp + preschentplural3enclitic); }
+
+            if (imperfectsing1enclitic != null && !imperfectsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing1enclitic, SurmiranPronouns.pron_r_v_1ps + imperfectsing1enclitic); }
+            if (imperfectsing2enclitic != null && !imperfectsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing2enclitic, SurmiranPronouns.pron_r_v_2ps + imperfectsing2enclitic); }
+            if (imperfectsing3encliticm != null && !imperfectsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticm, SurmiranPronouns.pron_r_v_3ps + imperfectsing3encliticm); }
+            if (imperfectsing3encliticf != null && !imperfectsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticf, SurmiranPronouns.pron_r_v_3ps + imperfectsing3encliticf); }
+            if (imperfectplural1enclitic != null && !imperfectplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural1enclitic, SurmiranPronouns.pron_r_v_1pp + imperfectplural1enclitic); }
+            if (imperfectplural2enclitic != null && !imperfectplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural2enclitic, SurmiranPronouns.pron_r_v_2pp + imperfectplural2enclitic); }
+            if (imperfectplural3enclitic != null && !imperfectplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural3enclitic, SurmiranPronouns.pron_r_v_3pp + imperfectplural3enclitic); }
+
+            if (cundizionalsing1enclitic != null && !cundizionalsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing1enclitic, SurmiranPronouns.pron_r_v_1ps + cundizionalsing1enclitic); }
+            if (cundizionalsing2enclitic != null && !cundizionalsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing2enclitic, SurmiranPronouns.pron_r_v_2ps + cundizionalsing2enclitic); }
+            if (cundizionalsing3encliticm != null && !cundizionalsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticm, SurmiranPronouns.pron_r_v_3ps + cundizionalsing3encliticm); }
+            if (cundizionalsing3encliticf != null && !cundizionalsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticf, SurmiranPronouns.pron_r_v_3ps + cundizionalsing3encliticf); }
+            if (cundizionalplural1enclitic != null && !cundizionalplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural1enclitic, SurmiranPronouns.pron_r_v_1pp + cundizionalplural1enclitic); }
+            if (cundizionalplural2enclitic != null && !cundizionalplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural2enclitic, SurmiranPronouns.pron_r_v_2pp + cundizionalplural2enclitic); }
+            if (cundizionalplural3enclitic != null && !cundizionalplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural3enclitic, SurmiranPronouns.pron_r_v_3pp + cundizionalplural3enclitic); }
+
+            if (futursing1enclitic != null && !futursing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing1enclitic, SurmiranPronouns.pron_r_v_1ps + futursing1enclitic); }
+            if (futursing2enclitic != null && !futursing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing2enclitic, SurmiranPronouns.pron_r_v_2ps + futursing2enclitic); }
+            if (futursing3encliticm != null && !futursing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticm, SurmiranPronouns.pron_r_v_3ps + futursing3encliticm); }
+            if (futursing3encliticf != null && !futursing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticf, SurmiranPronouns.pron_r_v_3ps + futursing3encliticf); }
+            if (futurplural1enclitic != null && !futurplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural1enclitic, SurmiranPronouns.pron_r_v_1pp + futurplural1enclitic); }
+            if (futurplural2enclitic != null && !futurplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural2enclitic, SurmiranPronouns.pron_r_v_2pp + futurplural2enclitic); }
+            if (futurplural3enclitic != null && !futurplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural3enclitic, SurmiranPronouns.pron_r_v_3pp + futurplural3enclitic); }
+        } else {
+            if(preschentsing1enclitic != null && !preschentsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing1enclitic, SurmiranPronouns.pron_r_1ps + preschentsing1enclitic); }
+            if(preschentsing2enclitic != null && !preschentsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing2enclitic, SurmiranPronouns.pron_r_2ps + preschentsing2enclitic); }
+            if(preschentsing3encliticm != null && !preschentsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticm, SurmiranPronouns.pron_r_3ps + preschentsing3encliticm); }
+            if(preschentsing3encliticf != null && !preschentsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticf, SurmiranPronouns.pron_r_3ps + preschentsing3encliticf); }
+            if(preschentplural1enclitic != null && !preschentplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural1enclitic, SurmiranPronouns.pron_r_1pp + preschentplural1enclitic); }
+            if(preschentplural2enclitic != null && !preschentplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural2enclitic, SurmiranPronouns.pron_r_2pp + preschentplural2enclitic); }
+            if(preschentplural3enclitic != null && !preschentplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural3enclitic, SurmiranPronouns.pron_r_3pp + preschentplural3enclitic); }
+
+            if(imperfectsing1enclitic != null && !imperfectsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing1enclitic, SurmiranPronouns.pron_r_1ps + imperfectsing1enclitic); }
+            if(imperfectsing2enclitic != null && !imperfectsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing2enclitic, SurmiranPronouns.pron_r_2ps + imperfectsing2enclitic); }
+            if(imperfectsing3encliticm != null && !imperfectsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticm, SurmiranPronouns.pron_r_3ps + imperfectsing3encliticm); }
+            if(imperfectsing3encliticf != null && !imperfectsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticf, SurmiranPronouns.pron_r_3ps + imperfectsing3encliticf); }
+            if(imperfectplural1enclitic != null && !imperfectplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural1enclitic, SurmiranPronouns.pron_r_1pp + imperfectplural1enclitic); }
+            if(imperfectplural2enclitic != null && !imperfectplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural2enclitic, SurmiranPronouns.pron_r_2pp + imperfectplural2enclitic); }
+            if(imperfectplural3enclitic != null && !imperfectplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural3enclitic, SurmiranPronouns.pron_r_3pp + imperfectplural3enclitic); }
+
+            if(cundizionalsing1enclitic != null && !cundizionalsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing1enclitic, SurmiranPronouns.pron_r_1ps + cundizionalsing1enclitic); }
+            if(cundizionalsing2enclitic != null && !cundizionalsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing2enclitic, SurmiranPronouns.pron_r_2ps + cundizionalsing2enclitic); }
+            if(cundizionalsing3encliticm != null && !cundizionalsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticm, SurmiranPronouns.pron_r_3ps + cundizionalsing3encliticm); }
+            if(cundizionalsing3encliticf != null && !cundizionalsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticf, SurmiranPronouns.pron_r_3ps + cundizionalsing3encliticf); }
+            if(cundizionalplural1enclitic != null && !cundizionalplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural1enclitic, SurmiranPronouns.pron_r_1pp + cundizionalplural1enclitic); }
+            if(cundizionalplural2enclitic != null && !cundizionalplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural2enclitic, SurmiranPronouns.pron_r_2pp + cundizionalplural2enclitic); }
+            if(cundizionalplural3enclitic != null && !cundizionalplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural3enclitic, SurmiranPronouns.pron_r_3pp + cundizionalplural3enclitic); }
+
+            if(futursing1enclitic != null && !futursing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing1enclitic, SurmiranPronouns.pron_r_1ps + futursing1enclitic); }
+            if(futursing2enclitic != null && !futursing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing2enclitic, SurmiranPronouns.pron_r_2ps + futursing2enclitic); }
+            if(futursing3encliticm != null && !futursing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticm, SurmiranPronouns.pron_r_3ps + futursing3encliticm); }
+            if(futursing3encliticf != null && !futursing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticf, SurmiranPronouns.pron_r_3ps + futursing3encliticf); }
+            if(futurplural1enclitic != null && !futurplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural1enclitic, SurmiranPronouns.pron_r_1pp + futurplural1enclitic); }
+            if(futurplural2enclitic != null && !futurplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural2enclitic, SurmiranPronouns.pron_r_2pp + futurplural2enclitic); }
+            if(futurplural3enclitic != null && !futurplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural3enclitic, SurmiranPronouns.pron_r_3pp + futurplural3enclitic); }
+        }
     }
 }
