@@ -18,6 +18,8 @@ import com.mongodb.client.MongoCursor;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
@@ -32,6 +34,8 @@ import static ch.pledarigrond.spellchecker.model.HunspellRules.RUMANTSCH_GRISCHU
 import static ch.pledarigrond.spellchecker.model.HunspellRules.SURMIRAN_PLEDS_APOSTROFAI;
 
 abstract public class HunspellGenerator {
+
+    private final Logger logger = LoggerFactory.getLogger(HunspellGenerator.class);
 
     PgEnvironment pgEnvironment;
 
@@ -128,6 +132,13 @@ abstract public class HunspellGenerator {
     }
 
     private void writeSetToHunspell(File wordListFile, Set<String> set) {
+        // delete existing file
+        if (wordListFile.exists()) {
+            if (!wordListFile.delete()) {
+                logger.warn("Warning: Failed to delete existing dict file {}", wordListFile.getName());
+            }
+        }
+
         try (BufferedWriter bf = new BufferedWriter(new FileWriter(wordListFile))) {
             bf.write(String.valueOf(set.size() + 1));
             bf.newLine();
