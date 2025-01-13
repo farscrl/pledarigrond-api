@@ -11,8 +11,10 @@ import java.util.Optional;
 public interface RegistrationRepository extends MongoRepository<Registration, String>, RegistrationRepositoryCustom {
     Optional<Registration> findFirstByRmStichwortAndRmGenusAndRmGrammatik(String RStichwort, String RGenus, String RGrammatik);
 
-    // TODO: only with status todo
-    @Aggregation(pipeline = { "{$sample: {size: 1}}" })
+    @Aggregation(pipeline = {
+            "{ $match: { status: 'TODO' } }",
+            "{ $sample: { size: 1 } }"
+    })
     Optional<Registration> findRandomRegistration();
 
     int countByStatus(RegistrationStatus status);
