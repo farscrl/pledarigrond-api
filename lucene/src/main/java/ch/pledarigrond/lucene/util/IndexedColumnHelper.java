@@ -53,13 +53,13 @@ public class IndexedColumnHelper {
         if (name.equals("DStichwort")) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("DStichwort_dict", value, stored));
+                fields.add(new StringField("DStichwort_dict", valueDict, stored));
             }
         }
         if (name.equals("RStichwort")) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("RStichwort_dict", value, stored));
+                fields.add(new StringField("RStichwort_dict", valueDict, stored));
             }
         }
         return fields;

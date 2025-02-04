@@ -1,7 +1,6 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -24,7 +23,10 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Helper class used by {@link LuceneIndexManager}. It manages the lucene index
@@ -179,13 +181,8 @@ class LuceneIndexFilesystem {
 
     private List<Document> createDocument(LexEntry lexEntry) {
         List<Document> docs = new ArrayList<>();
-        Set<LemmaVersion> versions = new HashSet<>();
         if (lexEntry.getCurrent() != null) {
-            versions.add(lexEntry.getCurrent());
-        }
-        versions.addAll(lexEntry.getUnapprovedVersions());
-        for (LemmaVersion version : versions) {
-            Document doc = FieldTransformer.getDocument(lexEntry, version);
+            Document doc = FieldTransformer.getDocument(lexEntry, lexEntry.getCurrent());
             docs.add(doc);
         }
         return docs;
