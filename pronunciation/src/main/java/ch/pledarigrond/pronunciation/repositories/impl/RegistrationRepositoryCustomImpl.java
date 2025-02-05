@@ -29,7 +29,12 @@ public class RegistrationRepositoryCustomImpl implements RegistrationRepositoryC
         }
 
         if (filter.getSearchTerm() != null && !filter.getSearchTerm().isEmpty()) {
-            query.addCriteria(Criteria.where("rmStichwort").regex("^" + filter.getSearchTerm()));
+            String regexPattern = "^" + filter.getSearchTerm();
+            Criteria searchCriteria = new Criteria().orOperator(
+                    Criteria.where("rmStichwort").regex(regexPattern),
+                    Criteria.where("deStichwort").regex(regexPattern)
+            );
+            query.addCriteria(searchCriteria);
         }
 
         Sort.Direction direction = filter.isAscending() ? Sort.Direction.ASC : Sort.Direction.DESC;
