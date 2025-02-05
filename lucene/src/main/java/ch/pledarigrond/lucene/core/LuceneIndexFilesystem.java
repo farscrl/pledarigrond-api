@@ -1,6 +1,7 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
+import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -181,9 +182,12 @@ class LuceneIndexFilesystem {
 
     private List<Document> createDocument(LexEntry lexEntry) {
         List<Document> docs = new ArrayList<>();
-        if (lexEntry.getCurrent() != null) {
-            Document doc = FieldTransformer.getDocument(lexEntry, lexEntry.getCurrent());
-            docs.add(doc);
+        LemmaVersion currentLemma = lexEntry.getCurrent();
+        if (currentLemma != null) {
+            if (currentLemma.getVerification() == LemmaVersion.Verification.ACCEPTED) {
+                Document doc = FieldTransformer.getDocument(lexEntry, currentLemma);
+                docs.add(doc);
+            }
         }
         return docs;
     }
