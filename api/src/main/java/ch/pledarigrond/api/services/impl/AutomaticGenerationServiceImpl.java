@@ -701,7 +701,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
         searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSuggestions(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
@@ -804,7 +803,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSuggestions(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
@@ -903,7 +901,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSuggestions(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();

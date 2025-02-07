@@ -6,7 +6,6 @@ import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
@@ -113,27 +112,16 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22"), IndexTestHelpers.getPagination());
 		Assert.assertEquals(1, result.getTotalElements());
-		SearchCriteria criteria = IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22");
-		criteria.setSuggestions(true);
-		result = luceneIndexManager.query(criteria, IndexTestHelpers.getPagination());
-		Assert.assertEquals(2, result.getTotalElements());
 
 		// accept one version
 		LemmaVersion acceptedVersion = result.getContent().get(0);
 		acceptedVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
-		LemmaVersion outdatedVersion = result.getContent().get(1);
-		outdatedVersion.setVerification(LemmaVersion.Verification.OUTDATED);
 
-		entry = generateValidEntryFromLemmaVersion(outdatedVersion);
+		entry = generateValidEntryFromLemmaVersion(acceptedVersion);
 		entry.setId(acceptedVersion.getLexEntryId());
-		entry.addLemma(acceptedVersion);
 		luceneIndexManager.update(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
-		criteria = IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22");
-		criteria.setSuggestions(true);
-		result = luceneIndexManager.query(criteria, IndexTestHelpers.getPagination());
 		Assert.assertEquals(1, result.getTotalElements());
 	}
 

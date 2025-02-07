@@ -260,7 +260,6 @@ public class LuceneIndexManager {
     // p.ex. grammar, gender
     public ArrayList<String> getSuggestionsForFieldChoice(SuggestionField suggestionField, String value, int limit) throws NoIndexAvailableException, IOException {
         SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setSuggestions(true);
         Set<String[]> fields = Set.of();
         if (suggestionField == SuggestionField.GENDER) {
             searchCriteria.setGender(value);
@@ -467,13 +466,10 @@ public class LuceneIndexManager {
             }
         }
 
-        // Unless a user wants to see unverified suggestions, each item returned must be verified.
-        if (!searchCriteria.getSuggestions()) {
-            BooleanQuery.Builder bc = new BooleanQuery.Builder();
-            bc.add(finalQueryBuilder.build(), BooleanClause.Occur.MUST);
-            bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-            finalQueryBuilder = bc;
-        }
+        BooleanQuery.Builder bc = new BooleanQuery.Builder();
+        bc.add(finalQueryBuilder.build(), BooleanClause.Occur.MUST);
+        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
+        finalQueryBuilder = bc;
 
         long prepareEnd = System.nanoTime();
         if (logger.isDebugEnabled()) {
