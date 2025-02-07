@@ -31,8 +31,8 @@ public class RegistrationRepositoryCustomImpl implements RegistrationRepositoryC
         if (filter.getSearchTerm() != null && !filter.getSearchTerm().isEmpty()) {
             String regexPattern = "^" + filter.getSearchTerm();
             Criteria searchCriteria = new Criteria().orOperator(
-                    Criteria.where("rmStichwort").regex(regexPattern),
-                    Criteria.where("deStichwort").regex(regexPattern)
+                    Criteria.where("rmStichwort").regex(regexPattern, "i"),
+                    Criteria.where("deStichwort").regex(regexPattern, "i")
             );
             query.addCriteria(searchCriteria);
         }
