@@ -9,12 +9,10 @@ import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
 import ch.pledarigrond.inflection.model.InflectionResponse;
 import ch.pledarigrond.inflection.model.InflectionType;
 import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
@@ -42,8 +40,10 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -74,6 +74,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     @Autowired
     private SursilvanVerbService sursilvanVerbService;
 
+    @Override
     public boolean generateNounForms(Language language) {
         StopWatch watch = new StopWatch();
         watch.start();
@@ -106,6 +107,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    @Override
     public boolean generateAdjectiveForms(Language language) {
         StopWatch watch = new StopWatch();
         watch.start();
@@ -139,6 +141,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
+    @Override
     public boolean generateVerbForms(Language language) {
         StopWatch watch = new StopWatch();
         watch.start();
@@ -156,142 +159,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    public boolean fixMissingIds(Language language) throws DatabaseException, UnknownHostException {
-        if (true) {
-            return false;
-        }
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            boolean didChange = false;
-
-            for (LemmaVersion lemmaVersion : entry.getVersionHistory()) {
-                if(lemmaVersion.getLexEntryId() == null) {
-                    lemmaVersion.setLexEntryId(entry.getId());
-                    didChange = true;
-                    //System.out.println(lemmaVersion.toString());
-                }
-            }
-
-            if (didChange) {
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-
-            }
-        }
-
-        return true;
-    }
-
-    public HashMap<String, String> listWrongNextIds(Language language) throws DatabaseException {
-        HashMap<String, String> wrong = new HashMap<>();
-
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getNextInternalId() != entry.getVersionHistory().size()) {
-                wrong.put(entry.getId(), entry.getNextInternalId()+"");
-            }
-        }
-
-        return wrong;
-    }
-
-    public boolean fixWrongNextIds(Language language) throws DatabaseException, UnknownHostException {
-        if (true) {
-            return false;
-        }
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getNextInternalId() != entry.getVersionHistory().size()) {
-                entry.setNextInternalId(entry.getVersionHistory().size());
-                int index = entry.getVersionHistory().size() - 1;
-                for (LemmaVersion lemmaVersion: entry.getVersionHistory()) {
-                    if (lemmaVersion.getInternalId() != index) {
-                        lemmaVersion.setInternalId(index);
-                    }
-                    if (lemmaVersion.getVerification() == LemmaVersion.Verification.ACCEPTED) {
-                        entry.setCurrent(lemmaVersion);
-                    }
-
-                    index--;
-                }
-
-                if (index != -1) {
-                    throw new RuntimeException("Index not on -1");
-                }
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-
-        }
-
-        return true;
-    }
-
-    public List<LexEntry> findEntriesWithWrongState(Language language) throws NoDatabaseAvailableException {
-        List<LexEntry> wrong = new ArrayList<>();
-
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getVersionHistory().get(0).getVerification() == LemmaVersion.Verification.OUTDATED) {
-                wrong.add(entry);
-            }
-        }
-
-        return wrong;
-    }
-
-    public boolean fixEntriesWithWrongState(Language language) throws DatabaseException, UnknownHostException {
-        if (true) {
-            return false;
-        }
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getVersionHistory().get(0).getVerification() == LemmaVersion.Verification.OUTDATED) {
-                for (LemmaVersion lemmaVersion : entry.getVersionHistory()) {
-                    if (lemmaVersion.getVerification() == LemmaVersion.Verification.ACCEPTED) {
-                        lemmaVersion.setVerification(LemmaVersion.Verification.OUTDATED);
-                    }
-                }
-                entry.getVersionHistory().get(0).setVerification(LemmaVersion.Verification.ACCEPTED);
-                entry.setCurrent(entry.getVersionHistory().get(0));
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-        }
-
-        return true;
-    }
-
+    @Override
     public boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException {
         if (true) {
             return false;
@@ -424,7 +292,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-
+    @Override
     public boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -483,84 +351,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    public boolean fixValuesWithNoAcceptedVersion(Language language) throws DatabaseException, UnknownHostException {
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        int counter = 0;
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            boolean noAccepted = true;
-            for (int i = 0; i < entry.getVersionHistory().size(); i++) {
-                if (entry.getVersionHistory().get(i).getVerification() == LemmaVersion.Verification.ACCEPTED) {
-                    noAccepted = false;
-                }
-            }
-
-            if (noAccepted) {
-                logger.warn(entry.getId());
-                logger.error(entry.getCurrent().getLemmaValues().get("RStichwort"));
-                logger.error(String.valueOf(entry.getCurrentId()));
-                logger.error("--------------------------------------------------");
-                counter++;
-
-                int currentId = entry.getCurrentId();
-                LemmaVersion lastAccepted = entry.getLemmaVersionByInternalId(currentId - 1);
-                if (lastAccepted != null) {
-                    lastAccepted.setVerification(LemmaVersion.Verification.ACCEPTED);
-                }
-
-                entry.getVersionHistory().forEach(lemmaVersion -> {
-                    if (lemmaVersion.getInternalId() >= currentId) {
-                        lemmaVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
-                    }
-                });
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-        }
-
-        logger.error("number of cases: " + counter);
-
-        return true;
-    }
-
-    public boolean fixWrongParentId(Language language) throws DatabaseException, UnknownHostException {
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        int counter = 0;
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            boolean wrongId = false;
-            for (int i = 0; i < entry.getVersionHistory().size(); i++) {
-                if (!entry.getVersionHistory().get(i).getLexEntryId().equals(entry.getId())) {
-                    logger.warn("aiaiaiai: " + entry.getId() + " / " + entry.getVersionHistory().get(i).getLexEntryId());
-                    wrongId = true;
-                    entry.getVersionHistory().get(i).setLexEntryId(entry.getId());
-                }
-            }
-
-            if (wrongId) {
-                counter++;
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-        }
-
-        logger.error("number of cases: " + counter);
-
-        return true;
-    }
-
+    @Override
     public boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -593,57 +384,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    public boolean moveConjunctivImperfectToConjunctiv2(Language language) throws DatabaseException, UnknownHostException {
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        int counter = 0;
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            AtomicBoolean didChange = new AtomicBoolean(false);
-            entry.getVersionHistory().forEach(lv -> {
-                if (lv.getLemmaValues().get("conjunctivimperfectsing1") != null) {
-                    lv.getLemmaValues().put("conjunctiv2sing1", lv.getLemmaValues().get("conjunctivimperfectsing1"));
-                    lv.getLemmaValues().remove("conjunctivimperfectsing1");
-                    didChange.set(true);
-                }
-                if (lv.getLemmaValues().get("conjunctivimperfectsing2") != null) {
-                    lv.getLemmaValues().put("conjunctiv2sing2", lv.getLemmaValues().get("conjunctivimperfectsing2"));
-                    lv.getLemmaValues().remove("conjunctivimperfectsing2");
-                }
-                if (lv.getLemmaValues().get("conjunctivimperfectsing3") != null) {
-                    lv.getLemmaValues().put("conjunctiv2sing3", lv.getLemmaValues().get("conjunctivimperfectsing3"));
-                    lv.getLemmaValues().remove("conjunctivimperfectsing3");
-                }
-                if (lv.getLemmaValues().get("conjunctivimperfectplural1") != null) {
-                    lv.getLemmaValues().put("conjunctiv2plural1", lv.getLemmaValues().get("conjunctivimperfectplural1"));
-                    lv.getLemmaValues().remove("conjunctivimperfectplural1");
-                }
-                if (lv.getLemmaValues().get("conjunctivimperfectplural2") != null) {
-                    lv.getLemmaValues().put("conjunctiv2plural2", lv.getLemmaValues().get("conjunctivimperfectplural2"));
-                    lv.getLemmaValues().remove("conjunctivimperfectplural2");
-                }
-                if (lv.getLemmaValues().get("conjunctivimperfectplural3") != null) {
-                    lv.getLemmaValues().put("conjunctiv2plural3", lv.getLemmaValues().get("conjunctivimperfectplural3"));
-                    lv.getLemmaValues().remove("conjunctivimperfectplural3");
-                }
-            });
-
-            if (didChange.get()) {
-                counter++;
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-        }
-
-        logger.error("number of verbs updated: " + counter);
-
-        return true;
-    }
-
+    @Override
     public String getVerbListWithConjugationClass(Language language) {
         List<VerbDto> sursilvanVerbs = sursilvanVerbService.getAllVerbs();
 
@@ -667,34 +408,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         csvWriter.flush();
 
         return writer.toString();
-    }
-
-    public boolean fixEncliticFormsForSurmiran(Language language) throws DatabaseException, UnknownHostException {
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-           LemmaVersion lv = entry.getCurrent();
-
-            if (lv != null && "V".equals(lv.getEntryValue(RM_INFLECTION_TYPE))) {
-                String RStichwort = lv.getEntryValue("RStichwort");
-                if (RStichwort.startsWith("sa ")) {
-                    addReflexivePronounsAndCopyEncliticForms(lv, false);
-
-                } else if (RStichwort.startsWith("s'")) {
-                    addReflexivePronounsAndCopyEncliticForms(lv, true);
-                }
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-            }
-        }
-
-        return true;
     }
 
     private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {
@@ -1056,106 +769,5 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             escapedData = "\"" + data + "\"";
         }
         return escapedData;
-    }
-
-    private void addReflexivePronounsAndCopyEncliticForms(LemmaVersion lv, boolean isVowel) {
-
-        String preschentsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing1enclitic);
-        String preschentsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing2enclitic);
-        String preschentsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing3encliticm);
-        String preschentsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentsing3encliticf);
-        String preschentplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural1enclitic);
-        String preschentplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural2enclitic);
-        String preschentplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.preschentplural3enclitic);
-
-        String imperfectsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing1enclitic);
-        String imperfectsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing2enclitic);
-        String imperfectsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing3encliticm);
-        String imperfectsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectsing3encliticf);
-        String imperfectplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural1enclitic);
-        String imperfectplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural2enclitic);
-        String imperfectplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.imperfectplural3enclitic);
-
-        String cundizionalsing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing1enclitic);
-        String cundizionalsing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing2enclitic);
-        String cundizionalsing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing3encliticm);
-        String cundizionalsing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalsing3encliticf);
-        String cundizionalplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural1enclitic);
-        String cundizionalplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural2enclitic);
-        String cundizionalplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.cundizionalplural3enclitic);
-
-        String futursing1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing1enclitic);
-        String futursing2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing2enclitic);
-        String futursing3encliticm = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing3encliticm);
-        String futursing3encliticf = lv.getLemmaValues().get(SurmiranConjugationStructure.futursing3encliticf);
-        String futurplural1enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural1enclitic);
-        String futurplural2enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural2enclitic);
-        String futurplural3enclitic = lv.getLemmaValues().get(SurmiranConjugationStructure.futurplural3enclitic);
-
-        if (isVowel) {
-            if (preschentsing1enclitic != null && !preschentsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing1enclitic, SurmiranPronouns.pron_r_v_1ps + preschentsing1enclitic); }
-            if (preschentsing2enclitic != null && !preschentsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing2enclitic, SurmiranPronouns.pron_r_v_2ps + preschentsing2enclitic); }
-            if (preschentsing3encliticm != null && !preschentsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticm, SurmiranPronouns.pron_r_v_3ps + preschentsing3encliticm); }
-            if (preschentsing3encliticf != null && !preschentsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticf, SurmiranPronouns.pron_r_v_3ps + preschentsing3encliticf); }
-            if (preschentplural1enclitic != null && !preschentplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural1enclitic, SurmiranPronouns.pron_r_v_1pp + preschentplural1enclitic); }
-            if (preschentplural2enclitic != null && !preschentplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural2enclitic, SurmiranPronouns.pron_r_v_2pp + preschentplural2enclitic); }
-            if (preschentplural3enclitic != null && !preschentplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural3enclitic, SurmiranPronouns.pron_r_v_3pp + preschentplural3enclitic); }
-
-            if (imperfectsing1enclitic != null && !imperfectsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing1enclitic, SurmiranPronouns.pron_r_v_1ps + imperfectsing1enclitic); }
-            if (imperfectsing2enclitic != null && !imperfectsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing2enclitic, SurmiranPronouns.pron_r_v_2ps + imperfectsing2enclitic); }
-            if (imperfectsing3encliticm != null && !imperfectsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticm, SurmiranPronouns.pron_r_v_3ps + imperfectsing3encliticm); }
-            if (imperfectsing3encliticf != null && !imperfectsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticf, SurmiranPronouns.pron_r_v_3ps + imperfectsing3encliticf); }
-            if (imperfectplural1enclitic != null && !imperfectplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural1enclitic, SurmiranPronouns.pron_r_v_1pp + imperfectplural1enclitic); }
-            if (imperfectplural2enclitic != null && !imperfectplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural2enclitic, SurmiranPronouns.pron_r_v_2pp + imperfectplural2enclitic); }
-            if (imperfectplural3enclitic != null && !imperfectplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural3enclitic, SurmiranPronouns.pron_r_v_3pp + imperfectplural3enclitic); }
-
-            if (cundizionalsing1enclitic != null && !cundizionalsing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing1enclitic, SurmiranPronouns.pron_r_v_1ps + cundizionalsing1enclitic); }
-            if (cundizionalsing2enclitic != null && !cundizionalsing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing2enclitic, SurmiranPronouns.pron_r_v_2ps + cundizionalsing2enclitic); }
-            if (cundizionalsing3encliticm != null && !cundizionalsing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticm, SurmiranPronouns.pron_r_v_3ps + cundizionalsing3encliticm); }
-            if (cundizionalsing3encliticf != null && !cundizionalsing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticf, SurmiranPronouns.pron_r_v_3ps + cundizionalsing3encliticf); }
-            if (cundizionalplural1enclitic != null && !cundizionalplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural1enclitic, SurmiranPronouns.pron_r_v_1pp + cundizionalplural1enclitic); }
-            if (cundizionalplural2enclitic != null && !cundizionalplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural2enclitic, SurmiranPronouns.pron_r_v_2pp + cundizionalplural2enclitic); }
-            if (cundizionalplural3enclitic != null && !cundizionalplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural3enclitic, SurmiranPronouns.pron_r_v_3pp + cundizionalplural3enclitic); }
-
-            if (futursing1enclitic != null && !futursing1enclitic.startsWith(SurmiranPronouns.pron_r_v_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing1enclitic, SurmiranPronouns.pron_r_v_1ps + futursing1enclitic); }
-            if (futursing2enclitic != null && !futursing2enclitic.startsWith(SurmiranPronouns.pron_r_v_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing2enclitic, SurmiranPronouns.pron_r_v_2ps + futursing2enclitic); }
-            if (futursing3encliticm != null && !futursing3encliticm.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticm, SurmiranPronouns.pron_r_v_3ps + futursing3encliticm); }
-            if (futursing3encliticf != null && !futursing3encliticf.startsWith(SurmiranPronouns.pron_r_v_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticf, SurmiranPronouns.pron_r_v_3ps + futursing3encliticf); }
-            if (futurplural1enclitic != null && !futurplural1enclitic.startsWith(SurmiranPronouns.pron_r_v_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural1enclitic, SurmiranPronouns.pron_r_v_1pp + futurplural1enclitic); }
-            if (futurplural2enclitic != null && !futurplural2enclitic.startsWith(SurmiranPronouns.pron_r_v_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural2enclitic, SurmiranPronouns.pron_r_v_2pp + futurplural2enclitic); }
-            if (futurplural3enclitic != null && !futurplural3enclitic.startsWith(SurmiranPronouns.pron_r_v_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural3enclitic, SurmiranPronouns.pron_r_v_3pp + futurplural3enclitic); }
-        } else {
-            if(preschentsing1enclitic != null && !preschentsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing1enclitic, SurmiranPronouns.pron_r_1ps + preschentsing1enclitic); }
-            if(preschentsing2enclitic != null && !preschentsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing2enclitic, SurmiranPronouns.pron_r_2ps + preschentsing2enclitic); }
-            if(preschentsing3encliticm != null && !preschentsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticm, SurmiranPronouns.pron_r_3ps + preschentsing3encliticm); }
-            if(preschentsing3encliticf != null && !preschentsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticf, SurmiranPronouns.pron_r_3ps + preschentsing3encliticf); }
-            if(preschentplural1enclitic != null && !preschentplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural1enclitic, SurmiranPronouns.pron_r_1pp + preschentplural1enclitic); }
-            if(preschentplural2enclitic != null && !preschentplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural2enclitic, SurmiranPronouns.pron_r_2pp + preschentplural2enclitic); }
-            if(preschentplural3enclitic != null && !preschentplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.preschentplural3enclitic, SurmiranPronouns.pron_r_3pp + preschentplural3enclitic); }
-
-            if(imperfectsing1enclitic != null && !imperfectsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing1enclitic, SurmiranPronouns.pron_r_1ps + imperfectsing1enclitic); }
-            if(imperfectsing2enclitic != null && !imperfectsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing2enclitic, SurmiranPronouns.pron_r_2ps + imperfectsing2enclitic); }
-            if(imperfectsing3encliticm != null && !imperfectsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticm, SurmiranPronouns.pron_r_3ps + imperfectsing3encliticm); }
-            if(imperfectsing3encliticf != null && !imperfectsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticf, SurmiranPronouns.pron_r_3ps + imperfectsing3encliticf); }
-            if(imperfectplural1enclitic != null && !imperfectplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural1enclitic, SurmiranPronouns.pron_r_1pp + imperfectplural1enclitic); }
-            if(imperfectplural2enclitic != null && !imperfectplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural2enclitic, SurmiranPronouns.pron_r_2pp + imperfectplural2enclitic); }
-            if(imperfectplural3enclitic != null && !imperfectplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.imperfectplural3enclitic, SurmiranPronouns.pron_r_3pp + imperfectplural3enclitic); }
-
-            if(cundizionalsing1enclitic != null && !cundizionalsing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing1enclitic, SurmiranPronouns.pron_r_1ps + cundizionalsing1enclitic); }
-            if(cundizionalsing2enclitic != null && !cundizionalsing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing2enclitic, SurmiranPronouns.pron_r_2ps + cundizionalsing2enclitic); }
-            if(cundizionalsing3encliticm != null && !cundizionalsing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticm, SurmiranPronouns.pron_r_3ps + cundizionalsing3encliticm); }
-            if(cundizionalsing3encliticf != null && !cundizionalsing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticf, SurmiranPronouns.pron_r_3ps + cundizionalsing3encliticf); }
-            if(cundizionalplural1enclitic != null && !cundizionalplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural1enclitic, SurmiranPronouns.pron_r_1pp + cundizionalplural1enclitic); }
-            if(cundizionalplural2enclitic != null && !cundizionalplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural2enclitic, SurmiranPronouns.pron_r_2pp + cundizionalplural2enclitic); }
-            if(cundizionalplural3enclitic != null && !cundizionalplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural3enclitic, SurmiranPronouns.pron_r_3pp + cundizionalplural3enclitic); }
-
-            if(futursing1enclitic != null && !futursing1enclitic.startsWith(SurmiranPronouns.pron_r_1ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing1enclitic, SurmiranPronouns.pron_r_1ps + futursing1enclitic); }
-            if(futursing2enclitic != null && !futursing2enclitic.startsWith(SurmiranPronouns.pron_r_2ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing2enclitic, SurmiranPronouns.pron_r_2ps + futursing2enclitic); }
-            if(futursing3encliticm != null && !futursing3encliticm.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticm, SurmiranPronouns.pron_r_3ps + futursing3encliticm); }
-            if(futursing3encliticf != null && !futursing3encliticf.startsWith(SurmiranPronouns.pron_r_3ps)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticf, SurmiranPronouns.pron_r_3ps + futursing3encliticf); }
-            if(futurplural1enclitic != null && !futurplural1enclitic.startsWith(SurmiranPronouns.pron_r_1pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural1enclitic, SurmiranPronouns.pron_r_1pp + futurplural1enclitic); }
-            if(futurplural2enclitic != null && !futurplural2enclitic.startsWith(SurmiranPronouns.pron_r_2pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural2enclitic, SurmiranPronouns.pron_r_2pp + futurplural2enclitic); }
-            if(futurplural3enclitic != null && !futurplural3enclitic.startsWith(SurmiranPronouns.pron_r_3pp)) { lv.getLemmaValues().put(SurmiranConjugationStructure.futurplural3enclitic, SurmiranPronouns.pron_r_3pp + futurplural3enclitic); }
-        }
     }
 }
