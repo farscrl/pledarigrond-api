@@ -145,6 +145,9 @@ public class DatabaseFields {
                 new IndexedColumn("fPlural"),
                 new IndexedColumn("pluralCollectiv"),
 
+                // adjectives
+                new IndexedColumn("adverbialForm"),
+
                 // other
                 new IndexedColumn("otherForm1"),
                 new IndexedColumn("otherForm2"),
