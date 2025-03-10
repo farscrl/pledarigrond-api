@@ -29,6 +29,7 @@
         <module>../spellchecker</module>
         <module>../pronunciation</module>
         <module>../corpus</module>
+        <module>../dictionary</module>
     </modules>
 
     <profiles>
