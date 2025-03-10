@@ -1,4 +1,4 @@
-<configuration debug="true">
+<configuration>
 
     <property name="LOG_HOME" value="logs"/>
     <springProperty name="apiToken" source="grafana.api.token"/>
