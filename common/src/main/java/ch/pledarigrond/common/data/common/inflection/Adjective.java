@@ -1,5 +1,8 @@
 package ch.pledarigrond.common.data.common.inflection;
 
+import lombok.Data;
+
+@Data
 public class Adjective {
     public String mSingular;
     public String fSingular;

@@ -1,18 +1,18 @@
 package ch.pledarigrond.dictionary.config;
 
-import ch.pledarigrond.common.data.common.RequestContext;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import static java.util.Collections.singletonList;
@@ -20,6 +20,8 @@ import static java.util.Collections.singletonList;
 @Configuration
 @EnableMongoRepositories(basePackages = "ch.pledarigrond.dictionary", mongoTemplateRef = "dictionaryMongoTemplate")
 public class DictionarySpringMongoConfig {
+    private final Logger logger = LoggerFactory.getLogger(DictionarySpringMongoConfig.class);
+
     @Value("${pg.db.host}")
     private String mongoHost;
 
@@ -35,13 +37,6 @@ public class DictionarySpringMongoConfig {
     @Value("${pg.db.authentication-database}")
     private String mongoAuthDb;
 
-    public String getMongoDbName() {
-        if (RequestContext.getLanguage() != null) {
-            return "dict_" + RequestContext.getLanguage().getName();
-        }
-        throw new RuntimeException("Language not set in request context");
-    }
-
     @Bean(name = "dictionaryMongoClient")
     public MongoClient mongoClient() {
         MongoCredential credential = MongoCredential
@@ -55,9 +50,8 @@ public class DictionarySpringMongoConfig {
     }
 
     @Bean(name = "dictionaryMongoDBFactory")
-    public MongoDatabaseFactory mongoDatabaseFactory(
-            @Qualifier("dictionaryMongoClient") MongoClient mongoClient) {
-        return new SimpleMongoClientDatabaseFactory(mongoClient, getMongoDbName());
+    public MongoDatabaseFactory mongoDatabaseFactory(@Qualifier("dictionaryMongoClient") MongoClient mongoClient) {
+        return new RoutingMongoDatabaseFactory(mongoClient, "dict_default");
     }
 
     @Bean(name = "dictionaryMongoTemplate")

@@ -10,6 +10,9 @@ import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.dictionary.entities.DictionaryEntry;
+import ch.pledarigrond.dictionary.mappers.LexEntryToDictionaryEntryMapper;
+import ch.pledarigrond.dictionary.repositories.DictionaryEntryRepository;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
@@ -73,6 +76,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Autowired
     private SursilvanVerbService sursilvanVerbService;
+
+    @Autowired
+    private DictionaryEntryRepository dictionaryEntryRepository;
 
     @Override
     public boolean generateNounForms(Language language) {
@@ -408,6 +414,41 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         csvWriter.flush();
 
         return writer.toString();
+    }
+
+    @Override
+    public boolean migrateDb() throws DatabaseException, UnknownHostException {
+        if (dictionaryEntryRepository.count() != 0) {
+            logger.error("Dictionary is not empty. Aborting.");
+            return false;
+        }
+
+        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, RequestContext.getLanguage());
+        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, RequestContext.getLanguage().getName()).getCollection("entries");
+        long entries = entryCollection.countDocuments();
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            DBObject object = new BasicDBObject(cursor.next());
+            LexEntry entry = Converter.convertToLexEntry(object);
+
+            DictionaryEntry dictionaryEntry = LexEntryToDictionaryEntryMapper.map(entry, RequestContext.getLanguage());
+            dictionaryEntryRepository.save(dictionaryEntry);
+            counter++;
+
+            if (counter % 1000 == 0) {
+                logger.info("migrated {} entries ({}%)", counter, (counter * 100L) / entries);
+            }
+        }
+
+        if (entries != dictionaryEntryRepository.count()) {
+            logger.error("Number of entries in dictionary does not match number of entries in MongoDB. Aborting.");
+            return false;
+        }
+
+        logger.info("number of LexEntries migrated: {}", counter);
+        return true;
     }
 
     private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {

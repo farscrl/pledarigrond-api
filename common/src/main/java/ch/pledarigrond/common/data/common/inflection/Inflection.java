@@ -1,8 +1,10 @@
 package ch.pledarigrond.common.data.common.inflection;
 
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
 
+@Data
 public class Inflection {
     private InflectionType inflectionType;
     private String inflectionSubtype;

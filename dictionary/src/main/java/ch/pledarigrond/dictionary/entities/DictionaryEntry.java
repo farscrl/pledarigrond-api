@@ -1,13 +1,8 @@
 package ch.pledarigrond.dictionary.entities;
 
-import ch.pledarigrond.common.data.common.DictionaryVersion;
 import ch.pledarigrond.common.data.common.DictionaryVersionInternal;
 import ch.pledarigrond.common.data.common.PublicationStatus;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
@@ -20,7 +15,7 @@ import java.util.List;
 public class DictionaryEntry {
     private String id;
 
-    @Nullable private DictionaryVersion currentlyPublished;
+    @Nullable private DictionaryVersionInternal current;
     private List<DictionaryVersionInternal> suggestions = new ArrayList<>();
     private List<DictionaryVersionInternal> versions = new ArrayList<>();
 
@@ -28,16 +23,16 @@ public class DictionaryEntry {
     private PublicationStatus publicationStatus;
 
     // Auditing fields
-    @CreatedDate
+    // @CreatedDate TODO: re-enable
     private Instant createdDate;
 
-    @LastModifiedDate
+    // @LastModifiedDate TODO: re-enable
     private Instant lastModifiedDate;
 
-    @CreatedBy
+    // @CreatedBy TODO: re-enable
     private String createdBy;
 
-    @LastModifiedBy
+    // @LastModifiedBy TODO: re-enable
     private String lastModifiedBy;
 
     public void updateCalculatedEventFields() {
@@ -53,13 +48,13 @@ public class DictionaryEntry {
     }
 
     private PublicationStatus calculateEntryStatus() {
-        if (currentlyPublished == null && !suggestions.isEmpty()) {
+        if (current == null && !suggestions.isEmpty()) {
             return PublicationStatus.SUGGESTION;
         }
-        if (currentlyPublished != null && suggestions.isEmpty()) {
+        if (current != null && suggestions.isEmpty()) {
             return PublicationStatus.PUBLISHED;
         }
-        if (currentlyPublished != null && !suggestions.isEmpty()) {
+        if (current != null && !suggestions.isEmpty()) {
             return PublicationStatus.MODIFIED;
         }
         return PublicationStatus.INVALID;

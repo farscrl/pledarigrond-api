@@ -129,6 +129,11 @@
 			<artifactId>loki-logback-appender</artifactId>
 			<version>1.5.2</version>
 		</dependency>
+        <dependency>
+            <groupId>ch.pledarigrond</groupId>
+            <artifactId>dictionary</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 	<build>

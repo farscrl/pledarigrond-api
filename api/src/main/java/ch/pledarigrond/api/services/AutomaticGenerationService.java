@@ -20,4 +20,6 @@ public interface AutomaticGenerationService {
     boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException;
 
     String getVerbListWithConjugationClass(Language language);
+
+    boolean migrateDb() throws DatabaseException, UnknownHostException;
 }

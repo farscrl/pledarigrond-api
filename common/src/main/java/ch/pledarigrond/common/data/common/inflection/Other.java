@@ -1,5 +1,8 @@
 package ch.pledarigrond.common.data.common.inflection;
 
+import lombok.Data;
+
+@Data
 public class Other {
     public String otherForm1;
     public String otherForm2;

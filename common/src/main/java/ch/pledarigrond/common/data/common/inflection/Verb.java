@@ -1,9 +1,11 @@
 package ch.pledarigrond.common.data.common.inflection;
 
-public class Verb {
-    public boolean irregular;
+import lombok.Data;
 
+@Data
+public class Verb {
     public String infinitiv;
+    public boolean irregular;
     public String composedWith;
 
     public PersonalVerb preschent;
@@ -25,7 +27,8 @@ public class Verb {
     public PersonalVerbEnclitic futurEnclitic;
     public PersonalVerbEnclitic futurdubitativEnclitic;
 
-    public class PersonalVerb {
+    @Data
+    public static class PersonalVerb {
         public String sing1;
         public String sing2;
         public String sing3;
@@ -34,7 +37,8 @@ public class Verb {
         public String plural3;
     }
 
-    public class PersonalVerbEnclitic {
+    @Data
+    public static class PersonalVerbEnclitic {
         public String sing1;
         public String sing2;
         public String sing3m;
@@ -44,7 +48,8 @@ public class Verb {
         public String plural3;
     }
 
-    public class ParticipPerfect {
+    @Data
+    public static class ParticipPerfect {
         public String ms;
         public String fs;
         public String mp;
@@ -52,7 +57,8 @@ public class Verb {
         public String msPredicativ;
     }
 
-    public class Imperativ {
+    @Data
+    public static class Imperativ {
         public String singular;
         public String plural;
         public String form1;

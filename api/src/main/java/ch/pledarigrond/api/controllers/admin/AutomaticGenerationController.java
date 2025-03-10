@@ -133,4 +133,22 @@ public class AutomaticGenerationController {
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
+    /**
+     * This command allows to migrate the data from the old database structure to the new one.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/db_migrate")
+    ResponseEntity<?> migrateDbStructure(@PathVariable("language")Language language) {
+        try {
+            boolean success = automaticGenerationService.migrateDb();
+            if (!success) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during db migration");
+            }
+
+            return ResponseEntity.ok().build();
+        } catch (UnknownHostException|DatabaseException exception) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during db migration");
+        }
+    }
 }

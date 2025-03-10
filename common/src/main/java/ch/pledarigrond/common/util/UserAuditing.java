@@ -1,4 +1,4 @@
-package ch.pledarigrond.pronunciation.utilities;
+package ch.pledarigrond.common.util;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
