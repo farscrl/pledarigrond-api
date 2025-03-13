@@ -10,9 +10,9 @@ import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.dictionary.entities.DictionaryEntry;
-import ch.pledarigrond.dictionary.mappers.LexEntryToDictionaryEntryMapper;
-import ch.pledarigrond.dictionary.repositories.DictionaryEntryRepository;
+import ch.pledarigrond.dictionary.entities.Entry;
+import ch.pledarigrond.dictionary.mappers.LexEntryToEntryMapper;
+import ch.pledarigrond.dictionary.repositories.EntryRepository;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
@@ -78,7 +78,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     private SursilvanVerbService sursilvanVerbService;
 
     @Autowired
-    private DictionaryEntryRepository dictionaryEntryRepository;
+    private EntryRepository entryRepository;
 
     @Override
     public boolean generateNounForms(Language language) {
@@ -418,7 +418,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Override
     public boolean migrateDb() throws DatabaseException, UnknownHostException {
-        if (dictionaryEntryRepository.count() != 0) {
+        if (entryRepository.count() != 0) {
             logger.error("Dictionary is not empty. Aborting.");
             return false;
         }
@@ -431,10 +431,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         int counter = 0;
         while (cursor.hasNext()) {
             DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
+            LexEntry lexEntry = Converter.convertToLexEntry(object);
 
-            DictionaryEntry dictionaryEntry = LexEntryToDictionaryEntryMapper.map(entry, RequestContext.getLanguage());
-            dictionaryEntryRepository.save(dictionaryEntry);
+            Entry entry = LexEntryToEntryMapper.map(lexEntry, RequestContext.getLanguage());
+            entry.updateCalculatedFields();
+            entryRepository.save(entry);
             counter++;
 
             if (counter % 1000 == 0) {
@@ -442,7 +443,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
         }
 
-        if (entries != dictionaryEntryRepository.count()) {
+        if (entries != entryRepository.count()) {
             logger.error("Number of entries in dictionary does not match number of entries in MongoDB. Aborting.");
             return false;
         }

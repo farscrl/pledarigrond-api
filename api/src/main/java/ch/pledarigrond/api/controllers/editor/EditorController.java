@@ -9,6 +9,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +48,14 @@ public class EditorController {
     private SursilvanVerbService verbService;
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @GetMapping("/lex_entries")
-    ResponseEntity<?> getLexEntries(@PathVariable("language") Language language, EditorQuery editorQuery, Pagination pagination) {
+    @GetMapping("/entries")
+    ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, EditorQuery2 editorQuery, Pagination pagination) {
         try {
-            Page<LexEntry> list = editorService.getLexEntries(language, editorQuery, pagination);
+            Page<NormalizedEntryVersionsDto> list = editorService.getDictionaryVersions(editorQuery, pagination);
             return ResponseEntity.ok(list);
 
         } catch (Exception e) {
-            logger.error("Error while fetching lex entries", e);
+            logger.error("Error while fetching dictionary versions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

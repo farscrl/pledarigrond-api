@@ -3,6 +3,7 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import org.springframework.data.domain.Page;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface EditorService {
-    Page<LexEntry> getLexEntries(Language language, EditorQuery query, Pagination pagination) throws Exception;
+    Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery2 query, Pagination pagination);
 
     LexEntry accept(Language language, LexEntry entry, LemmaVersion version) throws Exception;
 

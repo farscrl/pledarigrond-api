@@ -11,6 +11,8 @@ import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
+import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -49,16 +51,19 @@ public class EditorServiceImpl implements EditorService {
     @Autowired
     private LuceneService index;
 
+    @Autowired
+    private DictionaryService dictionaryService;
+
     private final Logger logger = LoggerFactory.getLogger(EditorServiceImpl.class);
 
     @Override
-    public Page<LexEntry> getLexEntries(Language language, EditorQuery query, Pagination pagination) throws Exception {
-        Page<LexEntry> result = Database
-                .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
-                .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending(), excludeAutomaticChangesForLanguage(language));
+    public Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery2 query, Pagination pagination) {
+        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage(), false);
+
+        /* TODO: check if still needed
         for (LexEntry lexEntry : result.getContent()) {
             addUserInfos(lexEntry);
-        }
+        }*/
         return result;
     }
 

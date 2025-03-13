@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class DictionaryVersionInternal extends DictionaryVersion {
+public class EntryVersionInternal extends EntryVersion {
     private Instant timestamp;
     private VersionStatus versionStatus;
 
@@ -18,4 +18,6 @@ public class DictionaryVersionInternal extends DictionaryVersion {
     private String creatorIp;
     private EditorRole creatorRole;
     private String verifier;
+
+    private boolean automaticChange = false;
 }

@@ -1,8 +1,9 @@
 package ch.pledarigrond.dictionary.entities;
 
-import ch.pledarigrond.common.data.common.DictionaryVersionInternal;
+import ch.pledarigrond.common.data.common.EntryVersionInternal;
 import ch.pledarigrond.common.data.common.PublicationStatus;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
@@ -12,12 +13,13 @@ import java.util.List;
 
 @Document("entries")
 @Data
-public class DictionaryEntry {
-    private String id;
+public class Entry {
+    @Id
+    private String entryId;
 
-    @Nullable private DictionaryVersionInternal current;
-    private List<DictionaryVersionInternal> suggestions = new ArrayList<>();
-    private List<DictionaryVersionInternal> versions = new ArrayList<>();
+    @Nullable private EntryVersionInternal current;
+    private List<EntryVersionInternal> suggestions = new ArrayList<>();
+    private List<EntryVersionInternal> versions = new ArrayList<>();
 
     // calculated fields
     private PublicationStatus publicationStatus;
@@ -35,7 +37,7 @@ public class DictionaryEntry {
     // @LastModifiedBy TODO: re-enable
     private String lastModifiedBy;
 
-    public void updateCalculatedEventFields() {
+    public void updateCalculatedFields() {
         this.publicationStatus = calculateEntryStatus();
     }
 

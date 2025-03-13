@@ -2,7 +2,7 @@ package ch.pledarigrond.dictionary.mappers;
 
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.common.inflection.*;
-import ch.pledarigrond.dictionary.entities.DictionaryEntry;
+import ch.pledarigrond.dictionary.entities.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,38 +11,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
-public class LexEntryToDictionaryEntryMapper {
+public class LexEntryToEntryMapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(LexEntryToDictionaryEntryMapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(LexEntryToEntryMapper.class);
 
-    public static DictionaryEntry map(LexEntry entry, Language language) {
-        DictionaryEntry dictionaryEntry = new DictionaryEntry();
-        dictionaryEntry.setId(entry.getId());
+    public static Entry map(LexEntry lexEntry, Language language) {
+        Entry entry = new Entry();
+        entry.setEntryId(lexEntry.getId());
 
-        ArrayList<DictionaryVersionInternal> suggestions = new ArrayList<>();
-        int[] suggestionIds = new int[entry.getUnapprovedVersions().size()];
-        for (LemmaVersion lv : entry.getUnapprovedVersions()) {
+        ArrayList<EntryVersionInternal> suggestions = new ArrayList<>();
+        int[] suggestionIds = new int[lexEntry.getUnapprovedVersions().size()];
+        for (LemmaVersion lv : lexEntry.getUnapprovedVersions()) {
             suggestions.add(map(lv, language));
             suggestionIds[suggestions.size() - 1] = lv.getInternalId();
         }
 
-        ArrayList<DictionaryVersionInternal> versions = new ArrayList<>();
-        for (LemmaVersion lv: entry.getVersionHistory()) {
+        ArrayList<EntryVersionInternal> versions = new ArrayList<>();
+        for (LemmaVersion lv: lexEntry.getVersionHistory()) {
             boolean contains = IntStream.of(suggestionIds).anyMatch(x -> x == lv.getInternalId());
             if (!contains) {
                 versions.add(map(lv, language));
             }
         }
 
-        dictionaryEntry.setCurrent(map(entry.getCurrent(), language));
-        dictionaryEntry.setVersions(versions);
-        dictionaryEntry.setSuggestions(suggestions);
+        entry.setCurrent(map(lexEntry.getCurrent(), language));
+        entry.setVersions(versions);
+        entry.setSuggestions(suggestions);
 
-        return dictionaryEntry;
+        return entry;
     }
 
-    public static DictionaryVersionInternal map(LemmaVersion lv, Language language) {
-        DictionaryVersionInternal dv = new DictionaryVersionInternal();
+    public static EntryVersionInternal map(LemmaVersion lv, Language language) {
+        EntryVersionInternal dv = new EntryVersionInternal();
 
         dv.setTimestamp(Instant.ofEpochMilli(lv.getTimestamp()));
         dv.setVersionStatus(lemmaVersionVerificationToDictionaryVersionStatusMapper(lv.getVerification()));
@@ -55,26 +55,26 @@ public class LexEntryToDictionaryEntryMapper {
         dv.setCreatorRole(lv.getCreatorRole());
         dv.setVerifier(lv.getVerifierId());
 
-        dv.setRStichwort(lv.getLemmaValues().get("RStichwort"));
-        dv.setRStichwortSort(lv.getLemmaValues().get("RStichwort_sort"));
-        dv.setRSemantik(lv.getLemmaValues().get("RSemantik"));
-        dv.setRSubsemantik(lv.getLemmaValues().get("RSubsemantik"));
-        dv.setRGrammatik(lv.getLemmaValues().get("RGrammatik"));
-        dv.setRGenus(lv.getLemmaValues().get("RGenus"));
-        dv.setRFlex(lv.getLemmaValues().get("RFlex"));
-        dv.setRTags(lv.getLemmaValues().get("RTags"));
-        dv.setRRedirect(lv.getLemmaValues().get("RRedirect"));
-        dv.setREtymologie(lv.getLemmaValues().get("REtymologie"));
-        dv.setRPronunciation(lv.getLemmaValues().get("RPronunciation"));
+        dv.setRmStichwort(lv.getLemmaValues().get("RStichwort"));
+        dv.setRmStichwortSort(lv.getLemmaValues().get("RStichwort_sort"));
+        dv.setRmSemantik(lv.getLemmaValues().get("RSemantik"));
+        dv.setRmSubsemantik(lv.getLemmaValues().get("RSubsemantik"));
+        dv.setRmGrammatik(lv.getLemmaValues().get("RGrammatik"));
+        dv.setRmGenus(lv.getLemmaValues().get("RGenus"));
+        dv.setRmFlex(lv.getLemmaValues().get("RFlex"));
+        dv.setRmTags(lv.getLemmaValues().get("RTags"));
+        dv.setRmRedirect(lv.getLemmaValues().get("RRedirect"));
+        dv.setRmEtymologie(lv.getLemmaValues().get("REtymologie"));
+        dv.setRmPronunciation(lv.getLemmaValues().get("RPronunciation"));
 
-        dv.setDStichwort(lv.getLemmaValues().get("DStichwort"));
-        dv.setDStichwortSort(lv.getLemmaValues().get("DStichwort_sort"));
-        dv.setDSemantik(lv.getLemmaValues().get("DSemantik"));
-        dv.setDSubsemantik(lv.getLemmaValues().get("DSubsemantik"));
-        dv.setDGrammatik(lv.getLemmaValues().get("DGrammatik"));
-        dv.setDGenus(lv.getLemmaValues().get("DGenus"));
-        dv.setDTags(lv.getLemmaValues().get("DTags"));
-        dv.setDRedirect(lv.getLemmaValues().get("DRedirect"));
+        dv.setDeStichwort(lv.getLemmaValues().get("DStichwort"));
+        dv.setDeStichwortSort(lv.getLemmaValues().get("DStichwort_sort"));
+        dv.setDeSemantik(lv.getLemmaValues().get("DSemantik"));
+        dv.setDeSubsemantik(lv.getLemmaValues().get("DSubsemantik"));
+        dv.setDeGrammatik(lv.getLemmaValues().get("DGrammatik"));
+        dv.setDeGenus(lv.getLemmaValues().get("DGenus"));
+        dv.setDeTags(lv.getLemmaValues().get("DTags"));
+        dv.setDeRedirect(lv.getLemmaValues().get("DRedirect"));
 
         dv.setCategories(lv.getLemmaValues().get("categories"));
         // dv.setExamples(lv.getLemmaValues().get("examples")); // TODO: import examples
@@ -299,6 +299,7 @@ public class LexEntryToDictionaryEntryMapper {
     private static Noun nounMapper(HashMap<String, String> lv) {
         Noun noun = new Noun();
 
+        noun.setBaseForm(lv.get("baseform"));
         noun.setMSingular(lv.get("mSingular"));
         noun.setFSingular(lv.get("fSingular"));
         noun.setMPlural(lv.get("mPlural"));
@@ -311,6 +312,7 @@ public class LexEntryToDictionaryEntryMapper {
     private static Adjective adjectiveMapper(HashMap<String, String> lv) {
         Adjective adjective = new Adjective();
 
+        adjective.setBaseForm(lv.get("baseform"));
         adjective.setMSingular(lv.get("mSingular"));
         adjective.setFSingular(lv.get("fSingular"));
         adjective.setMPlural(lv.get("mPlural"));
@@ -323,6 +325,7 @@ public class LexEntryToDictionaryEntryMapper {
     private static Pronoun pronounMapper(HashMap<String, String> lv) {
         Pronoun pronoun = new Pronoun();
 
+        pronoun.setBaseForm(lv.get("baseform"));
         pronoun.setMSingular(lv.get("mSingular"));
         pronoun.setFSingular(lv.get("fSingular"));
         pronoun.setMPlural(lv.get("mPlural"));
@@ -334,6 +337,7 @@ public class LexEntryToDictionaryEntryMapper {
     private static Other otherMapper(HashMap<String, String> lv) {
         Other other = new Other();
 
+        other.setBaseForm(lv.get("baseform"));
         other.setOtherForm1(lv.get("otherForm1"));
         other.setOtherForm2(lv.get("otherForm2"));
         other.setOtherForm3(lv.get("otherForm3"));
