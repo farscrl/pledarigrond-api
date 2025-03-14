@@ -18,7 +18,7 @@ public class InfoController {
 
     @GetMapping("entries")
     public ResponseEntity<?> getNumberOfEntries(@PathVariable("language") Language language) {
-        luceneService.getIndexStatistics(language);
-        return ResponseEntity.ok(luceneService.getIndexStatistics(language).getApprovedEntries());
+        luceneService.getIndexStatistics();
+        return ResponseEntity.ok(luceneService.getIndexStatistics().getApprovedEntries());
     }
 }

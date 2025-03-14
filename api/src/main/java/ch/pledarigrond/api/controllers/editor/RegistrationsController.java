@@ -67,7 +67,7 @@ public class RegistrationsController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/add_to_lemma/{lexEntryId}")
-    ResponseEntity<?> addRegistrationToLemma(@PathVariable("language") Language language, @Validated @RequestBody Registration registration, @PathVariable(value="lexEntryId") String lexEntryId) throws UnknownHostException, DatabaseException {
+    ResponseEntity<?> addRegistrationToLemma(@PathVariable("language") Language language, @Validated @RequestBody Registration registration, @PathVariable(value="lexEntryId") String lexEntryId) throws IOException, DatabaseException {
         Registration loadedRegistration = registrationService.getRegistration(registration.getId());
         if (loadedRegistration == null) {
             return ResponseEntity.notFound().build();

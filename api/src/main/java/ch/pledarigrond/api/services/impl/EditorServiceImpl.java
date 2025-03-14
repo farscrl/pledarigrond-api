@@ -2,22 +2,22 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
-import ch.pledarigrond.api.services.MongoDbService;
 import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
+import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
 import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.model.PgUser;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -27,8 +27,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -43,113 +46,125 @@ public class EditorServiceImpl implements EditorService {
     private PgEnvironment pgEnvironment;
 
     @Autowired
-    private MongoDbService db;
-
-    @Autowired
     private UserService userInfos;
 
     @Autowired
-    private LuceneService index;
+    private LuceneService luceneService;
 
     @Autowired
     private DictionaryService dictionaryService;
 
+    @Autowired
+    private UserService userService;
+
     private final Logger logger = LoggerFactory.getLogger(EditorServiceImpl.class);
 
     @Override
-    public Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery2 query, Pagination pagination) {
+    public Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery query, Pagination pagination) {
         Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage(), false);
 
         /* TODO: check if still needed
-        for (LexEntry lexEntry : result.getContent()) {
-            addUserInfos(lexEntry);
+        for (Entry Entry : result.getContent()) {
+            addUserInfos(Entry);
         }*/
         return result;
     }
 
     @Override
-    public LexEntry accept(Language language, LexEntry entry, LemmaVersion version) throws Exception {
-        db.accept(language, entry, version);
+    public EntryDto getEntry(String entryId) {
+        return dictionaryService.getEntry(entryId);
+    }
+
+    @Override
+    public EntryDto addEntry(EntryVersionDto version, boolean asSuggestion) throws IOException {
+        addCreatorInfo(version);
+        EntryDto entry = dictionaryService.addEntry(version, asSuggestion, getReviewerInfo());
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry reject(Language language, LexEntry entry, LemmaVersion rejected) throws Exception {
-        db.reject(language, entry, rejected);
+    public EntryDto addSuggestion(String entryId, EntryVersionDto version) throws IOException {
+        addCreatorInfo(version);
+        EntryDto entry = dictionaryService.addSuggestion(entryId, version);
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry drop(Language language, LexEntry entry) throws Exception {
-        db.delete(language, entry);
+    public EntryDto accept(String entryId, String versionIdToAccept) throws SuggestionNotFoundException, IOException {
+        EntryDto entry =  dictionaryService.accept(entryId, versionIdToAccept, getReviewerInfo());
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry acceptAfterUpdate(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) throws Exception {
-        db.acceptAfterUpdate(language, entry, suggested, modified);
+    public EntryDto reject(String entryId, String versionIdToReject) throws SuggestionNotFoundException, IOException {
+        EntryDto entry =  dictionaryService.reject(entryId, versionIdToReject, getReviewerInfo());
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry update(Language language, LexEntry lexEntry, LemmaVersion newVersion) throws Exception {
-        db.update(language, lexEntry, newVersion);
-        return lexEntry;
+    public void delete(String entryId) throws IOException {
+        EntryDto entry = dictionaryService.getEntry(entryId);
+        luceneService.delete(entry);
+        dictionaryService.delete(entryId);
     }
 
     @Override
-    public LexEntry reviewLater(Language language, LexEntry entry) throws Exception {
-        db.reviewLater(language, entry);
+    public EntryDto acceptAfterUpdateSuggestion(String entryId, EntryVersionDto modified) throws SuggestionNotFoundException, IOException {
+        EntryDto entry =  dictionaryService.updateAndAcceptVersion(entryId, modified, getReviewerInfo());
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry dropOutdatedHistory(Language language, LexEntry entry) throws Exception {
-        db.dropOutdatedHistory(language, entry);
+    public EntryDto updateSuggestion(String entryId, EntryVersionDto newVersion) throws SuggestionNotFoundException, IOException {
+        EntryDto entry =  dictionaryService.updateVersion(entryId, newVersion);
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public Page<LemmaVersion> search(Language language, SearchCriteria searchCriteria, Pagination pagination) throws Exception {
-        return index.query(language, searchCriteria, pagination, false);
-    }
-
-    @Override
-    public LexEntry getLexEntry(Language language, String entryId) throws Exception {
-        return Converter.convertToLexEntry(Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getById(entryId));
-    }
-
-    @Override
-    public LexEntry insert(Language language, LexEntry entry) throws Exception {
-        db.insert(language, entry, false);
+    public EntryDto reviewSuggestionLater(String entryId, String versionId) throws InvalidReviewLaterException, SuggestionNotFoundException, IOException {
+        EntryDto entry =  dictionaryService.reviewSuggestionLater(entryId, versionId);
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public LexEntry insertSuggestion(Language language, LexEntry entry) throws Exception {
-        db.insert(language, entry, true);
+    public EntryDto dropOutdatedHistory(String entryId) throws IOException {
+        EntryDto entry =  dictionaryService.dropOutdatedHistory(entryId);
+        luceneService.update(entry);
         return entry;
     }
 
     @Override
-    public List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception {
-        return db.updateOrder(language, dictionaryLanguage, ordered);
+    public Page<EntryVersionDto> search(SearchCriteria searchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
+        return luceneService.query(searchCriteria, pagination, false);
     }
 
     @Override
-    public ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception {
-        return new ArrayList<>(index.searchExactMatches(language, lemma, dictionaryLanguage, false).getContent());
+    public ArrayList<EntryVersionDto> getOrder(String lemma, DictionaryLanguage dictionaryLanguage) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
+        return new ArrayList<>(luceneService.searchExactMatches(lemma, dictionaryLanguage, false).getContent());
     }
 
     @Override
-    public String export(Language language, Set<String> fields, EditorQuery query) throws NoDatabaseAvailableException, IOException {
+    public List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered) throws IOException {
+        List<EntryDto> modified = dictionaryService.updateOrder(dictionaryLanguage, ordered);
+        luceneService.updateAll(modified);
+        return modified;
+    }
+
+    @Override
+    public String export(Set<String> fields, EditorQuery query) throws IOException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
         Timer timer = new Timer();
-        export(language, fields, query, tmp);
+        export(fields, query, tmp);
         timer.schedule(new TimerTask() {
-
             @Override
             public void run() {
                 if(tmp.exists()) {
@@ -162,12 +177,12 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public String export(Language language, Set<String> fields, SearchCriteria query) throws Exception {
+    public String export(Set<String> fields, SearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
         Timer timer = new Timer();
-        export(language, fields, query, tmp);
+        export(fields, query, tmp);
         timer.schedule(new TimerTask() {
 
             @Override
@@ -182,7 +197,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @RequestMapping("/editor/download/{fileName}.html")
-    public void export(Language language, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+    public void export(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         File file = new File(dir, fileName);
         ServletOutputStream out = response.getOutputStream();
@@ -204,57 +219,12 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException {
         SearchSuggestions suggestions = new SearchSuggestions();
-        suggestions.setGrammar(index.getSuggestionsForFieldChoice(language, SuggestionField.GRAMMAR, "", 10000));
-        suggestions.setGender(index.getSuggestionsForFieldChoice(language, SuggestionField.GENDER, "", 10000));
+        suggestions.setGrammar(luceneService.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "", 10000));
+        suggestions.setGender(luceneService.getSuggestionsForFieldChoice(SuggestionField.GENDER, "", 10000));
         return suggestions;
     }
 
-    private void addUserInfos(LexEntry lexEntry) {
-        List<LemmaVersion> lemmata = lexEntry.getVersionHistory();
-        for (LemmaVersion lemma : lemmata) {
-            addUserInfo(lemma);
-        }
-    }
-
-    private void addUserInfo(LemmaVersion lemma) {
-        String userId = lemma.getUserId();
-        PgUser userInfo = userInfos.getByEmail(userId);
-        if(userInfo != null) {
-            lemma.setUserInfo(userInfo.toLightUser());
-        }
-    }
-
-    private void export(Language language, Set<String> fields, EditorQuery query, File dest) throws NoDatabaseAvailableException, IOException {
-        Pagination pagination = new Pagination();
-        pagination.setPageSize(100);
-        ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(dest));
-        zout.putNextEntry(new ZipEntry("exported.tsv"));
-        OutputStream out = new BufferedOutputStream(zout);
-        OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
-        for (String field : fields) {
-            writer.write(field);
-            writer.write("\t");
-        }
-        writer.write("\n");
-        while(true) {
-            Page<LexEntry> result = Database
-                    .getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language))
-                    .queryForLexEntries(query.getUserOrIp(), query.getRole(), query.getVerification(), query.getVerifier(), query.getStartTime(), query.getEndTime(), query.getState(), pagination.getPageSize(), pagination.getPage(), query.getSortColumn(), query.isSortAscending(), excludeAutomaticChangesForLanguage(language));
-            if(result == null || result.getContent().size() == 0) break;
-            for (LexEntry lexEntry : result.getContent()) {
-                addUserInfos(lexEntry);
-                LemmaVersion version = lexEntry.getCurrent();
-                write(writer, version, fields);
-                writer.write("\n");
-            }
-            pagination.setPage(pagination.getPage() + 1);
-        }
-        writer.flush();
-        zout.closeEntry();
-        writer.close();
-    }
-
-    public void export(Language language, Set<String> fields, SearchCriteria query, File dest) throws IOException, InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
+    private void export(Set<String> fields, EditorQuery query, File dest) throws IOException {
         Pagination pagination = new Pagination();
         pagination.setPageSize(100);
 
@@ -267,11 +237,40 @@ public class EditorServiceImpl implements EditorService {
             writer.write("\t");
         }
         writer.write("\n");
+
         while(true) {
-            Page<LemmaVersion> result = index.query(language, query, pagination, false);
-            if(result == null || result.getContent().size() == 0) break;
-            List<LemmaVersion> entries = result.getContent();
-            for (LemmaVersion version : entries) {
+            Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage(), true);
+            if(result == null || result.getContent().isEmpty()) break;
+            for (NormalizedEntryVersionsDto normalizedVersion : result.getContent()) {
+                write(writer, normalizedVersion.getVersion(), fields);
+                writer.write("\n");
+            }
+            pagination.setPage(pagination.getPage() + 1);
+        }
+        writer.flush();
+        zout.closeEntry();
+        writer.close();
+    }
+
+    public void export(Set<String> fields, SearchCriteria query, File dest) throws IOException, BrokenIndexException, NoIndexAvailableException, InvalidQueryException {
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(100);
+
+        ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(dest));
+        zout.putNextEntry(new ZipEntry("exported.tsv"));
+        OutputStream out = new BufferedOutputStream(zout);
+        OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+        for (String field : fields) {
+            writer.write(field);
+            writer.write("\t");
+        }
+        writer.write("\n");
+
+        while(true) {
+            Page<EntryVersionDto> result = luceneService.query(query, pagination, false);
+            if(result == null || result.getContent().isEmpty()) break;
+            List<EntryVersionDto> entries = result.getContent();
+            for (EntryVersionDto version : entries) {
                 write(writer, version, fields);
                 writer.write("\n");
             }
@@ -283,15 +282,58 @@ public class EditorServiceImpl implements EditorService {
 
     }
 
-    private void write(OutputStreamWriter writer, LemmaVersion version, Set<String> fields) throws IOException {
+    private void write(OutputStreamWriter writer, EntryVersionDto version, Set<String> fields) throws IOException {
         for (String field : fields) {
-            String value = version.getEntryValue(field);
+            String value = switch (field) {
+                case "deStichwort" -> version.getDeStichwort();
+                case "deGrammatik" -> version.getDeGrammatik();
+                case "deGenus" -> version.getDeGenus();
+                case "deSubsemantik" -> version.getDeSubsemantik();
+                case "deRedirect" -> version.getDeRedirect();
+                case "deTags" -> version.getDeTags();
+                case "rmStichwort" -> version.getRmStichwort();
+                case "rmGrammatik" -> version.getRmGrammatik();
+                case "rmGenus" -> version.getRmGenus();
+                case "rmSubsemantik" -> version.getRmSubsemantik();
+                case "rmRedirect" -> version.getRmRedirect();
+                case "rmFlex" -> version.getRmFlex();
+                case "rmTags" -> version.getRmTags();
+                case "categories" -> version.getCategories();
+                case "userComment" -> version.getUserComment();
+                default -> throw new IllegalStateException("Unexpected value: " + field);
+            };
             if(value != null) writer.write(value.trim());
             writer.write("\t");
         }
     }
 
-    private boolean excludeAutomaticChangesForLanguage(Language language) {
-        return false;
+    private void addCreatorInfo(EntryVersionDto version) {
+        PgUser user = userService.getCurrentUserOrDefaultUser();
+        version.setCreator(user.getEmail());
+
+        switch (RequestContext.getLanguage()) {
+            case PUTER -> version.setCreatorRole(user.getPuterRole());
+            case RUMANTSCHGRISCHUN -> version.setCreatorRole(user.getRumantschgrischunRole());
+            case SURSILVAN -> version.setCreatorRole(user.getSursilvanRole());
+            case SURMIRAN -> version.setCreatorRole(user.getSurmiranRole());
+            case SUTSILVAN -> version.setCreatorRole(user.getSutsilvanRole());
+            case VALLADER -> version.setCreatorRole(user.getValladerRole());
+            default -> version.setCreatorRole(EditorRole.GUEST);
+        }
+        String ip = getClientIp(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+        version.setCreatorIp(ip);
+    }
+
+    private String getReviewerInfo() {
+        PgUser user = userService.getCurrentUserOrDefaultUser();
+        return user.getEmail();
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress != null && !ipAddress.isEmpty()) {
+            return ipAddress.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 }

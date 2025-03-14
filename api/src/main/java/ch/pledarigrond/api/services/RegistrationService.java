@@ -27,7 +27,7 @@ public interface RegistrationService {
 
     public Registration postponeReviewRegistration(Registration registration);
 
-    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws UnknownHostException, DatabaseException;
+    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws IOException;
 
     public Registration getOrderedRegistration(String lexEntryId);
 

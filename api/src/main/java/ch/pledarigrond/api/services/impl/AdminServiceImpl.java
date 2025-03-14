@@ -4,11 +4,11 @@ import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.util.Iterator;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -42,6 +41,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private LuceneService luceneService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Qualifier("backupInfoHelper")
     @Autowired
@@ -61,10 +63,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void rebuildIndex(Language language) throws NoDatabaseAvailableException, IndexException {
         logger.info("Rebuilding index...");
-        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
-        Iterator<LexEntry> iterator = db.getEntries();
-        luceneService.dropIndex(language);
-        luceneService.addToIndex(language, iterator);
+        luceneService.dropIndex();
+        luceneService.addToIndex(dictionaryService.getStreamForEntries());
         logger.info("Index has been created");
     }
 
@@ -84,7 +84,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public IndexStatistics getIndexStats(Language language) {
-        IndexStatistics statistics = luceneService.getIndexStatistics(language);
+        IndexStatistics statistics = luceneService.getIndexStatistics();
         DictionaryStatistics.initialize(statistics.getUnverifiedEntries(), statistics.getApprovedEntries(), statistics.getLastUpdated(), statistics.getInflectionCount());
         return statistics;
     }

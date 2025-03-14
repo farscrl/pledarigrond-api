@@ -1,7 +1,6 @@
 package ch.pledarigrond.dictionary.entities;
 
-import ch.pledarigrond.common.data.common.EntryVersionInternal;
-import ch.pledarigrond.common.data.common.PublicationStatus;
+import ch.pledarigrond.common.data.dictionary.PublicationStatus;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,9 +16,9 @@ public class Entry {
     @Id
     private String entryId;
 
-    @Nullable private EntryVersionInternal current;
-    private List<EntryVersionInternal> suggestions = new ArrayList<>();
-    private List<EntryVersionInternal> versions = new ArrayList<>();
+    @Nullable private EntryVersion current;
+    private List<EntryVersion> suggestions = new ArrayList<>();
+    private List<EntryVersion> versions = new ArrayList<>();
 
     // calculated fields
     private PublicationStatus publicationStatus;

@@ -1,8 +1,13 @@
 package ch.pledarigrond.dictionary.mappers;
 
-import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.common.inflection.*;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.dictionary.VersionStatus;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.dictionary.entities.Entry;
+import ch.pledarigrond.dictionary.entities.EntryVersion;
+import ch.pledarigrond.dictionary.entities.inflection.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +24,14 @@ public class LexEntryToEntryMapper {
         Entry entry = new Entry();
         entry.setEntryId(lexEntry.getId());
 
-        ArrayList<EntryVersionInternal> suggestions = new ArrayList<>();
+        ArrayList<EntryVersion> suggestions = new ArrayList<>();
         int[] suggestionIds = new int[lexEntry.getUnapprovedVersions().size()];
         for (LemmaVersion lv : lexEntry.getUnapprovedVersions()) {
             suggestions.add(map(lv, language));
             suggestionIds[suggestions.size() - 1] = lv.getInternalId();
         }
 
-        ArrayList<EntryVersionInternal> versions = new ArrayList<>();
+        ArrayList<EntryVersion> versions = new ArrayList<>();
         for (LemmaVersion lv: lexEntry.getVersionHistory()) {
             boolean contains = IntStream.of(suggestionIds).anyMatch(x -> x == lv.getInternalId());
             if (!contains) {
@@ -41,8 +46,8 @@ public class LexEntryToEntryMapper {
         return entry;
     }
 
-    public static EntryVersionInternal map(LemmaVersion lv, Language language) {
-        EntryVersionInternal dv = new EntryVersionInternal();
+    public static EntryVersion map(LemmaVersion lv, Language language) {
+        EntryVersion dv = new EntryVersion();
 
         dv.setTimestamp(Instant.ofEpochMilli(lv.getTimestamp()));
         dv.setVersionStatus(lemmaVersionVerificationToDictionaryVersionStatusMapper(lv.getVerification()));
@@ -85,15 +90,15 @@ public class LexEntryToEntryMapper {
             inflection.setInflectionType(inflectionTypeMapper(inflectionType));
             inflection.setInflectionSubtype(lv.getLemmaValues().get("RInflectionSubtype"));
 
-            if (inflection.getInflectionType() == Inflection.InflectionType.VERB) {
+            if (inflection.getInflectionType() == InflectionType.VERB) {
                 inflection.setVerb(verbMapper(lv.getLemmaValues(), language));
-            } else if (inflection.getInflectionType() == Inflection.InflectionType.NOUN) {
+            } else if (inflection.getInflectionType() == InflectionType.NOUN) {
                 inflection.setNoun(nounMapper(lv.getLemmaValues()));
-            } else if (inflection.getInflectionType() == Inflection.InflectionType.ADJECTIVE) {
+            } else if (inflection.getInflectionType() == InflectionType.ADJECTIVE) {
                 inflection.setAdjective(adjectiveMapper(lv.getLemmaValues()));
-            } else if (inflection.getInflectionType() == Inflection.InflectionType.PRONOUN) {
+            } else if (inflection.getInflectionType() == InflectionType.PRONOUN) {
                 inflection.setPronoun(pronounMapper(lv.getLemmaValues()));
-            } else if (inflection.getInflectionType() == Inflection.InflectionType.OTHER) {
+            } else if (inflection.getInflectionType() == InflectionType.OTHER) {
                 inflection.setOther(otherMapper(lv.getLemmaValues()));
             }
 
@@ -111,13 +116,13 @@ public class LexEntryToEntryMapper {
         };
     }
 
-    private static Inflection.InflectionType inflectionTypeMapper(String inflectionType) {
+    private static InflectionType inflectionTypeMapper(String inflectionType) {
         return switch (inflectionType) {
-            case "V" -> Inflection.InflectionType.VERB;
-            case "NOUN" -> Inflection.InflectionType.NOUN;
-            case "ADJECTIVE" -> Inflection.InflectionType.ADJECTIVE;
-            case "PRONOUN" -> Inflection.InflectionType.PRONOUN;
-            case "OTHER" -> Inflection.InflectionType.OTHER;
+            case "V" -> InflectionType.VERB;
+            case "NOUN" -> InflectionType.NOUN;
+            case "ADJECTIVE" -> InflectionType.ADJECTIVE;
+            case "PRONOUN" -> InflectionType.PRONOUN;
+            case "OTHER" -> InflectionType.OTHER;
             default ->  {
                 if (!inflectionType.isEmpty()) {
                     logger.warn("Unexpected value: «{}»", inflectionType);

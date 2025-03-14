@@ -1,15 +1,19 @@
 package ch.pledarigrond.api.controllers.editor;
 
+import ch.pledarigrond.api.dtos.EntryVersionList;
 import ch.pledarigrond.api.dtos.FieldsList;
-import ch.pledarigrond.api.dtos.LemmaVersionList;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +53,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/entries")
-    ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, EditorQuery2 editorQuery, Pagination pagination) {
+    ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, @Validated EditorQuery editorQuery, Pagination pagination) {
         try {
             Page<NormalizedEntryVersionsDto> list = editorService.getDictionaryVersions(editorQuery, pagination);
             return ResponseEntity.ok(list);
@@ -61,41 +65,32 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @GetMapping("/lex_entries/{id}")
-    ResponseEntity<?> getLexEntry(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String id) {
+    @GetMapping("/entries/{id}")
+    ResponseEntity<EntryDto> getEntry(@PathVariable("language") Language language, @PathVariable("id") @NotNull String id) {
         try {
-            return ResponseEntity.ok(editorService.getLexEntry(language, id));
+            return ResponseEntity.ok(editorService.getEntry(id));
         } catch (Exception e) {
-            logger.error("Error while fetching lex entry", e);
+            logger.error("Error while fetching entry", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries")
-    ResponseEntity<?> insertLexEntry(@PathVariable("language") Language language, @RequestBody LexEntry lexEntry, boolean asSuggestion) {
+    @PostMapping("/entries")
+    ResponseEntity<?> insertEntry(@PathVariable("language") Language language, @Validated @RequestBody EntryVersionDto version, boolean asSuggestion) {
         try {
-            if (asSuggestion) {
-                return ResponseEntity.ok(editorService.insertSuggestion(language, lexEntry));
-            }
-
-            return ResponseEntity.ok(editorService.insert(language, lexEntry));
-
+            return ResponseEntity.ok(editorService.addEntry(version, asSuggestion));
         } catch (Exception e) {
-            logger.error("Error while inserting lex entry", e);
+            logger.error("Error while inserting entry", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/accept_version")
-    ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion version) {
+    @PostMapping("/entries/{id}/accept_version/{versionId}")
+    ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionIdToAccept) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.accept(language, entry, version));
+            return ResponseEntity.ok(editorService.accept(entryId, versionIdToAccept));
         } catch (Exception e) {
             logger.error("Error while accepting version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -103,14 +98,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/reject_version")
-    ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion version) {
+    @PostMapping("/entries/{id}/reject_version/{versionId}")
+    ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionIdToReject) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.reject(language, entry, version));
+            return ResponseEntity.ok(editorService.reject(entryId, versionIdToReject));
         } catch (Exception e) {
             logger.error("Error while rejecting version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -118,17 +109,11 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @DeleteMapping("/lex_entries/{id}")
-    ResponseEntity<?> dropEntry(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
-        if (lexEntryId == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/entries/{id}")
+    ResponseEntity<?> deleteEntry(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.drop(language, entry));
+            editorService.delete(entryId);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error while dropping entry", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -136,15 +121,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/modify_and_accept_version")
-    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion modifiedVersion) {
+    @PostMapping("/entries/{id}/modify_and_accept_version")
+    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            LemmaVersion baseVersion = entry.getMostRecent();
-            return ResponseEntity.ok(editorService.acceptAfterUpdate(language, entry, baseVersion, modifiedVersion));
+            return ResponseEntity.ok(editorService.acceptAfterUpdateSuggestion(entryId, modifiedVersion));
         } catch (Exception e) {
             logger.error("Error while modifying and accepting version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -152,14 +132,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/modify_version")
-    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId, @RequestBody LemmaVersion modifiedVersion) {
+    @PostMapping("/entries/{id}/modify_version")
+    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.update(language, entry, modifiedVersion));
+            return ResponseEntity.ok(editorService.updateSuggestion(entryId, modifiedVersion));
         } catch (Exception e) {
             logger.error("Error while modifying version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -167,14 +143,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/review_later_version")
-    ResponseEntity<?> reviewLaterVersion(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
+    @PostMapping("/entries/{id}/review_later_version/{versionId}")
+    ResponseEntity<?> reviewLaterVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionId) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.reviewLater(language, entry));
+            return ResponseEntity.ok(editorService.reviewSuggestionLater(entryId, versionId));
         } catch (Exception e) {
             logger.error("Error while moving version to review later", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -182,14 +154,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries/{id}/drop_outdated_history")
-    ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, @Validated @PathVariable("id") @NotNull String lexEntryId) {
+    @PostMapping("/entries/{id}/drop_outdated_history")
+    ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId) {
         try {
-            LexEntry entry = editorService.getLexEntry(language, lexEntryId);
-            if (entry == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
-            return ResponseEntity.ok(editorService.dropOutdatedHistory(language, entry));
+            return ResponseEntity.ok(editorService.dropOutdatedHistory(entryId));
         } catch (Exception e) {
             logger.error("Error while dropping outdated history", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -198,9 +166,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/search")
-    ResponseEntity<?> searchLemmaVersions(@PathVariable("language") Language language, SearchCriteria searchCriteria, Pagination pagination) {
+    ResponseEntity<?> searchEntryVersions(@PathVariable("language") Language language, @Validated SearchCriteria searchCriteria, Pagination pagination) {
         try {
-            return ResponseEntity.ok(editorService.search(language, searchCriteria, pagination));
+            return ResponseEntity.ok(editorService.search(searchCriteria, pagination));
         } catch (Exception e) {
             logger.error("Error while searching lemma versions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -209,9 +177,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/update_order")
-    ResponseEntity<?> reorderLexEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @RequestBody LemmaVersionList lemmaVersionList) {
+    ResponseEntity<?> reorderEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @Validated @RequestBody EntryVersionList EntryVersionList) {
         try {
-            return ResponseEntity.ok(editorService.updateOrder(language, dictionaryLanguage, lemmaVersionList.lemmas));
+            return ResponseEntity.ok(editorService.updateOrder(dictionaryLanguage, EntryVersionList.entries));
         } catch (Exception e) {
             logger.error("Error while reordering lex entries", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -220,9 +188,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @GetMapping("/get_order")
-    ResponseEntity<?> getLexEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
+    ResponseEntity<?> getEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
         try {
-            return ResponseEntity.ok(editorService.getOrder(language, lemma, dictionaryLanguage));
+            return ResponseEntity.ok(editorService.getOrder(lemma, dictionaryLanguage));
         } catch (Exception e) {
             logger.error("Error while fetching lex entries order", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -231,10 +199,10 @@ public class EditorController {
 
     @PreAuthorize("hasPermission(#language, 'editor')")
     @PostMapping("/search_export")
-    void exportBySearchQuery(@PathVariable("language") Language language, SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
+    void exportBySearchQuery(@PathVariable("language") Language language, @Validated SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            String fileName = editorService.export(language, fields.fields, query);
+            String fileName = editorService.export(fields.fields, query);
             File export = new File(pgEnvironment.getTempExportLocation() + fileName);
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
@@ -246,11 +214,11 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/lex_entries_export")
-    void exportByEditorQuery(@PathVariable("language") Language language, EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
+    @PostMapping("/entries_export")
+    void exportByEditorQuery(@PathVariable("language") Language language, @Validated EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            String fileName = editorService.export(language, fields.fields, query);
+            String fileName = editorService.export(fields.fields, query);
             File export = new File(pgEnvironment.getTempExportLocation() + fileName);
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
@@ -279,7 +247,7 @@ public class EditorController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no value sent");
         }
         try {
-            return ResponseEntity.ok(luceneService.getSuggestionsForField(language, field, searchTerm, 10));
+            return ResponseEntity.ok(luceneService.getSuggestionsForField(field, searchTerm, 10));
         } catch (Exception e) {
             logger.error("Error while fetching search suggestions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);

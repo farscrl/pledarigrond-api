@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.xml.bind.JAXBException;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -36,8 +35,6 @@ public class UserServiceImpl implements UserService {
         String name = PgUser.DEFAULT_USER_NAME;
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             name = SecurityContextHolder.getContext().getAuthentication().getName();
-        } else {
-            name = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
         }
 
         try {

@@ -3,8 +3,8 @@ package ch.pledarigrond.api.controllers.user;
 import ch.pledarigrond.api.dtos.PageDto;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -41,11 +41,11 @@ public class SearchController {
             @Validated Pagination pagination
     ) {
         try {
-            Page<LemmaVersion> result = luceneService.query(language, searchCriteria, pagination, true);
+            Page<EntryVersionDto> result = luceneService.query(searchCriteria, pagination, true);
             
-            String[] suggestionsRm = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
-            String[] suggestionsDe = luceneService.getSuggestionForWord(language, searchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
-            PageDto<LemmaVersion> suggestionPage = new PageDto<>(
+            String[] suggestionsRm = luceneService.getSuggestionForWord(searchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
+            String[] suggestionsDe = luceneService.getSuggestionForWord(searchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
+            PageDto<EntryVersionDto> suggestionPage = new PageDto<>(
                     result.getContent(),
                     result.getPageable(),
                     result.getTotalElements(),

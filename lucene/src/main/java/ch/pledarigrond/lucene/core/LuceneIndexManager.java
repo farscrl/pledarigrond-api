@@ -2,6 +2,8 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -74,7 +76,7 @@ public class LuceneIndexManager {
         luceneIndexFilesystem.get(this.language).resetIndexDirectory();
     }
 
-    public Page<LemmaVersion> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
+    public Page<EntryVersionDto> query(SearchCriteria searchCriteria, Pagination pagination) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
         long start = System.nanoTime();
 
         // normalize setSearchPhrase (we remove pronunciation marks)
@@ -105,14 +107,14 @@ public class LuceneIndexManager {
         }
 
         if (searchCriteria.getSortBy() == SortBy.ROMANSH) {
-            fields[1] = new SortField("RStichwort", Type.STRING);
-            fields[2] = new SortField("RStichwort_sort", Type.INT);
+            fields[1] = new SortField("rmStichwort", Type.STRING);
+            fields[2] = new SortField("rmStichwortSort", Type.INT);
         } else {
-            fields[1] = new SortField("DStichwort", Type.STRING);
-            fields[2] = new SortField("DStichwort_sort", Type.INT);
+            fields[1] = new SortField("deStichwort", Type.STRING);
+            fields[2] = new SortField("deStichwortSort", Type.INT);
         }
         Sort sort = new Sort(fields);
-        Page<LemmaVersion> result;
+        Page<EntryVersionDto> result;
 
         int pageSize = pagination.getPageSize();
         int pageNr = pagination.getPage();
@@ -121,7 +123,7 @@ public class LuceneIndexManager {
             long s2 = System.nanoTime();
             docs = luceneIndexFilesystem.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
             long e2 = System.nanoTime();
-            result = toLemmaVersionPagination(docs, pageNr, pageSize);
+            result = toEntryVersionPagination(docs, pageNr, pageSize);
             if (logger.isDebugEnabled()) {
                 logger.debug("Time to build query: {}, Time to execute query: {}", (e1 - s1) / 1000000, (e2 - s2) / 1000000);
             }
@@ -153,15 +155,15 @@ public class LuceneIndexManager {
         }
     }
 
-    private Page<LemmaVersion> toLemmaVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException {
-        final ArrayList<LemmaVersion> results = new ArrayList<>(pageSize);
+    private Page<EntryVersionDto> toEntryVersionPagination(TopDocs docs, int page, int pageSize) throws NoIndexAvailableException, IOException {
+        final ArrayList<EntryVersionDto> results = new ArrayList<>(pageSize);
         final ScoreDoc[] scoreDocs = docs.scoreDocs;
         IndexSearcher searcher = luceneIndexFilesystem.get(language).getSearcher();
 		StoredFields storedFields = searcher.getIndexReader().storedFields();
         for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
 
             Document doc = storedFields.document(scoreDocs[i].doc);
-            LemmaVersion e = FieldTransformer.getLemmaVersion(doc);
+            EntryVersionDto e = FieldTransformer.getEntryVersion(doc);
             results.add(e);
         }
 
@@ -169,15 +171,15 @@ public class LuceneIndexManager {
         return new PageImpl<>(results, pageable, docs.totalHits.value);
     }
 
-    public Page<LemmaVersion> searchExactMatches(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException {
+    public Page<EntryVersionDto> searchExactMatches(String phrase, DictionaryLanguage dictionaryLanguage) throws NoIndexAvailableException, BrokenIndexException {
         List<Query> queries;
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
             queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("DStichwort_sort", Type.INT);
+            sortField = new SortField("deStichwortSort", Type.INT);
         } else {
             queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("RStichwort_sort", Type.INT);
+            sortField = new SortField("rmStichwortSort", Type.INT);
         }
         int pageSize = 120;
         try {
@@ -191,7 +193,7 @@ public class LuceneIndexManager {
             qBuilder = bc;
             TopDocs docs = luceneIndexFilesystem.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
 
-            return toLemmaVersionPagination(docs, 0, pageSize);
+            return toEntryVersionPagination(docs, 0, pageSize);
         } catch (IOException e) {
             throw new BrokenIndexException("Broken index!", e);
         }
@@ -280,9 +282,9 @@ public class LuceneIndexManager {
         return getLimitedResults(limit, allValues);
     }
 
-    public void addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
+    public void addToIndex(final Stream<EntryDto> stream) throws IndexException {
         try {
-            queue.push(language -> luceneIndexFilesystem.get(language).addToIndex(iterator));
+            queue.push(language -> luceneIndexFilesystem.get(language).addToIndex(stream));
         } catch (Exception e) {
             throw new IndexException(e);
         }
@@ -296,13 +298,13 @@ public class LuceneIndexManager {
         }
     }
 
-    public void update(final LexEntry entry) throws IOException {
+    public void update(final EntryDto entry) throws IOException {
         try {
             queue.push(language -> {
                 long start = System.currentTimeMillis();
                 luceneIndexFilesystem.get(language).update(entry);
                 long end = System.currentTimeMillis();
-                logger.info("Index update for entry {} completed after {} ms.", entry.getId(), end - start);
+                logger.info("Index update for entry {} completed after {} ms.", entry.getEntryId(), end - start);
             });
         } catch (Exception e) {
             throw new IOException(e);
@@ -310,7 +312,7 @@ public class LuceneIndexManager {
 
     }
 
-    public void delete(final LexEntry entry) throws IOException {
+    public void delete(final EntryDto entry) throws IOException {
         try {
             queue.push(language -> luceneIndexFilesystem.get(language).delete(entry));
         } catch (Exception e) {

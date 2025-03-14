@@ -1,9 +1,10 @@
-package ch.pledarigrond.common.data.common;
+package ch.pledarigrond.common.data.dictionary;
 
+import ch.pledarigrond.common.data.common.EditorRole;
 import lombok.Data;
 
 @Data
-public class EditorQuery2 {
+public class EditorQuery {
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
     private static final long HALF_YEAR = ONE_DAY * 31 * 6;
 

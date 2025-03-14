@@ -1,10 +1,12 @@
 package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.VersionStatus;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
+import ch.pledarigrond.lucene.util.FN;
 import ch.pledarigrond.lucene.util.FieldTransformer;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
@@ -26,8 +28,9 @@ import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 /**
  * Helper class used by {@link LuceneIndexManager}. It manages the lucene index
@@ -92,13 +95,13 @@ class LuceneIndexFilesystem {
     }
 
 
-    void addToIndex(final Iterator<LexEntry> iterator) throws IndexException {
+    void addToIndex(final Stream<EntryDto> stream) throws IndexException {
         logger.info("Indexing...");
         int counter;
         try {
             Date begin = new Date();
             IndexWriter writer = initIndexWriter();
-            counter = indexDocs(writer, iterator);
+            counter = indexDocs(writer, stream);
             writer.close();
             OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(luceneConfiguration.getLuceneTimestampFile()), StandardCharsets.UTF_8);
             BufferedWriter bw = new BufferedWriter(osw);
@@ -157,35 +160,42 @@ class LuceneIndexFilesystem {
         }
     }
 
-    private int indexDocs(final IndexWriter writer, final Iterator<LexEntry> iterator) throws IOException {
-        int counter = 0;
+    private int indexDocs(final IndexWriter writer, final Stream<EntryDto> stream) throws IOException {
+        AtomicInteger counter = new AtomicInteger();
         NumberFormat nf = NumberFormat.getNumberInstance();
-        while (iterator.hasNext()) {
-            LexEntry lexEntry = iterator.next();
-            List<Document> docs = createDocument(lexEntry);
-            if (tracing) {
-                logger.trace("Indexing Documents: {}", docs);
-            }
-            for (Document doc : docs) {
-                writer.addDocument(doc);
-            }
-            counter++;
-            if (counter % 10000 == 0) {
-                logger.debug("Indexed {} documents.", nf.format(counter));
-            }
+
+        try (stream) {
+            stream.forEach(entry -> {
+                try {
+                    List<Document> docs = createDocument(entry);
+                    if (tracing) {
+                        logger.trace("Indexing Documents: {}", docs);
+                    }
+                    for (Document doc : docs) {
+                        writer.addDocument(doc);
+                    }
+                    int count = counter.incrementAndGet();
+                    if (count % 10000 == 0) {
+                        logger.debug("Indexed {} documents.", nf.format(count));
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
+
         logger.info("###########################################");
         logger.info("Indexing completed - {} entries have been indexed.", nf.format(counter));
         logger.info("###########################################");
-        return counter;
+        return counter.get();
     }
 
-    private List<Document> createDocument(LexEntry lexEntry) {
+    private List<Document> createDocument(EntryDto entry) {
         List<Document> docs = new ArrayList<>();
-        LemmaVersion currentLemma = lexEntry.getCurrent();
-        if (currentLemma != null) {
-            if (currentLemma.getVerification() == LemmaVersion.Verification.ACCEPTED) {
-                Document doc = FieldTransformer.getDocument(lexEntry, currentLemma);
+        EntryVersionDto currentVersion = entry.getCurrent();
+        if (currentVersion != null) {
+            if (currentVersion.getVersionStatus() == VersionStatus.ACCEPTED) {
+                Document doc = FieldTransformer.getDocument(entry, currentVersion);
                 docs.add(doc);
             }
         }
@@ -208,9 +218,9 @@ class LuceneIndexFilesystem {
         }
     }
 
-    void update(LexEntry entry) throws IOException {
+    void update(EntryDto entry) throws IOException {
         IndexWriter writer = initIndexWriter();
-        Term queryTerm = new Term(LexEntry.ID, entry.getId());
+        Term queryTerm = new Term(FN.entryId, entry.getEntryId());
         writer.deleteDocuments(queryTerm);
         if (entry.getCurrent() != null) {
             List<Document> docs = createDocument(entry);
@@ -226,9 +236,9 @@ class LuceneIndexFilesystem {
         searcher = new IndexSearcher(reader);
     }
 
-    void delete(LexEntry entry) throws IOException {
+    void delete(EntryDto entry) throws IOException {
         IndexWriter writer = initIndexWriter();
-        Term queryTerm = new Term(LexEntry.ID, entry.getId());
+        Term queryTerm = new Term(FN.entryId, entry.getEntryId());
         writer.deleteDocuments(queryTerm);
         writer.commit();
         writer.close();

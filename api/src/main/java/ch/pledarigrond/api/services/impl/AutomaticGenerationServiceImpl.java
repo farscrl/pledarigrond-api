@@ -1,13 +1,17 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.dtos.VerbDto;
-import ch.pledarigrond.api.services.*;
+import ch.pledarigrond.api.services.AutomaticGenerationService;
+import ch.pledarigrond.api.services.EditorService;
+import ch.pledarigrond.api.services.InflectionService;
+import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.api.utils.InflectionResultDto;
 import ch.pledarigrond.api.utils.SursilvanInflectionComparatorUtil;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.dictionary.entities.Entry;
@@ -17,7 +21,6 @@ import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
 import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
 import ch.pledarigrond.inflection.model.InflectionResponse;
-import ch.pledarigrond.inflection.model.InflectionType;
 import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
 import ch.pledarigrond.inflection.utils.PronounRemover;
 import ch.pledarigrond.mongodb.core.Converter;
@@ -32,21 +35,14 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,9 +62,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     private InflectionService inflectionService;
 
     @Autowired
-    private MongoDbService mongoDbService;
-
-    @Autowired
     private PgEnvironment pgEnvironment;
 
     @Autowired
@@ -82,7 +75,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Override
     public boolean generateNounForms(Language language) {
-        StopWatch watch = new StopWatch();
+        /*StopWatch watch = new StopWatch();
         watch.start();
 
         List<String[]> noInflectionList = new ArrayList<>();
@@ -110,12 +103,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         watch.stop();
         logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+
+         */
         return true;
     }
 
     @Override
     public boolean generateAdjectiveForms(Language language) {
-        StopWatch watch = new StopWatch();
+        /* StopWatch watch = new StopWatch();
         watch.start();
 
         List<String[]> noInflectionList = new ArrayList<>();
@@ -144,12 +139,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         watch.stop();
         logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+
+         */
         return true;
     }
 
     @Override
     public boolean generateVerbForms(Language language) {
-        StopWatch watch = new StopWatch();
+        /* StopWatch watch = new StopWatch();
         watch.start();
 
         List<String> grammarValuesForVerbs = getGrammarValuesForVerbs(language);
@@ -162,6 +159,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         watch.stop();
         logger.info("Elapsed time: {}s", watch.getTotalTimeMillis()/1000);
+
+         */
         return true;
     }
 
@@ -452,8 +451,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         return true;
     }
 
-    private boolean updateNounsByGender(Language language, String gender, List<String[]> noInflectionList) {
-        SearchCriteria searchCriteria = new SearchCriteria();
+    private boolean updateNounsByGender(String gender, List<String[]> noInflectionList) {
+        /* SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGender(gender);
         searchCriteria.setExcludeAutomaticChanged(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
@@ -461,31 +460,31 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
-        Page<LemmaVersion> lemmas;
+        Page<EntryVersionDto> lemmas;
         try {
-            lemmas = editorService.search(language, searchCriteria, pagination);
+            lemmas = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
         for (int i = 0; i < lemmas.getContent().size(); i++) {
-            LemmaVersion lemma = lemmas.getContent().get(i);
-            // logger.debug(lemma.toString());
+            EntryVersionDto version = lemmas.getContent().get(i);
+            // logger.debug(version.toString());
 
-            String id = lemma.getLexEntryId();
-            String RStichwort = lemma.getLemmaValues().get("RStichwort");
-            String DStichwort = lemma.getLemmaValues().get("DStichwort");
+            String id = version.getLexEntryId();
+            String RStichwort = version.getRmStichwort();
+            String DStichwort = version.getDeStichwort();
 
-            LexEntry entry = null;
+            Entry entry = null;
             try {
-                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+                entry = editorService.getEntry(version.getLexEntryId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
 
-            // ignore if lemma has already new version
+            // ignore if version has already new version
             if (!entry.getUnapprovedVersions().isEmpty() || entry.getMostRecent().getPgValues().get(LemmaVersion.AUTOMATIC_CHANGE) != null) {
                 continue;
             }
@@ -549,13 +548,13 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 e.printStackTrace();
                 return false;
             }
-        }
+        }*/
 
         return true;
     }
 
     private boolean updateAdjectivesByGrammar(Language language, String grammarValue, List<String[]> noInflectionList) {
-        SearchCriteria searchCriteria = new SearchCriteria();
+        /* SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
@@ -563,25 +562,25 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
-        Page<LemmaVersion> lemmas;
+        Page<EntryVersionDto> lemmas;
         try {
-            lemmas = editorService.search(language, searchCriteria, pagination);
+            lemmas = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
         for (int i = 0; i < lemmas.getContent().size(); i++) {
-            LemmaVersion lemma = lemmas.getContent().get(i);
+            EntryVersionDto lemma = lemmas.getContent().get(i);
             // logger.debug(lemma.toString());
 
             String id = lemma.getLexEntryId();
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
             String DStichwort = lemma.getLemmaValues().get("DStichwort");
 
-            LexEntry entry = null;
+            Entry entry = null;
             try {
-                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+                entry = editorService.getEntry(lemma.getLexEntryId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -647,13 +646,13 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                 e.printStackTrace();
                 return false;
             }
-        }
+        } */
 
         return true;
     }
 
     private boolean updateVerbsByGrammar(Language language, String grammarValue) {
-        SearchCriteria searchCriteria = new SearchCriteria();
+        /* SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setGrammar(grammarValue);
         searchCriteria.setExcludeAutomaticChanged(true);
         searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
@@ -661,9 +660,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
-        Page<LemmaVersion> lemmas;
+        Page<EntryVersionDto> lemmas;
         try {
-            lemmas = editorService.search(language, searchCriteria, pagination);
+            lemmas = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -672,14 +671,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         int correct = 0;
         int nuncorrect = 0;
         for (int i = 0; i < lemmas.getContent().size(); i++) {
-            LemmaVersion lemma = lemmas.getContent().get(i);
+            EntryVersionDto lemma = lemmas.getContent().get(i);
             logger.debug(lemma.toString());
 
             String RStichwort = lemma.getLemmaValues().get("RStichwort");
 
-            LexEntry entry = null;
+            Entry entry = null;
             try {
-                entry = editorService.getLexEntry(language, lemma.getLexEntryId());
+                entry = editorService.getEntry(lemma.getLexEntryId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -758,6 +757,8 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         logger.warn("Generated verbs for grammar value: " + grammarValue + ". Correct: " + correct + " / Not correct: " + nuncorrect);
+
+         */
         return true;
     }
 

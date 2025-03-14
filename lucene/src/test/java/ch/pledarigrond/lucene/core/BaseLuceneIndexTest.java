@@ -49,8 +49,8 @@ public abstract class BaseLuceneIndexTest {
 
     protected LemmaVersion generateValidLemmaVersion(String DStichwort, String RStichwort) {
         LemmaVersion lv = new LemmaVersion();
-        lv.putEntryValue("DStichwort", DStichwort);
-        lv.putEntryValue("RStichwort", RStichwort);
+        lv.putEntryValue("deStichwort", DStichwort);
+        lv.putEntryValue("rmStichwort", RStichwort);
         return lv;
     }
 

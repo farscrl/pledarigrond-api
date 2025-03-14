@@ -1,8 +1,8 @@
 package ch.pledarigrond.dictionary.dal.impl;
 
-import ch.pledarigrond.common.data.common.EditorQuery2;
+import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.dictionary.dal.EntryDal;
-import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +28,7 @@ public class EntryDalImpl implements EntryDal {
 
     @Override
     public Page<NormalizedEntryVersionsDto> queryForEntries(
-            EditorQuery2 queryData,
+            EditorQuery queryData,
             int pageSize,
             int page,
             boolean excludeAutomaticChanges
@@ -102,7 +102,7 @@ public class EntryDalImpl implements EntryDal {
         return new PageImpl<>(versionsDtos, pageable, longTotalCount);
     }
 
-    private Criteria getEntryLevelCriteria(EditorQuery2 queryData) {
+    private Criteria getEntryLevelCriteria(EditorQuery queryData) {
         List<Criteria> criteriaList = new ArrayList<>();
 
         if (queryData.getState() != null && queryData.getState().length > 0) {
@@ -117,7 +117,7 @@ public class EntryDalImpl implements EntryDal {
         return finalCriteria;
     }
 
-    private Criteria getEntryVersionLevelCriteria(EditorQuery2 queryData, boolean excludeAutomaticChanges) {
+    private Criteria getEntryVersionLevelCriteria(EditorQuery queryData, boolean excludeAutomaticChanges) {
         List<Criteria> criteriaList = new ArrayList<>();
 
         if (queryData.getUserOrIp() != null && !queryData.getUserOrIp().trim().isEmpty()) {

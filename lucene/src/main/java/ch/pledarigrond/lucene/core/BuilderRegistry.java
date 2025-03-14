@@ -39,20 +39,20 @@ public class BuilderRegistry {
     public AbstractQueryBuilder getBuilder(SearchDirection direction, SearchMethod method) {
         if (direction == SearchDirection.ROMANSH) {
             return switch (method) {
-                case NORMAL -> builderMap.get("RStichwort_normal");
-                case INTERN -> builderMap.get("RStichwort_intern");
-                case PREFIX -> builderMap.get("RStichwort_prefix");
-                case SUFFIX -> builderMap.get("RStichwort_suffix");
-                case EXACT -> builderMap.get("RStichwort_exact");
+                case NORMAL -> builderMap.get("rmStichwort_normal");
+                case INTERN -> builderMap.get("rmStichwort_intern");
+                case PREFIX -> builderMap.get("rmStichwort_prefix");
+                case SUFFIX -> builderMap.get("rmStichwort_suffix");
+                case EXACT -> builderMap.get("rmStichwort_exact");
             };
         }
         if (direction == SearchDirection.GERMAN) {
             return switch (method) {
-                case NORMAL -> builderMap.get("DStichwort_normal");
-                case INTERN -> builderMap.get("DStichwort_intern");
-                case PREFIX -> builderMap.get("DStichwort_prefix");
-                case SUFFIX -> builderMap.get("DStichwort_suffix");
-                case EXACT -> builderMap.get("DStichwort_exact");
+                case NORMAL -> builderMap.get("deStichwort_normal");
+                case INTERN -> builderMap.get("deStichwort_intern");
+                case PREFIX -> builderMap.get("deStichwort_prefix");
+                case SUFFIX -> builderMap.get("deStichwort_suffix");
+                case EXACT -> builderMap.get("deStichwort_exact");
             };
         }
         return null;
@@ -93,10 +93,10 @@ public class BuilderRegistry {
 
     public AbstractQueryBuilder getStartsWithBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RStichwort_simple_prefix");
+            return builderMap.get("rmStichwort_simple_prefix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DStichwort_simple_prefix");
+            return builderMap.get("deStichwort_simple_prefix");
         }
         return null;
     }
@@ -145,27 +145,27 @@ public class BuilderRegistry {
     }
 
     private void init() {
-        // Search RStichwort
-        builderMap.put("RStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("RStichwort"));
-        builderMap.put("RStichwort_intern", new InfixQueryBuilder().setColumn("RStichwort"));
-        builderMap.put("RStichwort_prefix", new PrefixQueryBuilder().setColumn("RStichwort"));
-        builderMap.put("RStichwort_suffix", new SuffixQueryBuilder().setColumn("RStichwort"));
-        builderMap.put("RStichwort_exact", new ExactMatchQueryBuilder().setColumn("RStichwort"));
+        // Search rmStichwort
+        builderMap.put("rmStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("rmStichwort"));
+        builderMap.put("rmStichwort_intern", new InfixQueryBuilder().setColumn("rmStichwort"));
+        builderMap.put("rmStichwort_prefix", new PrefixQueryBuilder().setColumn("rmStichwort"));
+        builderMap.put("rmStichwort_suffix", new SuffixQueryBuilder().setColumn("rmStichwort"));
+        builderMap.put("rmStichwort_exact", new ExactMatchQueryBuilder().setColumn("rmStichwort"));
 
-        // Search DStichwort
-        builderMap.put("DStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("DStichwort"));
-        builderMap.put("DStichwort_intern", new InfixQueryBuilder().setColumn("DStichwort"));
-        builderMap.put("DStichwort_prefix", new PrefixQueryBuilder().setColumn("DStichwort"));
-        builderMap.put("DStichwort_suffix", new SuffixQueryBuilder().setColumn("DStichwort"));
-        builderMap.put("DStichwort_exact", new ExactMatchQueryBuilder().setColumn("DStichwort"));
+        // Search deStichwort
+        builderMap.put("deStichwort_normal", new DefaultQueryBuilderSubsemanticsWeighted().setColumn("deStichwort"));
+        builderMap.put("deStichwort_intern", new InfixQueryBuilder().setColumn("deStichwort"));
+        builderMap.put("deStichwort_prefix", new PrefixQueryBuilder().setColumn("deStichwort"));
+        builderMap.put("deStichwort_suffix", new SuffixQueryBuilder().setColumn("deStichwort"));
+        builderMap.put("deStichwort_exact", new ExactMatchQueryBuilder().setColumn("deStichwort"));
 
         // Search Tags
         builderMap.put("RTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("RTags"));
         builderMap.put("DTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("DTags"));
 
         // Search words starting with
-        builderMap.put("DStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DStichwort"));
-        builderMap.put("RStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RStichwort"));
+        builderMap.put("deStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("deStichwort"));
+        builderMap.put("rmStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("rmStichwort"));
 
         // Search Gender
         builderMap.put("DGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGenus"));

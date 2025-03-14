@@ -10,16 +10,16 @@ import java.util.List;
 public class DatabaseFields {
     public static List<IndexedColumn> getDatabaseColumns() {
         return Arrays.asList(
-                new IndexedColumn("DStichwort", FieldType.STRING_SORTED),
-                new IndexedColumn("DStichwort_sort", FieldType.INTEGER_SORTED),
+                new IndexedColumn("deStichwort", FieldType.STRING_SORTED),
+                new IndexedColumn("deStichwortSort", FieldType.INTEGER_SORTED),
                 new IndexedColumn("DSemantik"),
                 new IndexedColumn("DSubsemantik", FieldType.STRING_SORTED),
                 new IndexedColumn("DGrammatik", FieldType.STRING_SORTED),
                 new IndexedColumn("DGenus", FieldType.STRING_SORTED),
                 new IndexedColumn("DStatus"),
                 new IndexedColumn("DTags"),
-                new IndexedColumn("RStichwort", FieldType.STRING_SORTED),
-                new IndexedColumn("RStichwort_sort", FieldType.INTEGER_SORTED),
+                new IndexedColumn("rmStichwort", FieldType.STRING_SORTED),
+                new IndexedColumn("rmStichwortSort", FieldType.INTEGER_SORTED),
                 new IndexedColumn("RSemantik"),
                 new IndexedColumn("RSubsemantik", FieldType.STRING_SORTED),
                 new IndexedColumn("RGrammatik", FieldType.STRING_SORTED),
@@ -38,8 +38,8 @@ public class DatabaseFields {
                 new IndexedColumn("RPronunciation"),
 
                 // verbs
-                new IndexedColumn("irregular"),
                 new IndexedColumn("infinitiv"),
+                new IndexedColumn("irregular"),
                 new IndexedColumn("preschentsing1"),
                 new IndexedColumn("preschentsing2"),
                 new IndexedColumn("preschentsing3"),

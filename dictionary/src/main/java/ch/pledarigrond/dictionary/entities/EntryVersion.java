@@ -1,8 +1,11 @@
-package ch.pledarigrond.common.data.common;
+package ch.pledarigrond.dictionary.entities;
 
-import ch.pledarigrond.common.data.common.inflection.Inflection;
+import ch.pledarigrond.common.data.common.EditorRole;
+import ch.pledarigrond.common.data.dictionary.VersionStatus;
+import ch.pledarigrond.dictionary.entities.inflection.Inflection;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,4 +42,17 @@ public class EntryVersion {
     // general info
     private String categories;
     private List<Example> examples = new ArrayList<>();
+    private String userComment;
+    private String userEmail;
+
+    // technical info
+    private Instant timestamp = Instant.now();
+    private VersionStatus versionStatus = VersionStatus.UNVERIFIED;
+
+    private String creator;
+    private String creatorIp;
+    private EditorRole creatorRole;
+    private String verifier;
+
+    private boolean automaticChange = false;
 }

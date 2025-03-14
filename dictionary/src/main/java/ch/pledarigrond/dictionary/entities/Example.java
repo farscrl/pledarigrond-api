@@ -1,4 +1,4 @@
-package ch.pledarigrond.common.data.common;
+package ch.pledarigrond.dictionary.entities;
 
 public class Example {
     String rm;

@@ -9,10 +9,12 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.common.util.WordNormalizer;
+import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
@@ -25,10 +27,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.ReplaceOptions;
 import org.apache.commons.io.FilenameUtils;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.mongodb.client.model.Filters.eq;
-
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
@@ -78,6 +76,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @Override
     public Page<Registration> getRegistrations(ListFilter filter, Pageable pageable) {
@@ -116,7 +116,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration.getLemmaIds().forEach(lemmaId -> {
             try {
                 updatePronunciationForLexEntry(RequestContext.getLanguage(), lemmaId, id);
-            } catch (DatabaseException | UnknownHostException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -138,7 +138,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws UnknownHostException, DatabaseException {
+    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws IOException {
         String id = generateRegistrationIdString(registration);
         if (registration.getStatus() == RegistrationStatus.COMPLETED) {
             updatePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId, id);
@@ -369,52 +369,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         return input.replaceAll(regex, "");
     }
 
-    private void updatePronunciationForLexEntry(Language language, String id, String pronunciation) throws DatabaseException, UnknownHostException {
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        Document query = new Document("_id", new ObjectId(id));
-        try (MongoCursor<Document> cursor = entryCollection.find(query).iterator()) {
-            while (cursor.hasNext()) {
-                DBObject object = new BasicDBObject(cursor.next());
-                LexEntry entry = Converter.convertToLexEntry(object);
-
-                if (entry.getCurrent() != null) {
-                    entry.getCurrent().getLemmaValues().put("RPronunciation", pronunciation);
-                }
-                entry.getUnapprovedVersions().forEach(version -> version.getLemmaValues().put("RPronunciation", pronunciation));
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")), new Document(newObject), new ReplaceOptions().upsert(true));
-
-                luceneService.update(language, entry);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void updatePronunciationForLexEntry(Language language, String entryId, String pronunciation) throws IOException {
+        EntryDto entry = dictionaryService.updatePronunciationForEntry(entryId, pronunciation);
+        luceneService.update(entry);
     }
 
-    private void removePronunciationForLexEntry(Language language, String id) throws DatabaseException, UnknownHostException {
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        Document query = new Document("_id", new ObjectId(id));
-        try (MongoCursor<Document> cursor = entryCollection.find(query).iterator()) {
-            while (cursor.hasNext()) {
-                DBObject object = new BasicDBObject(cursor.next());
-                LexEntry entry = Converter.convertToLexEntry(object);
-
-                if (entry.getCurrent() != null) {
-                    entry.getCurrent().getLemmaValues().remove("RPronunciation");
-                }
-                entry.getUnapprovedVersions().forEach(version -> version.getLemmaValues().remove("RPronunciation"));
-
-                BasicDBObject newObject = Converter.convertLexEntry(entry);
-                entryCollection.replaceOne(eq("_id", newObject.get("_id")), new Document(newObject), new ReplaceOptions().upsert(true));
-
-                luceneService.update(language, entry);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void removePronunciationForLexEntry(Language language, String id) throws IOException {
+        EntryDto entry = dictionaryService.removePronunciationForEntry(id);
+        luceneService.update(entry);
     }
 
     private String generateRegistrationIdString(Registration registration) {

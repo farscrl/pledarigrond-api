@@ -1,4 +1,4 @@
-package ch.pledarigrond.common.data.common.inflection;
+package ch.pledarigrond.dictionary.entities.inflection;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package ch.pledarigrond.common.data.common;
+package ch.pledarigrond.common.data.dictionary;
 
 public enum VersionStatus {
     REJECTED ("Rejected"),

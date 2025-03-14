@@ -1,9 +1,18 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.SearchSuggestions;
+import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.dictionary.dto.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
+import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
+import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
+import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import org.springframework.data.domain.Page;
 
@@ -13,37 +22,37 @@ import java.util.List;
 import java.util.Set;
 
 public interface EditorService {
-    Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery2 query, Pagination pagination);
+    Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery query, Pagination pagination);
 
-    LexEntry accept(Language language, LexEntry entry, LemmaVersion version) throws Exception;
+    EntryDto getEntry(String entryId) ;
 
-    LexEntry reject(Language language, LexEntry entry, LemmaVersion rejected) throws Exception;
+    EntryDto addEntry(EntryVersionDto version, boolean asSuggestion) throws IOException;
 
-    LexEntry drop(Language language, LexEntry entry) throws Exception;
+    EntryDto addSuggestion(String entryId, EntryVersionDto version) throws IOException;
 
-    LexEntry acceptAfterUpdate(Language language, LexEntry entry, LemmaVersion suggested, LemmaVersion modified) throws Exception;
+    EntryDto accept(String entryId, String versionIdToAccept) throws SuggestionNotFoundException, IOException;
 
-    LexEntry dropOutdatedHistory(Language language, LexEntry entry) throws Exception;
+    EntryDto reject(String entryId, String versionIdToReject) throws SuggestionNotFoundException, IOException;
 
-    Page<LemmaVersion> search(Language language, SearchCriteria searchCriteria, Pagination pagination) throws Exception;
+    void delete(String entryId) throws IOException;
 
-    LexEntry getLexEntry(Language language, String entryId) throws Exception;
+    EntryDto acceptAfterUpdateSuggestion(String entryId, EntryVersionDto modified) throws SuggestionNotFoundException, IOException;
 
-    LexEntry insert(Language language, LexEntry entry) throws Exception;
+    EntryDto reviewSuggestionLater(String entryId, String versionId) throws InvalidReviewLaterException, SuggestionNotFoundException, IOException;
 
-    LexEntry insertSuggestion(Language language, LexEntry entry) throws Exception;
+    EntryDto dropOutdatedHistory(String entryId) throws IOException;
 
-    LexEntry update(Language language, LexEntry entry, LemmaVersion fromEditor) throws Exception;
+    Page<EntryVersionDto> search(SearchCriteria searchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
-    LexEntry reviewLater(Language language, LexEntry entry) throws Exception;
+    EntryDto updateSuggestion(String entryId, EntryVersionDto newVersion) throws SuggestionNotFoundException, IOException;
 
-    List<LexEntry> updateOrder(Language language, DictionaryLanguage dictionaryLanguage, List<LemmaVersion> ordered) throws Exception;
+    ArrayList<EntryVersionDto> getOrder(String lemma, DictionaryLanguage dictionaryLanguage) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
-    ArrayList<LemmaVersion> getOrder(Language language, String lemma, DictionaryLanguage dictionaryLanguage) throws Exception;
+    List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered) throws IOException;
 
-    String export(Language language, Set<String> fields, EditorQuery query) throws Exception;
+    String export(Set<String> fields, EditorQuery query) throws IOException;
 
-    String export(Language language, Set<String> selected, SearchCriteria query) throws Exception;
+    String export(Set<String> selected, SearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
     SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException;
 }
