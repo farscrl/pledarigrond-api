@@ -2,18 +2,15 @@ package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.data.common.LightLemmaVersion;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
-import org.bson.Document;
-import org.json.JSONArray;
+import ch.pledarigrond.dictionary.services.DictionaryService;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Objects;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -33,6 +31,8 @@ public class ScheduledDumpService {
 
     @Autowired
     private PgEnvironment pgEnvironment;
+    @Autowired
+    private DictionaryService dictionaryService;
 
     public File getJsonExportFile(Language language) throws IOException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
@@ -46,7 +46,7 @@ public class ScheduledDumpService {
     }
 
     @Scheduled(cron = "${pg.export.cron}")
-    private void exportJSON() throws IOException, NoDatabaseAvailableException {
+    private void exportJSON() throws IOException {
         exportDataForLanguage(Language.PUTER);
         exportDataForLanguage(Language.RUMANTSCHGRISCHUN);
         exportDataForLanguage(Language.SURMIRAN);
@@ -55,7 +55,8 @@ public class ScheduledDumpService {
         exportDataForLanguage(Language.VALLADER);
     }
 
-    private void exportDataForLanguage(Language language) throws IOException, NoDatabaseAvailableException {
+    private void exportDataForLanguage(Language language) throws IOException {
+        logger.info("Exporting data for language {}", language);
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         File exportDir = new File(pgEnvironment.getExportLocation() + dbName + "/");
         Files.createDirectories(exportDir.toPath());
@@ -63,34 +64,38 @@ public class ScheduledDumpService {
         String fileName = getExportFileName(language);
         File file = new File(exportDir, fileName + ".zip");
         FileOutputStream fos = new FileOutputStream(file, false);
-        exportDataJson(fos, fileName, Database.getInstance(dbName).getAll());
+        exportDataJson(fos, fileName, dictionaryService.getStreamForEntries());
+        logger.info("Exported data for language {}", language);
     }
 
-    private void exportDataJson(OutputStream outputStream, String fileName, MongoCursor<Document> cursor) throws IOException {
+    private void exportDataJson(OutputStream outputStream, String fileName, Stream<EntryDto> stream) throws IOException {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
         ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
         ZipEntry zipEntry = new ZipEntry(fileName + ".json");
         zipOutputStream.putNextEntry(zipEntry);
 
-        JSONArray entries = new JSONArray();
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-            LemmaVersion copy = entry.getCurrent();
-            if (copy != null) {
-                LightLemmaVersion lemmaVersion = new LightLemmaVersion(copy);
-                entries.put(lemmaVersion.getEntryValues());
-            }
-        }
+        JsonFactory jsonFactory = new JsonFactory();
+        try (JsonGenerator jsonGenerator = jsonFactory.createGenerator(zipOutputStream)) {
+            jsonGenerator.writeStartArray();
 
-        String jsonData = entries.toString(1);
-        byte[] bytes = jsonData.getBytes();
-        for (byte b : bytes) {
-            zipOutputStream.write(b);
+            ObjectMapper mapper = new ObjectMapper();
+            SimpleFilterProvider filters = new SimpleFilterProvider()
+                    .addFilter("entityVersionDtoFilter", SimpleBeanPropertyFilter.serializeAllExcept("userComment", "userEmail", "creator", "creatorIp", "creatorRole", "verifier"));
+            ObjectWriter writer = mapper.writer(filters);
+
+            stream.forEach(entry -> {
+                try {
+                    writer.writeValue(jsonGenerator, entry.getCurrent());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            jsonGenerator.writeEndArray();
         }
 
         zipOutputStream.closeEntry();
         zipOutputStream.close();
+        bufferedOutputStream.close();
     }
 
     private String getExportFileName(Language language) {

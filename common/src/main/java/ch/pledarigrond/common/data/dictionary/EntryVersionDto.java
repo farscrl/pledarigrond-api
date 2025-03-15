@@ -2,6 +2,7 @@ package ch.pledarigrond.common.data.dictionary;
 
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
+@JsonFilter("entityVersionDtoFilter")
 public class EntryVersionDto {
     private String versionId = UUID.randomUUID().toString();
     private String entryId;
