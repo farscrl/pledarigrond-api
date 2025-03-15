@@ -115,7 +115,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         String id = generateRegistrationIdString(registration);
         registration.getLemmaIds().forEach(lemmaId -> {
             try {
-                updatePronunciationForLexEntry(RequestContext.getLanguage(), lemmaId, id);
+                updatePronunciationForEntry(RequestContext.getLanguage(), lemmaId, id);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -138,21 +138,21 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws IOException {
+    public Registration addRegistrationToLemma(Registration registration, String entryId) throws IOException {
         String id = generateRegistrationIdString(registration);
         if (registration.getStatus() == RegistrationStatus.COMPLETED) {
-            updatePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId, id);
+            updatePronunciationForEntry(RequestContext.getLanguage(), entryId, id);
         } else {
-            removePronunciationForLexEntry(RequestContext.getLanguage(), lexEntryId);
-            registration.getLemmaIds().add(lexEntryId);
+            removePronunciationForEntry(RequestContext.getLanguage(), entryId);
+            registration.getLemmaIds().add(entryId);
             registrationRepository.save(registration);
         }
         return registration;
     }
 
     @Override
-    public Registration getOrderedRegistration(String lexEntryId) {
-        List<Registration> registrations = registrationRepository.findByLemmaIdsContaining(lexEntryId);
+    public Registration getOrderedRegistration(String entryId) {
+        List<Registration> registrations = registrationRepository.findByLemmaIdsContaining(entryId);
         return registrations.isEmpty() ? null : registrations.get(0);
     }
 
@@ -369,12 +369,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         return input.replaceAll(regex, "");
     }
 
-    private void updatePronunciationForLexEntry(Language language, String entryId, String pronunciation) throws IOException {
+    private void updatePronunciationForEntry(Language language, String entryId, String pronunciation) throws IOException {
         EntryDto entry = dictionaryService.updatePronunciationForEntry(entryId, pronunciation);
         luceneService.update(entry);
     }
 
-    private void removePronunciationForLexEntry(Language language, String id) throws IOException {
+    private void removePronunciationForEntry(Language language, String id) throws IOException {
         EntryDto entry = dictionaryService.removePronunciationForEntry(id);
         luceneService.update(entry);
     }

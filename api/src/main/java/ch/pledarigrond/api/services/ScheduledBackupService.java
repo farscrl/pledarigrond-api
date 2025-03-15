@@ -2,11 +2,9 @@ package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.mongodb.util.Validator;
+import ch.pledarigrond.dictionary.services.DbBackupService;
+import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
 import ch.pledarigrond.mongodb.util.backup.AbstractBackupHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +13,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBException;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Service()
 public class ScheduledBackupService extends AbstractBackupHelper {
@@ -33,6 +34,9 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private DbBackupService dbBackupService;
 
 	@Scheduled(cron = "${pg.backup.cron.rumantschgrischun}")
 	public void backupRumantschgrischun() {
@@ -72,25 +76,9 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		String backupFileName = buildName(dbName);
 		LOG.info("backup file name created: {}", backupFileName);
 
-		File backupFile = buildBackup(pgEnvironment.getBackupLocation(), backupFileName, dbName);
+		File backupFile = buildBackup(pgEnvironment.getBackupLocation(), backupFileName, language);
 		backupFile.mkdirs();
 		LOG.info("backup file created: {}", backupFile.getAbsolutePath());
-
-		if (valid(backupFile, dbName)) {
-			LOG.info("backup file valid");
-
-			s3BackupService.uploadFile(dbName, backupFile);
-
-			try {
-				cleanup(dbName);
-			} catch (ScheduledBackupException e) {
-				LOG.error("back up file is not valid.");
-			}
-		} else {
-			LOG.error("back up file is not valid.");
-		}
-
-		LOG.info("finished scheduled backup");
 	}
 
 	private void backupUserDb() throws IOException, JAXBException, NoSuchAlgorithmException {
@@ -118,12 +106,12 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		LOG.info("finished scheduled backup");
 	}
 
-	private File buildBackup(String dir, String backupFileName, String locale) {
+	private File buildBackup(String dir, String backupFileName, Language language) {
 		File backupDir = new File(dir);
 		backupDir.mkdirs();
 		File backupFile = new File(dir, backupFileName);
 		try {
-			Database.getInstance(locale).exportData(true, false, new FileOutputStream(backupFile), backupFileName);
+			dbBackupService.backup(language, new FileOutputStream(backupFile), backupFileName);
 		} catch (Exception e) {
 			LOG.error("error occured...", e);
 		}
@@ -143,27 +131,6 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		LOG.info("list of backupFiles...");
 		for (File file : backupFiles) {
 			LOG.info("{}", file);
-		}
-	}
-
-	private boolean valid(File backupFile, String dbName) {
-		if (null == backupFile) {
-			return false;
-		}
-
-		if (!filter().accept(backupFile)) {
-			return false;
-		}
-
-		try (FileInputStream input = new FileInputStream(backupFile)) {
-			Iterator<LexEntry> data = Database.getInstance(dbName).getExportedData(input);
-			while (data.hasNext()) {
-				Validator.validate(data.next());
-			}
-			return true;
-		} catch (Exception e) {
-			LOG.error("error occured: ", e);
-			return false;
 		}
 	}
 

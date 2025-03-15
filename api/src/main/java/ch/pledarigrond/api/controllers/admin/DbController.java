@@ -2,7 +2,6 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -19,13 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,12 +37,7 @@ public class DbController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/drop_db")
     void dropDb(@PathVariable("language")Language language) {
-        try {
-            adminService.dropDatabase(language);
-        } catch (DatabaseException e) {
-            logger.error("Error while dropping database", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        adminService.dropDatabase(language);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -54,12 +45,9 @@ public class DbController {
     void importDb(@PathVariable("language")Language language, HttpServletRequest request) {
         try {
             adminService.importDatabase(language, request);
-        } catch (DatabaseException | IOException e) {
+        } catch (IOException e) {
             logger.error("Error while importing database", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (XMLStreamException | JAXBException e) {
-            logger.error("Error while importing database, malformed data", e);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -67,8 +55,6 @@ public class DbController {
     @PostMapping(value="/export_db", produces="application/zip")
     void exportDb(
             @PathVariable("language")Language language,
-            @RequestParam(value = "includeVersionHistory", defaultValue = "true") boolean includeVersionHistory,
-            @RequestParam(value = "anonymizeData", defaultValue = "false") boolean anonymizeData,
             HttpServletResponse response
     ) {
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
@@ -78,14 +64,6 @@ public class DbController {
                 .append("pledarigrond_db_dump_")
                 .append(language.getName())
                 .append("_");
-        if(includeVersionHistory) {
-            fileName.append("including_version_history_");
-        } else {
-            fileName.append("only_current_");
-        }
-        if(anonymizeData) {
-            fileName.append("anonymized_");
-        }
         String pattern = "yyyy-MM-dd_HH-mm-ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         fileName.append(simpleDateFormat.format(new Date()));
@@ -93,19 +71,10 @@ public class DbController {
         ServletOutputStream out;
         try {
             out = response.getOutputStream();
-            adminService.exportData(language, includeVersionHistory, anonymizeData, out, fileName.toString());
+            adminService.exportData(language, out, fileName.toString());
         } catch (IOException e) {
             logger.error("Error while exporting database. Error writing.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error writing.");
-        } catch (JAXBException e) {
-            logger.error("Error while exporting database. Jaxb exception.", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Jaxb exception.");
-        } catch (NoDatabaseAvailableException e) {
-            logger.error("Error while exporting database. No database available.", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not found.");
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("Error while exporting database. No such algorithm.", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No such algorithm.");
         }
     }
 
@@ -157,9 +126,6 @@ public class DbController {
         } catch (IndexException e) {
             logger.error("Error while rebuilding index. Index error.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Index error.");
-        } catch (NoDatabaseAvailableException e) {
-            logger.error("Error while rebuilding index. Database not found.", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not found.");
         }
     }
 

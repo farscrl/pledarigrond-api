@@ -17,7 +17,6 @@ package ch.pledarigrond.mongodb.util;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.exception.DatabaseException;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -52,18 +51,6 @@ public class MongoHelper {
 			logger.info("Connecting to data base... " + DATABASE.getName());
 			
 			return DATABASE;	
-		}
-	}
-	
-	public static boolean isRunning() {
-		return DATABASE != null && MONGO_CLIENT != null;
-	}
-
-	public static void shutdown() {
-		synchronized(lock ) {
-			MONGO_CLIENT.close();
-			DATABASE = null;
-			MONGO_CLIENT = null;
 		}
 	}
 

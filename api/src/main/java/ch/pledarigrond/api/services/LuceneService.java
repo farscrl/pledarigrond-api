@@ -9,7 +9,6 @@ import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
@@ -30,7 +29,7 @@ public interface LuceneService {
 
     void dropIndex() throws IndexException;
 
-    void addToIndex(Stream<EntryDto> stream) throws NoDatabaseAvailableException, IndexException;
+    void addToIndex(Stream<EntryDto> stream) throws IndexException;
 
     void update(EntryDto entry) throws IOException;
 

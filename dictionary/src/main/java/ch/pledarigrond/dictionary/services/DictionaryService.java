@@ -30,4 +30,6 @@ public interface DictionaryService {
     EntryDto removePronunciationForEntry(String entryId);
 
     Stream<EntryDto> getStreamForEntries();
+
+    boolean deleteAllEntries();
 }

@@ -26,6 +26,8 @@ public class EntryVersion {
     private String rmTags;
     private String rmRedirect;
     private String rmEtymologie;
+    private String rmPhonetics;
+    private String rmSynonym;
     private String rmPronunciation;
     private Inflection inflection;
 

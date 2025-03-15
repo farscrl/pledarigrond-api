@@ -28,6 +28,8 @@ public class EntryVersionDto {
     @Size(max = 200) private String rmTags;
     @Size(max = 200) private String rmRedirect;
     @Size(max = 200) private String rmEtymologie;
+    @Size(max = 200) private String rmPhonetics;
+    @Size(max = 200) private String rmSynonym;
     @Size(max = 200) private String rmPronunciation;
     private InflectionDto inflection;
 

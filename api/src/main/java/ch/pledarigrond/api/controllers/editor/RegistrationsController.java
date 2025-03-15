@@ -66,19 +66,19 @@ public class RegistrationsController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/add_to_lemma/{lexEntryId}")
-    ResponseEntity<?> addRegistrationToLemma(@PathVariable("language") Language language, @Validated @RequestBody Registration registration, @PathVariable(value="lexEntryId") String lexEntryId) throws IOException, DatabaseException {
+    @PostMapping("/add_to_lemma/{entryId}")
+    ResponseEntity<?> addRegistrationToLemma(@PathVariable("language") Language language, @Validated @RequestBody Registration registration, @PathVariable(value="entryId") String entryId) throws IOException, DatabaseException {
         Registration loadedRegistration = registrationService.getRegistration(registration.getId());
         if (loadedRegistration == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(registrationService.addRegistrationToLemma(loadedRegistration, lexEntryId));
+        return ResponseEntity.ok(registrationService.addRegistrationToLemma(loadedRegistration, entryId));
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/did_order/{lexEntryId}")
-    ResponseEntity<?> didOrder(@PathVariable("language") Language language,  @PathVariable(value="lexEntryId") String lexEntryId) {
-        return ResponseEntity.ok(registrationService.getOrderedRegistration(lexEntryId));
+    @PostMapping("/did_order/{entryId}")
+    ResponseEntity<?> didOrder(@PathVariable("language") Language language,  @PathVariable(value="entryId") String entryId) {
+        return ResponseEntity.ok(registrationService.getOrderedRegistration(entryId));
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")

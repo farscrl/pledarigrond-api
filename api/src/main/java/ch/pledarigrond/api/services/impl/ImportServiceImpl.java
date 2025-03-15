@@ -1,14 +1,10 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.ImportService;
-import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.mongodb.core.Database;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.ExampleDto;
+import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -24,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -34,23 +31,20 @@ public class ImportServiceImpl implements ImportService {
     private final Logger logger = LoggerFactory.getLogger(ImportServiceImpl.class);
 
     @Autowired
-    private PgEnvironment pgEnvironment;
+    private DictionaryService dictionaryService;
 
     @Override
-    public boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException, InvalidEntryException, NoDatabaseAvailableException {
-        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
-
+    public boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException, InvalidEntryException {
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile multipartFile = dmhsRequest.getFile("file");
 
         String originalFilename = multipartFile.getOriginalFilename();
         logger.warn("Importing XLSX file: {}", originalFilename);
 
-        return processWorkbook(multipartFile.getInputStream(), db);
+        return processWorkbook(multipartFile.getInputStream());
     }
 
-    public boolean importZipSursilvan(Language language, HttpServletRequest request) throws IOException, NoDatabaseAvailableException {
-        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
+    public boolean importZipSursilvan(Language language, HttpServletRequest request) throws IOException {
 
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile zipFile = dmhsRequest.getFile("file");
@@ -66,7 +60,7 @@ public class ImportServiceImpl implements ImportService {
                     logger.warn("Importing file from ZIP: {}", entry.getName());
 
                     try (InputStream xlsxInput = zip.getInputStream(entry)) {
-                        boolean success = processWorkbook(xlsxInput, db);
+                        boolean success = processWorkbook(xlsxInput);
                         if (!success) {
                             logger.error("Import failed for file: {}", entry.getName());
                             return false;
@@ -84,7 +78,7 @@ public class ImportServiceImpl implements ImportService {
         return true;
     }
 
-    private boolean processWorkbook(InputStream xlsxInputStream, Database db) throws IOException, InvalidEntryException {
+    private boolean processWorkbook(InputStream xlsxInputStream) throws IOException, InvalidEntryException {
         Workbook workbook = new XSSFWorkbook(xlsxInputStream);
         Sheet sheet = workbook.getSheetAt(0);
 
@@ -107,7 +101,7 @@ public class ImportServiceImpl implements ImportService {
 
         logger.info("File format seems correct, continuing with import");
 
-        LemmaVersion lv = null;
+        EntryVersionDto ev = null;
 
         for (i = 1; i <= sheet.getLastRowNum(); i++) {
             logger.warn("Processing row: {}", i);
@@ -121,89 +115,87 @@ public class ImportServiceImpl implements ImportService {
                 if (row.getCell(0) != null && row.getCell(8) != null) {
                     String exampleRm = row.getCell(0).getRichStringCellValue().getString();
                     String exampleDe = row.getCell(8).getRichStringCellValue().getString();
-                    if (lv == null) {
+                    if (ev == null) {
                         throw new RuntimeException("No lemma found for example: " + exampleRm);
                     }
 
-                    String examples = lv.getLemmaValues().get("examples");
-                    if (examples == null) {
-                        examples = "";
-                    } else {
-                        examples += "\n";
+                    if (ev.getExamples() == null) {
+                        ev.setExamples(new ArrayList<>());
                     }
-                    examples += exampleRm + "###" + exampleDe;
-                    lv.getLemmaValues().put("examples", examples);
+                    ExampleDto newExample = new ExampleDto();
+                    newExample.setRm(exampleRm);
+                    newExample.setDe(exampleDe);
+                    ev.getExamples().add(newExample);
 
-                    logger.info("Added example: «" + exampleRm + "» TO «" + lv.getLemmaValues().get("RStichwort") + "»");
+                    logger.info("Added example: «" + exampleRm + "» to «" + ev.getRmStichwort() + "»");
                 }
             } else {
-                if (lv != null) {
-                    finalizeLemma(db, lv);
+                if (ev != null) {
+                    finalizeVersion(ev);
                 }
-                lv = new LemmaVersion();
+                ev = new EntryVersionDto();
                 if (row.getCell(0) != null) {
-                    String RStichwort = row.getCell(0).getRichStringCellValue().getString();
-                    if (RStichwort.startsWith("# ")) {
-                        RStichwort = RStichwort.substring(2);
-                        lv.getLemmaValues().put("RRedirect", RStichwort);
-                        lv.getLemmaValues().put("RStichwort", "cf. " + RStichwort);
+                    String rmStichwort = row.getCell(0).getRichStringCellValue().getString();
+                    if (rmStichwort.startsWith("# ")) {
+                        rmStichwort = rmStichwort.substring(2);
+                        ev.setRmRedirect(rmStichwort);
+                        ev.setRmStichwort("cf. " + rmStichwort);
                     } else {
-                        lv.getLemmaValues().put("RStichwort", RStichwort);
+                        ev.setRmStichwort(rmStichwort);
                     }
                 }
                 if (row.getCell(1) != null) {
-                    lv.getLemmaValues().put("RGenus", row.getCell(1).getRichStringCellValue().getString());
+                    ev.setRmGenus(row.getCell(1).getRichStringCellValue().getString());
                 }
                 if (row.getCell(2) != null) {
-                    lv.getLemmaValues().put("RGrammatik", row.getCell(2).getRichStringCellValue().getString());
+                    ev.setRmGrammatik(row.getCell(2).getRichStringCellValue().getString());
                 }
                 if (row.getCell(3) != null) {
-                    lv.getLemmaValues().put("RPhonetics", row.getCell(3).getRichStringCellValue().getString());
+                    ev.setRmPhonetics(row.getCell(3).getRichStringCellValue().getString());
                 }
                 if (row.getCell(4) != null) {
-                    lv.getLemmaValues().put("RSubsemantik", row.getCell(4).getRichStringCellValue().getString());
+                    ev.setRmSubsemantik(row.getCell(4).getRichStringCellValue().getString());
                 }
                 if (row.getCell(5) != null) {
-                    lv.getLemmaValues().put("RSemantik", row.getCell(5).getRichStringCellValue().getString());
+                    ev.setRmSemantik(row.getCell(5).getRichStringCellValue().getString());
                 }
                 if (row.getCell(6) != null) {
-                    lv.getLemmaValues().put("REtymologie", row.getCell(6).getRichStringCellValue().getString());
+                    ev.setRmEtymologie(row.getCell(6).getRichStringCellValue().getString());
                 }
                 if (row.getCell(7) != null) {
-                    lv.getLemmaValues().put("RSynonym", row.getCell(7).getRichStringCellValue().getString());
+                    ev.setRmSynonym(row.getCell(7).getRichStringCellValue().getString());
                 }
                 if (row.getCell(8) != null) {
-                    String DStichwort = row.getCell(8).getRichStringCellValue().getString();
-                    if (DStichwort.startsWith("# ")) {
-                        DStichwort = DStichwort.substring(2);
-                        lv.getLemmaValues().put("DRedirect", DStichwort);
-                        lv.getLemmaValues().put("DStichwort", "cf. " + DStichwort);
+                    String deStichwort = row.getCell(8).getRichStringCellValue().getString();
+                    if (deStichwort.startsWith("# ")) {
+                        deStichwort = deStichwort.substring(2);
+                        ev.setDeRedirect(deStichwort);
+                        ev.setDeStichwort("cf. " + deStichwort);
                     } else {
-                        lv.getLemmaValues().put("DStichwort", DStichwort);
+                        ev.setDeStichwort(deStichwort);
                     }
                 }
                 if (row.getCell(9) != null) {
-                    lv.getLemmaValues().put("DGenus", row.getCell(9).getRichStringCellValue().getString());
+                    ev.setDeGenus(row.getCell(9).getRichStringCellValue().getString());
                 }
                 if (row.getCell(10) != null) {
-                    lv.getLemmaValues().put("DGrammatik", row.getCell(10).getRichStringCellValue().getString());
+                    ev.setDeGrammatik(row.getCell(10).getRichStringCellValue().getString());
                 }
                 if (row.getCell(11) != null) {
-                    lv.getLemmaValues().put("DSubsemantik", row.getCell(11).getRichStringCellValue().getString());
+                    ev.setDeSubsemantik(row.getCell(11).getRichStringCellValue().getString());
                 }
                 if (row.getCell(12) != null) {
-                    lv.getLemmaValues().put("categories", row.getCell(12).getRichStringCellValue().getString());
+                    ev.setCategories(row.getCell(12).getRichStringCellValue().getString());
                 }
             }
         }
 
-        if (lv != null) {
-            finalizeLemma(db, lv);
+        if (ev != null) {
+            finalizeVersion(ev);
         }
 
         return true;
     }
-
 
     private boolean isYellowCell(Cell cell) {
         CellStyle cellStyle = cell.getCellStyle();
@@ -224,19 +216,8 @@ public class ImportServiceImpl implements ImportService {
         return false;
     }
 
-    private void finalizeLemma(Database db, LemmaVersion lv) throws InvalidEntryException {
-        lv.setCreatorRole(EditorRole.ADMIN);
-        lv.setStatus(LemmaVersion.Status.NEW_ENTRY);
-        lv.setVerification(LemmaVersion.Verification.ACCEPTED);
-        lv.setInternalId(0);
-        lv.setUserId("import@pledarigrond.ch");
-
-        LexEntry le = new LexEntry();
-        le.addLemma(lv);
-        le.setCurrent(lv);
-        le.setNextInternalId(1);
-
-        db.insert(le);
-        logger.info("Inserted: " + lv.getLemmaValues().get("RStichwort"));
+    private void finalizeVersion(EntryVersionDto ev) throws InvalidEntryException {
+        dictionaryService.addEntry(ev, false, "import@pledarigrond.ch");
+        logger.info("Inserted: {}", ev.getRmStichwort());
     }
 }

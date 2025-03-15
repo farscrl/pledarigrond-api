@@ -27,9 +27,9 @@ public interface RegistrationService {
 
     public Registration postponeReviewRegistration(Registration registration);
 
-    public Registration addRegistrationToLemma(Registration registration, String lexEntryId) throws IOException;
+    public Registration addRegistrationToLemma(Registration registration, String entryId) throws IOException;
 
-    public Registration getOrderedRegistration(String lexEntryId);
+    public Registration getOrderedRegistration(String entryId);
 
     public Registration order(Registration registration);
 

@@ -247,6 +247,12 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
     }
 
+    @Override
+    public boolean deleteAllEntries() {
+        entryRepository.deleteAll();
+        return true;
+    }
+
     private EntryVersion clone(EntryVersion version) {
         EntryVersion clone = entryMapper.toEntryVersion(entryMapper.toEntryVersionDto(version));
         clone.setVersionId(UUID.randomUUID().toString());
