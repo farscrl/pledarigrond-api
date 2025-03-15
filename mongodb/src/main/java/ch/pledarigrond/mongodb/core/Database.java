@@ -21,10 +21,8 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
-import ch.pledarigrond.mongodb.model.DatabaseStatistics;
 import ch.pledarigrond.mongodb.util.MongoHelper;
 import ch.pledarigrond.mongodb.util.Validator;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Indexes;
@@ -36,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Database {
@@ -131,41 +128,6 @@ public class Database {
 		return entryCollection.countDocuments() == 0;
 	}
 
-	public DatabaseStatistics getStatistics() {
-		logger.info("getStatistics called...");
-
-		DatabaseStatistics stats = new DatabaseStatistics();
-		stats.setNumberOfEntries((int) entryCollection.countDocuments());
-		Map<LemmaVersion.Verification, Integer> count = new HashMap<>();
-		MongoCursor<Document> cursor = entryCollection.find().iterator();
-		int entryCount = 0, lemmaCount = 0;
-		LemmaVersion.Verification[] values = LemmaVersion.Verification.values();
-		for (LemmaVersion.Verification verification : values) {
-			count.put(verification, 0);
-		}
-		count.put(null, 0);
-		while (cursor.hasNext()) {
-			LexEntry entry = Converter.convertToLexEntry(new BasicDBObject(cursor.next()));
-			List<LemmaVersion> history = entry.getVersionHistory();
-			entryCount++;
-			lemmaCount += history.size();
-			for (LemmaVersion lemma : history) {
-				Integer old = count.get(lemma.getVerification());
-				count.put(lemma.getVerification(), old + 1);
-			}
-		}
-		stats.setNumberOfApproved(count.get(LemmaVersion.Verification.ACCEPTED));
-		stats.setNumberOfSuggestions(count.get(LemmaVersion.Verification.UNVERIFIED));
-		stats.setNumberOfDeleted(count.get(LemmaVersion.Verification.REJECTED));
-		stats.setNumberOfOutdated(count.get(LemmaVersion.Verification.OUTDATED));
-		stats.setNumberOfUndefined(count.get(null));
-		stats.setNumberOfEntries(entryCount);
-		stats.setNumberOfLemmata(lemmaCount);
-		
-		logger.info("getStatistics finished.");
-		
-		return stats;
-	}
 
 	public MongoCursor<Document> getAll() {
 		return entryCollection.find().iterator();

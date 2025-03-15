@@ -2,11 +2,10 @@ package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.backup.BackupInfos;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.dictionary.DictionaryStatisticsDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.mongodb.model.DatabaseStatistics;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public interface AdminService {
 
     void rebuildSuggestionsIndex(Language language) throws Exception;
 
-    DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException;
+    DictionaryStatisticsDto getDatabaseStats(Language language);
 
     IndexStatistics getIndexStats(Language language) throws NoIndexAvailableException;
 

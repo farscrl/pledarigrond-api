@@ -1,10 +1,7 @@
 package ch.pledarigrond.dictionary.services.impl;
 
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
-import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.exception.dictionary.EntityNotFoundException;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
@@ -24,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 @Service
@@ -248,9 +246,33 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public boolean deleteAllEntries() {
+    public DictionaryStatisticsDto getStatistics() {
+        AtomicLong numberOfEntries = new AtomicLong();
+        AtomicLong numberOfVersions = new AtomicLong();
+        AtomicLong numberOfSuggestions = new AtomicLong();
+        AtomicLong numberOfApproved = new AtomicLong();
+
+        entryRepository.findAllBy().forEach(entry -> {
+            numberOfEntries.incrementAndGet();
+            numberOfVersions.addAndGet(entry.getVersions().size());
+            numberOfSuggestions.addAndGet(entry.getSuggestions().size());
+            if (entry.getCurrent() != null) {
+                numberOfApproved.incrementAndGet();
+            }
+        });
+
+        DictionaryStatisticsDto stats = new DictionaryStatisticsDto();
+        stats.setNumberOfEntries(numberOfEntries.get());
+        stats.setNumberOfVersions(numberOfVersions.get());
+        stats.setNumberOfSuggestions(numberOfSuggestions.get());
+        stats.setNumberOfApproved(numberOfApproved.get());
+
+        return stats;
+    }
+
+    @Override
+    public void deleteAllEntries() {
         entryRepository.deleteAll();
-        return true;
     }
 
     private EntryVersion clone(EntryVersion version) {

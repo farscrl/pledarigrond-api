@@ -1,10 +1,7 @@
 package ch.pledarigrond.dictionary.services;
 
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
-import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
 import org.springframework.data.domain.Page;
@@ -31,5 +28,6 @@ public interface DictionaryService {
 
     Stream<EntryDto> getStreamForEntries();
 
-    boolean deleteAllEntries();
+    DictionaryStatisticsDto getStatistics();
+    void deleteAllEntries();
 }

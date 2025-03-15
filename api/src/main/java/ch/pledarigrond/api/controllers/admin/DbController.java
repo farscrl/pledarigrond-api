@@ -2,7 +2,6 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AdminService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import org.apache.commons.io.IOUtils;
@@ -81,11 +80,7 @@ public class DbController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/db_stats")
     ResponseEntity<?> getDbStats(@PathVariable("language")Language language) {
-        try {
-            return ResponseEntity.ok(adminService.getDatabaseStats(language));
-        } catch (NoDatabaseAvailableException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Database not found.");
-        }
+        return ResponseEntity.ok(adminService.getDatabaseStats(language));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

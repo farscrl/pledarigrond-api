@@ -5,15 +5,11 @@ import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.backup.BackupInfos;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.dictionary.DictionaryStatisticsDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.dictionary.services.DbBackupService;
 import ch.pledarigrond.dictionary.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.IndexException;
-import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.mongodb.model.DatabaseStatistics;
-import ch.pledarigrond.mongodb.model.DictionaryStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,17 +63,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public DatabaseStatistics getDatabaseStats(Language language) throws NoDatabaseAvailableException {
-        DatabaseStatistics statistics = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language)).getStatistics();
-        logger.info(statistics.toString());
-        return statistics;
+    public DictionaryStatisticsDto getDatabaseStats(Language language) {
+        return dictionaryService.getStatistics();
     }
 
     @Override
     public IndexStatistics getIndexStats(Language language) {
-        IndexStatistics statistics = luceneService.getIndexStatistics();
-        DictionaryStatistics.initialize(statistics.getUnverifiedEntries(), statistics.getApprovedEntries(), statistics.getLastUpdated(), statistics.getInflectionCount());
-        return statistics;
+        return luceneService.getIndexStatistics();
     }
 
     @Override
