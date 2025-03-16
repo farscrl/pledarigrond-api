@@ -4,6 +4,7 @@ import ch.pledarigrond.api.services.RegistrationService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.exception.DatabaseException;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class RegistrationsController {
 
     @Autowired
     private RegistrationService registrationService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @PreAuthorize("hasPermission('registrations', 'editor')")
     @GetMapping("/list")
@@ -103,14 +107,14 @@ public class RegistrationsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_single_words")
     ResponseEntity<?> extractSingleWords() throws UnknownHostException, DatabaseException {
-        registrationService.extractSingleWords();
+        registrationService.extractSingleWords(dictionaryService.getStreamForEntries());
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_list_of_words_by_ending")
     ResponseEntity<?> extractListOfWordsByEnding() throws UnknownHostException, DatabaseException {
-        ByteArrayResource resource = registrationService.extractListOfWordsByEnding();
+        ByteArrayResource resource = registrationService.extractListOfWordsByEnding(dictionaryService.getStreamForEntries());
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=strings.txt")
                 .body(resource);

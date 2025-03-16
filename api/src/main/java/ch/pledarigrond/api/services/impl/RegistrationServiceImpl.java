@@ -6,29 +6,19 @@ import ch.pledarigrond.api.services.RegistrationService;
 import ch.pledarigrond.api.services.SlackService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.exception.DatabaseException;
-import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.database.services.DictionaryService;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.mongodb.util.MongoHelper;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatus;
 import ch.pledarigrond.pronunciation.entities.Registration;
 import ch.pledarigrond.pronunciation.repositories.RegistrationRepository;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import org.apache.commons.io.FilenameUtils;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +43,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -223,60 +214,54 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public boolean extractSingleWords() throws DatabaseException, UnknownHostException {
+    public void extractSingleWords(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException {
         Language language = RequestContext.getLanguage();
         if (language == null) {
             throw new DatabaseException("No language set in request context");
         }
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
+        stream.forEach(entry -> {
             if (entry.getCurrent() != null) {
-                LemmaVersion current = entry.getCurrent();
-                String RStichwort = current.getLemmaValues().get("RStichwort");
-                RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
-                RStichwort = removeRegularPlural(RStichwort);
-                RStichwort = removeSuffixes(RStichwort);
-                if (isSingleWord(RStichwort)) {
-                    Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(RStichwort, current.getLemmaValues().get("RGenus"), current.getLemmaValues().get("RGrammatik"));
+                EntryVersionDto current = entry.getCurrent();
+                String rmStichwort = current.getRmStichwort();
+                rmStichwort = WordNormalizer.normalizeWord(language, rmStichwort, false);
+                rmStichwort = removeRegularPlural(rmStichwort);
+                rmStichwort = removeSuffixes(rmStichwort);
+                if (isSingleWord(rmStichwort)) {
+                    Optional<Registration> existingRegistration = registrationRepository.findFirstByRmStichwortAndRmGenusAndRmGrammatik(rmStichwort, current.getRmGenus(), current.getRmGrammatik());
 
                     if (existingRegistration.isEmpty()) {
-                        // logger.info("registration added: " + RStichwort);
+                        // logger.info("registration added: " + rmStichwort);
                         Registration registration = new Registration();
-                        registration.getLemmaIds().add(entry.getId());
+                        registration.getLemmaIds().add(entry.getEntryId());
                         registration.setStatus(RegistrationStatus.TODO);
-                        registration.setDeStichwort(current.getLemmaValues().get("DStichwort"));
-                        registration.setRmStichwort(RStichwort);
+                        registration.setDeStichwort(current.getDeStichwort());
+                        registration.setRmStichwort(rmStichwort);
                         registration.setDeStichwortNormalized(normalizeString(registration.getDeStichwort()));
                         registration.setRmStichwortNormalized(normalizeString(registration.getRmStichwort()));
-                        registration.setRmSemantik(current.getLemmaValues().get("RSemantik"));
-                        registration.setRmSubsemantik(current.getLemmaValues().get("RSubsemantik"));
-                        registration.setRmGrammatik(current.getLemmaValues().get("RGrammatik"));
-                        registration.setRmGenus(current.getLemmaValues().get("RGenus"));
-                        registration.setRmFlex(current.getLemmaValues().get("RFlex"));
-                        registration.setRmTags(current.getLemmaValues().get("RTags"));
-                        registration.setRmInflectionType(current.getLemmaValues().get("RInflectionType"));
-                        registration.setRmInflectionSubtype(current.getLemmaValues().get("RInflectionSubtype"));
+                        registration.setRmSemantik(current.getRmSemantik());
+                        registration.setRmSubsemantik(current.getRmSubsemantik());
+                        registration.setRmGrammatik(current.getRmGrammatik());
+                        registration.setRmGenus(current.getRmGenus());
+                        registration.setRmFlex(current.getRmFlex());
+                        registration.setRmTags(current.getRmTags());
+                        if (current.getInflection() != null) {
+                            registration.setRmInflectionType(current.getInflection().getInflectionType().getName());
+                            registration.setRmInflectionSubtype(current.getInflection().getInflectionSubtype());
+                        }
                         registrationRepository.save(registration);
                     } else {
-                        // logger.info("registration already exists: " + RStichwort);
-                        existingRegistration.get().getLemmaIds().add(entry.getId());
+                        // logger.info("registration already exists: " + rmStichwort);
+                        existingRegistration.get().getLemmaIds().add(entry.getEntryId());
                         registrationRepository.save(existingRegistration.get());
                     }
                 }
             }
-        }
-
-        return true;
+        });
     }
 
     @Override
-    public ByteArrayResource extractListOfWordsByEnding() throws DatabaseException, UnknownHostException {
+    public ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException {
         Language language = RequestContext.getLanguage();
         if (language == null) {
             throw new DatabaseException("No language set in request context");
@@ -284,25 +269,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         List<String> strings = new ArrayList<>();
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
+        stream.forEach(entry -> {
             if (entry.getCurrent() != null) {
-                LemmaVersion current = entry.getCurrent();
-                String RStichwort = current.getLemmaValues().get("RStichwort");
-                RStichwort = WordNormalizer.normalizeWord(language, RStichwort, false);
-                RStichwort = removeRegularPlural(RStichwort);
-                RStichwort = removeSuffixes(RStichwort);
+                EntryVersionDto current = entry.getCurrent();
+                String rmStichwort = current.getRmStichwort();
+                rmStichwort = WordNormalizer.normalizeWord(language, rmStichwort, false);
+                rmStichwort = removeRegularPlural(rmStichwort);
+                rmStichwort = removeSuffixes(rmStichwort);
 
-                if (RStichwort != null && !RStichwort.isEmpty()) {
-                    strings.add(RStichwort);
+                if (rmStichwort != null && !rmStichwort.isEmpty()) {
+                    strings.add(rmStichwort);
                 }
             }
-        }
+        });
 
         List<String> sortedStrings = strings.stream()
                 .sorted((s1, s2) -> new StringBuilder(s1).reverse().toString()

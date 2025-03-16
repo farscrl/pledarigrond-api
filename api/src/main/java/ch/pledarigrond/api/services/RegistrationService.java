@@ -1,5 +1,6 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
@@ -11,35 +12,38 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.stream.Stream;
 
 public interface RegistrationService {
-    public Page<Registration> getRegistrations(ListFilter filter, Pageable pageable);
+    Page<Registration> getRegistrations(ListFilter filter, Pageable pageable);
 
-    public Registration getRegistration(String id);
+    Registration getRegistration(String id);
 
-    public Registration getNextRegistration();
+    Registration getNextRegistration();
 
-    public Registration postponeRegistration(Registration registration);
+    Registration postponeRegistration(Registration registration);
 
-    public Registration acceptRegistration(Registration registration);
+    Registration acceptRegistration(Registration registration);
 
-    public Registration rejectRegistration(Registration registration);
+    Registration rejectRegistration(Registration registration);
 
-    public Registration postponeReviewRegistration(Registration registration);
+    Registration postponeReviewRegistration(Registration registration);
 
-    public Registration addRegistrationToLemma(Registration registration, String entryId) throws IOException;
+    Registration addRegistrationToLemma(Registration registration, String entryId) throws IOException;
 
-    public Registration getOrderedRegistration(String entryId);
+    Registration getOrderedRegistration(String entryId);
 
-    public Registration order(Registration registration);
+    Registration order(Registration registration);
 
-    public void deleteRegistration(String id);
+    void deleteRegistration(String id);
 
-    public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
+    Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 
-    public boolean extractSingleWords() throws DatabaseException, UnknownHostException;
+    void extractSingleWords(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException;
 
-    public ByteArrayResource extractListOfWordsByEnding() throws DatabaseException, UnknownHostException;
+    ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException;
 
-    public RegistrationStatistics getStatistics();
+    RegistrationStatistics getStatistics();
+
+    void addNormalizedForms();
 }
