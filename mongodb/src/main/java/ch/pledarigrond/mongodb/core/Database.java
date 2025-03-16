@@ -20,14 +20,11 @@ import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import ch.pledarigrond.mongodb.util.MongoHelper;
-import ch.pledarigrond.mongodb.util.Validator;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Indexes;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +55,6 @@ public class Database {
 	private MongoCollection<Document> entryCollection;
 
 	private final String locale;
-
-
 
 	Database(String locale) throws UnknownHostException, DatabaseException {
 		this.locale = locale;
@@ -92,42 +87,6 @@ public class Database {
 			throw new NoDatabaseAvailableException("No Database Available!", e);
 		}
 	}
-
-	private String toLogString(LemmaVersion lemma) {
-		return lemma.getLemmaValues().get("DStichwort") + " ⇔ " + lemma.getLemmaValues().get("RStichwort");
-	}
-
-	public void insert(final LexEntry entry) throws InvalidEntryException {
-		Validator.validate(entry);
-		Document document = new Document(Converter.convertLexEntry(entry));
-		entryCollection.insertOne(document);
-		ObjectId id = (ObjectId) document.get("_id");
-		entry.setId(id.toString());
-		logger.info("INSERTED: {}, entryId {}", toLogString(entry.getVersionHistory().get(0)), entry.getId());
-	}
-
-
-
-
-	/**
-	 * <strong>For unit tests only!</strong> This method drops the entire collection
-	 * of entries and creates a new one.
-	 */
-	public void deleteAllEntries() {
-		logger.warn("Dropping database!");
-		entryCollection.drop();
-		try {
-			entryCollection = MongoHelper.getDB(pgEnvironment, this.locale).getCollection(ENTRIES);
-			createIndex();
-		} catch (UnknownHostException | DatabaseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public boolean isEmpty() {
-		return entryCollection.countDocuments() == 0;
-	}
-
 
 	public MongoCursor<Document> getAll() {
 		return entryCollection.find().iterator();

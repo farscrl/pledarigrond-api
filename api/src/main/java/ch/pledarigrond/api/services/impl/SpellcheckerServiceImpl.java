@@ -5,6 +5,7 @@ import ch.pledarigrond.api.services.SpellcheckerService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
 import ch.pledarigrond.spellchecker.generator.pos.*;
 import ch.pledarigrond.spellchecker.model.GitDataDto;
@@ -34,6 +35,9 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
     @Autowired
     private NameService nameService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
 
     @Value("${pg.hunspell.git.path}")
@@ -75,7 +79,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Override
     public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
         List<String> names = nameService.getWordsForLanguage(language);
-        return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell();
+        return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell(dictionaryService.getStreamForEntries());
     }
 
     @Override
@@ -87,7 +91,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
             logger.info("Generating Hunspell for language {}", language);
             List<String> names = nameService.getWordsForLanguage(language);
             HunspellGenerator generator = getGeneratorForLanguage(language, names);
-            generator.generateHunspell();
+            generator.generateHunspell(dictionaryService.getStreamForEntries());
             long executionTime = (System.currentTimeMillis() - languageStartTime) / 1000;
             logger.info("Execution time for language {}: {}s", language, executionTime);
         }

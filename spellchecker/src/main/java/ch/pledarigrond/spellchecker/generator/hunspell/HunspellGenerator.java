@@ -2,22 +2,16 @@ package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -31,6 +25,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static ch.pledarigrond.spellchecker.model.HunspellRules.RUMANTSCH_GRISCHUN_PLEDS_APOSTROFAI;
 import static ch.pledarigrond.spellchecker.model.HunspellRules.SURMIRAN_PLEDS_APOSTROFAI;
@@ -55,9 +50,9 @@ abstract public class HunspellGenerator {
         Files.createDirectories(basePath);
     }
 
-    public String generateHunspell() throws NoDatabaseAvailableException, IOException {
+    public String generateHunspell(Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
         // create dicFile
-        Set<String> words = getAllValidWords(language);
+        Set<String> words = getAllValidWords(language, stream);
         File dicFile = new File(basePath.toFile(), "rm-" + language.getSubtag() + ".dic");
         writeSetToHunspell(dicFile, words);
 
@@ -139,8 +134,8 @@ abstract public class HunspellGenerator {
         return versionAndBuild;
     }
 
-    public File exportHunspell() throws NoDatabaseAvailableException, IOException {
-        String versionAndBuild = generateHunspell();
+    public File exportHunspell(Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
+        String versionAndBuild = generateHunspell(stream);
 
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
@@ -190,42 +185,38 @@ abstract public class HunspellGenerator {
         }
     }
 
-    private Set<String> getAllValidWords(Language language) throws NoDatabaseAvailableException, IOException {
+    private Set<String> getAllValidWords(Language language, Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
         HunspellList hunspellList = new HunspellList();
 
         loadWordsToAdd(language, hunspellList);
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        stream.forEach(entryDto -> {
+            EntryVersionDto current = entryDto.getCurrent();
 
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            LemmaVersion current = entry.getCurrent();
-
-            if (current.getVerification() != LemmaVersion.Verification.ACCEPTED) {
-                // ignore lemmas that are not accepted (e.g. new suggestions)
-                continue;
+            if (current == null) {
+                // ignore entries with no accepted version (e.g. new suggestions)
+                return;
             }
 
-            String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
-            if (inflectionType == null || inflectionType.equals("")) {
+            if (current.getInflection() == null || current.getInflection().getInflectionType() == null) {
                 extractDefault(hunspellList, current);
-            } else if (inflectionType.equals("V")) {
-                extractVerbs(hunspellList, current);
-            } else if (inflectionType.equals("NOUN")) {
-                extractNouns(hunspellList, current);
-            } else if (inflectionType.equals("ADJECTIVE")) {
-                extractAdjectives(hunspellList, current);
-            } else if (inflectionType.equals("PRONOUN")) {
-                extractPronouns(hunspellList, current);
-            } else if (inflectionType.equals("OTHER")) {
-                extractOtherForms(hunspellList, current);
             } else {
-                throw new RuntimeException("Unexpected inflection type: " + inflectionType);
+                InflectionType inflectionType = current.getInflection().getInflectionType();
+                if (inflectionType.equals(InflectionType.VERB)) {
+                    extractVerbs(hunspellList, current);
+                } else if (inflectionType.equals(InflectionType.NOUN)) {
+                    extractNouns(hunspellList, current);
+                } else if (inflectionType.equals(InflectionType.ADJECTIVE)) {
+                    extractAdjectives(hunspellList, current);
+                } else if (inflectionType.equals(InflectionType.PRONOUN)) {
+                    extractPronouns(hunspellList, current);
+                } else if (inflectionType.equals(InflectionType.OTHER)) {
+                    extractOtherForms(hunspellList, current);
+                } else {
+                    throw new RuntimeException("Unexpected inflection type: " + inflectionType.getName());
+                }
             }
-        }
+        });
 
         if (names != null) {
             names.forEach(word -> {
@@ -241,17 +232,17 @@ abstract public class HunspellGenerator {
         return hunspellList.getListAsSet();
     }
 
-    abstract protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractNouns(HunspellList list, EntryVersionDto entryVersionDto);
 
-    abstract protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractAdjectives(HunspellList list, EntryVersionDto entryVersionDto);
 
-    abstract protected void extractPronouns(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractPronouns(HunspellList list, EntryVersionDto entryVersionDto);
 
-    abstract protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractVerbs(HunspellList list, EntryVersionDto entryVersionDto);
 
-    abstract protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractOtherForms(HunspellList list, EntryVersionDto entryVersionDto);
 
-    abstract protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion);
+    abstract protected void extractDefault(HunspellList list, EntryVersionDto entryVersionDto);
 
     abstract protected String removePronouns(String value);
 

@@ -2,7 +2,7 @@ package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 
 import java.io.IOException;
@@ -24,27 +24,27 @@ public class SursilvanHunspellGenerator extends HunspellGenerator {
         return input;
     }
 
-    protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractNouns(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 
-    protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractAdjectives(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 
-    protected void extractPronouns(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractPronouns(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 
-    protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractOtherForms(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 
-    protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractVerbs(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 
-    protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
+    protected void extractDefault(HunspellList list, EntryVersionDto dto) {
         // TODO: implement me
     }
 

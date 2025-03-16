@@ -2,7 +2,8 @@ package ch.pledarigrond.spellchecker.generator.hunspell;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.VerbDto;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
@@ -30,44 +31,62 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         return WordNormalizer.normalizeStringVallader(input);
     }
 
-    protected void extractNouns(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("pluralCollectiv"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+    protected void extractNouns(HunspellList list, EntryVersionDto dto) {
+        if (dto.getInflection().getNoun() == null) {
+            return;
+        }
+        list.addWord(dto.getInflection().getNoun().getBaseForm(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getNoun().getMSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getNoun().getFSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getNoun().getMPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getNoun().getFPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getNoun().getPluralCollectiv(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
 
-    protected void extractAdjectives(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("adverbialForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+    protected void extractAdjectives(HunspellList list, EntryVersionDto dto) {
+        if (dto.getInflection().getAdjective() == null) {
+            return;
+        }
+        list.addWord(dto.getInflection().getAdjective().getBaseForm(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getAdjective().getMSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getAdjective().getFSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getAdjective().getMPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getAdjective().getFPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getAdjective().getAdverbialForm(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
 
-    protected void extractPronouns(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fSingular"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("mPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("fPlural"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+    protected void extractPronouns(HunspellList list, EntryVersionDto dto) {
+        if (dto.getInflection().getPronoun() == null) {
+            return;
+        }
+        list.addWord(dto.getInflection().getPronoun().getBaseForm(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getPronoun().getMSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getPronoun().getFSingular(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getPronoun().getMPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getPronoun().getFPlural(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
 
-    protected void extractOtherForms(HunspellList list, LemmaVersion lemmaVersion) {
-        list.addWord(lemmaVersion.getEntryValue("baseForm"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("otherForm1"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("otherForm2"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("otherForm3"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
-        list.addWord(lemmaVersion.getEntryValue("otherForm4"), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+    protected void extractOtherForms(HunspellList list, EntryVersionDto dto) {
+        if (dto.getInflection().getOther() == null) {
+            return;
+        }
+        list.addWord(dto.getInflection().getOther().getBaseForm(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getOther().getOtherForm1(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getOther().getOtherForm2(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getOther().getOtherForm3(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
+        list.addWord(dto.getInflection().getOther().getOtherForm4(), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI});
     }
 
-    protected void extractVerbs(HunspellList list, LemmaVersion lemmaVersion) {
-        String infinitiv = lemmaVersion.getEntryValue("infinitiv");
-        if (infinitiv == null || infinitiv.equals("")) {
-            infinitiv = lemmaVersion.getEntryValue("RStichwort");
+    protected void extractVerbs(HunspellList list, EntryVersionDto dto) {
+        if (dto.getInflection().getVerb() == null) {
+            return;
+        }
+
+        VerbDto v = dto.getInflection().getVerb();
+
+        String infinitiv = v.getInfinitiv();
+        if (infinitiv == null || infinitiv.isEmpty()) {
+            infinitiv = dto.getRmStichwort();
         }
         list.addWord(removePronouns(infinitiv), new HunspellRules[]{VALLADER_PLEDS_APOSTROFAI, VALLADER_FURMA_DA_CURTASCHIA});
         if (startsWithVowel(infinitiv)) {
@@ -93,86 +112,86 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         }
 
         ArrayList<String> forms = new ArrayList<>();
-        addNewlines(lemmaVersion.getEntryValue("preschentsing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural3"), forms);
+        addNewlines(v.getPreschent().getSing1(), forms);
+        addNewlines(v.getPreschent().getSing2(), forms);
+        addNewlines(v.getPreschent().getSing3(), forms);
+        addNewlines(v.getPreschent().getPlural1(), forms);
+        addNewlines(v.getPreschent().getPlural2(), forms);
+        addNewlines(v.getPreschent().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural3"), forms);
+        addNewlines(v.getImperfect().getSing1(), forms);
+        addNewlines(v.getImperfect().getSing2(), forms);
+        addNewlines(v.getImperfect().getSing3(), forms);
+        addNewlines(v.getImperfect().getPlural1(), forms);
+        addNewlines(v.getImperfect().getPlural2(), forms);
+        addNewlines(v.getImperfect().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("conjunctivsing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctivsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctivsing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctivplural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctivplural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctivplural3"), forms);
+        addNewlines(v.getConjunctiv().getSing1(), forms);
+        addNewlines(v.getConjunctiv().getSing2(), forms);
+        addNewlines(v.getConjunctiv().getSing3(), forms);
+        addNewlines(v.getConjunctiv().getPlural1(), forms);
+        addNewlines(v.getConjunctiv().getPlural2(), forms);
+        addNewlines(v.getConjunctiv().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2sing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2sing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2sing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2plural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2plural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("conjunctiv2plural3"), forms);
+        addNewlines(v.getConjunctiv2().getSing1(), forms);
+        addNewlines(v.getConjunctiv2().getSing2(), forms);
+        addNewlines(v.getConjunctiv2().getSing3(), forms);
+        addNewlines(v.getConjunctiv2().getPlural1(), forms);
+        addNewlines(v.getConjunctiv2().getPlural2(), forms);
+        addNewlines(v.getConjunctiv2().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural3"), forms);
+        addNewlines(v.getCundizional().getSing1(), forms);
+        addNewlines(v.getCundizional().getSing2(), forms);
+        addNewlines(v.getCundizional().getSing3(), forms);
+        addNewlines(v.getCundizional().getPlural1(), forms);
+        addNewlines(v.getCundizional().getPlural2(), forms);
+        addNewlines(v.getCundizional().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("participperfectms"), forms);
-        addNewlines(lemmaVersion.getEntryValue("participperfectfs"), forms);
-        addNewlines(lemmaVersion.getEntryValue("participperfectmp"), forms);
-        addNewlines(lemmaVersion.getEntryValue("participperfectfp"), forms);
+        addNewlines(v.getParticipperfect().getMs(), forms);
+        addNewlines(v.getParticipperfect().getFs(), forms);
+        addNewlines(v.getParticipperfect().getMp(), forms);
+        addNewlines(v.getParticipperfect().getFp(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("gerundium"), forms);
+        addNewlines(v.getGerundium(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("futursing1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futursing2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futursing3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural3"), forms);
+        addNewlines(v.getFutur().getSing1(), forms);
+        addNewlines(v.getFutur().getSing2(), forms);
+        addNewlines(v.getFutur().getSing3(), forms);
+        addNewlines(v.getFutur().getPlural1(), forms);
+        addNewlines(v.getFutur().getPlural2(), forms);
+        addNewlines(v.getFutur().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("preschentsing1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing3encliticm"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentsing3encliticf"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("preschentplural3enclitic"), forms);
+        addNewlines(v.getPreschentEnclitic().getSing1(), forms);
+        addNewlines(v.getPreschentEnclitic().getSing2(), forms);
+        addNewlines(v.getPreschentEnclitic().getSing3m(), forms);
+        addNewlines(v.getPreschentEnclitic().getSing3f(), forms);
+        addNewlines(v.getPreschentEnclitic().getPlural1(), forms);
+        addNewlines(v.getPreschentEnclitic().getPlural2(), forms);
+        addNewlines(v.getPreschentEnclitic().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing3encliticm"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectsing3encliticf"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperfectplural3enclitic"), forms);
+        addNewlines(v.getImperfectEnclitic().getSing1(), forms);
+        addNewlines(v.getImperfectEnclitic().getSing2(), forms);
+        addNewlines(v.getImperfectEnclitic().getSing3m(), forms);
+        addNewlines(v.getImperfectEnclitic().getSing3f(), forms);
+        addNewlines(v.getImperfectEnclitic().getPlural1(), forms);
+        addNewlines(v.getImperfectEnclitic().getPlural2(), forms);
+        addNewlines(v.getImperfectEnclitic().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3encliticm"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalsing3encliticf"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("cundizionalplural3enclitic"), forms);
+        addNewlines(v.getCundizionalEnclitic().getSing1(), forms);
+        addNewlines(v.getCundizionalEnclitic().getSing2(), forms);
+        addNewlines(v.getCundizionalEnclitic().getSing3m(), forms);
+        addNewlines(v.getCundizionalEnclitic().getSing3f(), forms);
+        addNewlines(v.getCundizionalEnclitic().getPlural1(), forms);
+        addNewlines(v.getCundizionalEnclitic().getPlural2(), forms);
+        addNewlines(v.getCundizionalEnclitic().getPlural3(), forms);
 
-        addNewlines(lemmaVersion.getEntryValue("futursing1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futursing2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futursing3encliticm"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futursing3encliticf"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural1enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural2enclitic"), forms);
-        addNewlines(lemmaVersion.getEntryValue("futurplural3enclitic"), forms);
+        addNewlines(v.getFuturEnclitic().getSing1(), forms);
+        addNewlines(v.getFuturEnclitic().getSing2(), forms);
+        addNewlines(v.getFuturEnclitic().getSing3m(), forms);
+        addNewlines(v.getFuturEnclitic().getSing3f(), forms);
+        addNewlines(v.getFuturEnclitic().getPlural1(), forms);
+        addNewlines(v.getFuturEnclitic().getPlural2(), forms);
+        addNewlines(v.getFuturEnclitic().getPlural3(), forms);
 
         forms.forEach(f -> {
             String form = removePronouns(f);
@@ -183,12 +202,12 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         });
 
         forms = new ArrayList<>();
-        addNewlines(lemmaVersion.getEntryValue("imperativ1"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperativ2"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperativ3"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperativ4"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperativ5"), forms);
-        addNewlines(lemmaVersion.getEntryValue("imperativ6"), forms);
+        addNewlines(v.getImperativ().getSingular(), forms);
+        addNewlines(v.getImperativ().getPlural(), forms);
+        addNewlines(v.getImperativ().getForm3(), forms);
+        addNewlines(v.getImperativ().getForm4(), forms);
+        addNewlines(v.getImperativ().getForm5(), forms);
+        addNewlines(v.getImperativ().getForm6(), forms);
 
         forms.forEach(f -> {
             String form = removePronouns(f);
@@ -200,8 +219,8 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         });
     }
 
-    protected void extractDefault(HunspellList list, LemmaVersion lemmaVersion) {
-        String candidate = lemmaVersion.getEntryValue("RStichwort");
+    protected void extractDefault(HunspellList list, EntryVersionDto dto) {
+        String candidate = dto.getRmStichwort();
 
         if (candidate == null) {
             return;

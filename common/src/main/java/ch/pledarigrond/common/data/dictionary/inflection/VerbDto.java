@@ -68,10 +68,10 @@ public class VerbDto {
     public static class ImperativDto {
         @Size(max = 200) private String singular;
         @Size(max = 200) private String plural;
-        @Size(max = 200) private String form1;
-        @Size(max = 200) private String form2;
         @Size(max = 200) private String form3;
         @Size(max = 200) private String form4;
+        @Size(max = 200) private String form5;
+        @Size(max = 200) private String form6;
     }
 }
 
