@@ -112,6 +112,27 @@ public class DbBackupServiceImpl implements DbBackupService {
         return new File(pgEnvironment.getBackupLocation() + dbName + "/" + fileName);
     }
 
+    @Override
+    public List<File> listBackupFilesAsc(String backupDir) {
+        File backupFolder = new File(backupDir);
+        backupFolder.mkdirs();
+        File[] files = backupFolder.listFiles(filter());
+        if (files == null) {
+            return new ArrayList<File>();
+        }
+        List<File> backupFiles = Arrays.asList(files);
+
+        Collections.sort(backupFiles, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                Date d1 = new Date(o1.lastModified());
+                Date d2 = new Date(o2.lastModified());
+                return d2.compareTo(d1);
+            }
+        });
+        return backupFiles;
+    }
+
     private void backupCollection(String dbName, String collectionName, OutputStream output, String fileName) {
         MongoDatabase database = mongoClient.getDatabase(dbName);
         MongoCollection<Document> collection = database.getCollection(collectionName);
@@ -296,26 +317,6 @@ public class DbBackupServiceImpl implements DbBackupService {
             case VALLADER -> "dict_vallader";
             default -> throw new IllegalStateException("Unexpected value: " + language);
         };
-    }
-
-    private List<File> listBackupFilesAsc(String backupDir) {
-        File backupFolder = new File(backupDir);
-        backupFolder.mkdirs();
-        File[] files = backupFolder.listFiles(filter());
-        if (files == null) {
-            return new ArrayList<File>();
-        }
-        List<File> backupFiles = Arrays.asList(files);
-
-        Collections.sort(backupFiles, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                Date d1 = new Date(o1.lastModified());
-                Date d2 = new Date(o2.lastModified());
-                return d2.compareTo(d1);
-            }
-        });
-        return backupFiles;
     }
 
     private FileFilter filter() {

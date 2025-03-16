@@ -5,7 +5,6 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.services.DbBackupService;
 import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
-import ch.pledarigrond.mongodb.util.backup.AbstractBackupHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service()
-public class ScheduledBackupService extends AbstractBackupHelper {
+public class ScheduledBackupService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ScheduledBackupService.class);
 
@@ -116,13 +115,13 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 	}
 
 	private void cleanup(String dbName) throws ScheduledBackupException {
-		List<File> backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
+		List<File> backupFiles = dbBackupService.listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
 		while (backupFiles.size() > Integer.parseInt(pgEnvironment.getBackupNumber())) {
 			boolean delete = backupFiles.get(backupFiles.size() - 1).delete();
 			if (!delete) {
 				throw new ScheduledBackupException(String.format("could not delete obsolete backup file: %s", backupFiles.get(0).getAbsolutePath()));
 			}
-			backupFiles = listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
+			backupFiles = dbBackupService.listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
 		}
 
 		LOG.info("list of backupFiles...");

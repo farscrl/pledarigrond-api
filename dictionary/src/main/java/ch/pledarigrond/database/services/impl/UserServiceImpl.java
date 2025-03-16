@@ -29,7 +29,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    final public static String DEFAULT_USER_NAME = "guest@pledarigrond.ch";
+
     final public static String ROLE_PREFIX = "ROLE_";
 
     @Autowired

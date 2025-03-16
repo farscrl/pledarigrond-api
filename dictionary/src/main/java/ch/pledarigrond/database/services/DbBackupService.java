@@ -6,6 +6,7 @@ import ch.pledarigrond.common.data.common.Language;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 public interface DbBackupService {
     void backupLanguage(Language language, OutputStream output, String fileName);
@@ -15,4 +16,6 @@ public interface DbBackupService {
 
     BackupInfos getBackupInfos(Language language);
     File getBackupFile(Language language, String fileName);
+
+    List<File> listBackupFilesAsc(String backupDir);
 }

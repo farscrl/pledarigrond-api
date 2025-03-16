@@ -216,7 +216,7 @@ public class ImportServiceImpl implements ImportService {
         return false;
     }
 
-    private void finalizeVersion(EntryVersionDto ev) throws InvalidEntryException {
+    private void finalizeVersion(EntryVersionDto ev) {
         dictionaryService.addEntry(ev, false, "import@pledarigrond.ch");
         logger.info("Inserted: {}", ev.getRmStichwort());
     }

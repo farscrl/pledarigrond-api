@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserService {
 
+    final public static String DEFAULT_USER_NAME = "guest@pledarigrond.ch";
+
     /**
      * Returns user infos of the user currently logged in. If no user is logged in, a default user is returned.
      */

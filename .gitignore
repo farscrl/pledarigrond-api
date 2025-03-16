@@ -1,4 +1,5 @@
 /data/backup
+/data/backup_new
 /data/lucene_index
 /data/export
 /data/export_tmp
