@@ -14,7 +14,7 @@ import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.common.util.WordNormalizer;
-import ch.pledarigrond.dictionary.services.DictionaryService;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;

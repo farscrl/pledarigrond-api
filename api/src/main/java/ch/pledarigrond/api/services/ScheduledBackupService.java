@@ -3,7 +3,7 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.dictionary.services.DbBackupService;
+import ch.pledarigrond.database.services.DbBackupService;
 import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
 import ch.pledarigrond.mongodb.util.backup.AbstractBackupHelper;
 import org.slf4j.Logger;
@@ -31,9 +31,6 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 
 	@Autowired
 	private S3BackupService s3BackupService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private DbBackupService dbBackupService;
@@ -81,7 +78,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		LOG.info("backup file created: {}", backupFile.getAbsolutePath());
 	}
 
-	private void backupUserDb() throws IOException, JAXBException, NoSuchAlgorithmException {
+	private void backupUserDb() throws IOException {
 		LOG.info("started backup for users table");
 		String backupFileName = buildName("users");
 		LOG.info("backup file name created: {}", backupFileName);
@@ -91,7 +88,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		backupDir.mkdirs();
 		File backupFile = new File(backupDir, backupFileName);
 		backupFile.getParentFile().mkdirs();
-		userService.exportData(new FileOutputStream(backupFile), backupFileName);
+		dbBackupService.backupUsers(new FileOutputStream(backupFile), backupFileName);
 
 		LOG.info("user backup created: {}", backupFile.getAbsolutePath());
 
@@ -111,7 +108,7 @@ public class ScheduledBackupService extends AbstractBackupHelper {
 		backupDir.mkdirs();
 		File backupFile = new File(dir, backupFileName);
 		try {
-			dbBackupService.backup(language, new FileOutputStream(backupFile), backupFileName);
+			dbBackupService.backupLanguage(language, new FileOutputStream(backupFile), backupFileName);
 		} catch (Exception e) {
 			LOG.error("error occured...", e);
 		}

@@ -4,7 +4,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.dictionary.services.DictionaryService;
+import ch.pledarigrond.database.services.DictionaryService;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;

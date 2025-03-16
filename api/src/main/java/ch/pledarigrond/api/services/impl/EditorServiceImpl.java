@@ -2,7 +2,6 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
-import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.dictionary.EditorQuery;
@@ -12,13 +11,14 @@ import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
-import ch.pledarigrond.dictionary.services.DictionaryService;
+import ch.pledarigrond.database.services.DictionaryService;
+import ch.pledarigrond.database.services.UserService;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
-import ch.pledarigrond.mongodb.model.PgUser;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -308,16 +308,16 @@ public class EditorServiceImpl implements EditorService {
     }
 
     private void addCreatorInfo(EntryVersionDto version) {
-        PgUser user = userService.getCurrentUserOrDefaultUser();
+        UserDto user = userService.getCurrentUserOrDefaultUser();
         version.setCreator(user.getEmail());
 
         switch (RequestContext.getLanguage()) {
-            case PUTER -> version.setCreatorRole(user.getPuterRole());
-            case RUMANTSCHGRISCHUN -> version.setCreatorRole(user.getRumantschgrischunRole());
-            case SURSILVAN -> version.setCreatorRole(user.getSursilvanRole());
-            case SURMIRAN -> version.setCreatorRole(user.getSurmiranRole());
-            case SUTSILVAN -> version.setCreatorRole(user.getSutsilvanRole());
-            case VALLADER -> version.setCreatorRole(user.getValladerRole());
+            case PUTER -> version.setCreatorRole(user.getRoles().getRolePuter());
+            case RUMANTSCHGRISCHUN -> version.setCreatorRole(user.getRoles().getRoleRumantschGrischun());
+            case SURSILVAN -> version.setCreatorRole(user.getRoles().getRoleSursilvan());
+            case SURMIRAN -> version.setCreatorRole(user.getRoles().getRoleSurmiran());
+            case SUTSILVAN -> version.setCreatorRole(user.getRoles().getRoleSutsilvan());
+            case VALLADER -> version.setCreatorRole(user.getRoles().getRoleVallader());
             default -> version.setCreatorRole(EditorRole.GUEST);
         }
         String ip = getClientIp(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
@@ -325,7 +325,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     private String getReviewerInfo() {
-        PgUser user = userService.getCurrentUserOrDefaultUser();
+        UserDto user = userService.getCurrentUserOrDefaultUser();
         return user.getEmail();
     }
 

@@ -7,8 +7,8 @@ import ch.pledarigrond.common.data.backup.BackupInfos;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.DictionaryStatisticsDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
-import ch.pledarigrond.dictionary.services.DbBackupService;
-import ch.pledarigrond.dictionary.services.DictionaryService;
+import ch.pledarigrond.database.services.DbBackupService;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,12 +78,12 @@ public class AdminServiceImpl implements AdminService {
         MultipartFile multipartFile = (MultipartFile) dmhsRequest.getFile("file");
         InputStream in = multipartFile.getInputStream();
         logger.info("Importing from backup file... {}", multipartFile.getName());
-        dbBackupService.restore(language, in);
+        dbBackupService.restoreLanguage(language, in);
     }
 
     @Override
     public void exportData(Language language, ServletOutputStream out, String fileName) {
-        dbBackupService.backup(language, out, fileName);
+        dbBackupService.backupLanguage(language, out, fileName);
     }
 
     @Override

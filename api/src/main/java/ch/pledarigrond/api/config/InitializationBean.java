@@ -1,9 +1,7 @@
 package ch.pledarigrond.api.config;
 
-import ch.pledarigrond.api.services.UserService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
-import ch.pledarigrond.mongodb.model.PgUser;
+import ch.pledarigrond.database.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,23 +20,19 @@ public class InitializationBean implements InitializingBean {
     private UserService userService;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        initUsers();
+    public void afterPropertiesSet() {
+        initDefaultUser();
     }
 
-    private void initUsers() throws InvalidUserException {
-        if (!pgEnvironment.getAdminUsername().equals("") && !pgEnvironment.getAdminPassword().equals("")) {
-            logger.info("Creating new user");
-
+    private void initDefaultUser() {
+        if (!pgEnvironment.getAdminUsername().isEmpty() && !pgEnvironment.getAdminPassword().isEmpty()) {
             if (userService.userExists(pgEnvironment.getAdminUsername())) {
-                logger.info("User already exists. Skipping user creation.");
+                logger.info("Default user already exists. Skipping creation.");
                 return;
             }
 
-            PgUser pgUser = new PgUser(pgEnvironment.getAdminUsername(), pgEnvironment.getAdminPassword());
-            pgUser.setAdmin(true);
-
-            userService.insert(pgUser);
+            logger.info("Creating default user{}", pgEnvironment.getAdminUsername());
+            userService.generateDefaultUser(pgEnvironment.getAdminUsername(), pgEnvironment.getAdminPassword());
         }
     }
 }

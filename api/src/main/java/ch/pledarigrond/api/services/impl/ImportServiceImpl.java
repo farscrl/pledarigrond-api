@@ -4,7 +4,7 @@ import ch.pledarigrond.api.services.ImportService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.ExampleDto;
-import ch.pledarigrond.dictionary.services.DictionaryService;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
