@@ -109,7 +109,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Override
     public File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException {
         List<String> names = nameService.getWordsForLanguage(language);
-        return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language);
+        return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language, dictionaryService.getStreamForEntries());
     }
 
     private HunspellGenerator getGeneratorForLanguage(Language language, List<String> names) throws IOException {

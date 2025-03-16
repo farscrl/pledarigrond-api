@@ -2,21 +2,14 @@ package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
-import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
 import ch.pledarigrond.spellchecker.utils.freemarker.FreemarkerConfigSpellchecker;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -25,6 +18,7 @@ import org.springframework.util.StringUtils;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Stream;
 
 public abstract class PartOfSpeechListGenerator {
     private static final Logger logger = LoggerFactory.getLogger(PartOfSpeechListGenerator.class);
@@ -47,7 +41,7 @@ public abstract class PartOfSpeechListGenerator {
         this.names = names;
     }
 
-    public File exportWordlist(Language language) throws NoDatabaseAvailableException, IOException {
+    public File exportWordlist(Language language, Stream<EntryDto> stream) throws IOException {
         blocklist = new TreeSet<>();
         loadBlockList(language);
 
@@ -61,7 +55,7 @@ public abstract class PartOfSpeechListGenerator {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
 
-        loadValidWords(language);
+        loadValidWords(language, stream);
 
         Set<String> notFound = new TreeSet<>();
         for(String word: missingGrammar) {
@@ -145,59 +139,60 @@ public abstract class PartOfSpeechListGenerator {
 
     abstract protected String removePronouns(String value);
 
-    abstract protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+    abstract protected void extractNouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort);
 
-    abstract protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, LemmaVersion lemmaVersion, String RStichwort);
+    abstract protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, EntryVersionDto dto, String RStichwort);
 
-    abstract protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+    abstract protected void extractPronouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort);
 
-    abstract protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+    abstract protected void extractVerbs(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort);
 
-    abstract protected void extractDefault(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort);
+    abstract protected void extractDefault(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort);
 
-    private void loadValidWords(Language language) throws NoDatabaseAvailableException {
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+    private void loadValidWords(Language language, Stream<EntryDto> stream) {
+        stream.forEach(entry -> {
+            EntryVersionDto current = entry.getCurrent();
 
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-            LemmaVersion current = entry.getCurrent();
-
-            String RStichwort = current.getEntryValue("RStichwort");
-            String RRegularInflection = current.getEntryValue("RRegularInflection");
-            String RGrammatik = current.getEntryValue("RGrammatik");
-            String DGrammatik = current.getEntryValue("DGrammatik");
-            String preschentsing1 = current.getEntryValue("preschentsing1");
-            String preschentsing3 = current.getEntryValue("preschentsing3");
-
-            if (current.getVerification() != LemmaVersion.Verification.ACCEPTED) {
+            if (current == null) {
                 // ignore lemmas that are not accepted (== new suggestions)
-                continue;
+                return;
             }
 
-            RStichwort = normalizeString(RStichwort);
-            if (RStichwort == null || RStichwort.isEmpty() || blocklist.contains(RStichwort)) {
-                continue;
+            String rmStichwort = current.getRmStichwort();
+            String rmGrammatik = current.getRmGrammatik();
+            String deGrammatik = current.getDeGrammatik();
+            boolean isIrregularConjugation = false;
+            String preschentsing1 = "";
+            String preschentsing3 = "";
+            if (current.getInflection() != null && current.getInflection().getVerb() != null) {
+                isIrregularConjugation = current.getInflection().getVerb().isIrregular();
+                preschentsing1 = current.getInflection().getVerb().getPreschent().getSing1();
+                preschentsing3 = current.getInflection().getVerb().getPreschent().getSing3();
             }
-            if (RGrammatik == null) {
-                String RGenus = current.getEntryValue("RGenus");
-                if (RGenus != null && !RGenus.isEmpty()) {
-                    RGrammatik = "nomen";
-                } else if (DGrammatik != null && !DGrammatik.isEmpty()) {
+
+
+            rmStichwort = normalizeString(rmStichwort);
+            if (rmStichwort == null || rmStichwort.isEmpty() || blocklist.contains(rmStichwort)) {
+                return;
+            }
+            if (rmGrammatik == null) {
+                String rmGenus = current.getRmGenus();
+                if (rmGenus != null && !rmGenus.isEmpty()) {
+                    rmGrammatik = "nomen";
+                } else if (deGrammatik != null && !deGrammatik.isEmpty()) {
                     // using german grammar
-                    RGrammatik = DGrammatik;
+                    rmGrammatik = deGrammatik;
                 } else {
                     // logger.error("No grammar defined for word: {}", RStichwort);
-                    missingGrammar.add(RStichwort);
-                    continue;
+                    missingGrammar.add(rmStichwort);
+                    return;
                 }
             }
-            PartOfSpeechTag[] tags = posLookupTable.get(RGrammatik);
+            PartOfSpeechTag[] tags = posLookupTable.get(rmGrammatik);
 
             if (tags == null) {
-                logger.error("No POS entry defined for grammar: {}", RGrammatik);
-                continue;
+                logger.error("No POS entry defined for grammar: {}", rmGrammatik);
+                return;
             }
 
             for(PartOfSpeechTag tag : tags) {
@@ -205,31 +200,33 @@ public abstract class PartOfSpeechListGenerator {
                     tag == PartOfSpeechTag.VERB &&
                     ( (StringUtils.hasLength(preschentsing1) && !StringUtils.hasLength(preschentsing3)) || (StringUtils.hasLength(preschentsing3) && !StringUtils.hasLength(preschentsing1)) )
                 ) {
-                    addForms(baseForms.get(PartOfSpeechTag.VERB_DEFECTIV), inflections.get(PartOfSpeechTag.VERB_DEFECTIV), current, RStichwort);
-                } else if (tag == PartOfSpeechTag.VERB && RRegularInflection != null && !"true".equals(RRegularInflection)) {
-                    addForms(baseForms.get(PartOfSpeechTag.VERB_IRREGULAR), inflections.get(PartOfSpeechTag.VERB_IRREGULAR), current, RStichwort);
+                    addForms(baseForms.get(PartOfSpeechTag.VERB_DEFECTIV), inflections.get(PartOfSpeechTag.VERB_DEFECTIV), current, rmStichwort);
+                } else if (tag == PartOfSpeechTag.VERB && isIrregularConjugation) {
+                    addForms(baseForms.get(PartOfSpeechTag.VERB_IRREGULAR), inflections.get(PartOfSpeechTag.VERB_IRREGULAR), current, rmStichwort);
                 } else {
-                    addForms(baseForms.get(tag), inflections.get(tag), current, RStichwort);
+                    addForms(baseForms.get(tag), inflections.get(tag), current, rmStichwort);
                 }
-                foundWords.add(RStichwort);
+                foundWords.add(rmStichwort);
             }
-        }
+        });
     }
 
-    private void addForms(Set<String> baseForms, Set<String> inflections, LemmaVersion current, String RStichwort) {
-        String inflectionType = current.getEntryValue(LemmaVersion.RM_INFLECTION_TYPE);
-        if (inflectionType == null || inflectionType.isEmpty()) {
+    private void addForms(Set<String> baseForms, Set<String> inflections, EntryVersionDto current, String RStichwort) {
+        if (current.getInflection() == null || current.getInflection().getInflectionType() == null) {
             extractDefault(baseForms, inflections, current, RStichwort);
-        } else if (inflectionType.equals("V")) {
-            extractVerbs(baseForms, inflections, current, RStichwort);
-        } else if (inflectionType.equals("NOUN")) {
-            extractNouns(baseForms, inflections, current, RStichwort);
-        } else if (inflectionType.equals("ADJECTIVE")) {
-            extractAdjectives(baseForms, inflections, this.baseForms.get(PartOfSpeechTag.ADV), this.inflections.get(PartOfSpeechTag.ADV), current, RStichwort);
-        } else if (inflectionType.equals("PRONOUN")) {
-            extractPronouns(baseForms, inflections, current, RStichwort);
         } else {
-            throw new RuntimeException("Unexpected inflection type: " + inflectionType);
+            InflectionType inflectionType = current.getInflection().getInflectionType();
+            if (inflectionType.equals(InflectionType.VERB)) {
+                extractVerbs(baseForms, inflections, current, RStichwort);
+            } else if (inflectionType.equals(InflectionType.NOUN)) {
+                extractNouns(baseForms, inflections, current, RStichwort);
+            } else if (inflectionType.equals(InflectionType.ADJECTIVE)) {
+                extractAdjectives(baseForms, inflections, this.baseForms.get(PartOfSpeechTag.ADV), this.inflections.get(PartOfSpeechTag.ADV), current, RStichwort);
+            } else if (inflectionType.equals(InflectionType.PRONOUN)) {
+                extractPronouns(baseForms, inflections, current, RStichwort);
+            } else {
+                throw new RuntimeException("Unexpected inflection type: " + inflectionType);
+            }
         }
     }
 

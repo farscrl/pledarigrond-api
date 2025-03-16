@@ -1,7 +1,7 @@
 package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,28 +30,28 @@ public class RumantschgrischunPartOfSpeechListGenerator extends PartOfSpeechList
     }
 
     @Override
-    protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractNouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
         // TODO: implement me
     }
 
 
     @Override
-    protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, EntryVersionDto dto, String RStichwort) {
         // TODO: implement me
     }
 
     @Override
-    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
         // TODO: implement me
     }
 
     @Override
-    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
         // TODO: implement me
     }
 
     @Override
-    protected void extractDefault(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractDefault(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
         // TODO: implement me
     }
 }

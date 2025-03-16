@@ -1,7 +1,7 @@
 package ch.pledarigrond.spellchecker.generator.pos;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.LemmaVersion;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.PartOfSpeechTag;
@@ -66,7 +66,8 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
     }
 
     @Override
-    protected void extractNouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractNouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
+        /*
         String baseForm = lemmaVersion.getEntryValue("baseForm");
         if (baseForm == null || baseForm.equals("")) {
             baseForm = RStichwort;
@@ -79,10 +80,12 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
         addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
         addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
         addFormToSet(inflections, lemmaVersion.getEntryValue("pluralCollectiv"));
+        */
     }
 
     @Override
-    protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractAdjectives(Set<String> adjectiveBaseForms, Set<String> adjectiveInflections, Set<String> adverbialBaseForms, Set<String> adverbialInflections, EntryVersionDto dto, String RStichwort) {
+        /*
         String baseForm = lemmaVersion.getEntryValue("baseForm");
         if (baseForm == null || baseForm.equals("")) {
             baseForm = RStichwort;
@@ -97,10 +100,12 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
 
         addFormToSet(adverbialBaseForms, lemmaVersion.getEntryValue("adverbialForm"));
         addFormToSet(adverbialInflections, lemmaVersion.getEntryValue("adverbialForm"));
+        */
     }
 
     @Override
-    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractPronouns(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
+        /*
         String baseForm = lemmaVersion.getEntryValue("baseForm");
         if (baseForm == null || baseForm.equals("")) {
             baseForm = RStichwort;
@@ -112,10 +117,12 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
         addFormToSet(inflections, lemmaVersion.getEntryValue("fSingular"));
         addFormToSet(inflections, lemmaVersion.getEntryValue("mPlural"));
         addFormToSet(inflections, lemmaVersion.getEntryValue("fPlural"));
+        */
     }
 
     @Override
-    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractVerbs(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
+        /*
         String infinitiv = lemmaVersion.getEntryValue("infinitiv");
         if (infinitiv == null || infinitiv.equals("")) {
             infinitiv = RStichwort;
@@ -199,11 +206,14 @@ public class SurmiranPartOfSpeechListGenerator extends PartOfSpeechListGenerator
         addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural1enclitic")));
         addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural2enclitic")));
         addFormToSet(inflections, removePronouns(lemmaVersion.getEntryValue("futurplural3enclitic")));
+        */
     }
 
     @Override
-    protected void extractDefault(Set<String> baseForms, Set<String> inflections, LemmaVersion lemmaVersion, String RStichwort) {
+    protected void extractDefault(Set<String> baseForms, Set<String> inflections, EntryVersionDto dto, String RStichwort) {
+        /*
         addFormToSet(baseForms, RStichwort);
         addFormToSet(inflections, RStichwort);
+        */
     }
 }
