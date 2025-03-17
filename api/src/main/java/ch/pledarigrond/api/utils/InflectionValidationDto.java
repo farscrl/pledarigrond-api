@@ -1,14 +1,14 @@
 package ch.pledarigrond.api.utils;
 
-import ch.pledarigrond.inflection.model.InflectionResponse;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import lombok.Data;
 
 @Data
 public class InflectionValidationDto {
-    InflectionResponse inflectionResponse;
+    InflectionDto inflectionResponse;
     int nbrWrongForms;
 
-    InflectionValidationDto(InflectionResponse inflectionResponse) {
+    InflectionValidationDto(InflectionDto inflectionResponse) {
         this.inflectionResponse = inflectionResponse;
     }
 }

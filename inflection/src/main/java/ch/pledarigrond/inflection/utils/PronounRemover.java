@@ -1,10 +1,10 @@
 package ch.pledarigrond.inflection.utils;
 
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.inflection.generation.puter.PuterConjugationPronouns;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranPronouns;
-import ch.pledarigrond.inflection.generation.sursilvan.SursilvanPronouns;
-import ch.pledarigrond.inflection.generation.vallader.ValladerConjugationPronouns;
+import ch.pledarigrond.inflection.generation.verb.puter.PuterPronouns;
+import ch.pledarigrond.inflection.generation.verb.surmiran.SurmiranPronouns;
+import ch.pledarigrond.inflection.generation.verb.sursilvan.SursilvanPronouns;
+import ch.pledarigrond.inflection.generation.verb.vallader.ValladerPronouns;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,73 +96,73 @@ public class PronounRemover {
     private void setUpPuterPrefixes() {
         Collections.addAll(puterPrefixes,
                 // has to be upfront, as other pronouns may follow
-                PuterConjugationPronouns.pron_conjunctiv_c,
-                PuterConjugationPronouns.pron_conjunctiv_v,
+                PuterPronouns.pron_conjunctiv_c,
+                PuterPronouns.pron_conjunctiv_v,
 
-                PuterConjugationPronouns.pron_1ps,
-                PuterConjugationPronouns.pron_2ps,
-                PuterConjugationPronouns.pron_3ps,
-                PuterConjugationPronouns.pron_1pp,
-                PuterConjugationPronouns.pron_2pp,
-                PuterConjugationPronouns.pron_3pp,
-                PuterConjugationPronouns.pron_r_1ps,
-                PuterConjugationPronouns.pron_r_2ps,
-                PuterConjugationPronouns.pron_r_3ps,
-                PuterConjugationPronouns.pron_r_1pp,
-                PuterConjugationPronouns.pron_r_2pp,
-                PuterConjugationPronouns.pron_r_3pp,
-                PuterConjugationPronouns.pron_r_v_1ps,
-                PuterConjugationPronouns.pron_r_v_2ps,
-                PuterConjugationPronouns.pron_r_v_3ps,
-                PuterConjugationPronouns.pron_r_v_1pp,
-                PuterConjugationPronouns.pron_r_v_2pp,
-                PuterConjugationPronouns.pron_r_v_3pp,
-                PuterConjugationPronouns.imperativ_not,
-                PuterConjugationPronouns.imperativ_not_refl_sg,
-                PuterConjugationPronouns.imperativ_not_refl_pl,
-                PuterConjugationPronouns.imperativ_refl_sg,
-                PuterConjugationPronouns.imperativ_refl_pl,
-                PuterConjugationPronouns.imperativ_polite_sg,
-                PuterConjugationPronouns.imperativ_polite_pl
+                PuterPronouns.pron_1ps,
+                PuterPronouns.pron_2ps,
+                PuterPronouns.pron_3ps,
+                PuterPronouns.pron_1pp,
+                PuterPronouns.pron_2pp,
+                PuterPronouns.pron_3pp,
+                PuterPronouns.pron_r_1ps,
+                PuterPronouns.pron_r_2ps,
+                PuterPronouns.pron_r_3ps,
+                PuterPronouns.pron_r_1pp,
+                PuterPronouns.pron_r_2pp,
+                PuterPronouns.pron_r_3pp,
+                PuterPronouns.pron_r_v_1ps,
+                PuterPronouns.pron_r_v_2ps,
+                PuterPronouns.pron_r_v_3ps,
+                PuterPronouns.pron_r_v_1pp,
+                PuterPronouns.pron_r_v_2pp,
+                PuterPronouns.pron_r_v_3pp,
+                PuterPronouns.imperativ_not,
+                PuterPronouns.imperativ_not_refl_sg,
+                PuterPronouns.imperativ_not_refl_pl,
+                PuterPronouns.imperativ_refl_sg,
+                PuterPronouns.imperativ_refl_pl,
+                PuterPronouns.imperativ_polite_sg,
+                PuterPronouns.imperativ_polite_pl
         );
     }
 
     private void setUpValladerPrefixes() {
         Collections.addAll(valladerPrefixes,
                 // has to be upfront, as other pronouns may follow
-                ValladerConjugationPronouns.pron_conjunctiv_c,
-                ValladerConjugationPronouns.pron_conjunctiv_v,
+                ValladerPronouns.pron_conjunctiv_c,
+                ValladerPronouns.pron_conjunctiv_v,
 
-                ValladerConjugationPronouns.pron_1ps,
-                ValladerConjugationPronouns.pron_2ps,
-                ValladerConjugationPronouns.pron_3ps,
-                ValladerConjugationPronouns.pron_1pp,
-                ValladerConjugationPronouns.pron_1pp_alt,
-                ValladerConjugationPronouns.pron_2pp,
-                ValladerConjugationPronouns.pron_2pp_alt,
-                ValladerConjugationPronouns.pron_3pp,
-                ValladerConjugationPronouns.pron_r_1ps,
-                ValladerConjugationPronouns.pron_r_2ps,
-                ValladerConjugationPronouns.pron_r_3ps,
-                ValladerConjugationPronouns.pron_r_1pp,
-                ValladerConjugationPronouns.pron_r_2pp,
-                ValladerConjugationPronouns.pron_r_3pp,
-                ValladerConjugationPronouns.pron_r_v_1ps,
-                ValladerConjugationPronouns.pron_r_v_2ps,
-                ValladerConjugationPronouns.pron_r_v_3ps,
-                ValladerConjugationPronouns.pron_r_v_1pp,
-                ValladerConjugationPronouns.pron_r_v_2pp,
-                ValladerConjugationPronouns.pron_r_v_3pp,
-                ValladerConjugationPronouns.imperativ_not,
-                ValladerConjugationPronouns.imperativ_not_vowel,
-                ValladerConjugationPronouns.imperativ_not_refl_sg,
-                ValladerConjugationPronouns.imperativ_not_refl_pl,
-                ValladerConjugationPronouns.imperativ_refl_sg,
-                ValladerConjugationPronouns.imperativ_refl_sg_vowel,
-                ValladerConjugationPronouns.imperativ_refl_pl,
-                ValladerConjugationPronouns.imperativ_refl_pl_vowel,
-                ValladerConjugationPronouns.imperativ_polite_sg,
-                ValladerConjugationPronouns.imperativ_polite_pl
+                ValladerPronouns.pron_1ps,
+                ValladerPronouns.pron_2ps,
+                ValladerPronouns.pron_3ps,
+                ValladerPronouns.pron_1pp,
+                ValladerPronouns.pron_1pp_alt,
+                ValladerPronouns.pron_2pp,
+                ValladerPronouns.pron_2pp_alt,
+                ValladerPronouns.pron_3pp,
+                ValladerPronouns.pron_r_1ps,
+                ValladerPronouns.pron_r_2ps,
+                ValladerPronouns.pron_r_3ps,
+                ValladerPronouns.pron_r_1pp,
+                ValladerPronouns.pron_r_2pp,
+                ValladerPronouns.pron_r_3pp,
+                ValladerPronouns.pron_r_v_1ps,
+                ValladerPronouns.pron_r_v_2ps,
+                ValladerPronouns.pron_r_v_3ps,
+                ValladerPronouns.pron_r_v_1pp,
+                ValladerPronouns.pron_r_v_2pp,
+                ValladerPronouns.pron_r_v_3pp,
+                ValladerPronouns.imperativ_not,
+                ValladerPronouns.imperativ_not_vowel,
+                ValladerPronouns.imperativ_not_refl_sg,
+                ValladerPronouns.imperativ_not_refl_pl,
+                ValladerPronouns.imperativ_refl_sg,
+                ValladerPronouns.imperativ_refl_sg_vowel,
+                ValladerPronouns.imperativ_refl_pl,
+                ValladerPronouns.imperativ_refl_pl_vowel,
+                ValladerPronouns.imperativ_polite_sg,
+                ValladerPronouns.imperativ_polite_pl
         );
     }
 

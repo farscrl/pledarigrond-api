@@ -10,25 +10,26 @@ import javax.validation.constraints.Size;
 public class VerbDto {
     @Size(max = 200)  private String infinitiv;
     private boolean irregular;
+    private boolean isReflexive;
     @Size(max = 200) private String composedWith;
 
     private PersonalVerbDto preschent;
     private PersonalVerbDto imperfect;
     private PersonalVerbDto conjunctiv;
     private PersonalVerbDto conjunctiv2;
-    private PersonalVerbDto cundizional;
-    private PersonalVerbDto condiizionalindirect;
-    private ParticipPerfectDto participperfect;
+    private PersonalVerbDto cundiziunal;
+    private PersonalVerbDto cundiziunalIndirect;
+    private ParticipPerfectDto participPerfect;
     private ImperativDto imperativ;
     @Size(max = 200) private String gerundium;
     private PersonalVerbDto futur;
-    private PersonalVerbDto futurdubitativ;
+    private PersonalVerbDto futurDubitativ;
 
     private PersonalVerbEncliticDto preschentEnclitic;
     private PersonalVerbEncliticDto imperfectEnclitic;
     private PersonalVerbEncliticDto cundizionalEnclitic;
     private PersonalVerbEncliticDto futurEnclitic;
-    private PersonalVerbEncliticDto futurdubitativEnclitic;
+    private PersonalVerbEncliticDto futurDubitativEnclitic;
 
     @Data
     @NoArgsConstructor

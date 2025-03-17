@@ -68,18 +68,6 @@ public class AutomaticGenerationController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add_enclitic_forms")
-    ResponseEntity<?> addEncliticForms(@PathVariable("language")Language language) throws DatabaseException, UnknownHostException {
-        boolean success = automaticGenerationService.addEncliticForms(language);
-
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during generation of enclitic forms");
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
     /**
      * List errors in sutsilvan caused by duplication of lemmas during automatic generation
      */

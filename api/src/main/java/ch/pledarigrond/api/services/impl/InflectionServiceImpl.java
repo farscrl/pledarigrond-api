@@ -2,16 +2,11 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.inflection.generation.generic.LanguageInflection;
-import ch.pledarigrond.inflection.generation.puter.PuterInflection;
-import ch.pledarigrond.inflection.generation.rumantschgrischun.RumantschGrischunInflection;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranInflection;
-import ch.pledarigrond.inflection.generation.sursilvan.SursilvanInflection;
-import ch.pledarigrond.inflection.generation.sutsilvan.SutsilvanInflection;
-import ch.pledarigrond.inflection.generation.vallader.ValladerInflection;
-import ch.pledarigrond.inflection.model.InflectionResponse;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
+import ch.pledarigrond.inflection.LanguageInflection;
+import ch.pledarigrond.inflection.generation.*;
 import ch.pledarigrond.inflection.model.InflectionSubType;
-import ch.pledarigrond.inflection.model.InflectionType;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,12 +22,12 @@ public class InflectionServiceImpl implements InflectionService {
         return inflection.getInflectionSubtypes(inflectionType);
     }
 
-    public InflectionResponse guessInflection(Language language, InflectionType inflectionType, String baseForm, String genus, String flex) {
+    public InflectionDto guessInflection(Language language, InflectionType inflectionType, String baseForm, String genus, String flex) {
         LanguageInflection inflection = getLanguageInflection(language);
         return inflection.guessInflectionSubtype(inflectionType, baseForm, genus, flex);
     }
 
-    public InflectionResponse generateInflection(Language language, InflectionType inflectionType, String subTypeId, String baseForm) {
+    public InflectionDto generateInflection(Language language, InflectionType inflectionType, String subTypeId, String baseForm) {
         LanguageInflection inflection = getLanguageInflection(language);
         return inflection.generateInflection(inflectionType, subTypeId, baseForm);
     }

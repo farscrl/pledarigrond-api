@@ -2,8 +2,6 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.dtos.VerbDto;
 import ch.pledarigrond.api.services.AutomaticGenerationService;
-import ch.pledarigrond.api.services.EditorService;
-import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.api.utils.InflectionResultDto;
 import ch.pledarigrond.api.utils.SursilvanInflectionComparatorUtil;
@@ -12,17 +10,12 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.dictionary.entities.Entry;
 import ch.pledarigrond.database.dictionary.mappers.LexEntryToEntryMapper;
 import ch.pledarigrond.database.dictionary.repositories.EntryRepository;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugation;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationClasses;
-import ch.pledarigrond.inflection.generation.surmiran.SurmiranConjugationStructure;
-import ch.pledarigrond.inflection.model.InflectionResponse;
-import ch.pledarigrond.inflection.utils.ConjugationStructureGenerator;
-import ch.pledarigrond.inflection.utils.PronounRemover;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
 import ch.pledarigrond.mongodb.util.MongoHelper;
@@ -46,20 +39,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_SUBTYPE;
-import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_TYPE;
 import static com.mongodb.client.model.Filters.eq;
 
 @Service
 public class AutomaticGenerationServiceImpl implements AutomaticGenerationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AutomaticGenerationServiceImpl.class);
-
-    @Autowired
-    private EditorService editorService;
-
-    @Autowired
-    private InflectionService inflectionService;
 
     @Autowired
     private PgEnvironment pgEnvironment;
@@ -165,139 +150,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     @Override
-    public boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException {
-        if (true) {
-            return false;
-        }
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getCurrent() != null && "V".equals(entry.getCurrent().getEntryValue(RM_INFLECTION_TYPE)) && entry.getCurrent().getLemmaValues().get("preschentsing3") != null) {
-                if (language == Language.SURMIRAN) {
-                    SurmiranConjugationStructure cs = ConjugationStructureGenerator.generateSurmiranConjugationStructure(entry.getCurrent().getLemmaValues());
-                    cs.setConjugationClass(SurmiranConjugationClasses.getConjugationClass(entry.getCurrent().getEntryValue(RM_INFLECTION_SUBTYPE)));
-
-                    if (cs.getConjugationclass() == null) {
-                        SurmiranConjugation conj = new SurmiranConjugation();
-                        InflectionResponse ir = conj.guessInflection(entry.getCurrent().getEntryValue("RStichwort"), "", "");
-                        if (ir != null) {
-                            cs.setConjugationClass(ir.getInflectionSubType());
-                        } else {
-                            cs.setConjugationClass(SurmiranConjugationClasses.getConjugationClass("1"));
-                        }
-                    }
-
-                    PronounRemover pr = new PronounRemover();
-                    cs.setPreschentsing1(pr.removePronouns(language, cs.getPreschentsing1()));
-                    cs.setPreschentsing2(pr.removePronouns(language, cs.getPreschentsing2()));
-                    cs.setPreschentsing3(pr.removePronouns(language, cs.getPreschentsing3()));
-                    cs.setPreschentplural1(pr.removePronouns(language, cs.getPreschentplural1()));
-                    cs.setPreschentplural2(pr.removePronouns(language, cs.getPreschentplural2()));
-                    cs.setPreschentplural3(pr.removePronouns(language, cs.getPreschentplural3()));
-
-                    cs.setImperfectsing1(pr.removePronouns(language, cs.getImperfectsing1()));
-                    cs.setImperfectsing2(pr.removePronouns(language, cs.getImperfectsing2()));
-                    cs.setImperfectsing3(pr.removePronouns(language, cs.getImperfectsing3()));
-                    cs.setImperfectplural1(pr.removePronouns(language, cs.getImperfectplural1()));
-                    cs.setImperfectplural2(pr.removePronouns(language, cs.getImperfectplural2()));
-                    cs.setImperfectplural3(pr.removePronouns(language, cs.getImperfectplural3()));
-
-                    cs.setCundizionalsing1(pr.removePronouns(language, cs.getCundizionalsing1()));
-                    cs.setCundizionalsing2(pr.removePronouns(language, cs.getCundizionalsing2()));
-                    cs.setCundizionalsing3(pr.removePronouns(language, cs.getCundizionalsing3()));
-                    cs.setCundizionalplural1(pr.removePronouns(language, cs.getCundizionalplural1()));
-                    cs.setCundizionalplural2(pr.removePronouns(language, cs.getCundizionalplural2()));
-                    cs.setCundizionalplural3(pr.removePronouns(language, cs.getCundizionalplural3()));
-
-                    cs.setFutursing1(pr.removePronouns(language, cs.getFutursing1()));
-                    cs.setFutursing2(pr.removePronouns(language, cs.getFutursing2()));
-                    cs.setFutursing3(pr.removePronouns(language, cs.getFutursing3()));
-                    cs.setFuturplural1(pr.removePronouns(language, cs.getFuturplural1()));
-                    cs.setFuturplural2(pr.removePronouns(language, cs.getFuturplural2()));
-                    cs.setFuturplural3(pr.removePronouns(language, cs.getFuturplural3()));
-
-                    if (
-                            cs.getPreschentsing1() == null || cs.getPreschentsing1().isEmpty() ||
-                            cs.getPreschentsing2() == null || cs.getPreschentsing2().isEmpty() ||
-                            cs.getPreschentsing3() == null || cs.getPreschentsing3().isEmpty() ||
-                            cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
-                            cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
-                            cs.getPreschentplural1() == null || cs.getPreschentplural1().isEmpty() ||
-
-                            cs.getImperfectsing1() == null || cs.getImperfectsing1().isEmpty() ||
-                            cs.getImperfectsing2() == null || cs.getImperfectsing2().isEmpty() ||
-                            cs.getImperfectsing3() == null || cs.getImperfectsing3().isEmpty() ||
-                            cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
-                            cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
-                            cs.getImperfectplural1() == null || cs.getImperfectplural1().isEmpty() ||
-
-                            cs.getCundizionalsing1() == null || cs.getCundizionalsing1().isEmpty() ||
-                            cs.getCundizionalsing2() == null || cs.getCundizionalsing2().isEmpty() ||
-                            cs.getCundizionalsing3() == null || cs.getCundizionalsing3().isEmpty() ||
-                            cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
-                            cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
-                            cs.getCundizionalplural1() == null || cs.getCundizionalplural1().isEmpty() ||
-
-                            cs.getFutursing1() == null || cs.getFutursing1().isEmpty() ||
-                            cs.getFutursing2() == null || cs.getFutursing2().isEmpty() ||
-                            cs.getFutursing3() == null || cs.getFutursing3().isEmpty() ||
-                            cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
-                            cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty() ||
-                            cs.getFuturplural1() == null || cs.getFuturplural1().isEmpty()
-                    ) {
-                        logger.debug("Form missing for: " + entry.getCurrent().getLemmaValues().get("RStichwort"));
-                        continue;
-                    }
-
-                    SurmiranConjugation.addEncliticForms(cs);
-
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentsing1enclitic, cs.getPreschentsing1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentsing2enclitic, cs.getPreschentsing2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticm, cs.getPreschentsing3EncliticM());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentsing3encliticf, cs.getPreschentsing3EncliticF());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentplural1enclitic, cs.getPreschentplural1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentplural2enclitic, cs.getPreschentplural2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.preschentplural3enclitic, cs.getPreschentplural3Enclitic());
-
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectsing1enclitic, cs.getImperfectsing1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectsing2enclitic, cs.getImperfectsing2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticm, cs.getImperfectsing3EncliticM());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectsing3encliticf, cs.getImperfectsing3EncliticF());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectplural1enclitic, cs.getImperfectplural1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectplural2enclitic, cs.getImperfectplural2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.imperfectplural3enclitic, cs.getImperfectplural3Enclitic());
-
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing1enclitic, cs.getCundizionalsing1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing2enclitic, cs.getCundizionalsing2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticm, cs.getCundizionalsing3EncliticM());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalsing3encliticf, cs.getCundizionalsing3EncliticF());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural1enclitic, cs.getCundizionalplural1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural2enclitic, cs.getCundizionalplural2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.cundizionalplural3enclitic, cs.getCundizionalplural3Enclitic());
-
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futursing1enclitic, cs.getFutursing1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futursing2enclitic, cs.getFutursing2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticm, cs.getFutursing3EncliticM());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futursing3encliticf, cs.getFutursing3EncliticF());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futurplural1enclitic, cs.getFuturplural1Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futurplural2enclitic, cs.getFuturplural2Enclitic());
-                    entry.getCurrent().getLemmaValues().put(SurmiranConjugationStructure.futurplural3enclitic, cs.getFuturplural3Enclitic());
-
-                    BasicDBObject newObject = Converter.convertLexEntry(entry);
-                    entryCollection.replaceOne(eq("_id", newObject.get("_id")),  new Document(newObject), new ReplaceOptions().upsert(true));
-                }
-            }
-        }
-
-        return true;
-    }
-
-    @Override
     public boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
@@ -398,9 +250,9 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         for (VerbDto verb : sursilvanVerbs) {
             InflectionResultDto result = sursilvanInflectionComparatorUtil.getInflection(verb.getRmStichwort());
-            InflectionResponse response = result.getInflectionResponse();
+            InflectionDto response = result.getInflectionResponse();
             Integer errorCount = result.getErrorCount();
-            data.add(new String[]{verb.getRmStichwort(), response != null ? response.getInflectionSubType().id : "-", errorCount != null ? errorCount.toString() : "222"});
+            data.add(new String[]{verb.getRmStichwort(), response != null ? response.getInflectionSubtype() : "-", errorCount != null ? errorCount.toString() : "222"});
         }
 
         data.sort(Comparator.comparing(o -> o[0]));

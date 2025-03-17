@@ -2,7 +2,7 @@ package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.inflection.model.InflectionType;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -14,4 +14,6 @@ public class AdjectiveDto {
     @Size(max = 200) private String mPlural;
     @Size(max = 200) private String fPlural;
     @Size(max = 200) private String adverbialForm;
+
+    @Size(max = 200) private String predicative;
 }

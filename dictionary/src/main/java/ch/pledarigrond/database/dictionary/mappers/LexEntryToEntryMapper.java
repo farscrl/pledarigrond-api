@@ -184,7 +184,7 @@ public class LexEntryToEntryMapper {
         cundizional.setPlural1(lv.get("cundizionalplural1"));
         cundizional.setPlural2(lv.get("cundizionalplural2"));
         cundizional.setPlural3(lv.get("cundizionalplural3"));
-        verb.setCundizional(cundizional);
+        verb.setCundiziunal(cundizional);
 
         if (language.name().equals("sursilvan")|| language.name().equals("sutsilvan")) {
             Verb.PersonalVerb condiizionalindirect = new Verb.PersonalVerb();
@@ -194,7 +194,7 @@ public class LexEntryToEntryMapper {
             condiizionalindirect.setPlural1(lv.get("cundizionalindirectplural1"));
             condiizionalindirect.setPlural2(lv.get("cundizionalindirectplural2"));
             condiizionalindirect.setPlural3(lv.get("cundizionalindirectplural3"));
-            verb.setCondiizionalindirect(condiizionalindirect);
+            verb.setCundiziunalIndirect(condiizionalindirect);
         }
 
         Verb.ParticipPerfect participperfect = new Verb.ParticipPerfect();
@@ -205,7 +205,7 @@ public class LexEntryToEntryMapper {
         if (language.name().equals("sursilvan")) {
             participperfect.setMsPredicativ(lv.get("participperfectmspredicativ"));
         }
-        verb.setParticipperfect(participperfect);
+        verb.setParticipPerfect(participperfect);
 
         Verb.Imperativ imperativ = new Verb.Imperativ();
         imperativ.setSingular(lv.get("imperativ1"));
@@ -237,7 +237,7 @@ public class LexEntryToEntryMapper {
             futurdubitativ.setPlural1(lv.get("futurdubitativplural1"));
             futurdubitativ.setPlural2(lv.get("futurdubitativplural2"));
             futurdubitativ.setPlural3(lv.get("futurdubitativplural3"));
-            verb.setFuturdubitativ(futurdubitativ);
+            verb.setFuturDubitativ(futurdubitativ);
         }
 
         // enclitic
@@ -295,7 +295,7 @@ public class LexEntryToEntryMapper {
             futurdubitativEnclitic.setPlural1(lv.get("futurdubitativplural1enclitic"));
             futurdubitativEnclitic.setPlural2(lv.get("futurdubitativplural2enclitic"));
             futurdubitativEnclitic.setPlural3(lv.get("futurdubitativplural3enclitic"));
-            verb.setFuturdubitativEnclitic(futurdubitativEnclitic);
+            verb.setFuturDubitativEnclitic(futurdubitativEnclitic);
         }
 
         return verb;

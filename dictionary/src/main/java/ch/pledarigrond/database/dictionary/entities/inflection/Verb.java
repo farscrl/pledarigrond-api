@@ -6,26 +6,27 @@ import lombok.Data;
 public class Verb {
     public String infinitiv;
     public boolean irregular;
+    public boolean isReflexive;
     public String composedWith;
 
     public PersonalVerb preschent;
     public PersonalVerb imperfect;
     public PersonalVerb conjunctiv;
     public PersonalVerb conjunctiv2;
-    public PersonalVerb cundizional;
-    public PersonalVerb condiizionalindirect;
-    public ParticipPerfect participperfect;
+    public PersonalVerb cundiziunal;
+    public PersonalVerb cundiziunalIndirect;
+    public ParticipPerfect participPerfect;
     public Imperativ imperativ;
     public String gerundium;
     public PersonalVerb futur;
-    public PersonalVerb futurdubitativ;
+    public PersonalVerb futurDubitativ;
 
 
     public PersonalVerbEnclitic preschentEnclitic;
     public PersonalVerbEnclitic imperfectEnclitic;
     public PersonalVerbEnclitic cundizionalEnclitic;
     public PersonalVerbEnclitic futurEnclitic;
-    public PersonalVerbEnclitic futurdubitativEnclitic;
+    public PersonalVerbEnclitic futurDubitativEnclitic;
 
     @Data
     public static class PersonalVerb {

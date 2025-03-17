@@ -3,14 +3,12 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.services.DictionaryService;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,13 +77,17 @@ public class ScheduledDumpService {
             jsonGenerator.writeStartArray();
 
             ObjectMapper mapper = new ObjectMapper();
-            SimpleFilterProvider filters = new SimpleFilterProvider()
-                    .addFilter("entityVersionDtoFilter", SimpleBeanPropertyFilter.serializeAllExcept("userComment", "userEmail", "creator", "creatorIp", "creatorRole", "verifier"));
-            ObjectWriter writer = mapper.writer(filters);
 
             stream.forEach(entry -> {
                 try {
-                    writer.writeValue(jsonGenerator, entry.getCurrent());
+                    EntryVersionDto current = entry.getCurrent();
+                    current.setUserComment(null);
+                    current.setUserEmail(null);
+                    current.setCreator(null);
+                    current.setCreatorIp(null);
+                    current.setCreatorRole(null);
+                    current.setVerifier(null);
+                    mapper.writeValue(jsonGenerator, current);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

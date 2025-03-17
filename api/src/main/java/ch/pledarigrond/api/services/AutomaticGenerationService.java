@@ -13,8 +13,6 @@ public interface AutomaticGenerationService {
 
     boolean generateVerbForms(Language language);
 
-    boolean addEncliticForms(Language language) throws DatabaseException, UnknownHostException;
-
     boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException;
 
     boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException;

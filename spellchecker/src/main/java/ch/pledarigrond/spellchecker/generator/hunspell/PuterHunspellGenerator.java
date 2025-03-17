@@ -122,17 +122,17 @@ public class PuterHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getConjunctiv2().getPlural2(), forms);
         addNewlines(v.getConjunctiv2().getPlural3(), forms);
 
-        addNewlines(v.getCundizional().getSing1(), forms);
-        addNewlines(v.getCundizional().getSing2(), forms);
-        addNewlines(v.getCundizional().getSing3(), forms);
-        addNewlines(v.getCundizional().getPlural1(), forms);
-        addNewlines(v.getCundizional().getPlural2(), forms);
-        addNewlines(v.getCundizional().getPlural3(), forms);
+        addNewlines(v.getCundiziunal().getSing1(), forms);
+        addNewlines(v.getCundiziunal().getSing2(), forms);
+        addNewlines(v.getCundiziunal().getSing3(), forms);
+        addNewlines(v.getCundiziunal().getPlural1(), forms);
+        addNewlines(v.getCundiziunal().getPlural2(), forms);
+        addNewlines(v.getCundiziunal().getPlural3(), forms);
 
-        addNewlines(v.getParticipperfect().getMs(), forms);
-        addNewlines(v.getParticipperfect().getFs(), forms);
-        addNewlines(v.getParticipperfect().getMp(), forms);
-        addNewlines(v.getParticipperfect().getFp(), forms);
+        addNewlines(v.getParticipPerfect().getMs(), forms);
+        addNewlines(v.getParticipPerfect().getFs(), forms);
+        addNewlines(v.getParticipPerfect().getMp(), forms);
+        addNewlines(v.getParticipPerfect().getFp(), forms);
 
         addNewlines(v.getGerundium(), forms);
 
@@ -143,12 +143,12 @@ public class PuterHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getFutur().getPlural2(), forms);
         addNewlines(v.getFutur().getPlural3(), forms);
 
-        addNewlines(v.getFuturdubitativ().getSing1(), forms);
-        addNewlines(v.getFuturdubitativ().getSing2(), forms);
-        addNewlines(v.getFuturdubitativ().getSing3(), forms);
-        addNewlines(v.getFuturdubitativ().getPlural1(), forms);
-        addNewlines(v.getFuturdubitativ().getPlural2(), forms);
-        addNewlines(v.getFuturdubitativ().getPlural3(), forms);
+        addNewlines(v.getFuturDubitativ().getSing1(), forms);
+        addNewlines(v.getFuturDubitativ().getSing2(), forms);
+        addNewlines(v.getFuturDubitativ().getSing3(), forms);
+        addNewlines(v.getFuturDubitativ().getPlural1(), forms);
+        addNewlines(v.getFuturDubitativ().getPlural2(), forms);
+        addNewlines(v.getFuturDubitativ().getPlural3(), forms);
 
         addNewlines(v.getPreschentEnclitic().getSing1(), forms);
         addNewlines(v.getPreschentEnclitic().getSing2(), forms);
@@ -182,13 +182,13 @@ public class PuterHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getFuturEnclitic().getPlural2(), forms);
         addNewlines(v.getFuturEnclitic().getPlural3(), forms);
 
-        addNewlines(v.getFuturdubitativEnclitic().getSing1(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getSing2(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getSing3m(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getSing3f(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getPlural1(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getPlural2(), forms);
-        addNewlines(v.getFuturdubitativEnclitic().getPlural3(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getSing1(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getSing2(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getSing3m(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getSing3f(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getPlural1(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getPlural2(), forms);
+        addNewlines(v.getFuturDubitativEnclitic().getPlural3(), forms);
 
         forms.forEach(f -> {
             String form = removePronouns(f);

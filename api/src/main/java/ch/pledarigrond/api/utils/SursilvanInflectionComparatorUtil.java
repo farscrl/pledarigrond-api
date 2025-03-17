@@ -4,8 +4,8 @@ import ch.pledarigrond.api.dtos.VerbDto;
 import ch.pledarigrond.api.services.InflectionService;
 import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.inflection.model.InflectionResponse;
-import ch.pledarigrond.inflection.model.InflectionType;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.inflection.utils.PronounRemover;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,13 +38,13 @@ public class SursilvanInflectionComparatorUtil {
         referenceVerb = sursilvanVerbService.getVerb(baseForm);
 
         if (referenceVerb == null) {
-            InflectionResponse inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.V, baseForm, null, null);
+            InflectionDto inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.VERB, baseForm, null, null);
             return new InflectionResultDto(inflectionResponse, false, null);
         }
 
         generateAllInflections();
         if (allInflections.isEmpty()) {
-            InflectionResponse inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.V, baseForm, null, null);
+            InflectionDto inflectionResponse = inflectionService.guessInflection(Language.SURSILVAN, InflectionType.VERB, baseForm, null, null);
             return new InflectionResultDto(inflectionResponse, false, null);
         }
 
@@ -74,7 +74,7 @@ public class SursilvanInflectionComparatorUtil {
 
         for (String constant : possibleInflections) {
             try {
-                InflectionResponse inflectionResponse = inflectionService.generateInflection(Language.SURSILVAN, InflectionType.V, constant, baseForm);
+                InflectionDto inflectionResponse = inflectionService.generateInflection(Language.SURSILVAN, InflectionType.VERB, constant, baseForm);
                 if (inflectionResponse != null) {
                     this.allInflections.put(constant, new InflectionValidationDto(inflectionResponse));
                 }
@@ -91,54 +91,53 @@ public class SursilvanInflectionComparatorUtil {
         }
     }
 
-    private int validateInflection(InflectionResponse inflectionResponse) {
+    private int validateInflection(InflectionDto inflection) {
         int nbrWrongForms = 0;
 
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentsing1"), referenceVerb.getPreschentsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentsing1"), referenceVerb.getPreschentsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentsing2"), referenceVerb.getPreschentsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentsing3"), referenceVerb.getPreschentsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentplural1"), referenceVerb.getPreschentplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentplural2"), referenceVerb.getPreschentplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("preschentplural3"), referenceVerb.getPreschentplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectsing1"), referenceVerb.getImperfectsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectsing2"), referenceVerb.getImperfectsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectsing3"), referenceVerb.getImperfectsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectplural1"), referenceVerb.getImperfectplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectplural2"), referenceVerb.getImperfectplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperfectplural3"), referenceVerb.getImperfectplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivsing1"), referenceVerb.getConjunctivsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivsing2"), referenceVerb.getConjunctivsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivsing3"), referenceVerb.getConjunctivsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivplural1"), referenceVerb.getConjunctivplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivplural2"), referenceVerb.getConjunctivplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctivplural3"), referenceVerb.getConjunctivplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2sing1"), referenceVerb.getConjunctivimpsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2sing2"), referenceVerb.getConjunctivimpsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2sing3"), referenceVerb.getConjunctivimpsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2plural1"), referenceVerb.getConjunctivimpplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2plural2"), referenceVerb.getConjunctivimpplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("conjunctiv2plural3"), referenceVerb.getConjunctivimpplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalsing1"), referenceVerb.getCundizionalsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalsing2"), referenceVerb.getCundizionalsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalsing3"), referenceVerb.getCundizionalsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalplural1"), referenceVerb.getCundizionalplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalplural2"), referenceVerb.getCundizionalplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalplural3"), referenceVerb.getCundizionalplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectsing1"), referenceVerb.getCundizionalindsing1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectsing2"), referenceVerb.getCundizionalindsing2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectsing3"), referenceVerb.getCundizionalindsing3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectplural1"), referenceVerb.getCundizionalindplural1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectplural2"), referenceVerb.getCundizionalindplural2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("cundizionalindirectplural3"), referenceVerb.getCundizionalindplural3());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("participperfectmspredicativ"), referenceVerb.getParticipperfectms());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("participperfectfs"), referenceVerb.getParticipperfectfs());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("participperfectmp"), referenceVerb.getParticipperfectmp());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("participperfectfp"), referenceVerb.getParticipperfectfp());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperativ1"), referenceVerb.getImperativ1());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("imperativ2"), referenceVerb.getImperativ2());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("gerundium"), referenceVerb.getGerundium());
-        nbrWrongForms += getWrongness(inflectionResponse.getInflectionValues().get("infinitiv"), referenceVerb.getInfinitiv());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getSing1(), referenceVerb.getPreschentsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getSing2(), referenceVerb.getPreschentsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getSing3(), referenceVerb.getPreschentsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getPlural1(), referenceVerb.getPreschentplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getPlural2(), referenceVerb.getPreschentplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getPreschent().getPlural3(), referenceVerb.getPreschentplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getSing1(), referenceVerb.getImperfectsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getSing2(), referenceVerb.getImperfectsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getSing3(), referenceVerb.getImperfectsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getPlural1(), referenceVerb.getImperfectplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getPlural2(), referenceVerb.getImperfectplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperfect().getPlural3(), referenceVerb.getImperfectplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getSing1(), referenceVerb.getConjunctivsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getSing2(), referenceVerb.getConjunctivsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getSing3(), referenceVerb.getConjunctivsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getPlural1(), referenceVerb.getConjunctivplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getPlural2(), referenceVerb.getConjunctivplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv().getPlural3(), referenceVerb.getConjunctivplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getSing1(), referenceVerb.getConjunctivimpsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getSing2(), referenceVerb.getConjunctivimpsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getSing3(), referenceVerb.getConjunctivimpsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getPlural1(), referenceVerb.getConjunctivimpplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getPlural2(), referenceVerb.getConjunctivimpplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getConjunctiv2().getPlural3(), referenceVerb.getConjunctivimpplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getSing1(), referenceVerb.getCundizionalsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getSing2(), referenceVerb.getCundizionalsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getSing3(), referenceVerb.getCundizionalsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getPlural1(), referenceVerb.getCundizionalplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getPlural2(), referenceVerb.getCundizionalplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunal().getPlural3(), referenceVerb.getCundizionalplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getSing1(), referenceVerb.getCundizionalindsing1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getSing2(), referenceVerb.getCundizionalindsing2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getSing3(), referenceVerb.getCundizionalindsing3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getPlural1(), referenceVerb.getCundizionalindplural1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getPlural2(), referenceVerb.getCundizionalindplural2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getCundiziunalIndirect().getPlural3(), referenceVerb.getCundizionalindplural3());
+        nbrWrongForms += getWrongness(inflection.getVerb().getParticipPerfect().getMsPredicativ(), referenceVerb.getParticipperfectms());
+        nbrWrongForms += getWrongness(inflection.getVerb().getParticipPerfect().getFs(), referenceVerb.getParticipperfectfs());
+        nbrWrongForms += getWrongness(inflection.getVerb().getParticipPerfect().getMp(), referenceVerb.getParticipperfectmp());
+        nbrWrongForms += getWrongness(inflection.getVerb().getParticipPerfect().getFp(), referenceVerb.getParticipperfectfp());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperativ().getSingular(), referenceVerb.getImperativ1());
+        nbrWrongForms += getWrongness(inflection.getVerb().getImperativ().getPlural(), referenceVerb.getImperativ2());
+        nbrWrongForms += getWrongness(inflection.getVerb().getGerundium(), referenceVerb.getGerundium());
+        nbrWrongForms += getWrongness(inflection.getVerb().getInfinitiv(), referenceVerb.getInfinitiv());
 
         return nbrWrongForms;
     }
