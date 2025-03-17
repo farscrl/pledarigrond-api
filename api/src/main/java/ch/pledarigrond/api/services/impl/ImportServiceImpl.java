@@ -5,7 +5,6 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.ExampleDto;
 import ch.pledarigrond.database.services.DictionaryService;
-import ch.pledarigrond.mongodb.exceptions.InvalidEntryException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -34,7 +33,7 @@ public class ImportServiceImpl implements ImportService {
     private DictionaryService dictionaryService;
 
     @Override
-    public boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException, InvalidEntryException {
+    public boolean importXlsSursilvan(Language language, HttpServletRequest request) throws IOException {
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile multipartFile = dmhsRequest.getFile("file");
 

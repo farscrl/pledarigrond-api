@@ -5,7 +5,6 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.spellchecker.generator.WordListUtils;
 import ch.pledarigrond.spellchecker.model.HunspellList;
 import ch.pledarigrond.spellchecker.model.HunspellRules;
@@ -50,7 +49,7 @@ abstract public class HunspellGenerator {
         Files.createDirectories(basePath);
     }
 
-    public String generateHunspell(Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
+    public String generateHunspell(Stream<EntryDto> stream) throws IOException {
         // create dicFile
         Set<String> words = getAllValidWords(language, stream);
         File dicFile = new File(basePath.toFile(), "rm-" + language.getSubtag() + ".dic");
@@ -134,7 +133,7 @@ abstract public class HunspellGenerator {
         return versionAndBuild;
     }
 
-    public File exportHunspell(Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
+    public File exportHunspell(Stream<EntryDto> stream) throws IOException {
         String versionAndBuild = generateHunspell(stream);
 
         File dir = new File(pgEnvironment.getTempExportLocation());
@@ -185,7 +184,7 @@ abstract public class HunspellGenerator {
         }
     }
 
-    private Set<String> getAllValidWords(Language language, Stream<EntryDto> stream) throws NoDatabaseAvailableException, IOException {
+    private Set<String> getAllValidWords(Language language, Stream<EntryDto> stream) throws IOException {
         HunspellList hunspellList = new HunspellList();
 
         loadWordsToAdd(language, hunspellList);

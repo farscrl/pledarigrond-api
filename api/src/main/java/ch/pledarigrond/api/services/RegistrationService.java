@@ -1,7 +1,6 @@
 package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.pronunciation.dto.ListFilter;
 import ch.pledarigrond.pronunciation.dto.RegistrationStatistics;
 import ch.pledarigrond.pronunciation.entities.Registration;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.stream.Stream;
 
 public interface RegistrationService {
@@ -39,9 +37,9 @@ public interface RegistrationService {
 
     Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException;
 
-    void extractSingleWords(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException;
+    void extractSingleWords(Stream<EntryDto> stream);
 
-    ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException;
+    ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream);
 
     RegistrationStatistics getStatistics();
 

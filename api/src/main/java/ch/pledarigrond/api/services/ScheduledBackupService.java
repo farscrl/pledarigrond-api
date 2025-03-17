@@ -4,7 +4,6 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.services.DbBackupService;
-import ch.pledarigrond.mongodb.exceptions.ScheduledBackupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,13 +92,9 @@ public class ScheduledBackupService {
 
 		s3BackupService.uploadFile("users", backupFile);
 
-		try {
-			cleanup("users");
-		} catch (ScheduledBackupException e) {
-			LOG.error("back up file is not valid.");
-		}
+        cleanup("users");
 
-		LOG.info("finished scheduled backup");
+        LOG.info("finished scheduled backup");
 	}
 
 	private File buildBackup(String dir, String backupFileName, Language language) {
@@ -114,12 +109,12 @@ public class ScheduledBackupService {
 		return backupFile;
 	}
 
-	private void cleanup(String dbName) throws ScheduledBackupException {
+	private void cleanup(String dbName) {
 		List<File> backupFiles = dbBackupService.listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
 		while (backupFiles.size() > Integer.parseInt(pgEnvironment.getBackupNumber())) {
 			boolean delete = backupFiles.get(backupFiles.size() - 1).delete();
 			if (!delete) {
-				throw new ScheduledBackupException(String.format("could not delete obsolete backup file: %s", backupFiles.get(0).getAbsolutePath()));
+				throw new RuntimeException(String.format("could not delete obsolete backup file: %s", backupFiles.get(0).getAbsolutePath()));
 			}
 			backupFiles = dbBackupService.listBackupFilesAsc(pgEnvironment.getBackupLocation() + "/" + dbName);
 		}

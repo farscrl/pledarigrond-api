@@ -9,7 +9,6 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.database.services.DictionaryService;
@@ -37,7 +36,6 @@ import ws.schild.jave.encode.EncodingAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -214,11 +212,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void extractSingleWords(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException {
+    public void extractSingleWords(Stream<EntryDto> stream) {
         Language language = RequestContext.getLanguage();
-        if (language == null) {
-            throw new DatabaseException("No language set in request context");
-        }
 
         stream.forEach(entry -> {
             if (entry.getCurrent() != null) {
@@ -261,11 +256,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream) throws DatabaseException, UnknownHostException {
+    public ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream) {
         Language language = RequestContext.getLanguage();
-        if (language == null) {
-            throw new DatabaseException("No language set in request context");
-        }
 
         List<String> strings = new ArrayList<>();
 

@@ -17,7 +17,6 @@ import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
-import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.dictionary.entities.Entry;
 import ch.pledarigrond.database.dictionary.mappers.EntryMapper;
@@ -44,7 +43,6 @@ import org.springframework.util.StopWatch;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -198,7 +196,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     @Override
-    public boolean migrateDb() throws DatabaseException, UnknownHostException {
+    public boolean migrateDb() {
         if (entryRepository.count() != 0) {
             logger.error("Dictionary is not empty. Aborting.");
             return false;

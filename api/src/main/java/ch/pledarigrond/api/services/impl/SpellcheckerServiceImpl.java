@@ -4,7 +4,6 @@ import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.api.services.SpellcheckerService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.exception.NoDatabaseAvailableException;
 import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
 import ch.pledarigrond.spellchecker.generator.pos.*;
@@ -67,7 +66,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     }
 
     @Scheduled(cron = "${pg.hunspell.cron}")
-    private void export() throws IOException, NoDatabaseAvailableException {
+    private void export() throws IOException {
         logger.info("Scheduled export of Hunspell spellchecker files");
 
         generateAndCommit();
@@ -77,13 +76,13 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
 
 
     @Override
-    public File exportHunspell(Language language) throws NoDatabaseAvailableException, IOException {
+    public File exportHunspell(Language language) throws IOException {
         List<String> names = nameService.getWordsForLanguage(language);
         return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell(dictionaryService.getStreamForEntries());
     }
 
     @Override
-    public void generateAndCommit() throws NoDatabaseAvailableException, IOException {
+    public void generateAndCommit() throws IOException {
         long startTime = System.currentTimeMillis();
 
         for (Language language : activeLanguages) {
@@ -107,7 +106,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     }
 
     @Override
-    public File exportMsWordlist(Language language) throws NoDatabaseAvailableException, IOException {
+    public File exportMsWordlist(Language language) throws IOException {
         List<String> names = nameService.getWordsForLanguage(language);
         return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language, dictionaryService.getStreamForEntries());
     }

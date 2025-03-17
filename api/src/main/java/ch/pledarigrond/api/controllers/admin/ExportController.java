@@ -2,7 +2,6 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.ExportService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.exception.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ public class ExportController {
                     .headers(headers)
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .body(new InputStreamResource(in));
-        } catch (DatabaseException | IOException e) {
+        } catch (IOException e) {
             logger.error("Error while importing excel file", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -76,7 +75,7 @@ public class ExportController {
                     .headers(headers)
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .body(new InputStreamResource(in));
-        } catch (DatabaseException | IOException e) {
+        } catch (IOException e) {
             logger.error("Error while importing excel file", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -102,7 +101,7 @@ public class ExportController {
                     .headers(headers)
                     .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .body(new InputStreamResource(in));
-        } catch (DatabaseException | IOException e) {
+        } catch (IOException e) {
             logger.error("Error while importing excel file", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -2,7 +2,6 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.exception.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.net.UnknownHostException;
 
 @RestController
 @RequestMapping("{language}/admin/generation")
@@ -92,15 +89,11 @@ public class AutomaticGenerationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/db_migrate")
     ResponseEntity<?> migrateDbStructure(@PathVariable("language")Language language) {
-        try {
-            boolean success = automaticGenerationService.migrateDb();
-            if (!success) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during db migration");
-            }
-
-            return ResponseEntity.ok().build();
-        } catch (UnknownHostException|DatabaseException exception) {
+        boolean success = automaticGenerationService.migrateDb();
+        if (!success) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during db migration");
         }
+
+        return ResponseEntity.ok().build();
     }
 }

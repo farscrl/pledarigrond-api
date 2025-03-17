@@ -16,14 +16,11 @@
 package ch.pledarigrond.mongodb.util;
 
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.exception.DatabaseException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.UnknownHostException;
 
 public class MongoHelper {
 
@@ -35,11 +32,11 @@ public class MongoHelper {
 
 	private static final Object lock = new Object();
 
-	public static MongoDatabase getDB(PgEnvironment pgEnvironment, String dbName) throws UnknownHostException, DatabaseException {
+	public static MongoDatabase getDB(PgEnvironment pgEnvironment, String dbName) {
 		synchronized(lock) {
 
 			if (dbName == null) {
-				throw new DatabaseException("No DB name provided");
+				throw new RuntimeException("No DB name provided");
 			}
 
 			if(MONGO_CLIENT == null) {

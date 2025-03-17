@@ -1,13 +1,14 @@
 package ch.pledarigrond.api.controllers.editor;
 
 import ch.pledarigrond.api.services.NameService;
+import ch.pledarigrond.common.data.common.ApiError;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.mongodb.exceptions.InvalidUserException;
 import ch.pledarigrond.names.entities.Category;
 import ch.pledarigrond.names.entities.Name;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -56,9 +58,14 @@ public class NamesController {
 
     @PreAuthorize("hasPermission('names', 'editor')")
     @PutMapping("/{id}")
-    ResponseEntity<?> update(@PathVariable("id")String id, @Validated @RequestBody Name name) throws InvalidUserException {
+    ResponseEntity<?> update(@PathVariable("id")String id, @Validated @RequestBody Name name) {
         if (!id.equals(name.getId())) {
-            throw new InvalidUserException("IDs are not equal");
+            ApiError error = new ApiError(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "IDs are not equal.",
+                    List.of("IDs are not equal.")
+            );
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
         return ResponseEntity.ok(nameService.updateName(name));

@@ -1,21 +1,14 @@
 package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.ExportService;
-import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import ch.pledarigrond.common.exception.DatabaseException;
-import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
+import ch.pledarigrond.common.data.dictionary.inflection.VerbDto;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCursor;
+import ch.pledarigrond.database.services.DictionaryService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import static ch.pledarigrond.common.data.common.LemmaVersion.RM_INFLECTION_TYPE;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ExportServiceImpl implements ExportService {
@@ -34,65 +26,56 @@ public class ExportServiceImpl implements ExportService {
     private final Logger logger = LoggerFactory.getLogger(ExportServiceImpl.class);
 
     @Autowired
-    private PgEnvironment pgEnvironment;
+    private DictionaryService dictionaryService;
 
     @Override
-    public ByteArrayInputStream ladinComposedVerbs(Language language, HttpServletRequest request) throws IOException, DatabaseException {
-        String[] headers = {"ID", "RStichwort"};
+    public ByteArrayInputStream ladinComposedVerbs(Language language, HttpServletRequest request) throws IOException {
+        String[] headers = {"ID", "rmStichwort"};
         Workbook workbook = initializeExcel(language.getName() + " - verbs che cuntegnan in segn da spazi", headers);
         Sheet sheet = workbook.getSheetAt(0);
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        AtomicInteger rowNum = new AtomicInteger(0);
 
-        int rowNum = 1;
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            if (entry.getCurrent() != null && "V".equals(entry.getCurrent().getEntryValue(RM_INFLECTION_TYPE))) {
-                LemmaVersion current = entry.getCurrent();
-                String RStichwort = current.getLemmaValues().get("RStichwort");
-                String RStichwortStripped = RStichwort.trim();
-                if (RStichwortStripped.startsWith("as ")) {
-                    RStichwortStripped = RStichwortStripped.substring(3).trim();
-                } else if (RStichwortStripped.startsWith("s'")) {
-                    RStichwortStripped = RStichwortStripped.substring(2).trim();
+        dictionaryService.getStreamForEntries().forEach(entry -> {
+            if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+                String rmStichwortStripped = entry.getCurrent().getRmStichwort().trim();
+                if (rmStichwortStripped.startsWith("as ")) {
+                    rmStichwortStripped = rmStichwortStripped.substring(3).trim();
+                } else if (rmStichwortStripped.startsWith("s'")) {
+                    rmStichwortStripped = rmStichwortStripped.substring(2).trim();
                 }
-                if (RStichwortStripped.contains(" ")) {
-                    Row row = sheet.createRow(rowNum++);
-                    row.createCell(0).setCellValue(current.getLexEntryId());
-                    row.createCell(1).setCellValue(RStichwort);
+                if (rmStichwortStripped.contains(" ")) {
+                    Row row = sheet.createRow(rowNum.getAndIncrement());
+                    row.createCell(0).setCellValue(entry.getCurrent().getEntryId());
+                    row.createCell(1).setCellValue(entry.getCurrent().getRmStichwort());
                 }
             }
-        }
+        });
 
         return terminateExcel(workbook);
     }
 
     @Override
-    public ByteArrayInputStream ladinConsonantsOnErrors(Language language, HttpServletRequest request) throws IOException, DatabaseException {
+    public ByteArrayInputStream ladinConsonantsOnErrors(Language language, HttpServletRequest request) throws IOException {
         String[] headers = {"ID", "RStichwort"};
         Workbook workbook = initializeExcel(language.getName() + " - verbs cun 1, 2 u 3 consonants avant la finiziun «-er»", headers);
         Sheet sheet = workbook.getSheetAt(0);
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        AtomicInteger rowNum = new AtomicInteger(0);
 
-        int rowNum = 1;
+        dictionaryService.getStreamForEntries().forEach(entry -> {
+            if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+                EntryVersionDto current = entry.getCurrent();
+                VerbDto verb = current.getInflection().getVerb();
 
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
+                if (verb == null) {
+                    return;
+                }
 
-            if (entry.getCurrent() != null && "V".equals(entry.getCurrent().getEntryValue(RM_INFLECTION_TYPE))) {
-                LemmaVersion current = entry.getCurrent();
-
-                String infinitiv = current.getLemmaValues().get("infinitiv");
+                String infinitiv = verb.getInfinitiv();
 
                 if (infinitiv == null) {
-                    continue;
+                    return;
                 }
 
                 infinitiv = PronunciationNormalizer.normalizePronunciation(infinitiv);
@@ -101,7 +84,7 @@ public class ExportServiceImpl implements ExportService {
                     boolean isCandidate = false;
 
                     if (isVocal(infinitiv.charAt(infinitiv.length() - 3))) {
-                        continue;
+                        return;
                     }
 
                     isCandidate = true;
@@ -110,55 +93,48 @@ public class ExportServiceImpl implements ExportService {
                         if (infinitiv.length() > 4 && !isVocal(infinitiv.charAt(infinitiv.length() - 5))) {
                             if (infinitiv.length() > 5 && !isVocal(infinitiv.charAt(infinitiv.length() - 6))) {
                                 isCandidate = false;
-                                logger.info("Verb with more thant 3 consonants before -er: " + current.getLexEntryId() + " - " + infinitiv);
+                                logger.info("Verb with more thant 3 consonants before -er: " + current.getEntryId() + " - " + infinitiv);
                             }
                         }
                     }
 
                     if (isCandidate) {
-                        Row row = sheet.createRow(rowNum++);
-                        row.createCell(0).setCellValue(current.getLexEntryId());
+                        Row row = sheet.createRow(rowNum.getAndIncrement());
+                        row.createCell(0).setCellValue(current.getEntryId());
                         row.createCell(1).setCellValue(infinitiv);
                     }
                 }
             }
-        }
+        });
 
         return terminateExcel(workbook);
     }
 
     @Override
-    public ByteArrayInputStream ladinEntriesWithCommaAndSlash(Language language, HttpServletRequest request) throws IOException, DatabaseException {
+    public ByteArrayInputStream ladinEntriesWithCommaAndSlash(Language language, HttpServletRequest request) throws IOException {
         String[] headers = {"ID", "RStichwort", "RGenus"};
         Workbook workbook = initializeExcel(language.getName() + " - endataziuns che cuntegnan ina comma en il lemma rumantsch ed in slash («/») en il champ genus", headers);
         Sheet sheet = workbook.getSheetAt(0);
 
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        AtomicInteger rowNum = new AtomicInteger(0);
 
-        int rowNum = 1;
-
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry entry = Converter.convertToLexEntry(object);
-
-            LemmaVersion current = entry.getCurrent();
+        dictionaryService.getStreamForEntries().forEach(entry -> {
+            EntryVersionDto current = entry.getCurrent();
 
             if (current != null) {
-                String RStichwort = current.getLemmaValues().get("RStichwort");
-                String RGenus = current.getLemmaValues().get("RGenus");
+                String RStichwort = current.getRmStichwort();
+                String RGenus = current.getRmGenus();
 
                 if (RStichwort != null && RGenus != null) {
-
                     if (RStichwort.contains(",") && RGenus.contains("/")) {
-                        Row row = sheet.createRow(rowNum++);
-                        row.createCell(0).setCellValue(current.getLexEntryId());
+                        Row row = sheet.createRow(rowNum.getAndIncrement());
+                        row.createCell(0).setCellValue(current.getEntryId());
                         row.createCell(1).setCellValue(RStichwort);
                         row.createCell(2).setCellValue(RGenus);
                     }
                 }
             }
-        }
+        });
 
         return terminateExcel(workbook);
     }

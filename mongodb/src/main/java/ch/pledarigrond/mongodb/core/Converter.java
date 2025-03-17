@@ -17,52 +17,15 @@ package ch.pledarigrond.mongodb.core;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * Converts {@link LexEntry} and {@link LemmaVersion} objects to/from
- * {@link DBObject} objects.
- *
- * @return
- */
 public class Converter {
-
-	public static BasicDBObject convertLexEntry(LexEntry entry) {
-		BasicDBObject object = new BasicDBObject();
-		List<LemmaVersion> vHistory = entry.getVersionHistory();
-		BasicDBList versions = new BasicDBList();
-		for (LemmaVersion lemmaVersion : vHistory) {
-			BasicDBObject obj = convertLemmaVersion(lemmaVersion);
-			versions.add(obj);
-		}
-		object.put(LexEntry.VERSIONS, versions);
-		if (entry.getId() != null) {
-			object.put(LexEntry.ID, new ObjectId(entry.getId()));
-		}
-		object.put(LexEntry.CURRENT, entry.getCurrentId());
-		object.put(LexEntry.NEXT_INTERNAL_ID, entry.getNextInternalId());
-		object.put(LexEntry.CHANGE_STAMP, entry.getChangeStamp());
-		return object;
-	}
-
-	private static BasicDBObject convertLemmaVersion(LemmaVersion lemmaVersion) {
-		BasicDBObject obj = new BasicDBObject();
-		Map<String, String> toStore = new HashMap<String, String>(lemmaVersion.getLemmaValues());
-		toStore.keySet().removeAll(LemmaVersion.PG_KEYS);
-		toStore.putAll(lemmaVersion.getPgValues());
-		obj.putAll(toStore);
-		obj.put(LemmaVersion.TIMESTAMP, lemmaVersion.getTimestamp());
-		return obj;
-	}
 
 	public static LexEntry convertToLexEntry(DBObject obj) {
 		ArrayList<Document> versions = (ArrayList<Document>) obj.get(LexEntry.VERSIONS);
