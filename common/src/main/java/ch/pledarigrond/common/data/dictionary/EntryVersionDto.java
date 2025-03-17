@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class EntryVersionDto {
     private String versionId = UUID.randomUUID().toString();
-    private String entryId;
+    private String entryId; // TODO: implement this
 
     // info romansh
     @Size(max = 200) private String rmStichwort;

@@ -1,23 +1,18 @@
 package ch.pledarigrond.api.services;
 
-import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.exception.DatabaseException;
 
 import java.net.UnknownHostException;
 
 public interface AutomaticGenerationService {
 
-    boolean generateNounForms(Language language);
+    boolean generateNounForms();
 
-    boolean generateAdjectiveForms(Language language);
+    boolean generateAdjectiveForms();
 
-    boolean generateVerbForms(Language language);
+    boolean generateVerbForms();
 
-    boolean fixAutomaticDuplicationErrors(Language language) throws DatabaseException, UnknownHostException;
-
-    boolean removeSubstIndicationIfGenusIsSet(Language language) throws DatabaseException, UnknownHostException;
-
-    String getVerbListWithConjugationClass(Language language);
+    String getVerbListWithConjugationClass();
 
     boolean migrateDb() throws DatabaseException, UnknownHostException;
 }
