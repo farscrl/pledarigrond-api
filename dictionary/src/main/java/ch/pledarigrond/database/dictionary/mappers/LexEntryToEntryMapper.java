@@ -55,10 +55,13 @@ public class LexEntryToEntryMapper {
         dv.setUserComment(lv.getLemmaValues().get("contact_comment")); // TODO: or user_comment ?
         dv.setUserEmail(lv.getLemmaValues().get("contact_email")); // TODO: or user_email ?
 
-        dv.setCreator(lv.getUserId());
+        if (lv.getVerifierId() != null) {
+            dv.setCreator(lv.getVerifierId());
+        } else {
+            dv.setCreator(lv.getUserId());
+        }
         dv.setCreatorIp(lv.getIP());
         dv.setCreatorRole(lv.getCreatorRole());
-        dv.setVerifier(lv.getVerifierId());
 
         dv.setRmStichwort(lv.getLemmaValues().get("RStichwort"));
         dv.setRmStichwortSort(lv.getLemmaValues().get("RStichwort_sort"));

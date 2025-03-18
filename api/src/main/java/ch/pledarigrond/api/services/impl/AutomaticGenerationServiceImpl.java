@@ -11,6 +11,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
@@ -19,7 +20,6 @@ import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.dictionary.entities.Entry;
-import ch.pledarigrond.database.dictionary.mappers.EntryMapper;
 import ch.pledarigrond.database.dictionary.mappers.LexEntryToEntryMapper;
 import ch.pledarigrond.database.dictionary.repositories.EntryRepository;
 import ch.pledarigrond.database.services.DictionaryService;
@@ -77,9 +77,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Autowired
     private InflectionService inflectionService;
-
-    @Autowired
-    private EntryMapper entryMapper;
 
     @Override
     public boolean generateNounForms() {
@@ -244,7 +241,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         try {
             versions = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while searching for versions", e);
             return false;
         }
 
@@ -256,11 +253,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             String RStichwort = version.getRmStichwort();
             String DStichwort = version.getDeStichwort();
 
-            EntryDto entry = null;
+            EntryDto entry;
             try {
                 entry = editorService.getEntry(version.getEntryId());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Error while searching for entry", e);
                 return false;
             }
 
@@ -271,7 +268,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
-            InflectionDto inflectionResponse = null;
+            InflectionDto inflectionResponse;
             try {
                 inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.NOUN, newVersion.getRmStichwort(), newVersion.getRmGenus(), newVersion.getRmFlex());
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
@@ -285,7 +282,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflectionResponse);
             newVersion.setAutomaticChange(true);
-            dictionaryService.addSuggestion(entry.getEntryId(), newVersion);
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
         }
 
         return true;
@@ -304,7 +301,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         try {
             versions = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while searching for versions", e);
             return false;
         }
 
@@ -315,11 +312,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             String RStichwort = version.getRmStichwort();
             String DStichwort = version.getDeStichwort();
 
-            EntryDto entry = null;
+            EntryDto entry;
             try {
                 entry = editorService.getEntry(version.getEntryId());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Error while searching for entry", e);
                 return false;
             }
 
@@ -330,7 +327,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
-            InflectionDto inflectionResponse = null;
+            InflectionDto inflectionResponse;
             try {
                 inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.ADJECTIVE, newVersion.getRmStichwort(), newVersion.getRmGenus(), newVersion.getRmFlex());
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
@@ -344,7 +341,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflectionResponse);
             newVersion.setAutomaticChange(true);
-            dictionaryService.addSuggestion(entry.getEntryId(), newVersion);
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
         }
 
         return true;
@@ -363,7 +360,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         try {
             versions = editorService.search(searchCriteria, pagination);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while searching for versions", e);
             return false;
         }
 
@@ -373,11 +370,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             EntryVersionDto version = versions.getContent().get(i);
             logger.debug(version.toString());
 
-            EntryDto entry = null;
+            EntryDto entry;
             try {
                 entry = editorService.getEntry(version.getEntryId());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Error while searching for entry", e);
                 return false;
             }
 
@@ -388,7 +385,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
-            InflectionResultDto inflection = null;
+            InflectionResultDto inflection;
             try {
                 inflection = sursilvanInflectionComparatorUtil.getInflection(newVersion.getRmStichwort());
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
@@ -400,10 +397,10 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflection.getInflectionResponse());
             newVersion.setAutomaticChange(true);
-            dictionaryService.addSuggestion(entry.getEntryId(), newVersion);
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
         }
 
-        logger.warn("Generated verbs for grammar value: " + grammarValue + ". Correct: " + correct + " / Not correct: " + nuncorrect);
+        logger.warn("Generated verbs for grammar value: {}. Correct: {} / Not correct: {}", grammarValue, correct, nuncorrect);
 
         return true;
     }

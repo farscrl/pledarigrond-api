@@ -1,5 +1,6 @@
 package ch.pledarigrond.database.dictionary.entities;
 
+import ch.pledarigrond.common.data.common.Action;
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.dictionary.VersionStatus;
 import ch.pledarigrond.database.dictionary.entities.inflection.Inflection;
@@ -12,8 +13,8 @@ import java.util.UUID;
 
 @Data
 public class EntryVersion {
-
     private String versionId = UUID.randomUUID().toString();
+    private String entryId;
 
     // info romansh
     private String rmStichwort;
@@ -44,17 +45,18 @@ public class EntryVersion {
     // general info
     private String categories;
     private List<Example> examples = new ArrayList<>();
+
+    // metadata
     private String userComment;
     private String userEmail;
 
     // technical info
     private Instant timestamp = Instant.now();
-    private VersionStatus versionStatus = VersionStatus.UNVERIFIED;
-
+    private Action action;
+    private VersionStatus versionStatus = VersionStatus.UNVERIFIED; // TODO: remove?
     private String creator;
     private String creatorIp;
     private EditorRole creatorRole;
-    private String verifier;
 
     private boolean automaticChange = false;
 }

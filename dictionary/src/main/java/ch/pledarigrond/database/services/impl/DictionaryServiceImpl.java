@@ -1,6 +1,8 @@
 package ch.pledarigrond.database.services.impl;
 
+import ch.pledarigrond.common.data.common.Action;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.exception.dictionary.EntityNotFoundException;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
@@ -50,60 +52,33 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public EntryDto addEntry(EntryVersionDto version, boolean asSuggestion, String reviewer) {
+    public EntryDto addEntry(EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo) {
         EntryVersion entryVersion = entryMapper.toEntryVersion(version);
-        Entry entry = new Entry();
-        if (!asSuggestion) {
-            entryVersion.setVerifier(reviewer);
-        }
-        entry.getVersions().add(entryVersion);
-        if (asSuggestion) {
-            entry.getSuggestions().add(entryVersion);
-        } else {
-            entry.setCurrent(entryVersion);
-        }
+        Entry entry = Entry.createEntry(entryVersion, asSuggestion, userInfo);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
     @Override
-    public EntryDto addSuggestion(String entryId, EntryVersionDto version) {
+    public EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo) {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-
         EntryVersion entryVersion = entryMapper.toEntryVersion(version);
-        entry.getSuggestions().add(entryVersion);
-        entry.getVersions().add(entryVersion);
+
+        entry.addVersion(entryVersion, userInfo, Action.SUGGESTED_MODIFICATION);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
     @Override
-    public EntryDto accept(String entryId, String versionIdToAccept, String reviewer) throws SuggestionNotFoundException {
+    public EntryDto accept(String entryId, String versionIdToAccept, UserInfoDto userInfo) throws SuggestionNotFoundException {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-
-        EntryVersion versionToAccept = entry.getSuggestions().stream()
-                .filter(v -> Objects.equals(v.getVersionId(), versionIdToAccept))
-                .findFirst()
-                .orElseThrow(() -> new SuggestionNotFoundException(versionIdToAccept));
-
-        versionToAccept.setVerifier(reviewer);
-
-        entry.getSuggestions().removeIf(v -> v.getVersionId().equals(versionIdToAccept));
-        entry.setCurrent(versionToAccept);
+        entry.acceptVersion(versionIdToAccept, userInfo);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
     @Override
-    public EntryDto reject(String entryId, String versionIdToReject, String reviewer) throws SuggestionNotFoundException {
+    public EntryDto reject(String entryId, String versionIdToReject, UserInfoDto userInfo) throws SuggestionNotFoundException {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
 
-        EntryVersion versionToReject = entry.getSuggestions().stream()
-                .filter(v -> Objects.equals(v.getVersionId(), versionIdToReject))
-                .findFirst()
-                .orElseThrow(() -> new SuggestionNotFoundException(versionIdToReject));
-
-        versionToReject.setVerifier(reviewer);
-
-        entry.getSuggestions().removeIf(v -> v.getVersionId().equals(versionIdToReject));
-        entry.getVersions().removeIf(v -> v.getVersionId().equals(versionIdToReject));
+        entry.refuseVersion(versionIdToReject, userInfo);
 
         if (entry.getCurrent() == null && entry.getSuggestions().isEmpty()) {
             entryRepository.delete(entry);
@@ -115,29 +90,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public void delete(String entryId) {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-
         entryRepository.delete(entry);
-    }
-
-    @Override
-    public EntryDto updateVersion(String entryId, EntryVersionDto version) throws SuggestionNotFoundException {
-        Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-
-        boolean exists = entry.getSuggestions().stream().anyMatch(v -> Objects.equals(v.getVersionId(), version.getVersionId()));
-        if (!exists) {
-            throw new SuggestionNotFoundException(version.getVersionId());
-        }
-
-        EntryVersion entryVersion = entryMapper.toEntryVersion(version);
-        replaceSuggestion(entry, entryVersion);
-
-        return entryMapper.toEntryDto(entryRepository.save(entry));
-    }
-
-    @Override
-    public EntryDto updateAndAcceptVersion(String entryId, EntryVersionDto modified, String reviewer) throws SuggestionNotFoundException {
-        updateVersion(entryId, modified);
-        return accept(entryId, modified.getVersionId(), reviewer);
     }
 
     @Override

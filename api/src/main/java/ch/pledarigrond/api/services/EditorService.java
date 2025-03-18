@@ -28,7 +28,7 @@ public interface EditorService {
 
     EntryDto addEntry(EntryVersionDto version, boolean asSuggestion) throws IOException;
 
-    EntryDto addSuggestion(String entryId, EntryVersionDto version) throws IOException;
+    EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion) throws IOException;
 
     EntryDto accept(String entryId, String versionIdToAccept) throws SuggestionNotFoundException, IOException;
 
@@ -36,15 +36,11 @@ public interface EditorService {
 
     void delete(String entryId) throws IOException;
 
-    EntryDto acceptAfterUpdateSuggestion(String entryId, EntryVersionDto modified) throws SuggestionNotFoundException, IOException;
-
     EntryDto reviewSuggestionLater(String entryId, String versionId) throws InvalidReviewLaterException, SuggestionNotFoundException, IOException;
 
     EntryDto dropOutdatedHistory(String entryId) throws IOException;
 
     Page<EntryVersionDto> search(SearchCriteria searchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
-
-    EntryDto updateSuggestion(String entryId, EntryVersionDto newVersion) throws SuggestionNotFoundException, IOException;
 
     ArrayList<EntryVersionDto> getOrder(String lemma, DictionaryLanguage dictionaryLanguage) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 

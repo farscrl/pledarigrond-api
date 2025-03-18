@@ -2,6 +2,7 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.ImportService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.ExampleDto;
 import ch.pledarigrond.database.services.DictionaryService;
@@ -216,7 +217,7 @@ public class ImportServiceImpl implements ImportService {
     }
 
     private void finalizeVersion(EntryVersionDto ev) {
-        dictionaryService.addEntry(ev, false, "import@pledarigrond.ch");
+        dictionaryService.addEntry(ev, false, UserInfoDto.getSystemDto());
         logger.info("Inserted: {}", ev.getRmStichwort());
     }
 }

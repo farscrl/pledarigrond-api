@@ -1,5 +1,6 @@
 package ch.pledarigrond.common.data.dictionary;
 
+import ch.pledarigrond.common.data.common.Action;
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class EntryVersionDto {
     private String versionId = UUID.randomUUID().toString();
-    private String entryId; // TODO: implement this
+    private String entryId;
 
     // info romansh
     @Size(max = 200) private String rmStichwort;
@@ -51,12 +52,12 @@ public class EntryVersionDto {
 
     // technical info
     private Instant timestamp;
+    private Action action;
     private VersionStatus versionStatus;
 
     @Size(max = 200) private String creator;
     @Size(max = 200) private String creatorIp;
     @Size(max = 200) private EditorRole creatorRole;
-    @Size(max = 200) private String verifier;
 
     private boolean automaticChange = false;
 }

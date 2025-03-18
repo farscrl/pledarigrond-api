@@ -38,7 +38,7 @@ public class ModifyController {
     public ResponseEntity<?> suggestModification(@PathVariable("language") Language language, @PathVariable("id") String entryId, @Validated @RequestBody EntryVersionDto newVersion) {
         try {
             validateUserModification(newVersion);
-            EntryDto entry = editorService.addSuggestion(entryId, newVersion);
+            EntryDto entry = editorService.addVersion(entryId, newVersion, true);
             return ResponseEntity.ok(entry);
         } catch (Exception e) {
             logger.error("Error while suggesting modification for entry ID: {}", entryId, e);

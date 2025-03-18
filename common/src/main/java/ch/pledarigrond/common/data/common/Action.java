@@ -1,0 +1,14 @@
+package ch.pledarigrond.common.data.common;
+
+public enum Action {
+    SUGGESTED_ENTRY,
+    ACCEPTED_ENTRY,
+    CREATED_ENTRY,
+
+    SUGGESTED_MODIFICATION,
+    ACCEPTED_MODIFICATION,
+    REFUSED_MODIFICATION,
+    CREATED_MODIFICATION,
+
+    CHANGED_ORDER,
+}

@@ -121,10 +121,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/entries/{id}/modify_and_accept_version")
-    ResponseEntity<?> modifyAndAcceptVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
+    @PostMapping("/entries/{id}/add_version")
+    ResponseEntity<?> addVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
-            return ResponseEntity.ok(editorService.acceptAfterUpdateSuggestion(entryId, modifiedVersion));
+            return ResponseEntity.ok(editorService.addVersion(entryId, modifiedVersion, false));
         } catch (Exception e) {
             logger.error("Error while modifying and accepting version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -132,10 +132,10 @@ public class EditorController {
     }
 
     @PreAuthorize("hasPermission(#language, 'editor')")
-    @PostMapping("/entries/{id}/modify_version")
-    ResponseEntity<?> modifyVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
+    @PostMapping("/entries/{id}/suggest_version")
+    ResponseEntity<?> suggestVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
-            return ResponseEntity.ok(editorService.updateSuggestion(entryId, modifiedVersion));
+            return ResponseEntity.ok(editorService.addVersion(entryId, modifiedVersion, true));
         } catch (Exception e) {
             logger.error("Error while modifying version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
