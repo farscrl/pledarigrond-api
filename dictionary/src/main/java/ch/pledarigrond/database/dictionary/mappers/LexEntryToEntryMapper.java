@@ -214,10 +214,10 @@ public class LexEntryToEntryMapper {
         imperativ.setSingular(lv.get("imperativ1"));
         imperativ.setPlural(lv.get("imperativ2"));
         if (language.name().equals("puter") || language.name().equals("vallader")) {
-            imperativ.setForm1(lv.get("imperativ3"));
-            imperativ.setForm1(lv.get("imperativ4"));
-            imperativ.setForm3(lv.get("imperativ5"));
-            imperativ.setForm4(lv.get("imperativ6"));
+            imperativ.setForm3(lv.get("imperativ3"));
+            imperativ.setForm4(lv.get("imperativ4"));
+            imperativ.setForm5(lv.get("imperativ5"));
+            imperativ.setForm6(lv.get("imperativ6"));
         }
         verb.setImperativ(imperativ);
 

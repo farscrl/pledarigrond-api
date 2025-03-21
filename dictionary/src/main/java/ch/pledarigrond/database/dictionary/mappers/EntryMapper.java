@@ -18,24 +18,24 @@ public interface EntryMapper {
     EntryVersionDto toEntryVersionDto(EntryVersion entryVersion);
     EntryVersion toEntryVersion(EntryVersionDto entryDto);
 
-    ExampleDto toExampleDto(Entry entry);
+    ExampleDto toExampleDto(Example example);
     Example toExample(ExampleDto exampleDto);
 
-    InflectionDto toInflectionDto(Entry entry);
+    InflectionDto toInflectionDto(Inflection inflection);
     Inflection toInflection(InflectionDto inflectionDto);
 
-    VerbDto toVerbDto(Entry entry);
+    VerbDto toVerbDto(Verb verb);
     Verb toVerb(VerbDto verbDto);
 
-    NounDto toNounDto(Entry entry);
+    NounDto toNounDto(Noun noun);
     Noun toNoun(NounDto nounDto);
 
-    AdjectiveDto toAdjectiveDto(Entry entry);
+    AdjectiveDto toAdjectiveDto(Adjective adjective);
     Adjective toAdjective(AdjectiveDto adjectiveDto);
 
-    PronounDto toPronounDto(Entry entry);
+    PronounDto toPronounDto(Pronoun pronoun);
     Pronoun toPronoun(PronounDto pronounDto);
 
-    OtherDto toOtherDto(Entry entry);
+    OtherDto toOtherDto(Other other);
     Other toOther(OtherDto otherDto);
 }

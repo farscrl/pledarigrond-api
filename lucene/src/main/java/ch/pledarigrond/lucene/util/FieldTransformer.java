@@ -63,7 +63,6 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.creator, ev.getCreator(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.creatorIp, ev.getCreatorIp(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.creatorRole, ev.getCreatorRole().toString(), allFieldsList);
-        toFieldUpdateAllFields(doc, FN.verifier, ev.getVerifier(), allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.automaticChange, ev.isAutomaticChange() + "", allFieldsList);
 
@@ -172,7 +171,6 @@ public class FieldTransformer {
             ev.setCreator(toValue(doc, FN.creator));
             ev.setCreatorIp(toValue(doc, FN.creatorIp));
             ev.setCreatorRole(EditorRole.valueOf(toValue(doc, FN.creatorRole)));
-            ev.setVerifier(toValue(doc, FN.verifier));
 
             ev.setAutomaticChange(Boolean.parseBoolean(toValue(doc, FN.automaticChange)));
         }

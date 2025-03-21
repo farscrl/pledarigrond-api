@@ -16,7 +16,7 @@ public class SearchCriteria {
     private String category = null;
     private Boolean onlyAutomaticChanged = false;
     private Boolean excludeAutomaticChanged = false;
-    private LemmaVersion.Verification verification = null;
-    private AutomaticChangesType automaticChangesType = AutomaticChangesType.ALL;
+    private LemmaVersion.Verification verification = null; // TODO: change me
+    private AutomaticChangesType automaticChangesType = AutomaticChangesType.ALL; // TODO: change me
     private Boolean showReviewLater = null;
 }

@@ -4,12 +4,14 @@ import lombok.Data;
 
 @Data
 public class Adjective {
-    public String baseForm;
+    private String baseForm;
 
-    public String mSingular;
-    public String fSingular;
-    public String mPlural;
-    public String fPlural;
+    private String mSingular;
+    private String fSingular;
+    private String mPlural;
+    private String fPlural;
 
-    public String adverbialForm;
+    private String adverbialForm;
+
+    private String predicative;
 }

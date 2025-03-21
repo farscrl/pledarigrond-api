@@ -40,7 +40,6 @@ public class FN {
     public static final String creator = "creator";
     public static final String creatorIp = "creatorIp";
     public static final String creatorRole = "creatorRole";
-    public static final String verifier = "verifier";
 
     public static final String automaticChange = "automaticChange";
 
