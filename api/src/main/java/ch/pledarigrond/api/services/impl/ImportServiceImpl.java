@@ -6,6 +6,7 @@ import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.ExampleDto;
 import ch.pledarigrond.database.services.DictionaryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,9 +65,6 @@ public class ImportServiceImpl implements ImportService {
                             logger.error("Import failed for file: {}", entry.getName());
                             return false;
                         }
-                    } catch (InvalidEntryException e) {
-                        logger.error("Import failed for file: {}", entry.getName());
-                        return false;
                     }
                 }
             }
@@ -78,7 +75,7 @@ public class ImportServiceImpl implements ImportService {
         return true;
     }
 
-    private boolean processWorkbook(InputStream xlsxInputStream) throws IOException, InvalidEntryException {
+    private boolean processWorkbook(InputStream xlsxInputStream) throws IOException {
         Workbook workbook = new XSSFWorkbook(xlsxInputStream);
         Sheet sheet = workbook.getSheetAt(0);
 

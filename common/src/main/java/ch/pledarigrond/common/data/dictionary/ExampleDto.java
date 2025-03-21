@@ -3,7 +3,7 @@ package ch.pledarigrond.common.data.dictionary;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor

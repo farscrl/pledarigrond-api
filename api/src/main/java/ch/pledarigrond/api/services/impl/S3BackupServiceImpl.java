@@ -2,7 +2,6 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.S3BackupService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.Language;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

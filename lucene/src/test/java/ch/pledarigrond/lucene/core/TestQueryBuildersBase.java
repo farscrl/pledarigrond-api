@@ -3,11 +3,10 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.data.domain.Page;
 
 import java.io.BufferedReader;
@@ -19,18 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 public abstract class TestQueryBuildersBase {
 
 	protected LuceneIndexManager luceneIndexManager;
 
 	protected File indexDir;
 
-	@Before
+	@BeforeEach
 	public void beforeTest() throws Exception {
 		Language language = Language.SURMIRAN;
 		File file = File.createTempFile("pledarigrond", "test");
 		indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID() + "_idx");
-		Assert.assertFalse(indexDir.exists());
+		assertFalse(indexDir.exists());
 		boolean success = indexDir.mkdir();
 		if (!success) {
 			throw new Exception("Could not create index directory");
@@ -43,35 +44,38 @@ public abstract class TestQueryBuildersBase {
         assert input != null;
         BufferedReader br = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
 		String line;
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		int counter = 0;
 		while((line = br.readLine()) != null) {
 			String[] parts = line.split("\t");
-			LemmaVersion lv = new LemmaVersion();
-			lv.setValue("DStichwort", parts[0]);
-			lv.setValue("RStichwort", parts[1]);
-			lv.setValue("RStichwort_sort", "1");
-			lv.setValue("DStichwort_sort", "1");
-			lv.setVerification(LemmaVersion.Verification.ACCEPTED);
-			lv.setStatus(LemmaVersion.Status.NEW_ENTRY);
-			LexEntry entry = new LexEntry(lv);
-			entry.setId(counter+"");
+			EntryDto entry = new EntryDto();
+			EntryVersionDto ev = new EntryVersionDto();
+			ev.setDeStichwort(parts[0]);
+			ev.setRmStichwort(parts[1]);
+			ev.setDeStichwortSort("1");
+			ev.setRmStichwortSort("1");
+			entry.setCurrent(ev);
+			entry.setEntryId(counter+"");
 			counter++;
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 	}
 	
-	@After
+	@AfterEach
 	public void afterTest() {
 		deleteRecursive(indexDir);
 	}
 
-	protected String[] getStrings(String key, Page<LemmaVersion> result) {
+	protected String[] getStrings(FieldName field, Page<EntryVersionDto> dto) {
 		List<String> toReturn = new ArrayList<>();
-		List<LemmaVersion> entries = result.getContent();
-		for (LemmaVersion lv : entries) {
-			toReturn.add(lv.getEntryValue(key));
+		List<EntryVersionDto> entries = dto.getContent();
+		for (EntryVersionDto ev : entries) {
+			if (field == FieldName.RMSTICHWORT) {
+				toReturn.add(ev.getRmStichwort());
+			} else if (field == FieldName.DESTICHWORT) {
+				toReturn.add(ev.getDeStichwort());
+			}
 		}
 		return toReturn.toArray(new String[0]);
 	}
@@ -100,5 +104,9 @@ public abstract class TestQueryBuildersBase {
 			}
 		}
 		System.out.println(" }");
+	}
+
+	protected enum FieldName {
+		DESTICHWORT, RMSTICHWORT
 	}
 }

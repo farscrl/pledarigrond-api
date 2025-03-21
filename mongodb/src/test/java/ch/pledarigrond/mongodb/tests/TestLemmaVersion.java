@@ -16,8 +16,12 @@
 package ch.pledarigrond.mongodb.tests;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestLemmaVersion {
 
@@ -26,40 +30,40 @@ public class TestLemmaVersion {
 		LemmaVersion l = new LemmaVersion();
 		l.setStatus(LemmaVersion.Status.NEW_ENTRY);
 		LemmaVersion.Status s = l.getStatus();
-		Assert.assertEquals(LemmaVersion.Status.NEW_ENTRY, s);
+		assertEquals(LemmaVersion.Status.NEW_ENTRY, s);
 		l.setStatus(LemmaVersion.Status.DELETED);
 		s = l.getStatus();
-		Assert.assertEquals(LemmaVersion.Status.DELETED, s);
+		assertEquals(LemmaVersion.Status.DELETED, s);
 	}
 
 	@Test
 	public void testUserId() {
 		LemmaVersion l = new LemmaVersion();
 		l.setUserId("a");
-		Assert.assertEquals("a", l.getUserId());
+		assertEquals("a", l.getUserId());
 		l.setUserId("b");
-		Assert.assertEquals("b", l.getUserId());
+		assertEquals("b", l.getUserId());
 	}
 
 	@Test
 	public void testTimeStamp() {
 		LemmaVersion l = new LemmaVersion();
 		l.setTimestamp(10L);
-		Assert.assertEquals(10, (long) l.getTimestamp());
+		assertEquals(10, (long) l.getTimestamp());
 		l.setTimestamp(20L);
-		Assert.assertEquals(20, (long) l.getTimestamp());
+		assertEquals(20, (long) l.getTimestamp());
 	}
 
 	@Test
 	public void testValues() {
 		LemmaVersion l = new LemmaVersion();
-		Assert.assertNotNull(l.getLemmaValues());
-		Assert.assertEquals(0, l.getLemmaValues().size());
+		assertNotNull(l.getLemmaValues());
+		assertEquals(0, l.getLemmaValues().size());
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("a", "b");
 		map.put("c", "d");
 		l.setLemmaValues(map);
-		Assert.assertEquals(map, l.getLemmaValues());
+		assertEquals(map, l.getLemmaValues());
 	}
 
 }

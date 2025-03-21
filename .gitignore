@@ -15,6 +15,7 @@
 /data/corpus/
 /logs/app.log
 /api/logs/app.log
+/api/data-test/
 
 # macOS
 .DS_Store

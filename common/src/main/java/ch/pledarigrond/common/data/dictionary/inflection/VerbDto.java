@@ -1,9 +1,8 @@
 package ch.pledarigrond.common.data.dictionary.inflection;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor

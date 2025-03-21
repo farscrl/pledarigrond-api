@@ -1,21 +1,16 @@
 package ch.pledarigrond.common.config;
 
 import ch.pledarigrond.common.data.common.Language;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
-@Service
 @Data
-@Configuration
-@EnableConfigurationProperties
+@Component
 @ConfigurationProperties(prefix = "pg")
 public class PgEnvironment {
 

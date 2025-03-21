@@ -2,14 +2,15 @@ package ch.pledarigrond.lucene.core;
 
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public abstract class BaseLuceneIndexTest {
 
@@ -18,19 +19,19 @@ public abstract class BaseLuceneIndexTest {
 
     private File indexDir;
 
-    @Before
+    @BeforeEach
     public void beforeTest() throws Exception {
         Language language = Language.SURMIRAN;
         File file = File.createTempFile("pledarigrond", "test");
         indexDir = new File(file.getParentFile(), "pg_test" + UUID.randomUUID() + "_idx");
-        Assert.assertFalse(indexDir.exists());
+        assertFalse(indexDir.exists());
         indexDir.mkdir();
         file.deleteOnExit();
         luceneConfiguration = new LuceneConfiguration(language, indexDir.getAbsolutePath());
         luceneIndexManager = new LuceneIndexManager(luceneConfiguration);
     }
 
-    @After
+    @AfterEach
     public void afterTest() {
         deleteRecursive(indexDir);
     }
@@ -47,22 +48,22 @@ public abstract class BaseLuceneIndexTest {
         }
     }
 
-    protected LemmaVersion generateValidLemmaVersion(String DStichwort, String RStichwort) {
-        LemmaVersion lv = new LemmaVersion();
-        lv.putEntryValue("deStichwort", DStichwort);
-        lv.putEntryValue("rmStichwort", RStichwort);
-        return lv;
+    protected EntryVersionDto generateValidEntryVersionDto(String deStichwort, String rmStichwort) {
+        EntryVersionDto ev = new EntryVersionDto();
+        ev.setDeStichwort(deStichwort);
+        ev.setRmStichwort(rmStichwort);
+        return ev;
     }
 
-    protected LexEntry generateValidEntry() {
-        LemmaVersion lv = generateValidLemmaVersion("a" + UUID.randomUUID(), "b" + UUID.randomUUID());
-        return generateValidEntryFromLemmaVersion(lv);
+    protected EntryDto generateValidEntry() {
+        EntryVersionDto lv = generateValidEntryVersionDto("a" + UUID.randomUUID(), "b" + UUID.randomUUID());
+        return generateValidEntryFromEntryVersionDto(lv);
     }
 
-    protected LexEntry generateValidEntryFromLemmaVersion(LemmaVersion lv) {
-        LexEntry entry = new LexEntry(lv);
-        lv.setVerification(LemmaVersion.Verification.ACCEPTED);
-        entry.setId(UUID.randomUUID().toString());
+    protected EntryDto generateValidEntryFromEntryVersionDto(EntryVersionDto ev) {
+        EntryDto entry = new EntryDto();
+        entry.setCurrent(ev);
+        entry.setEntryId(UUID.randomUUID().toString());
         return entry;
     }
 }

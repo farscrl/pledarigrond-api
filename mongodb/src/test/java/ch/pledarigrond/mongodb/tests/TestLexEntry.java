@@ -17,10 +17,11 @@ package ch.pledarigrond.mongodb.tests;
 
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
-import org.junit.Assert ;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestLexEntry {
 
@@ -30,23 +31,23 @@ public class TestLexEntry {
 		version.putEntryValue("a", "b");
 		LexEntry entry = new LexEntry(version);
 		List<LemmaVersion> history = entry.getVersionHistory();
-		Assert.assertEquals(1, history.size());
-		Assert.assertTrue(history.contains(version));
-		Assert.assertTrue(entry.hasUnapprovedVersions());
-		Assert.assertEquals(1, entry.getUnapprovedVersions().size());
-		Assert.assertEquals(version, entry.getCurrent());
+		assertEquals(1, history.size());
+		assertTrue(history.contains(version));
+		assertTrue(entry.hasUnapprovedVersions());
+		assertEquals(1, entry.getUnapprovedVersions().size());
+		assertEquals(version, entry.getCurrent());
 		LemmaVersion version2 = new LemmaVersion();
 		version2.putEntryValue("c", "d");
-		Assert.assertNotSame(version, version2);
+		assertNotSame(version, version2);
 		entry.addLemma(version2);
 		history = entry.getVersionHistory();
-		Assert.assertEquals(2, history.size());
-		Assert.assertTrue(history.contains(version));
-		Assert.assertTrue(history.contains(version2));
-		Assert.assertEquals(2, entry.getUnapprovedVersions().size());
-		Assert.assertEquals(version, entry.getCurrent());
+		assertEquals(2, history.size());
+		assertTrue(history.contains(version));
+		assertTrue(history.contains(version2));
+		assertEquals(2, entry.getUnapprovedVersions().size());
+		assertEquals(version, entry.getCurrent());
 		entry.setCurrent(version2);
-		Assert.assertEquals(version2, entry.getCurrent());
+		assertEquals(version2, entry.getCurrent());
 		
 	}
 	

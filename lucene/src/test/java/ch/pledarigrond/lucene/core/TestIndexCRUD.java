@@ -1,17 +1,19 @@
 package ch.pledarigrond.lucene.core;
 
-import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.SearchMethod;
+import ch.pledarigrond.common.data.dictionary.EntryDto;
+import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class TestIndexCRUD extends BaseLuceneIndexTest {
@@ -21,139 +23,137 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 	@Test
 	public void testGetStatistics() {
 		IndexStatistics stats = luceneIndexManager.getIndexStatistics();
-		Assert.assertNotNull(stats);
+		assertNotNull(stats);
 	}
 	
 	@Test
 	public void testDropIndex() throws Exception  {
 		luceneIndexManager.dropIndex();
 		IndexStatistics statistics = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(0, statistics.getNumberOfEntries());
+		assertEquals(0, statistics.getNumberOfEntries());
 
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 		statistics = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(entries.size(),statistics.getNumberOfEntries());
+		assertEquals(entries.size(),statistics.getNumberOfEntries());
 
 		luceneIndexManager.dropIndex();
 		statistics = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(0, statistics.getNumberOfEntries());
+		assertEquals(0, statistics.getNumberOfEntries());
 	}
 	
 	
 	@Test
 	public void testCreateIndex() throws Exception  {
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 		IndexStatistics statistics = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(entries.size(),statistics.getNumberOfEntries());
+		assertEquals(entries.size(),statistics.getNumberOfEntries());
 	}
 	
 	@Test
 	public void testUpdateIndex() throws Exception  {
 		testCreateIndex();
 		IndexStatistics beforeUpdate = luceneIndexManager.getIndexStatistics();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
 			entries.add(generateValidEntry());
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(afterUpdate.getNumberOfEntries(), beforeUpdate.getNumberOfEntries() * 2);
+		assertEquals(afterUpdate.getNumberOfEntries(), beforeUpdate.getNumberOfEntries() * 2);
 	}
 
 	@Test
 	public void testUpdateEntityIndex() throws Exception  {
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
-			LexEntry entry = generateValidEntry();
-			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
-			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
+			EntryDto entry = generateValidEntry();
+			entry.getCurrent().setDeStichwort("d" + i);
+			entry.getCurrent().setRmStichwort("r" + i);
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(5, afterUpdate.getNumberOfEntries());
+		assertEquals(5, afterUpdate.getNumberOfEntries());
 
-		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r2"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
+		Page<EntryVersionDto> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r2"), IndexTestHelpers.getPagination());
+		assertEquals(1, result.getTotalElements());
 
 		// Update existing lemma version
-		LemmaVersion lemmaVersion = result.getContent().get(0);
-		lemmaVersion.getLemmaValues().put("RStichwort", "r22");
-		LexEntry entry = generateValidEntryFromLemmaVersion(lemmaVersion);
-		entry.setId(lemmaVersion.getLexEntryId());
+		EntryVersionDto EntryVersionDto = result.getContent().get(0);
+		EntryVersionDto.setRmStichwort("r22");
+		EntryDto entry = generateValidEntryFromEntryVersionDto(EntryVersionDto);
+		entry.setEntryId(EntryVersionDto.getEntryId());
 		luceneIndexManager.update(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r2"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(0, result.getTotalElements());
+		assertEquals(0, result.getTotalElements());
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
+		assertEquals(1, result.getTotalElements());
 
 		// adding modified version
-		lemmaVersion = result.getContent().get(0);
-		entry = generateValidEntryFromLemmaVersion(lemmaVersion);
-		entry.setId(lemmaVersion.getLexEntryId());
+		EntryVersionDto = result.getContent().get(0);
+		entry = generateValidEntryFromEntryVersionDto(EntryVersionDto);
+		entry.setEntryId(EntryVersionDto.getEntryId());
 
-		LemmaVersion modifiedLemmaVersion = new LemmaVersion();
-		modifiedLemmaVersion.putEntryValue("DStichwort", "d22");
-		modifiedLemmaVersion.putEntryValue("RStichwort", "r22");
-		modifiedLemmaVersion.setVerification(LemmaVersion.Verification.UNVERIFIED);
-		entry.addLemma(modifiedLemmaVersion);
+		EntryVersionDto modifiedEntryVersionDto = new EntryVersionDto();
+		modifiedEntryVersionDto.setDeStichwort("d22");
+		modifiedEntryVersionDto.setRmStichwort("r22");
+		entry.setCurrent(modifiedEntryVersionDto);
 		luceneIndexManager.update(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
+		assertEquals(1, result.getTotalElements());
 
 		// accept one version
-		LemmaVersion acceptedVersion = result.getContent().get(0);
-		acceptedVersion.setVerification(LemmaVersion.Verification.ACCEPTED);
+		EntryVersionDto acceptedVersion = result.getContent().get(0);
 
-		entry = generateValidEntryFromLemmaVersion(acceptedVersion);
-		entry.setId(acceptedVersion.getLexEntryId());
+		entry = generateValidEntryFromEntryVersionDto(acceptedVersion);
+		entry.setEntryId(acceptedVersion.getEntryId());
 		luceneIndexManager.update(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r22"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
+		assertEquals(1, result.getTotalElements());
 	}
 
 	@Test
 	public void testDeleteEntryFromIndex() throws Exception  {
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < 5; i++) {
-			LexEntry entry = generateValidEntry();
-			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
-			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
+			EntryDto entry = generateValidEntry();
+			entry.getCurrent().setDeStichwort("d" + i);
+			entry.getCurrent().setRmStichwort("r" + i);
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(5, afterUpdate.getNumberOfEntries());
+		assertEquals(5, afterUpdate.getNumberOfEntries());
 
-		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r3"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(1, result.getTotalElements());
+		Page<EntryVersionDto> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r3"), IndexTestHelpers.getPagination());
+		assertEquals(1, result.getTotalElements());
 
 		// Delete existing lemma version
-		LemmaVersion lemmaVersion = result.getContent().get(0);
-		LexEntry entry = generateValidEntryFromLemmaVersion(lemmaVersion);
-		entry.setId(lemmaVersion.getLexEntryId());
+		EntryVersionDto EntryVersionDto = result.getContent().get(0);
+		EntryDto entry = generateValidEntryFromEntryVersionDto(EntryVersionDto);
+		entry.setEntryId(EntryVersionDto.getEntryId());
 		luceneIndexManager.delete(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.NORMAL, "r"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(4, result.getTotalElements());
+		assertEquals(4, result.getTotalElements());
 		afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(4, afterUpdate.getNumberOfEntries());
+		assertEquals(4, afterUpdate.getNumberOfEntries());
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.EXACT, "r3"), IndexTestHelpers.getPagination());
-		Assert.assertEquals(0, result.getTotalElements());
+		assertEquals(0, result.getTotalElements());
 	}
 
 	@Test
@@ -162,22 +162,22 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		int numberOfEntries = 12;
 
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
-			LexEntry entry = generateValidEntry();
-			entry.getCurrent().putEntryValue("DStichwort", "a" + i);
-			entry.getCurrent().putEntryValue("RStichwort", "b");
-			entry.getCurrent().putEntryValue("RStichwort_sort", String.valueOf(numberOfEntries + 1 - i));
+			EntryDto entry = generateValidEntry();
+			entry.getCurrent().setDeStichwort("a" + i);
+			entry.getCurrent().setRmStichwort("b");
+			entry.getCurrent().setRmStichwortSort(String.valueOf(numberOfEntries + 1 - i));
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 
-		Page<LemmaVersion> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.NORMAL, "b"), IndexTestHelpers.getPagination());
+		Page<EntryVersionDto> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.NORMAL, "b"), IndexTestHelpers.getPagination());
 
-		Assert.assertEquals(numberOfEntries, result.getTotalElements());
+		assertEquals(numberOfEntries, result.getTotalElements());
 
 		for(int i = 0;  i < numberOfEntries; i++) {
-			Assert.assertEquals("a" + (numberOfEntries - i - 1), result.getContent().get(i).getLemmaValues().get("DStichwort"));
+			assertEquals("a" + (numberOfEntries - i - 1), result.getContent().get(i).getDeStichwort());
 		}
 	}
 
@@ -186,77 +186,77 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		int numberOfEntries = 36;
 
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
-			LexEntry entry = generateValidEntry();
-			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
-			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
-			entry.getCurrent().putEntryValue("DSubsemantik", "d" + i % 12);
-			entry.getCurrent().putEntryValue("RSubsemantik", "r" + i % 12);
+			EntryDto entry = generateValidEntry();
+			entry.getCurrent().setDeStichwort("d" + i);
+			entry.getCurrent().setRmStichwort("r" + i);
+			entry.getCurrent().setDeSubsemantik("d" + i % 12);
+			entry.getCurrent().setRmSubsemantik("r" + i % 12);
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 36);
+		assertEquals(afterUpdate.getNumberOfEntries(), 36);
 
 		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("DSubsemantik", "d", 10);
 
-		Assert.assertEquals(10, result.size());
+		assertEquals(10, result.size());
 
-		Assert.assertEquals("d0", result.get(0));
-		Assert.assertEquals("d1", result.get(1));
-		Assert.assertEquals("d2", result.get(2));
-		Assert.assertEquals("d3", result.get(3));
-		Assert.assertEquals("d4", result.get(4));
-		Assert.assertEquals("d5", result.get(5));
-		Assert.assertEquals("d6", result.get(6));
-		Assert.assertEquals("d7", result.get(7));
-		Assert.assertEquals("d8", result.get(8));
-		Assert.assertEquals("d9", result.get(9));
+		assertEquals("d0", result.get(0));
+		assertEquals("d1", result.get(1));
+		assertEquals("d2", result.get(2));
+		assertEquals("d3", result.get(3));
+		assertEquals("d4", result.get(4));
+		assertEquals("d5", result.get(5));
+		assertEquals("d6", result.get(6));
+		assertEquals("d7", result.get(7));
+		assertEquals("d8", result.get(8));
+		assertEquals("d9", result.get(9));
 
 		result = luceneIndexManager.getSuggestionsForField("RSubsemantik", "r", 5);
 
-		Assert.assertEquals(5, result.size());
+		assertEquals(5, result.size());
 
-		Assert.assertEquals("r0", result.get(0));
-		Assert.assertEquals("r1", result.get(1));
-		Assert.assertEquals("r2", result.get(2));
-		Assert.assertEquals("r3", result.get(3));
-		Assert.assertEquals("r4", result.get(4));
+		assertEquals("r0", result.get(0));
+		assertEquals("r1", result.get(1));
+		assertEquals("r2", result.get(2));
+		assertEquals("r3", result.get(3));
+		assertEquals("r4", result.get(4));
 	}
 
 	@Test
 	public void testCategorySuggestions() throws Exception {
 
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 
-		LexEntry entry1 = generateValidEntry();
-		entry1.getCurrent().putEntryValue("DStichwort", "d" + 1);
-		entry1.getCurrent().putEntryValue("RStichwort", "r" + 1);
-		entry1.getCurrent().putEntryValue("categories", "stringA, stringB, stringC");
+		EntryDto entry1 = generateValidEntry();
+		entry1.getCurrent().setDeStichwort("d" + 1);
+		entry1.getCurrent().setRmStichwort("r" + 1);
+		entry1.getCurrent().setCategories("stringA, stringB, stringC");
 		entries.add(entry1);
 
-		LexEntry entry2 = generateValidEntry();
-		entry2.getCurrent().putEntryValue("DStichwort", "d" + 2);
-		entry2.getCurrent().putEntryValue("RStichwort", "r" + 2);
-		entry2.getCurrent().putEntryValue("categories", "stringB, stringC, stringD");
+		EntryDto entry2 = generateValidEntry();
+		entry2.getCurrent().setDeStichwort("d" + 2);
+		entry2.getCurrent().setRmStichwort("r" + 2);
+		entry2.getCurrent().setCategories("stringB, stringC, stringD");
 		entries.add(entry2);
 
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 2);
+		assertEquals(afterUpdate.getNumberOfEntries(), 2);
 
 		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("categories", "s", 10);
 
-		Assert.assertEquals(4, result.size());
+		assertEquals(4, result.size());
 
-		Assert.assertEquals("stringA", result.get(0));
-		Assert.assertEquals("stringB", result.get(1));
-		Assert.assertEquals("stringC", result.get(2));
-		Assert.assertEquals("stringD", result.get(3));
+		assertEquals("stringA", result.get(0));
+		assertEquals("stringB", result.get(1));
+		assertEquals("stringC", result.get(2));
+		assertEquals("stringD", result.get(3));
 	}
 
 	@Test
@@ -264,43 +264,43 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		int numberOfEntries = 36;
 
 		luceneIndexManager.dropIndex();
-		List<LexEntry> entries = new ArrayList<>();
+		List<EntryDto> entries = new ArrayList<>();
 		for(int i = 0;  i < numberOfEntries; i++) {
-			LexEntry entry = generateValidEntry();
-			entry.getCurrent().putEntryValue("DStichwort", "d" + i);
-			entry.getCurrent().putEntryValue("RStichwort", "r" + i);
-			entry.getCurrent().putEntryValue("DGrammatik", "d" + i % 12);
-			entry.getCurrent().putEntryValue("RGrammatik", "r" + i % 12);
+			EntryDto entry = generateValidEntry();
+			entry.getCurrent().setDeStichwort("d" + i);
+			entry.getCurrent().setRmStichwort("r" + i);
+			entry.getCurrent().setDeGrammatik("d" + i % 12);
+			entry.getCurrent().setRmGrammatik("r" + i % 12);
 			entries.add(entry);
 		}
-		luceneIndexManager.addToIndex(entries.iterator());
+		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		Assert.assertEquals(afterUpdate.getNumberOfEntries(), 36);
+		assertEquals(afterUpdate.getNumberOfEntries(), 36);
 
 		ArrayList<String> result = luceneIndexManager.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "d", 10);
 
-		Assert.assertEquals(10, result.size());
+		assertEquals(10, result.size());
 
-		Assert.assertEquals("d0", result.get(0));
-		Assert.assertEquals("d1", result.get(1));
-		Assert.assertEquals("d10", result.get(2));
-		Assert.assertEquals("d11", result.get(3));
-		Assert.assertEquals("d2", result.get(4));
-		Assert.assertEquals("d3", result.get(5));
-		Assert.assertEquals("d4", result.get(6));
-		Assert.assertEquals("d5", result.get(7));
-		Assert.assertEquals("d6", result.get(8));
-		Assert.assertEquals("d7", result.get(9));
+		assertEquals("d0", result.get(0));
+		assertEquals("d1", result.get(1));
+		assertEquals("d10", result.get(2));
+		assertEquals("d11", result.get(3));
+		assertEquals("d2", result.get(4));
+		assertEquals("d3", result.get(5));
+		assertEquals("d4", result.get(6));
+		assertEquals("d5", result.get(7));
+		assertEquals("d6", result.get(8));
+		assertEquals("d7", result.get(9));
 
 		result = luceneIndexManager.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "r", 5);
 
-		Assert.assertEquals(5, result.size());
+		assertEquals(5, result.size());
 
-		Assert.assertEquals("r0", result.get(0));
-		Assert.assertEquals("r1", result.get(1));
-		Assert.assertEquals("r10", result.get(2));
-		Assert.assertEquals("r11", result.get(3));
-		Assert.assertEquals("r2", result.get(4));
+		assertEquals("r0", result.get(0));
+		assertEquals("r1", result.get(1));
+		assertEquals("r10", result.get(2));
+		assertEquals("r11", result.get(3));
+		assertEquals("r2", result.get(4));
 	}
 }

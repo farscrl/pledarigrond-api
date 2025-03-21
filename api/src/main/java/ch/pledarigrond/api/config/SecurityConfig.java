@@ -1,40 +1,36 @@
 package ch.pledarigrond.api.config;
 
+import ch.pledarigrond.api.services.JwtUserDetailsService;
 import ch.pledarigrond.database.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
-    private UserDetailsService jwtUserDetailsService;
+    private JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
-
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
-        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,37 +38,48 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(provider);
     }
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // We don't need CSRF for this example
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .anonymous().principal(UserService.DEFAULT_USER_NAME).and()
+                .anonymous(anonymous -> anonymous.principal(UserService.DEFAULT_USER_NAME))
 
-                .cors().and()
-                .csrf().disable()
+                .cors(withDefaults())
+                .csrf(csrf -> csrf.disable())
 
                 // dont authenticate user requests
-                .authorizeRequests().antMatchers("/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/puter/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/rumantschgrischun/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/surmiran/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/sursilvan/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/sutsilvan/user/**").permitAll().and()
-                .authorizeRequests().antMatchers("/vallader/user/**").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/user/**",
+                                "/puter/user/**",
+                                "/rumantschgrischun/user/**",
+                                "/surmiran/user/**",
+                                "/sursilvan/user/**",
+                                "/sutsilvan/user/**",
+                                "/vallader/user/**"
+                        ).permitAll()
+                        // All other requests require authentication
+                        .anyRequest().authenticated()
+                )
 
-                // all other requests need to be authenticated
-                .anyRequest().authenticated().and()
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
 
-                // make sure we use stateless session; session won't be used to store user's state.
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                // Configure session management as stateless
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
-        // Add a filter to validate the tokens with every request
+        // Add the JWT filter before the standard authentication filter
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
     }
 }

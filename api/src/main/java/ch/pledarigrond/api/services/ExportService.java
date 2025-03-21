@@ -2,7 +2,7 @@ package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.common.Language;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 

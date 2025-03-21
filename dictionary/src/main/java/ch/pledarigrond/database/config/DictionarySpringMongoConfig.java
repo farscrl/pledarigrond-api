@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -38,6 +39,7 @@ public class DictionarySpringMongoConfig {
     private String mongoAuthDb;
 
     @Bean(name = "dictionaryMongoClient")
+    @Profile("!testing")
     public MongoClient mongoClient() {
         MongoCredential credential = MongoCredential
                 .createCredential(mongoUser, mongoAuthDb, mongoPassword.toCharArray());
