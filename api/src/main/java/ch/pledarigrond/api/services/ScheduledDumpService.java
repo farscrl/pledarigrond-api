@@ -86,7 +86,7 @@ public class ScheduledDumpService {
                     current.setCreator(null);
                     current.setCreatorIp(null);
                     current.setCreatorRole(null);
-                    current.setVerifier(null);
+                    current.setAction(null);
                     mapper.writeValue(jsonGenerator, current);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
