@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -84,6 +86,7 @@ abstract public class HunspellGenerator {
             versionFileWriter.flush();
             versionFileWriter.close();
         } catch (TemplateException e) {
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -102,6 +105,40 @@ abstract public class HunspellGenerator {
             licenceFileWriter.flush();
             licenceFileWriter.close();
         } catch (TemplateException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        // create hyphenation file
+        File hyphenationFile = new File(basePath.toFile(), "hyph_rm-" + language.getSubtag()+ ".dic");
+        try {
+            URL resourceUrl = HunspellGenerator.class.getClassLoader().getResource("static/hyph_rm.dic");
+            if (resourceUrl == null) {
+                throw new IllegalArgumentException("Hyphenation file not found in resources");
+            }
+            Files.copy(Paths.get(resourceUrl.toURI()), hyphenationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (URISyntaxException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+
+        // create hyphenation licence file
+        File licenceFileHyphenation = new File(basePath.toFile(), "hyph_rm-" + language.getSubtag()+ "_LICENSE.txt");
+        try {
+            SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
+            Date now = new Date();
+
+            Map<String, Object> licenceTemplateData = new HashMap<>();
+            licenceTemplateData.put("year", yearDateFormat.format(now));
+            licenceTemplateData.put("publisher", "Fundaziun Medias Rumantschas (www.fmr.ch) / far ScRL (www.far.ch)");
+            Writer licenceFileWriter = new FileWriter(licenceFileHyphenation);
+            Template licenceTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("licence.ftlh");
+            licenceTemplate.process(licenceTemplateData, licenceFileWriter);
+            licenceFileWriter.flush();
+            licenceFileWriter.close();
+        } catch (TemplateException e) {
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -118,6 +155,8 @@ abstract public class HunspellGenerator {
         File dicFile = basePath.resolve("rm-" + language.getSubtag() + ".dic").toFile();
         File versionFile = basePath.resolve("rm-" + language.getSubtag() + "_version.txt").toFile();
         File licenceFile = basePath.resolve("rm-" + language.getSubtag() + "_LICENSE.txt").toFile();
+        File hyphenation = basePath.resolve("hyph_rm-" + language.getSubtag() + ".dic").toFile();
+        File hyphenationLicense = basePath.resolve("hyph_rm-" + language.getSubtag() + "_LICENSE.txt").toFile();
 
         // write Zip
         List<File> files = new ArrayList<>();
@@ -125,6 +164,8 @@ abstract public class HunspellGenerator {
         files.add(dicFile);
         files.add(versionFile);
         files.add(licenceFile);
+        files.add(hyphenation);
+        files.add(hyphenationLicense);
         File zipFile = new File(dir, "hunspell_" + language + "_" + versionAndBuild + ".zip");
         WordListUtils.writeFilesToZip(zipFile, files);
 
