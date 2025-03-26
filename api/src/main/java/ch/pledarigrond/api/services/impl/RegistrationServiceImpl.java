@@ -35,6 +35,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 import ws.schild.jave.Encoder;
 import ws.schild.jave.EncoderException;
@@ -85,7 +86,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration getNextRegistration() {
+        StopWatch stopWatch = new StopWatch("getNextRegistration()");
+
+        stopWatch.start("loading random word");
         Optional<Registration> registration = registrationRepository.findRandomRegistration();
+        stopWatch.stop();
+
+        logger.warn("getNextRegistration() performance metrics:\n{}", stopWatch.prettyPrint());
+
         return registration.orElse(null);
     }
 
@@ -159,25 +167,42 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Registration uploadRegistration(Registration registration, MultipartFile wavFile) throws IOException {
+        StopWatch stopWatch = new StopWatch("uploadRegistration()");
+
+        stopWatch.start("save temp file");
         File tempWavFile = File.createTempFile("upload", ".wav");
         wavFile.transferTo(tempWavFile);
+        stopWatch.stop();
 
+        stopWatch.start("convert wav to mp3");
         File mp3File = convertWavToMp3(tempWavFile);
 
         if (mp3File == null) {
             throw new IOException("Failed to convert wav to mp3");
         }
+        stopWatch.stop();
 
         String path = generateRegistrationPath(registration);
 
+        stopWatch.start("upload wav file");
         bunnyService.uploadFile(path + ".wav", tempWavFile);
-        bunnyService.uploadFile(path + ".mp3", mp3File);
+        stopWatch.stop();
 
+        stopWatch.start("upload mp3 file");
+        bunnyService.uploadFile(path + ".mp3", mp3File);
+        stopWatch.stop();
+
+        stopWatch.start("delete temp files");
         tempWavFile.delete();
         mp3File.delete();
+        stopWatch.stop();
 
+        stopWatch.start("save registration");
         registration.setStatus(RegistrationStatus.IN_REVIEW);
         registrationRepository.save(registration);
+        stopWatch.stop();
+
+        logger.warn("uploadRegistration() performance metrics:\n{}", stopWatch.prettyPrint());
 
         return registration;
     }
