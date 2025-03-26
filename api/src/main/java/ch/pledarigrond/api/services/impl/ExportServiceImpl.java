@@ -53,10 +53,17 @@ public class ExportServiceImpl implements ExportService {
 
             if (entry.getCurrent() != null && "V".equals(entry.getCurrent().getEntryValue(RM_INFLECTION_TYPE))) {
                 LemmaVersion current = entry.getCurrent();
-                if (current.getLemmaValues().get("RStichwort").contains(" ")) {
+                String RStichwort = current.getLemmaValues().get("RStichwort");
+                String RStichwortStripped = RStichwort.trim();
+                if (RStichwortStripped.startsWith("as ")) {
+                    RStichwortStripped = RStichwortStripped.substring(3).trim();
+                } else if (RStichwortStripped.startsWith("s'")) {
+                    RStichwortStripped = RStichwortStripped.substring(2).trim();
+                }
+                if (RStichwortStripped.contains(" ")) {
                     Row row = sheet.createRow(rowNum++);
                     row.createCell(0).setCellValue(current.getLexEntryId());
-                    row.createCell(1).setCellValue(current.getLemmaValues().get("RStichwort"));
+                    row.createCell(1).setCellValue(RStichwort);
                 }
             }
         }
