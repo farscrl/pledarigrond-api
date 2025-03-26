@@ -68,10 +68,6 @@ public class ExportServiceImpl implements ExportService {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
         return terminateExcel(workbook);
     }
 
@@ -128,10 +124,6 @@ public class ExportServiceImpl implements ExportService {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
         return terminateExcel(workbook);
     }
 
@@ -168,10 +160,6 @@ public class ExportServiceImpl implements ExportService {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
         return terminateExcel(workbook);
     }
 
@@ -193,10 +181,6 @@ public class ExportServiceImpl implements ExportService {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
             cell.setCellStyle(getHeaderStyle(workbook));
-        }
-
-        for (int i = 0; i < headers.length; i++) {
-            sheet.autoSizeColumn(i);
         }
 
         return workbook;
