@@ -103,21 +103,32 @@ public class GitUtil {
             File dicFile = basePath.resolve(language.getName() + "/rm-" + language.getSubtag() + ".dic").toFile();
             File versionFile = basePath.resolve(language.getName() + "/rm-" + language.getSubtag() + "_version.txt").toFile();
             File licenceFile = basePath.resolve(language.getName() + "/rm-" + language.getSubtag() + "_LICENSE.txt").toFile();
+            File hyphenationFile = basePath.resolve(language.getName() + "/hyph_rm-" + language.getSubtag() + ".dic").toFile();
+            File licenceHyphenationFile = basePath.resolve(language.getName() + "/hyph_rm-" + language.getSubtag() + "_LICENSE.txt").toFile();
 
             String affPath = "dictionaries/rm-" + language.getSubtag() + "/rm-" + language.getSubtag() + ".aff";
             String dicPath = "dictionaries/rm-" + language.getSubtag() + "/rm-" + language.getSubtag() + ".dic";
             String versionPath = "dictionaries/rm-" + language.getSubtag() + "/rm-" + language.getSubtag() + "_version.txt";
             String licencePath = "dictionaries/rm-" + language.getSubtag() + "/rm-" + language.getSubtag() + "_LICENSE.txt";
+            String hyphenationPath = "dictionaries/rm-" + language.getSubtag() + "/hyph_rm-" + language.getSubtag() + ".dic";
+            String licenceHyphenationPath = "dictionaries/rm-" + language.getSubtag() + "/hyph_rm-" + language.getSubtag() + "_LICENSE.txt";
+
             Path affDestination = basePath.resolve("git/" + affPath);
             Path dicDestination = basePath.resolve("git/" + dicPath);
             Path versionDestination = basePath.resolve("git/" + versionPath);
             Path licenceDestination = basePath.resolve("git/" + licencePath);
+            Path hyphenationDestination = basePath.resolve("git/" + hyphenationPath);
+            Path licenceHyphenationDestination = basePath.resolve("git/" + licenceHyphenationPath);
 
             try {
                 Files.copy(aff.toPath(), affDestination, StandardCopyOption.REPLACE_EXISTING);
                 Files.copy(dicFile.toPath(), dicDestination, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(hyphenationFile.toPath(), hyphenationDestination, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(licenceHyphenationFile.toPath(), licenceHyphenationDestination, StandardCopyOption.REPLACE_EXISTING);
                 git.add().addFilepattern(affPath).call();
                 git.add().addFilepattern(dicPath).call();
+                git.add().addFilepattern(hyphenationPath).call();
+                git.add().addFilepattern(licenceHyphenationPath).call();
 
                 Status status = git.status().call();
                 if (!status.getAdded().isEmpty() || !status.getChanged().isEmpty() || !status.getRemoved().isEmpty()) {

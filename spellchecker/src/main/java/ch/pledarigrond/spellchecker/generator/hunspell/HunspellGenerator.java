@@ -126,18 +126,12 @@ abstract public class HunspellGenerator {
         // create hyphenation licence file
         File licenceFileHyphenation = new File(basePath.toFile(), "hyph_rm-" + language.getSubtag()+ "_LICENSE.txt");
         try {
-            SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
-            Date now = new Date();
-
-            Map<String, Object> licenceTemplateData = new HashMap<>();
-            licenceTemplateData.put("year", yearDateFormat.format(now));
-            licenceTemplateData.put("publisher", "Fundaziun Medias Rumantschas (www.fmr.ch) / far ScRL (www.far.ch)");
-            Writer licenceFileWriter = new FileWriter(licenceFileHyphenation);
-            Template licenceTemplate = FreemarkerConfigSpellchecker.getConfig().getTemplate("licence.ftlh");
-            licenceTemplate.process(licenceTemplateData, licenceFileWriter);
-            licenceFileWriter.flush();
-            licenceFileWriter.close();
-        } catch (TemplateException e) {
+            URL resourceUrl = HunspellGenerator.class.getClassLoader().getResource("static/hyph_rm_LICENSE.txt");
+            if (resourceUrl == null) {
+                throw new IllegalArgumentException("Hyphenation LICEnSE file not found in resources");
+            }
+            Files.copy(Paths.get(resourceUrl.toURI()), licenceFileHyphenation.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (URISyntaxException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
