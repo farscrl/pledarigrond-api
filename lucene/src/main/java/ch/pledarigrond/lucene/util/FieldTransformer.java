@@ -5,7 +5,6 @@ import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.VersionStatus;
 import ch.pledarigrond.common.data.dictionary.inflection.*;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.lucene.core.FieldManager;
@@ -58,7 +57,6 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.userEmail, ev.getUserEmail(), allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.timestamp, ev.getTimestamp().toString(), allFieldsList);
-        toFieldUpdateAllFields(doc, FN.versionStatus, ev.getVersionStatus().toString(), allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.creator, ev.getCreator(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.creatorIp, ev.getCreatorIp(), allFieldsList);
@@ -166,7 +164,6 @@ public class FieldTransformer {
             ev.setUserEmail(toValue(doc, FN.userEmail));
 
             // ev.setTimestamp(toValue(doc, FN.timestamp));
-            ev.setVersionStatus(VersionStatus.valueOf(toValue(doc, FN.versionStatus)));
 
             ev.setCreator(toValue(doc, FN.creator));
             ev.setCreatorIp(toValue(doc, FN.creatorIp));

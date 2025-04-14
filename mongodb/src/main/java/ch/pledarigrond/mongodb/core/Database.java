@@ -22,15 +22,11 @@ import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Database {
-
-	@Autowired
-	private PgEnvironment pgEnvironment;
 
 	private static final String ENTRIES = "entries";
 
@@ -42,17 +38,17 @@ public class Database {
 
 	private final String locale;
 
-	Database(String locale) {
+	Database(String locale, PgEnvironment pgEnvironment) {
 		this.locale = locale;
 		entryCollection = MongoHelper.getDB(pgEnvironment, this.locale).getCollection(ENTRIES);
 		long entries = entryCollection.countDocuments();
 		logger.info("Connected to entries-collection containing " + entries + " items.");
 	}
 
-	public static synchronized Database getInstance(String dbName) {
+	public static synchronized Database getInstance(String dbName, PgEnvironment pgEnvironment) {
 		Database instance = instances.get(dbName);
 		if (instance == null) {
-			instance = new Database(dbName);
+			instance = new Database(dbName, pgEnvironment);
 			instances.put(dbName, instance);
 		}
 		return instance;

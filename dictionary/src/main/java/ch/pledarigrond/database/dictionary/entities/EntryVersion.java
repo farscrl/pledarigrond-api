@@ -2,7 +2,6 @@ package ch.pledarigrond.database.dictionary.entities;
 
 import ch.pledarigrond.common.data.common.Action;
 import ch.pledarigrond.common.data.common.EditorRole;
-import ch.pledarigrond.common.data.dictionary.VersionStatus;
 import ch.pledarigrond.database.dictionary.entities.inflection.Inflection;
 import lombok.Data;
 
@@ -53,10 +52,11 @@ public class EntryVersion {
     // technical info
     private Instant timestamp = Instant.now();
     private Action action;
-    private VersionStatus versionStatus = VersionStatus.UNVERIFIED; // TODO: remove?
     private String creator;
     private String creatorIp;
     private EditorRole creatorRole;
 
     private boolean automaticChange = false;
+
+    private UnusedData unusedData = new UnusedData();
 }

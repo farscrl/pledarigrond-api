@@ -35,7 +35,6 @@ public class FN {
     public static final String userEmail = "userEmail";
 
     public static final String timestamp = "timestamp";
-    public static final String versionStatus = "versionStatus";
 
     public static final String creator = "creator";
     public static final String creatorIp = "creatorIp";

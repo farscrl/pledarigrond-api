@@ -11,4 +11,6 @@ public enum Action {
     CREATED_MODIFICATION,
 
     CHANGED_ORDER,
+
+    UNKNOWN,
 }

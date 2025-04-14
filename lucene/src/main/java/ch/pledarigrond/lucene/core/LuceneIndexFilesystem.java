@@ -3,7 +3,6 @@ package ch.pledarigrond.lucene.core;
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.VersionStatus;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.lucene.util.FN;
@@ -194,10 +193,8 @@ class LuceneIndexFilesystem {
         List<Document> docs = new ArrayList<>();
         EntryVersionDto currentVersion = entry.getCurrent();
         if (currentVersion != null) {
-            if (currentVersion.getVersionStatus() == VersionStatus.ACCEPTED) {
-                Document doc = FieldTransformer.getDocument(entry, currentVersion);
-                docs.add(doc);
-            }
+            Document doc = FieldTransformer.getDocument(entry, currentVersion);
+            docs.add(doc);
         }
         return docs;
     }

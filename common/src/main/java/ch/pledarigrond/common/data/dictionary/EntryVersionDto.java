@@ -3,10 +3,10 @@ package ch.pledarigrond.common.data.dictionary;
 import ch.pledarigrond.common.data.common.Action;
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,6 @@ public class EntryVersionDto {
     // technical info
     private Instant timestamp;
     private Action action;
-    private VersionStatus versionStatus;
 
     @Size(max = 200) private String creator;
     @Size(max = 200) private String creatorIp;

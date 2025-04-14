@@ -200,7 +200,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         }
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, RequestContext.getLanguage());
-        MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
+        MongoCursor<Document> cursor = Database.getInstance(dbName, pgEnvironment).getAll();
         MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, RequestContext.getLanguage().getName()).getCollection("entries");
         long entries = entryCollection.countDocuments();
 
