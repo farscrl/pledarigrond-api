@@ -27,6 +27,10 @@ public class RegistrationRepositoryCustomImpl implements RegistrationRepositoryC
         if (filter.getStatus() != null) {
             query.addCriteria(Criteria.where("status").is(filter.getStatus()));
         }
+        
+        if(!filter.getStatuslist().isEmpty()) {
+            query.addCriteria(Criteria.where("status").in(filter.getStatuslist()));
+        }
 
         if (filter.getSearchTerm() != null && !filter.getSearchTerm().isEmpty()) {
             String regexPattern = "^" + filter.getSearchTerm();
