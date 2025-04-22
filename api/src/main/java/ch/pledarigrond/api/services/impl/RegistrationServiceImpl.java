@@ -10,6 +10,7 @@ import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.exception.DatabaseException;
 import ch.pledarigrond.common.util.DbSelector;
+import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.common.util.WordNormalizer;
 import ch.pledarigrond.mongodb.core.Converter;
 import ch.pledarigrond.mongodb.core.Database;
@@ -154,6 +155,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public Registration order(Registration registration) {
         registration.setId(null);
+        registration.setDeStichwortNormalized(normalizeString(registration.getDeStichwort()));
+        registration.setRmStichwortNormalized(normalizeString(registration.getRmStichwort()));
         registration.setStatus(RegistrationStatus.TODO);
         return registrationRepository.save(registration);
     }
@@ -238,6 +241,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                         registration.setStatus(RegistrationStatus.TODO);
                         registration.setDeStichwort(current.getLemmaValues().get("DStichwort"));
                         registration.setRmStichwort(RStichwort);
+                        registration.setDeStichwortNormalized(normalizeString(registration.getDeStichwort()));
+                        registration.setRmStichwortNormalized(normalizeString(registration.getRmStichwort()));
                         registration.setRmSemantik(current.getLemmaValues().get("RSemantik"));
                         registration.setRmSubsemantik(current.getLemmaValues().get("RSubsemantik"));
                         registration.setRmGrammatik(current.getLemmaValues().get("RGrammatik"));
@@ -309,6 +314,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         statistics.setCompletedRegistrations(registrationRepository.countByStatus(RegistrationStatus.COMPLETED));
         statistics.setRefusedRegistrations(registrationRepository.countByStatus(RegistrationStatus.REFUSED));
         return statistics;
+    }
+
+    @Override
+    public void addNormalizedForms() {
+        List<Registration> registrations = registrationRepository.findAll();
+        for (Registration registration : registrations) {
+            registration.setDeStichwortNormalized(normalizeString(registration.getDeStichwort()));
+            registration.setRmStichwortNormalized(normalizeString(registration.getRmStichwort()));
+            registrationRepository.save(registration);
+        }
     }
 
     private static boolean isSingleWord(String input) {
@@ -437,5 +452,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else {
             return input;
         }
+    }
+
+    private static String normalizeString(String input) {
+        if (input == null) {
+            return null;
+        }
+        input = PronunciationNormalizer.normalizePronunciation(input);
+        return input.toLowerCase();
     }
 }

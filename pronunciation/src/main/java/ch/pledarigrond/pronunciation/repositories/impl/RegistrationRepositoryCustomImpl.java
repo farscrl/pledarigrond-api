@@ -33,10 +33,10 @@ public class RegistrationRepositoryCustomImpl implements RegistrationRepositoryC
         }
 
         if (filter.getSearchTerm() != null && !filter.getSearchTerm().isEmpty()) {
-            String regexPattern = "^" + filter.getSearchTerm();
+            String regexPattern = "^" + filter.getSearchTerm().toLowerCase();
             Criteria searchCriteria = new Criteria().orOperator(
-                    Criteria.where("rmStichwort").regex(regexPattern, "i"),
-                    Criteria.where("deStichwort").regex(regexPattern, "i")
+                    Criteria.where("rmStichwortNormalized").regex(regexPattern),
+                    Criteria.where("deStichwortNormalized").regex(regexPattern)
             );
             query.addCriteria(searchCriteria);
         }

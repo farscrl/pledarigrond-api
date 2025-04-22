@@ -126,4 +126,10 @@ public class RegistrationsController {
             throw new RuntimeException(e);
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/add_normalized_forms")
+    void addNormalizedForms() throws UnknownHostException, DatabaseException {
+        registrationService.addNormalizedForms();
+    }
 }

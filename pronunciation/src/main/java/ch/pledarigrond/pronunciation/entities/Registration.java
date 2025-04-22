@@ -19,6 +19,8 @@ public class Registration {
 
     private String deStichwort;
     private String rmStichwort;
+    private String deStichwortNormalized;
+    private String rmStichwortNormalized;
     private String rmSemantik;
     private String rmSubsemantik;
     private String rmGrammatik;
