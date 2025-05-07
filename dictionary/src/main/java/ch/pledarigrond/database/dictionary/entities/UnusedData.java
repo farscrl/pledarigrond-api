@@ -11,4 +11,10 @@ public class UnusedData {
 
     private String rmSemind;
     private String deSemind;
+
+    private String rmStichwortSortAlpha;
+    private String deStichwortSortAlpha;
+
+    private Integer importedId;
+    private String verbId;
 }
