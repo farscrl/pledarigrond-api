@@ -38,6 +38,7 @@ public class EntryVersion {
     private String deSubsemantik;
     private String deGrammatik;
     private String deGenus;
+    private String deFlex;
     private String deTags;
     private String deRedirect;
 

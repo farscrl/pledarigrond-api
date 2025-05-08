@@ -15,6 +15,11 @@ public class UnusedData {
     private String rmStichwortSortAlpha;
     private String deStichwortSortAlpha;
 
+    private String rmEnum;
+    private String deEnum;
+
+    private String deCategories;
+
     private Integer importedId;
     private String verbId;
 }

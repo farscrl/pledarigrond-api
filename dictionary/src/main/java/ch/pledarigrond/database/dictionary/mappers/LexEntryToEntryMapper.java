@@ -32,12 +32,13 @@ public class LexEntryToEntryMapper {
             while (internalToNewIdMap.containsKey(internalId)) {
                 // logger.warn("Duplicate internal id: " + lexEntry.getCurrent().getEntryValue("RStichwort") + " / ID: " + lexEntry.getId());
                 if (lexEntry.getCurrentId() == internalId) {
-                    logger.error("Duplicate internal id: " + lexEntry.getCurrent().getEntryValue("RStichwort") + " / ID: " + lexEntry.getId());
+                    logger.error("Duplicate internal id: " + lexEntry.getCurrent().getEntryValue("RStichwort") + " / " + lexEntry.getCurrent().getEntryValue("DStichwort") + ": " + lexEntry.getId());
                     logger.error("    >> INTERNAL ID IS CURRENT");
                 }
                 // logger.warn("    >> Version history contains duplicate entry: {}", lv.getInternalId());
                 // logger.warn("    >> Setting to: {}", internalId - 1);
-                lv.setInternalId(internalId - 1);
+                // lv.setInternalId(internalId - 1);
+                internalId = internalId - 1;
             }
 
             EntryVersion ev = map(lv, language);
@@ -101,6 +102,8 @@ public class LexEntryToEntryMapper {
         dv.setRmRedirect(getField(lv, "RRedirect", false, mappedFields));
         dv.setRmEtymologie(getField(lv, "REtymologie", false, mappedFields));
         dv.setRmPronunciation(getField(lv, "RPronunciation", false, mappedFields));
+        dv.setRmPhonetics(getField(lv, "RPhonetics", false, mappedFields));
+        dv.setRmSynonym(getField(lv, "RSynonym", false, mappedFields));
 
         dv.setDeStichwort(getField(lv, "DStichwort", false, mappedFields));
         dv.setDeStichwortSort(getField(lv, "DStichwort_sort", false, mappedFields));
@@ -108,6 +111,7 @@ public class LexEntryToEntryMapper {
         dv.setDeSubsemantik(getField(lv, "DSubsemantik", false, mappedFields));
         dv.setDeGrammatik(getField(lv, "DGrammatik", false, mappedFields));
         dv.setDeGenus(getField(lv, "DGenus", false, mappedFields));
+        dv.setDeFlex(getField(lv, "DFlex", false, mappedFields));
         dv.setDeTags(getField(lv, "DTags", false, mappedFields));
         dv.setDeRedirect(getField(lv, "DRedirect", false, mappedFields));
 
@@ -175,13 +179,25 @@ public class LexEntryToEntryMapper {
         if (verbId != null) {
             dv.getUnusedData().setVerbId(verbId);
         }
+        String rmEnum = getField(lv, "REnum", false, mappedFields);
+        if (rmEnum != null) {
+            dv.getUnusedData().setRmEnum(rmEnum);
+        }
+        String deEnum = getField(lv, "DEnum", false, mappedFields);
+        if (deEnum != null) {
+            dv.getUnusedData().setDeEnum(deEnum);
+        }
+        String deCategories = getField(lv, "Dcategories", false, mappedFields);
+        if (deCategories != null) {
+            dv.getUnusedData().setDeCategories(deCategories);
+        }
 
         lv.getLemmaValues().forEach((k, v) -> {
             if (v != null && !v.isEmpty() && !mappedFields.contains(k)) {
                 if (k.equals("_id") || k.equals("field_names")) {
                     return;
                 }
-                logger.warn("    >> Field {} is not mapped: {}", k, v);
+                logger.warn("    >> Field {} is not mapped: {}. [{}/{}: {}]", k, v, dv.getRmStichwort(), dv.getDeStichwort(), lv.getLexEntryId());
             }
         });
         lv.getPgValues().forEach((k, v) -> {
