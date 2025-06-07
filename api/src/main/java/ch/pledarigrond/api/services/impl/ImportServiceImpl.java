@@ -21,7 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @Service
 public class ImportServiceImpl implements ImportService {
@@ -38,32 +43,75 @@ public class ImportServiceImpl implements ImportService {
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile multipartFile = dmhsRequest.getFile("file");
 
-        assert multipartFile != null;
-        Workbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
+        String originalFilename = multipartFile.getOriginalFilename();
+        logger.warn("Importing XLSX file: {}", originalFilename);
+
+        return processWorkbook(multipartFile.getInputStream(), db);
+    }
+
+    public boolean importZipSursilvan(Language language, HttpServletRequest request) throws IOException, NoDatabaseAvailableException {
+        Database db = Database.getInstance(DbSelector.getDbNameByLanguage(pgEnvironment, language));
+
+        StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
+        MultipartFile zipFile = dmhsRequest.getFile("file");
+
+        File tempZipFile = File.createTempFile("zip-upload-", ".zip");
+        zipFile.transferTo(tempZipFile);
+
+        try (ZipFile zip = new ZipFile(tempZipFile)) {
+            Enumeration<? extends ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                if (!entry.isDirectory() && entry.getName().endsWith(".xlsx") && !entry.getName().endsWith("00_Dublettas.xlsx")) {
+                    logger.warn("Importing file from ZIP: {}", entry.getName());
+
+                    try (InputStream xlsxInput = zip.getInputStream(entry)) {
+                        boolean success = processWorkbook(xlsxInput, db);
+                        if (!success) {
+                            logger.error("Import failed for file: {}", entry.getName());
+                            return false;
+                        }
+                    } catch (InvalidEntryException e) {
+                        logger.error("Import failed for file: {}", entry.getName());
+                        return false;
+                    }
+                }
+            }
+        } finally {
+            tempZipFile.delete();
+        }
+
+        return true;
+    }
+
+    private boolean processWorkbook(InputStream xlsxInputStream, Database db) throws IOException, InvalidEntryException {
+        Workbook workbook = new XSSFWorkbook(xlsxInputStream);
         Sheet sheet = workbook.getSheetAt(0);
 
         // check if format is correct
         int i = 0;
         Row row = sheet.getRow(i);
-        if (!row.getCell(0).getRichStringCellValue().getString().equals("RStichwort")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(1).getRichStringCellValue().getString().equals("RGenus")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(2).getRichStringCellValue().getString().equals("RGrammatik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(3).getRichStringCellValue().getString().equals("RPhonetics")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(4).getRichStringCellValue().getString().equals("RSemantikVis")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(5).getRichStringCellValue().getString().equals("RSemantik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(6).getRichStringCellValue().getString().equals("REtymologie")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(7).getRichStringCellValue().getString().equals("RSynonym")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(8).getRichStringCellValue().getString().equals("DStichwort")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(9).getRichStringCellValue().getString().equals("DGenus")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(10).getRichStringCellValue().getString().equals("DGrammatik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(11).getRichStringCellValue().getString().equals("DSemantik")) throw new RuntimeException("Invalid format");
-        if (!row.getCell(12).getRichStringCellValue().getString().equals("categories")) throw new RuntimeException("Invalid format");
+        if (!row.getCell(0).getRichStringCellValue().getString().equals("RStichwort")) throw new RuntimeException("Invalid format: RStichwort not found in A1");
+        if (!row.getCell(1).getRichStringCellValue().getString().equals("RGenus")) throw new RuntimeException("Invalid format: RGenus not found in B1");
+        if (!row.getCell(2).getRichStringCellValue().getString().equals("RGrammatik")) throw new RuntimeException("Invalid format: RGrammatik not found in C1");
+        if (!row.getCell(3).getRichStringCellValue().getString().equals("RPhonetics")) throw new RuntimeException("Invalid format: RPhonetics not found in D1");
+        if (!row.getCell(4).getRichStringCellValue().getString().equals("RSemantikVis")) throw new RuntimeException("Invalid format: RSemantikVis not found in E1");
+        if (!row.getCell(5).getRichStringCellValue().getString().equals("RSemantik")) throw new RuntimeException("Invalid format: RSemantik not found in F1");
+        if (!row.getCell(6).getRichStringCellValue().getString().equals("REtymologie")) throw new RuntimeException("Invalid format: REtymologie not found in G1");
+        if (!row.getCell(7).getRichStringCellValue().getString().equals("RSynonym")) throw new RuntimeException("Invalid format: RSynonym not found in H1");
+        if (!row.getCell(8).getRichStringCellValue().getString().equals("DStichwort")) throw new RuntimeException("Invalid format: DStichwort not found in I1");
+        if (!row.getCell(9).getRichStringCellValue().getString().equals("DGenus")) throw new RuntimeException("Invalid format: DGenus not found in J1");
+        if (!row.getCell(10).getRichStringCellValue().getString().equals("DGrammatik")) throw new RuntimeException("Invalid format: DGrammatik not found in K1");
+        if (!row.getCell(11).getRichStringCellValue().getString().equals("DSemantik")) throw new RuntimeException("Invalid format: DSemantik not found in L1");
+        if (!row.getCell(12).getRichStringCellValue().getString().equals("categories")) throw new RuntimeException("Invalid format: categories not found in M1");
 
         logger.info("File format seems correct, continuing with import");
 
         LemmaVersion lv = null;
 
         for (i = 1; i <= sheet.getLastRowNum(); i++) {
+            logger.warn("Processing row: {}", i);
+
             row = sheet.getRow(i);
             if (row == null) {
                 continue;

@@ -32,7 +32,7 @@ public class ImportController {
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/import_excel_sursilvan")
-    ResponseEntity<?> importSursilvan(@PathVariable("language") Language language, HttpServletRequest request) {
+    ResponseEntity<?> importExcelSursilvan(@PathVariable("language") Language language, HttpServletRequest request) {
         if (language != Language.SURSILVAN) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
@@ -40,12 +40,35 @@ public class ImportController {
         try {
             boolean success = importService.importXlsSursilvan(language, request);
             if (!success) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during changing grammar indications");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during XLSX import");
             }
 
             return ResponseEntity.ok().build();
         } catch (DatabaseException | IOException e) {
             logger.error("Error while importing excel file", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    /**
+     * Allows to import Zip file with all the LRC data for sursilvan
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/import_zip_sursilvan")
+    ResponseEntity<?> importZipSursilvan(@PathVariable("language") Language language, HttpServletRequest request) {
+        if (language != Language.SURSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+
+        try {
+            boolean success = importService.importZipSursilvan(language, request);
+            if (!success) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during Zip import");
+            }
+
+            return ResponseEntity.ok().build();
+        } catch (DatabaseException | IOException e) {
+            logger.error("Error while importing zip file", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
