@@ -42,6 +42,4 @@ public interface RegistrationService {
     public ByteArrayResource extractListOfWordsByEnding() throws DatabaseException, UnknownHostException;
 
     public RegistrationStatistics getStatistics();
-
-    void addNormalizedForms();
 }

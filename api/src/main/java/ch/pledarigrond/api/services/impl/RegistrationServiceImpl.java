@@ -316,16 +316,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         return statistics;
     }
 
-    @Override
-    public void addNormalizedForms() {
-        List<Registration> registrations = registrationRepository.findAll();
-        for (Registration registration : registrations) {
-            registration.setDeStichwortNormalized(normalizeString(registration.getDeStichwort()));
-            registration.setRmStichwortNormalized(normalizeString(registration.getRmStichwort()));
-            registrationRepository.save(registration);
-        }
-    }
-
     private static boolean isSingleWord(String input) {
         if (input == null || input.trim().isEmpty()) {
             return false; // Consider empty or null input as not a single word
