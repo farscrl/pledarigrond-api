@@ -14,7 +14,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <revision>1.6.11</revision>
+        <revision>1.6.12</revision>
         <lucene.version>9.11.0</lucene.version>
         <poi-ooxml.version>5.3.0</poi-ooxml.version>
     </properties>
