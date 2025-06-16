@@ -2,6 +2,7 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.ImportService;
 import ch.pledarigrond.common.data.common.Language;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -66,7 +66,7 @@ public class ImportController {
             }
 
             return ResponseEntity.ok().build();
-        } catch (DatabaseException | IOException e) {
+        } catch (IOException e) {
             logger.error("Error while importing zip file", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
