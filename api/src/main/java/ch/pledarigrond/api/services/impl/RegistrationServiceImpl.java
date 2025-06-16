@@ -3,6 +3,7 @@ package ch.pledarigrond.api.services.impl;
 import ch.pledarigrond.api.services.BunnyService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.api.services.RegistrationService;
+import ch.pledarigrond.api.services.SlackService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
@@ -71,6 +72,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private LuceneService luceneService;
+
+    @Autowired
+    private SlackService slackService;
 
     @Value("${spring.profiles.active:dev}")
     private String activeProfile;
@@ -206,6 +210,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         stopWatch.stop();
 
         logger.warn("uploadRegistration() performance metrics:\n{}", stopWatch.prettyPrint());
+        long durationMillis = stopWatch.getTotalTimeMillis();
+        if (durationMillis > 2000) {
+            slackService.sendMessage(
+                    "Slow Registration Upload",
+                    String.format("Registration upload took %d ms. Please check the performance.", durationMillis),
+                    SlackService.SlackMessageType.WARNING
+            );
+        }
 
         return registration;
     }
@@ -219,7 +231,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
 
         while (cursor.hasNext()) {
             DBObject object = new BasicDBObject(cursor.next());
@@ -275,7 +286,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         MongoCursor<Document> cursor = Database.getInstance(dbName).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, language.getName()).getCollection("entries");
 
         while (cursor.hasNext()) {
             DBObject object = new BasicDBObject(cursor.next());
