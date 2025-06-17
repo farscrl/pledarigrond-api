@@ -107,7 +107,7 @@ public class Entry {
         return addVersion(version, userInfo, Action.REFUSED_MODIFICATION);
     }
 
-    private Entry removeHistory() {
+    public Entry removeHistory() {
         versions = new ArrayList<>();
 
         if (current != null) {

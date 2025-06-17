@@ -114,10 +114,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public EntryDto dropOutdatedHistory(String entryId) {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-
-        entry.setVersions(new ArrayList<>());
-        entry.getVersions().add(entry.getCurrent());
-        entry.getSuggestions().forEach(s -> entry.getVersions().add(s));
+        entry.removeHistory();
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 

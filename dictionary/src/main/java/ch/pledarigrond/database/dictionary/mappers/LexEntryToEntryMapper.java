@@ -73,10 +73,16 @@ public class LexEntryToEntryMapper {
         String timestamp = getPgField(lv, "timestamp", false);
         dv.setTimestamp(Instant.ofEpochMilli(timestamp == null ? 0L : Long.parseLong(timestamp)));
 
-        dv.setUserComment(getField(lv, "contact_comment", false, mappedFields));
-        dv.setUserComment(getField(lv, "user_comment", false, mappedFields));
-        dv.setUserEmail(getField(lv, "contact_email", false, mappedFields));
-        dv.setUserEmail(getField(lv, "user_email", false, mappedFields));
+        String contactComment = getField(lv, "contact_comment", false, mappedFields);
+        String userComment = getField(lv, "user_comment", false, mappedFields);
+        String comment = Objects.toString(contactComment, "") + Objects.toString(userComment, "");
+        dv.setUserComment(comment);
+
+        String contactEmail = getField(lv, "contact_email", false, mappedFields);
+        String userEmail = getField(lv, "user_email", false, mappedFields);
+        String email = Objects.toString(contactEmail, "") + Objects.toString(userEmail, "");
+        dv.setUserEmail(email);
+
         dv.setCreatorIp(getPgField(lv, "user_ip", false));
 
         String verifier = getPgField(lv, "verifier", false);
@@ -88,7 +94,7 @@ public class LexEntryToEntryMapper {
         }
         dv.setCreatorRole(getCreatorRole(getPgField(lv, "creator_role", false)));
         dv.setCreatorRole(lv.getCreatorRole());
-        dv.setAction(getAction(getPgField(lv, "status", false)));
+        dv.setAction(getAction(getPgField(lv, "status", false), getPgField(lv, "verification", false)));
 
         dv.setRmStichwort(getField(lv, "RStichwort", false, mappedFields));
         dv.setRmStichwortSort(getField(lv, "RStichwort_sort", false, mappedFields));
@@ -211,14 +217,27 @@ public class LexEntryToEntryMapper {
         return dv;
     }
 
-    private static Action getAction(String s) {
-        if(s == null) return Action.UNKNOWN;
-        LemmaVersion.Status status = LemmaVersion.Status.valueOf(s);
+    private static Action getAction(String statusString, String verificationString) {
+        if(statusString == null) return Action.UNKNOWN;
+        LemmaVersion.Status status = LemmaVersion.Status.valueOf(statusString);
+
+        LemmaVersion.Verification verification = LemmaVersion.Verification.UNVERIFIED;
+        if (verificationString != null) {
+            verification = LemmaVersion.Verification.valueOf(verificationString);
+        }
 
         return switch (status) {
-            case DELETED, UNDEFINED -> Action.UNKNOWN;
             case NEW_ENTRY -> Action.CREATED_ENTRY;
-            case NEW_MODIFICATION -> Action.CREATED_MODIFICATION;
+            case NEW_MODIFICATION -> {
+                if (verification == LemmaVersion.Verification.UNVERIFIED) {
+                    yield Action.SUGGESTED_MODIFICATION;
+                } else if (verification == LemmaVersion.Verification.OUTDATED) {
+                    yield Action.REFUSED_MODIFICATION;
+                }
+                yield Action.ACCEPTED_MODIFICATION;
+            }
+            case DELETED -> Action.REFUSED_MODIFICATION;
+            case UNDEFINED -> Action.UNKNOWN;
         };
     }
 
@@ -492,7 +511,7 @@ public class LexEntryToEntryMapper {
             }
             return null;
         }
-        lv.getPgValues().remove(field);
+        // lv.getPgValues().remove(field);
         return value;
     }
 
