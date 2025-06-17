@@ -2,7 +2,7 @@ package ch.pledarigrond.lucene.util;
 
 public class FN {
     // entry fields
-    public static final String entryId = "engryId";
+    public static final String entryId = "entryId";
     public static final String publicationStatus = "publicationStatus";
 
     // entry version fields
