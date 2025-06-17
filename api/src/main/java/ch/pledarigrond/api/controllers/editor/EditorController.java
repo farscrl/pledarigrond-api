@@ -14,6 +14,8 @@ import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.data.user.SearchCriteria;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class EditorController {
     @Autowired
     private SursilvanVerbService verbService;
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/entries")
     ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, @Validated EditorQuery editorQuery, Pagination pagination) {
         try {
@@ -64,7 +64,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/entries/{id}")
     ResponseEntity<EntryDto> getEntry(@PathVariable("language") Language language, @PathVariable("id") @NotNull String id) {
         try {
@@ -75,7 +75,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries")
     ResponseEntity<?> insertEntry(@PathVariable("language") Language language, @Validated @RequestBody EntryVersionDto version, boolean asSuggestion) {
         try {
@@ -86,7 +86,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/accept_version/{versionId}")
     ResponseEntity<?> acceptVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionIdToAccept) {
         try {
@@ -97,7 +97,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/reject_version/{versionId}")
     ResponseEntity<?> rejectVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionIdToReject) {
         try {
@@ -108,7 +108,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @DeleteMapping("/entries/{id}")
     ResponseEntity<?> deleteEntry(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId) {
         try {
@@ -120,7 +120,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/add_version")
     ResponseEntity<?> addVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
@@ -131,7 +131,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/suggest_version")
     ResponseEntity<?> suggestVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @Validated @RequestBody EntryVersionDto modifiedVersion) {
         try {
@@ -142,7 +142,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/review_later_version/{versionId}")
     ResponseEntity<?> reviewLaterVersion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("versionId") @NotNull String versionId) {
         try {
@@ -153,7 +153,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries/{id}/drop_outdated_history")
     ResponseEntity<?> dropOutdatedHistory(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId) {
         try {
@@ -164,7 +164,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/search")
     ResponseEntity<?> searchEntryVersions(@PathVariable("language") Language language, @Validated SearchCriteria searchCriteria, Pagination pagination) {
         try {
@@ -175,7 +175,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/update_order")
     ResponseEntity<?> reorderEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @Validated @RequestBody EntryVersionList EntryVersionList) {
         try {
@@ -186,7 +186,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/get_order")
     ResponseEntity<?> getEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
         try {
@@ -197,7 +197,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/search_export")
     void exportBySearchQuery(@PathVariable("language") Language language, @Validated SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
@@ -213,7 +213,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries_export")
     void exportByEditorQuery(@PathVariable("language") Language language, @Validated EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
@@ -229,7 +229,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/search_suggestions_choice")
     public ResponseEntity<?> getSearchSuggestionsChoice(@PathVariable("language") Language language) {
         try {
@@ -240,7 +240,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/search_suggestions")
     public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language, String field, String searchTerm) {
         if (searchTerm == null) {
@@ -254,7 +254,7 @@ public class EditorController {
         }
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/reference_inflection")
     public ResponseEntity<?> getReferenceInflection(@PathVariable("language") Language language, String searchTerm) {
         if (language != Language.SURSILVAN) {

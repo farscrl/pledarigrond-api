@@ -18,7 +18,7 @@ public class InflectionController {
     @Autowired
     private InflectionService inflectionService;
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/{inflectionType}/subtypes")
     ResponseEntity<?> getSubtypes(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType) {
         if (inflectionType == null) {
@@ -27,7 +27,7 @@ public class InflectionController {
         return ResponseEntity.ok(inflectionService.getInflectionTypes(language, inflectionType));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/{inflectionType}/subtypes/{baseForm}")
     ResponseEntity<?> guessSubtypeAndGenerateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("baseForm") String baseForm, String genus, String flex) {
         if (inflectionType == null) {
@@ -39,7 +39,7 @@ public class InflectionController {
         return ResponseEntity.ok(inflectionService.guessInflection(language, inflectionType, baseForm, genus, flex));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/{inflectionType}/{inflectionSubType}/{baseForm}")
     ResponseEntity<?> generateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("inflectionSubType") String inflectionSubType, @PathVariable("baseForm") String baseForm) {
         if (inflectionType == null) {

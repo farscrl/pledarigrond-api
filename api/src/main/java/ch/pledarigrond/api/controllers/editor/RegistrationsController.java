@@ -49,25 +49,25 @@ public class RegistrationsController {
         return ResponseEntity.ok(registrationService.postponeRegistration(registration));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/accept")
     ResponseEntity<?> accept(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
         return ResponseEntity.ok(registrationService.acceptRegistration(registration));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/reject")
     ResponseEntity<?> reject(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
         return ResponseEntity.ok(registrationService.rejectRegistration(registration));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/postpone_review")
     ResponseEntity<?> postponeReview(@PathVariable("language") Language language, @Validated @RequestBody Registration registration) {
         return ResponseEntity.ok(registrationService.postponeReviewRegistration(registration));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/add_to_lemma/{entryId}")
     ResponseEntity<?> addRegistrationToLemma(@PathVariable("language") Language language, @Validated @RequestBody Registration registration, @PathVariable(value="entryId") String entryId) throws IOException {
         Registration loadedRegistration = registrationService.getRegistration(registration.getId());
@@ -77,19 +77,19 @@ public class RegistrationsController {
         return ResponseEntity.ok(registrationService.addRegistrationToLemma(loadedRegistration, entryId));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/did_order/{entryId}")
     ResponseEntity<?> didOrder(@PathVariable("language") Language language,  @PathVariable(value="entryId") String entryId) {
         return ResponseEntity.ok(registrationService.getOrderedRegistration(entryId));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/order")
     ResponseEntity<?> order(@PathVariable("language") Language language,  @Validated @RequestBody Registration registration) {
         return ResponseEntity.ok(registrationService.order(registration));
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable("language") Language language, @PathVariable("id") String id) {
         registrationService.deleteRegistration(id);

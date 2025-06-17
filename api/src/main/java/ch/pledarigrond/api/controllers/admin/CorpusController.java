@@ -25,7 +25,7 @@ public class CorpusController {
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Import error.");
     }
 
-    @PreAuthorize("hasPermission(#language, 'editor')")
+    @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/find")
     ResponseEntity<?> findInCorpus(@PathVariable("language") Language language, @RequestParam String s) {
         return ResponseEntity.ok(corpusService.findInCorpus(language, s));
