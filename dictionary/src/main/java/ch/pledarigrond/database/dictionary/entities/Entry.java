@@ -47,23 +47,22 @@ public class Entry {
     }
 
     public PublicationStatus getPublicationStatus() {
-        if (publicationStatus != null) {
-            return publicationStatus;
+        if (publicationStatus == null) {
+            publicationStatus = calculateEntryStatus();
         }
 
-        return calculateEntryStatus();
+        return publicationStatus;
     }
 
     private PublicationStatus calculateEntryStatus() {
-        if (current == null && !suggestions.isEmpty()) {
-            return PublicationStatus.SUGGESTION;
+        if (!suggestions.isEmpty()) {
+            return PublicationStatus.HAS_SUGGESTION;
         }
-        if (current != null && suggestions.isEmpty()) {
+
+        if (current != null) {
             return PublicationStatus.PUBLISHED;
         }
-        if (current != null) {
-            return PublicationStatus.MODIFIED;
-        }
+
         return PublicationStatus.INVALID;
     }
 

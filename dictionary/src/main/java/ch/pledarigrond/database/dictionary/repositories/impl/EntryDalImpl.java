@@ -3,6 +3,8 @@ package ch.pledarigrond.database.dictionary.repositories.impl;
 import ch.pledarigrond.common.data.dictionary.EditorQuery;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.database.dictionary.repositories.EntryDal;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,10 +16,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class EntryDalImpl implements EntryDal {
@@ -41,14 +40,18 @@ public class EntryDalImpl implements EntryDal {
         AggregationOperation matchStage = Aggregation.match(getEntryLevelCriteria(queryData));
 
         // Stage 2: $set version by concatenating arrays
-        AggregationOperation setStage2 = context -> new Document("$set",
-                new Document("version",
-                        new Document("$concatArrays", Arrays.asList(
-                                "$suggestions",
-                                List.of("$current")
-                        ))
-                )
-        );
+        AggregationOperation setStage2 = switch (queryData.getState()) {
+            case HAS_SUGGESTION -> context -> new Document("$set",
+                    new Document("version", "$suggestions")
+            );
+            case PUBLISHED -> context -> new Document("$set",
+                    new Document("version", List.of("$current"))
+            );
+            default -> context -> new Document("$set",
+                    new Document("version", Collections.emptyList())
+            );
+        };
+
 
         // Stage 3: $unset unwanted fields
         AggregationOperation unsetStage = context -> new Document("$unset",
@@ -61,6 +64,11 @@ public class EntryDalImpl implements EntryDal {
         // Stage 5: $match publicationStatus "MODIFIED"
         AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData, excludeAutomaticChanges));
 
+        // Stage 6: $set entryId
+        AggregationOperation renameIdStage = context -> new Document("$set",
+                new Document("entryId", "$_id")
+        );
+
         // Combine all stages into the aggregation pipeline for the result page
         List<AggregationOperation> operationsFilter = Arrays.asList(
                 matchStage,
@@ -68,6 +76,7 @@ public class EntryDalImpl implements EntryDal {
                 unsetStage,
                 unwindStage,
                 filterStage,
+                renameIdStage,
 
                 Aggregation.sort(queryData.isSortAscending() ? Sort.Direction.ASC : Sort.Direction.DESC, "version." + queryData.getSortColumn()),
 
@@ -75,6 +84,22 @@ public class EntryDalImpl implements EntryDal {
                 Aggregation.limit(pageSize)
         );
         Aggregation aggregationFilter = Aggregation.newAggregation(operationsFilter);
+
+
+        List<Document> pipeline = new ArrayList<>();
+        for (AggregationOperation op : operationsFilter) {
+            pipeline.add(op.toDocument(Aggregation.DEFAULT_CONTEXT));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(pipeline);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(json);
+
+
 
         // Combine all stages into the aggregation pipeline for the total count
         List<AggregationOperation> operationsTotal= Arrays.asList(
@@ -105,8 +130,8 @@ public class EntryDalImpl implements EntryDal {
     private Criteria getEntryLevelCriteria(EditorQuery queryData) {
         List<Criteria> criteriaList = new ArrayList<>();
 
-        if (queryData.getState() != null && queryData.getState().length > 0) {
-            criteriaList.add(Criteria.where("publicationStatus").in(Arrays.asList(queryData.getState())));
+        if (queryData.getState() != null) {
+            criteriaList.add(Criteria.where("publicationStatus").is(queryData.getState()));
         }
 
         Criteria finalCriteria = new Criteria();
@@ -138,12 +163,6 @@ public class EntryDalImpl implements EntryDal {
         if (queryData.getRole() != null) {
             criteriaList.add(
                     Criteria.where("version.creatorRole").is(queryData.getRole().toString())
-            );
-        }
-
-        if (queryData.getVersionStatus() != null) {
-            criteriaList.add(
-                    Criteria.where("version.versionStatus").is(queryData.getVersionStatus().toString())
             );
         }
 

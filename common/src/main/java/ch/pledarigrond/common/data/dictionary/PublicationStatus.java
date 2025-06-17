@@ -1,8 +1,7 @@
 package ch.pledarigrond.common.data.dictionary;
 
 public enum PublicationStatus {
-    SUGGESTION,
+    HAS_SUGGESTION,
     PUBLISHED,
-    MODIFIED,
     INVALID;
 }

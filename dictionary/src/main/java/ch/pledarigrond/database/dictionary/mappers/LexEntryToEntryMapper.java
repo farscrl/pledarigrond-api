@@ -49,15 +49,14 @@ public class LexEntryToEntryMapper {
 
         ArrayList<EntryVersion> suggestions = new ArrayList<>();
         for (LemmaVersion lv : lexEntry.getUnapprovedVersions()) {
-            String internalId = String.valueOf(lv.getInternalId());
-            String transformedId = internalToNewIdMap.get(internalId);
+            String transformedId = internalToNewIdMap.get(lv.getInternalId());
             versions.stream()
                     .filter(version -> version.getVersionId().equals(transformedId))
                     .findFirst().ifPresent(suggestions::add);
         }
         entry.setSuggestions(suggestions);
 
-        String transformedId = internalToNewIdMap.get(String.valueOf(lexEntry.getCurrentId()));
+        String transformedId = internalToNewIdMap.get(lexEntry.getCurrentId());
         versions.stream()
                         .filter(version -> version.getVersionId().equals(transformedId))
                         .findFirst().ifPresent(entry::setCurrent);

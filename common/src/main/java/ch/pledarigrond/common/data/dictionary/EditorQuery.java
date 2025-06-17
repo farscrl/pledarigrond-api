@@ -9,14 +9,12 @@ public class EditorQuery {
     private static final long HALF_YEAR = ONE_DAY * 31 * 6;
 
     // filters for Entry
-    private PublicationStatus[] state = new PublicationStatus[] {PublicationStatus.SUGGESTION, PublicationStatus.MODIFIED};
-    // private PublicationStatus[] state = new PublicationStatus[] {};
+    private PublicationStatus state = PublicationStatus.PUBLISHED;
 
     // filters for EntryVersion
     private String userOrIp; // The current text (first name, last name, email, login) used for filtering results
     private String verifier;
     private EditorRole role;
-    private VersionStatus versionStatus;
     private long startTime = System.currentTimeMillis() - HALF_YEAR;
     private long endTime;
 
