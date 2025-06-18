@@ -18,11 +18,11 @@ import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.lucene.suggestions.SuggestionsIndex;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class LuceneServiceImpl implements LuceneService {
     private final Map<Language, SuggestionsIndex> luceneSuggestionsIndexMap = new HashMap<>();
 
     @PostConstruct
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, NoIndexAvailableException {
         luceneIndexMap.put(Language.PUTER, new LuceneIndexManager(pgEnvironment.getLuceneConfigPuter()));
         luceneIndexMap.put(Language.RUMANTSCHGRISCHUN, new LuceneIndexManager(pgEnvironment.getLuceneConfigRumantschgrischun()));
         luceneIndexMap.put(Language.SURMIRAN, new LuceneIndexManager(pgEnvironment.getLuceneConfigSurmiran()));

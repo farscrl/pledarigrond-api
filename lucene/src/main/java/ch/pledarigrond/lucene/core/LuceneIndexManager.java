@@ -61,7 +61,7 @@ public class LuceneIndexManager {
 
     private final IndexCommandQueue queue;
 
-    public LuceneIndexManager(LuceneConfiguration luceneConfiguration) throws IOException {
+    public LuceneIndexManager(LuceneConfiguration luceneConfiguration) throws IOException, NoIndexAvailableException {
         this.language = luceneConfiguration.getLanguage();
         queue = IndexCommandQueue.getInstance(this.language);
         formatter = (NumberFormat) NumberFormat.getNumberInstance().clone();
@@ -70,7 +70,7 @@ public class LuceneIndexManager {
         setLuceneConfiguration(luceneConfiguration);
     }
 
-    public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) throws IOException {
+    public void setLuceneConfiguration(LuceneConfiguration luceneConfiguration) throws IOException, NoIndexAvailableException {
         luceneIndexFilesystem.put(this.language, new LuceneIndexFilesystem(luceneConfiguration));
         luceneIndexFilesystem.get(this.language).initialize();
         luceneIndexFilesystem.get(this.language).resetIndexDirectory();
