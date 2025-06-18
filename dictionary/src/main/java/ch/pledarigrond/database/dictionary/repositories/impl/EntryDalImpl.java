@@ -3,8 +3,6 @@ package ch.pledarigrond.database.dictionary.repositories.impl;
 import ch.pledarigrond.common.data.dictionary.EditorQuery;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.database.dictionary.repositories.EntryDal;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -84,22 +82,6 @@ public class EntryDalImpl implements EntryDal {
                 Aggregation.limit(pageSize)
         );
         Aggregation aggregationFilter = Aggregation.newAggregation(operationsFilter);
-
-
-        List<Document> pipeline = new ArrayList<>();
-        for (AggregationOperation op : operationsFilter) {
-            pipeline.add(op.toDocument(Aggregation.DEFAULT_CONTEXT));
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(pipeline);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(json);
-
-
 
         // Combine all stages into the aggregation pipeline for the total count
         List<AggregationOperation> operationsTotal= Arrays.asList(
