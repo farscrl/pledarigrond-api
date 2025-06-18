@@ -48,6 +48,11 @@ public class SlackServiceImpl implements SlackService {
 
     @Async
     public void sendException(Exception ex, String title) {
+        // do not send exceptions in dev profile
+        if (activeProfile.equals("dev")) {
+            return;
+        }
+
         String stackTrace = Arrays.stream(ex.getStackTrace())
                 .limit(10)
                 .map(StackTraceElement::toString)
