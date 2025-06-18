@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getCurrentUserOrDefaultUser() {
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            return userMapper.toUserDto(userRepository.findByEmail(email).get());
+            UserForLoginDto user = (UserForLoginDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return userMapper.toUserDto(userRepository.findByEmail(user.getEmail()).get());
         }
         return userMapper.toUserDto(getOrCreateGuestUser());
     }
