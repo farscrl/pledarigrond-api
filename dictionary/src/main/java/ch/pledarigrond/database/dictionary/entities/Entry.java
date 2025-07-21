@@ -98,12 +98,14 @@ public class Entry {
     public Entry acceptVersion(String versionId, UserInfoDto userInfo) throws SuggestionNotFoundException {
         EntryVersion version = suggestions.stream().filter(v -> v.getVersionId().equals(versionId)).findFirst().orElseThrow(() -> new SuggestionNotFoundException(versionId));
         suggestions.remove(version);
+        version.setTimestamp(Instant.now());
         return addVersion(version, userInfo, Action.ACCEPTED_MODIFICATION);
     }
 
     public Entry refuseVersion(String versionId, UserInfoDto userInfo) throws SuggestionNotFoundException {
         EntryVersion version = suggestions.stream().filter(v -> v.getVersionId().equals(versionId)).findFirst().orElseThrow(() -> new SuggestionNotFoundException(versionId));
         suggestions.remove(version);
+        version.setTimestamp(Instant.now());
         return addVersion(version, userInfo, Action.REFUSED_MODIFICATION);
     }
 

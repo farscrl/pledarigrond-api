@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -52,18 +53,20 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public EntryDto addEntry(EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo) {
-        EntryVersion entryVersion = entryMapper.toEntryVersion(version);
-        Entry entry = Entry.createEntry(entryVersion, asSuggestion, userInfo);
+    public EntryDto addEntry(EntryVersionDto versionDto, boolean asSuggestion, UserInfoDto userInfo) {
+        EntryVersion version = entryMapper.toEntryVersion(versionDto);
+        version.setTimestamp(Instant.now());
+        Entry entry = Entry.createEntry(version, asSuggestion, userInfo);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
     @Override
-    public EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo) {
+    public EntryDto addVersion(String entryId, EntryVersionDto versionDto, boolean asSuggestion, UserInfoDto userInfo) {
         Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
-        EntryVersion entryVersion = entryMapper.toEntryVersion(version);
+        EntryVersion version = entryMapper.toEntryVersion(versionDto);
+        version.setTimestamp(Instant.now());
 
-        entry.addVersion(entryVersion, userInfo, Action.SUGGESTED_MODIFICATION);
+        entry.addVersion(version, userInfo, Action.SUGGESTED_MODIFICATION);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
@@ -140,6 +143,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             }
             logger.info("Entry {} <-> {} had sortVal «{}», now is «{}»", updatedVersion.getRmStichwort(), updatedVersion.getDeStichwort(), sortValOld, sortValNew);
 
+            updatedVersion.setTimestamp(Instant.now());
             entry.setCurrent(updatedVersion);
             entry.getVersions().add(updatedVersion);
             entry = entryRepository.save(entry);
@@ -156,6 +160,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         EntryVersion updatedVersion = clone(entry.getCurrent());
         updatedVersion.setRmPronunciation(pronunciation);
 
+        updatedVersion.setTimestamp(Instant.now());
         entry.setCurrent(updatedVersion);
         entry.getVersions().add(updatedVersion);
 
@@ -168,6 +173,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         EntryVersion updatedVersion = clone(entry.getCurrent());
         updatedVersion.setRmPronunciation(null);
 
+        updatedVersion.setTimestamp(Instant.now());
         entry.setCurrent(updatedVersion);
         entry.getVersions().add(updatedVersion);
 
