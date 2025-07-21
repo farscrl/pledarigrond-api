@@ -32,11 +32,6 @@
             <artifactId>spring-data-mongodb</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
         <!-- used for import/export -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
