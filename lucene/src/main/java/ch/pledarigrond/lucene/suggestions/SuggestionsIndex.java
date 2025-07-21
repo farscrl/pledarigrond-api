@@ -60,8 +60,8 @@ public class SuggestionsIndex {
         IndexReader readerDe = DirectoryReader.open(spellIndexDirectoryDe);
 
         // Use the SpellChecker's indexDictionary method to build the suggestion index
-        spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "DStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
-        spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "RStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "deStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "rmStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
 
         logIndexedWords();
 

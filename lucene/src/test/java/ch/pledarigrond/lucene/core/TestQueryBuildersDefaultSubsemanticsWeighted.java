@@ -61,12 +61,12 @@ public class TestQueryBuildersDefaultSubsemanticsWeighted extends TestQueryBuild
 		assertArrayEquals(expected, found);
 	}
 
-	private void addEntryVersionDto(List<EntryDto> entries, int counter, String DStichwort, String RStichwort, String DSubsemantik, String RSubsemantik) {
+	private void addEntryVersionDto(List<EntryDto> entries, int counter, String deStichwort, String rmStichwort, String deSubsemantik, String rmSubsemantik) {
 		EntryVersionDto ev = new EntryVersionDto();
-		ev.setDeStichwort(DStichwort);
-		ev.setRmStichwort(RStichwort);
-		ev.setDeSubsemantik(DSubsemantik);
-		ev.setRmSubsemantik(RSubsemantik);
+		ev.setDeStichwort(deStichwort);
+		ev.setRmStichwort(rmStichwort);
+		ev.setDeSubsemantik(deSubsemantik);
+		ev.setRmSubsemantik(rmSubsemantik);
 		ev.setRmStichwortSort("1");
 		ev.setDeStichwortSort("1");
 

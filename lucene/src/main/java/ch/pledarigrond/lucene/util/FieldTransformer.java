@@ -2,16 +2,12 @@ package ch.pledarigrond.lucene.util;
 
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.common.LemmaVersion;
-import ch.pledarigrond.common.data.common.LexEntry;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.*;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.lucene.core.FieldManager;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +25,8 @@ public class FieldTransformer {
         StringBuilder allFieldsList = new StringBuilder();
 
         toFieldUpdateAllFields(doc, FN.entryId, entry.getEntryId(), allFieldsList);
-        toFieldUpdateAllFields(doc, FN.publicationStatus, entry.getPublicationStatus().toString(), allFieldsList);
+        toFieldUpdateAllFields(doc, FN.versionId, ev.getVersionId(), allFieldsList);
+        toFieldUpdateAllFields(doc, FN.publicationStatus, entry.getPublicationStatus() != null ? entry.getPublicationStatus().toString() : "", allFieldsList);
         toFieldUpdateAllFields(doc, FN.rmStichwort, ev.getRmStichwort(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.rmStichwortSort, ev.getRmStichwortSort(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.rmSemantik, ev.getRmSemantik(), allFieldsList);
@@ -56,11 +53,11 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.userComment, ev.getUserComment(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.userEmail, ev.getUserEmail(), allFieldsList);
 
-        toFieldUpdateAllFields(doc, FN.timestamp, ev.getTimestamp().toString(), allFieldsList);
+        toFieldUpdateAllFields(doc, FN.timestamp, ev.getTimestamp() != null ? ev.getTimestamp().toString() : "", allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.creator, ev.getCreator(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.creatorIp, ev.getCreatorIp(), allFieldsList);
-        toFieldUpdateAllFields(doc, FN.creatorRole, ev.getCreatorRole().toString(), allFieldsList);
+        toFieldUpdateAllFields(doc, FN.creatorRole, ev.getCreatorRole() != null ? ev.getCreatorRole().toString() : "", allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.automaticChange, ev.isAutomaticChange() + "", allFieldsList);
 
@@ -136,6 +133,7 @@ public class FieldTransformer {
     public static EntryVersionDto getEntryVersion(Document doc) {
         EntryVersionDto ev = new EntryVersionDto();
         for (String fieldName : FieldManager.getInstance().getAllColumns()) {
+            ev.setEntryId(toValue(doc, FN.entryId));
             ev.setVersionId(toValue(doc, FN.versionId));
             ev.setRmStichwort(toValue(doc, FN.rmStichwort));
             ev.setRmStichwortSort(toValue(doc, FN.rmStichwortSort));
@@ -167,7 +165,11 @@ public class FieldTransformer {
 
             ev.setCreator(toValue(doc, FN.creator));
             ev.setCreatorIp(toValue(doc, FN.creatorIp));
-            ev.setCreatorRole(EditorRole.valueOf(toValue(doc, FN.creatorRole)));
+
+            String creatorRole = toValue(doc, FN.creatorRole);
+            if (creatorRole != null && creatorRole.isEmpty()) {
+                ev.setCreatorRole(EditorRole.valueOf(creatorRole));
+            }
 
             ev.setAutomaticChange(Boolean.parseBoolean(toValue(doc, FN.automaticChange)));
         }
@@ -226,27 +228,5 @@ public class FieldTransformer {
             }
         }
         return fields;
-    }
-
-    /**
-     * Helper method to add the default pg fields of a {@link LemmaVersion} to a lucene {@link Document}.
-     */
-    protected static void addPgFieldsToDocument(LexEntry lexEntry, LemmaVersion version, Document document) {
-        // TODO: check if added
-        document.add(new StringField(LexEntry.ID, lexEntry.getId(), Field.Store.YES));
-        document.add(new StringField(LemmaVersion.LEXENTRY_ID, lexEntry.getId(), Field.Store.YES));
-        document.add(new StringField(LemmaVersion.ID, version.getInternalId() + "", Field.Store.YES));
-        document.add(new StringField(LemmaVersion.VERIFICATION, version.getVerification().toString(), Field.Store.YES));
-        document.add(new TextField(LemmaVersion.VERIFICATION + "_analyzed", version.getVerification().toString().toLowerCase(), Field.Store.NO));
-    }
-
-    /**
-     * Helper method to add default PG fields from a lucene {@link Document} to a {@link LemmaVersion}.
-     */
-    protected static void addPgFieldsToLemmaVersion(Document document, LemmaVersion lemmaVersion) {
-        lemmaVersion.putPgValue(LexEntry.ID, document.get(LexEntry.ID));
-        lemmaVersion.putPgValue(LemmaVersion.LEXENTRY_ID, document.get(LemmaVersion.LEXENTRY_ID));
-        lemmaVersion.putPgValue(LemmaVersion.ID, document.get(LemmaVersion.ID));
-        lemmaVersion.putPgValue(LemmaVersion.VERIFICATION, document.get(LemmaVersion.VERIFICATION));
     }
 }

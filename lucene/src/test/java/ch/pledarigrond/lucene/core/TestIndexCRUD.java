@@ -143,9 +143,9 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		assertEquals(1, result.getTotalElements());
 
 		// Delete existing lemma version
-		EntryVersionDto EntryVersionDto = result.getContent().get(0);
-		EntryDto entry = generateValidEntryFromEntryVersionDto(EntryVersionDto);
-		entry.setEntryId(EntryVersionDto.getEntryId());
+		EntryVersionDto entryVersionDto = result.getContent().get(0);
+		EntryDto entry = generateValidEntryFromEntryVersionDto(entryVersionDto);
+		entry.setEntryId(entryVersionDto.getEntryId());
 		luceneIndexManager.delete(entry);
 
 		result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.ROMANSH, SearchMethod.NORMAL, "r"), IndexTestHelpers.getPagination());
@@ -198,9 +198,9 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		assertEquals(afterUpdate.getNumberOfEntries(), 36);
+		assertEquals(36, afterUpdate.getNumberOfEntries());
 
-		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("DSubsemantik", "d", 10);
+		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("deSubsemantik", "d", 10);
 
 		assertEquals(10, result.size());
 
@@ -215,7 +215,7 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		assertEquals("d8", result.get(8));
 		assertEquals("d9", result.get(9));
 
-		result = luceneIndexManager.getSuggestionsForField("RSubsemantik", "r", 5);
+		result = luceneIndexManager.getSuggestionsForField("rmSubsemantik", "r", 5);
 
 		assertEquals(5, result.size());
 
@@ -247,7 +247,7 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		assertEquals(afterUpdate.getNumberOfEntries(), 2);
+		assertEquals(2, afterUpdate.getNumberOfEntries());
 
 		ArrayList<String> result = luceneIndexManager.getSuggestionsForField("categories", "s", 10);
 
@@ -276,7 +276,7 @@ public class TestIndexCRUD extends BaseLuceneIndexTest {
 		luceneIndexManager.addToIndex(entries.stream());
 
 		IndexStatistics afterUpdate = luceneIndexManager.getIndexStatistics();
-		assertEquals(afterUpdate.getNumberOfEntries(), 36);
+		assertEquals(36, afterUpdate.getNumberOfEntries());
 
 		ArrayList<String> result = luceneIndexManager.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "d", 10);
 

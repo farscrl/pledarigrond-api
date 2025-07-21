@@ -50,16 +50,16 @@ public class IndexedColumnHelper {
         fields.add(new SortedDocValuesField(name, new BytesRef(value.toLowerCase())));
         fields.add(new TextField(name, value, stored));
 
-        if (name.equals("DStichwort")) {
+        if (name.equals("deStichwort")) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("DStichwort_dict", valueDict, stored));
+                fields.add(new StringField("deStichwort_dict", valueDict, stored));
             }
         }
-        if (name.equals("RStichwort")) {
+        if (name.equals("rmStichwort")) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("RStichwort_dict", valueDict, stored));
+                fields.add(new StringField("rmStichwort_dict", valueDict, stored));
             }
         }
         return fields;
@@ -84,15 +84,15 @@ public class IndexedColumnHelper {
     }
 
     /**
-     * RStichwort in ladin (puter & vallader) contains pronunciation marks. As search should not depend
+     * rmStichwort in ladin (puter & vallader) contains pronunciation marks. As search should not depend
      * on those, we normalize the values for the search fields.
-     * This function normalizes the values in fields with a name starting with "RStichwort_".
+     * This function normalizes the values in fields with a name starting with "rmStichwort".
      *
      * @param value The field value
      * @return The normalized file value
      */
     private static String normalizeLadinPronunciationValues(String fieldName, String value) {
-        if (fieldName.startsWith("RStichwort_")) {
+        if (fieldName.startsWith("rmStichwort_")) {
             return PronunciationNormalizer.normalizePronunciation(value);
         }
         return value;

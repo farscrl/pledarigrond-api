@@ -63,10 +63,10 @@ public class BuilderRegistry {
             return new ArrayList<>();
         }
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RTags_normal").transform(field);
+            return builderMap.get("rmTags_normal").transform(field);
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DTags_normal").transform(field);
+            return builderMap.get("deTags_normal").transform(field);
         }
         return new ArrayList<>();
     }
@@ -75,18 +75,18 @@ public class BuilderRegistry {
         if (method != SearchMethod.INTERN) {
             return new ArrayList<>();
         }
-        return builderMap.get("REtymologie_intern").transform(field);
+        return builderMap.get("rmEtymologie_intern").transform(field);
     }
 
     public List<Query> getSuggestionQueries(String field, String searchTerm) {
         return switch (field) {
-            case "DGrammatik" -> builderMap.get("DGrammatik_default").transform(searchTerm);
-            case "DGenus" -> builderMap.get("DGenus_default").transform(searchTerm);
-            case "DSubsemantik" -> builderMap.get("DSubsemantik_default").transform(searchTerm);
+            case "deGrammatik" -> builderMap.get("deGrammatik_default").transform(searchTerm);
+            case "deGenus" -> builderMap.get("deGenus_default").transform(searchTerm);
+            case "deSubsemantik" -> builderMap.get("deSubsemantik_default").transform(searchTerm);
             case "categories" -> builderMap.get("categories_default").transform(searchTerm);
-            case "RGrammatik" -> builderMap.get("RGrammatik_default").transform(searchTerm);
-            case "RGenus" -> builderMap.get("RGenus_default").transform(searchTerm);
-            case "RSubsemantik" -> builderMap.get("RSubsemantik_default").transform(searchTerm);
+            case "rmGrammatik" -> builderMap.get("rmGrammatik_default").transform(searchTerm);
+            case "rmGenus" -> builderMap.get("rmGenus_default").transform(searchTerm);
+            case "rmSubsemantik" -> builderMap.get("rmSubsemantik_default").transform(searchTerm);
             default -> List.of();
         };
     }
@@ -103,30 +103,30 @@ public class BuilderRegistry {
 
     public AbstractQueryBuilder getGenderBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RGenus_simple_prefix");
+            return builderMap.get("rmGenus_simple_prefix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DGenus_simple_prefix");
+            return builderMap.get("deGenus_simple_prefix");
         }
         return null;
     }
 
     public AbstractQueryBuilder getGrammarBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("RGrammatik_simple_prefix");
+            return builderMap.get("rmGrammatik_simple_prefix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("DGrammatik_simple_prefix");
+            return builderMap.get("deGrammatik_simple_prefix");
         }
         return null;
     }
 
     public AbstractQueryBuilder getSubSemanticsBuilder(SearchDirection direction) {
         if (direction == SearchDirection.ROMANSH) {
-            return builderMap.get("DSubsemantik_infix");
+            return builderMap.get("deSubsemantik_infix");
         }
         if (direction == SearchDirection.GERMAN) {
-            return builderMap.get("RSubsemantik_infix");
+            return builderMap.get("rmSubsemantik_infix");
         }
         return null;
     }
@@ -160,38 +160,38 @@ public class BuilderRegistry {
         builderMap.put("deStichwort_exact", new ExactMatchQueryBuilder().setColumn("deStichwort"));
 
         // Search Tags
-        builderMap.put("RTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("RTags"));
-        builderMap.put("DTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("DTags"));
+        builderMap.put("rmTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("rmTags"));
+        builderMap.put("deTags_normal", new DefaultQueryBuilderSplittingWhitespaces().setColumn("deTags"));
 
         // Search words starting with
         builderMap.put("deStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("deStichwort"));
         builderMap.put("rmStichwort_simple_prefix", new SimplePrefixQueryBuilder().setColumn("rmStichwort"));
 
         // Search Gender
-        builderMap.put("DGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGenus"));
-        builderMap.put("RGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RGenus"));
+        builderMap.put("deGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("deGenus"));
+        builderMap.put("rmGenus_simple_prefix", new SimplePrefixQueryBuilder().setColumn("rmGenus"));
 
         // Search Grammar
-        builderMap.put("DGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("DGrammatik"));
-        builderMap.put("RGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("RGrammatik"));
+        builderMap.put("deGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("deGrammatik"));
+        builderMap.put("rmGrammatik_simple_prefix", new SimplePrefixQueryBuilder().setColumn("rmGrammatik"));
         
         // Search SubSemantics
-        builderMap.put("DSubsemantik_infix", new InfixQueryBuilder().setColumn("DSubsemantik"));
-        builderMap.put("RSubsemantik_infix", new InfixQueryBuilder().setColumn("RSubsemantik"));
+        builderMap.put("deSubsemantik_infix", new InfixQueryBuilder().setColumn("deSubsemantik"));
+        builderMap.put("rmSubsemantik_infix", new InfixQueryBuilder().setColumn("rmSubsemantik"));
 
         // Category
         builderMap.put("categories_infix", new InfixQueryBuilder().setColumn("categories"));
 
         // Etymology
-        builderMap.put("REtymologie_intern", new InfixQueryBuilder().setColumn("REtymologie"));
+        builderMap.put("rmEtymologie_intern", new InfixQueryBuilder().setColumn("rmEtymologie"));
 
         // Suggestion Builders
-        builderMap.put("DGrammatik_default", new DefaultQueryBuilder().setColumn("DGrammatik"));
-        builderMap.put("DGenus_default", new DefaultQueryBuilder().setColumn("DGenus"));
-        builderMap.put("DSubsemantik_default", new DefaultQueryBuilder().setColumn("DSubsemantik"));
+        builderMap.put("deGrammatik_default", new DefaultQueryBuilder().setColumn("deGrammatik"));
+        builderMap.put("deGenus_default", new DefaultQueryBuilder().setColumn("deGenus"));
+        builderMap.put("deSubsemantik_default", new DefaultQueryBuilder().setColumn("deSubsemantik"));
         builderMap.put("categories_default", new DefaultQueryBuilder().setColumn("categories"));
-        builderMap.put("RGrammatik_default", new DefaultQueryBuilder().setColumn("RGrammatik"));
-        builderMap.put("RGenus_default", new DefaultQueryBuilder().setColumn("RGenus"));
-        builderMap.put("RSubsemantik_default", new DefaultQueryBuilder().setColumn("RSubsemantik"));
+        builderMap.put("rmGrammatik_default", new DefaultQueryBuilder().setColumn("rmGrammatik"));
+        builderMap.put("rmGenus_default", new DefaultQueryBuilder().setColumn("rmGenus"));
+        builderMap.put("rmSubsemantik_default", new DefaultQueryBuilder().setColumn("rmSubsemantik"));
     }
 }

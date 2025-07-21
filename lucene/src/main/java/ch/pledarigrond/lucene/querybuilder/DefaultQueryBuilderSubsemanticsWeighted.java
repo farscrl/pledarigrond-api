@@ -33,9 +33,9 @@ public class DefaultQueryBuilderSubsemanticsWeighted extends AbstractQueryBuilde
     @Override
     public List<Query> transform(String value) {
         value = TokenizerHelper.tokenizeString(new CaseInsensitiveWhitespaceAnalyzer(), value);
-        String subsemanticsField = "RSubsemantik";
-        if (column.equals("DStichwort")) {
-            subsemanticsField = "DSubsemantik";
+        String subsemanticsField = "rmSubsemantik";
+        if (column.equals("deStichwort")) {
+            subsemanticsField = "deSubsemantik";
         }
 
         String[] vulgarWords = {"vulg."};

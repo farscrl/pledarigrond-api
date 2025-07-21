@@ -10,6 +10,9 @@ import java.util.List;
 public class DatabaseFields {
     public static List<IndexedColumn> getDatabaseColumns() {
         return Arrays.asList(
+                new IndexedColumn("entryId"),
+                new IndexedColumn("versionId"),
+
                 new IndexedColumn("deStichwort", FieldType.STRING_SORTED),
                 new IndexedColumn("deStichwortSort", FieldType.INTEGER_SORTED),
                 new IndexedColumn("deSemantik"),

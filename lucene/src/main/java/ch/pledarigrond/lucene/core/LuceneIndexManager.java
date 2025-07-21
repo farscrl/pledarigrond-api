@@ -187,10 +187,6 @@ public class LuceneIndexManager {
             for (Query q : queries) {
                 qBuilder.add(q, Occur.SHOULD);
             }
-            BooleanQuery.Builder bc = new BooleanQuery.Builder();
-            bc.add(qBuilder.build(), Occur.MUST);
-            bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), Occur.MUST);
-            qBuilder = bc;
             TopDocs docs = luceneIndexFilesystem.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
 
             return toEntryVersionPagination(docs, 0, pageSize);
@@ -210,20 +206,20 @@ public class LuceneIndexManager {
                 statistics.setNumberOfEntries(reader.numDocs());
 
                 // Find accepted values
-                Term term = new Term("verification", "ACCEPTED");
+                Term term = new Term("verification", "ACCEPTED"); // TODO: re-implement me
                 Query query = new TermQuery(term);
                 TopDocs results = searcher.search(query, Integer.MAX_VALUE);
                 statistics.setApprovedEntries((int) results.totalHits.value);
 
                 // Find unverified values
-                term = new Term("verification", "UNVERIFIED");
+                term = new Term("verification", "UNVERIFIED");  // TODO: re-implement me
                 query = new TermQuery(term);
                 results = searcher.search(query, Integer.MAX_VALUE);
                 statistics.setUnverifiedEntries((int) results.totalHits.value);
 
                 // Find unknown values
-                TermQuery acceptedQuery = new TermQuery(new Term("verification", "ACCEPTED"));
-                TermQuery unverifiedQuery = new TermQuery(new Term("verification", "UNVERIFIED"));
+                TermQuery acceptedQuery = new TermQuery(new Term("verification", "ACCEPTED"));  // TODO: re-implement me
+                TermQuery unverifiedQuery = new TermQuery(new Term("verification", "UNVERIFIED"));  // TODO: re-implement me
                 BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
                 booleanQueryBuilder.add(acceptedQuery, BooleanClause.Occur.MUST_NOT);
                 booleanQueryBuilder.add(unverifiedQuery, BooleanClause.Occur.MUST_NOT);
@@ -238,7 +234,7 @@ public class LuceneIndexManager {
                 HashMap<String, Integer> inflectionCount = new HashMap<>();
                 String[] inflectionTypes = new String[]{"NOUN", "V", "ADJECTIVE", "PRONOUN", "OTHER"};
                 for (String inflectionType : inflectionTypes) {
-                    term = new Term("RInflectionType", inflectionType);
+                    term = new Term("rmInflectionType", inflectionType);
                     query = new TermQuery(term);
                     results = searcher.search(query, Integer.MAX_VALUE);
                     inflectionCount.put(inflectionType, (int) results.totalHits.value);
@@ -265,10 +261,10 @@ public class LuceneIndexManager {
         Set<String[]> fields = Set.of();
         if (suggestionField == SuggestionField.GENDER) {
             searchCriteria.setGender(value);
-            fields = Set.of(new String[]{"DGenus_na_nw_l_t-STRING", "DGenus"}, new String[]{"RGenus_na_nw_l_t-STRING", "RGenus"});
+            fields = Set.of(new String[]{"deGenus_na_nw_l_t-STRING", "deGenus"}, new String[]{"rmGenus_na_nw_l_t-STRING", "rmGenus"});
         } else if (suggestionField == SuggestionField.GRAMMAR) {
             searchCriteria.setGrammar(value);
-            fields = Set.of(new String[]{"DGrammatik_na_nw_l_t-STRING", "DGrammatik"}, new String[]{"RGrammatik_na_nw_l_t-STRING", "RGrammatik"});
+            fields = Set.of(new String[]{"deGrammatik_na_nw_l_t-STRING", "deGrammatik"}, new String[]{"rmGrammatik_na_nw_l_t-STRING", "rmGrammatik"});
         }
         Query query = buildQuery(searchCriteria);
         if (query == null) {
@@ -419,16 +415,6 @@ public class LuceneIndexManager {
             finalQueryBuilder.add(part.build(), BooleanClause.Occur.MUST);
         }
 
-        if (searchCriteria.getVerification() != null) {
-            try {
-                QueryParser queryParser = new QueryParser(LemmaVersion.VERIFICATION + "_analyzed", new StandardAnalyzer());
-                queryParser.setAllowLeadingWildcard(true);
-                finalQueryBuilder.add(queryParser.parse(searchCriteria.getVerification().toString()), BooleanClause.Occur.MUST);
-            } catch (ParseException e) {
-                logger.error("Failed to parse verification query", e);
-            }
-        }
-
         if (searchCriteria.getShowReviewLater() != null) {
             try {
                 QueryParser queryParser = new QueryParser(LemmaVersion.REVIEW_LATER, new StandardAnalyzer());
@@ -467,11 +453,6 @@ public class LuceneIndexManager {
                 logger.error("Failed to parse automatic change query", e);
             }
         }
-
-        BooleanQuery.Builder bc = new BooleanQuery.Builder();
-        bc.add(finalQueryBuilder.build(), BooleanClause.Occur.MUST);
-        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), BooleanClause.Occur.MUST);
-        finalQueryBuilder = bc;
 
         long prepareEnd = System.nanoTime();
         if (logger.isDebugEnabled()) {
@@ -539,9 +520,6 @@ public class LuceneIndexManager {
         for (Query part : parts) {
             bqBuilder.add(part, Occur.SHOULD);
         }
-        BooleanQuery.Builder bc = new BooleanQuery.Builder();
-        bc.add(bqBuilder.build(), Occur.MUST);
-        bc.add(new TermQuery(new Term(LemmaVersion.VERIFICATION, LemmaVersion.Verification.ACCEPTED.toString())), Occur.MUST);
-        return bc.build();
+        return bqBuilder.build();
     }
 }
