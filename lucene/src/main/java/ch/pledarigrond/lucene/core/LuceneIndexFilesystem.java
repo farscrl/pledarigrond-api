@@ -56,12 +56,16 @@ class LuceneIndexFilesystem {
         this.luceneConfiguration = luceneConfiguration;
     }
 
-    void initialize() throws IOException, NoIndexAvailableException {
+    void initialize() throws IOException {
         resetIndexDirectory();
 //		analyzer = LuceneHelper.newAnalyzer();
         analyzer = LuceneHelper.newWhitespaceAnalyzer();
 
-        createSearcher();
+        try {
+            createSearcher();
+        } catch (NoIndexAvailableException ex) {
+            logger.error("Could not initialize LuceneIndexFilesystem", ex);
+        }
     }
 
     IndexSearcher getSearcher() throws NoIndexAvailableException {
