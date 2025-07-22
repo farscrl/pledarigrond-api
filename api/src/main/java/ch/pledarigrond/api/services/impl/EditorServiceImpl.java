@@ -19,6 +19,9 @@ import ch.pledarigrond.database.services.UserService;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -76,6 +76,13 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion) throws IOException {
         EntryDto entry = dictionaryService.addVersion(entryId, version, asSuggestion, getUserInfo());
+        luceneService.update(entry);
+        return entry;
+    }
+
+    @Override
+    public EntryDto replaceSuggestion(String entryId, String versionToReplaceId, EntryVersionDto version, boolean asSuggestion) throws IOException, SuggestionNotFoundException {
+        EntryDto entry = dictionaryService.replaceSuggestion(entryId, versionToReplaceId, version, asSuggestion, getUserInfo());
         luceneService.update(entry);
         return entry;
     }

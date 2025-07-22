@@ -67,7 +67,29 @@ public class DictionaryServiceImpl implements DictionaryService {
         version.setTimestamp(Instant.now());
 
         entry.addVersion(version, userInfo, Action.SUGGESTED_MODIFICATION);
-        return entryMapper.toEntryDto(entryRepository.save(entry));
+
+        entry = entryRepository.save(entry);
+
+        if (asSuggestion) {
+            return entryMapper.toEntryDto(entry);
+        } else {
+            try {
+                return accept(entryId, version.getVersionId(), userInfo);
+            } catch (SuggestionNotFoundException e) {
+                // this should not happen, as we just created the version
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public EntryDto replaceSuggestion(String entryId, String versionToReplaceId, EntryVersionDto versionDto, boolean asSuggestion, UserInfoDto userInfo) throws SuggestionNotFoundException {
+        Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
+        EntryVersion versionToReplace = entry.getSuggestions().stream().filter(v -> v.getVersionId().equals(versionToReplaceId)).findFirst().orElseThrow(() -> new SuggestionNotFoundException(versionToReplaceId));
+        entry.getSuggestions().remove(versionToReplace);
+
+        return addVersion(entryId, versionDto, asSuggestion, userInfo);
     }
 
     @Override

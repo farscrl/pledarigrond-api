@@ -15,6 +15,7 @@ public interface DictionaryService {
     EntryDto getEntry(String entryId);
     EntryDto addEntry(EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo);
     EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo);
+    EntryDto replaceSuggestion(String entryId, String versionToReplaceId, EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo) throws SuggestionNotFoundException;
     EntryDto accept(String entryId, String versionIdToAccept, UserInfoDto userInfo) throws SuggestionNotFoundException;
     EntryDto reject(String entryId, String versionIdToReject, UserInfoDto userInfo) throws SuggestionNotFoundException;
     void delete(String entryId);

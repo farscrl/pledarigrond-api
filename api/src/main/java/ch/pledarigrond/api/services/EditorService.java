@@ -30,6 +30,8 @@ public interface EditorService {
 
     EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion) throws IOException;
 
+    EntryDto replaceSuggestion(String entryId, String versionToReplaceId, EntryVersionDto version, boolean asSuggestion) throws IOException, SuggestionNotFoundException;
+
     EntryDto accept(String entryId, String versionIdToAccept) throws SuggestionNotFoundException, IOException;
 
     EntryDto reject(String entryId, String versionIdToReject) throws SuggestionNotFoundException, IOException;

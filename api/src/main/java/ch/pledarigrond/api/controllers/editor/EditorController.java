@@ -77,7 +77,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries")
-    ResponseEntity<?> insertEntry(@PathVariable("language") Language language, @Validated @RequestBody EntryVersionDto version, boolean asSuggestion) {
+    ResponseEntity<?> insertEntry(@PathVariable("language") Language language, @Validated @RequestBody EntryVersionDto version, @RequestParam(value = "asSuggestion", defaultValue = "false") boolean asSuggestion) {
         try {
             return ResponseEntity.ok(editorService.addEntry(version, asSuggestion));
         } catch (Exception e) {
@@ -138,6 +138,28 @@ public class EditorController {
             return ResponseEntity.ok(editorService.addVersion(entryId, modifiedVersion, true));
         } catch (Exception e) {
             logger.error("Error while modifying version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasPermission('language', 'editor')")
+    @PostMapping("/entries/{id}/replace_suggestion/{suggestionVersionId}")
+    ResponseEntity<?> replaceSuggestionAsSuggestion(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("suggestionVersionId") @NotNull String versionIdToReject, @Validated @RequestBody EntryVersionDto modifiedVersion) {
+        try {
+            return ResponseEntity.ok(editorService.replaceSuggestion(entryId, versionIdToReject, modifiedVersion, true));
+        } catch (Exception e) {
+            logger.error("Error while modifying and accepting version", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasPermission('language', 'editor')")
+    @PostMapping("/entries/{id}/replace_suggestion_and_accept/{suggestionVersionId}")
+    ResponseEntity<?> replaceSuggestionAndAccept(@PathVariable("language") Language language, @PathVariable("id") @NotNull String entryId, @PathVariable("suggestionVersionId") @NotNull String versionIdToReject, @Validated @RequestBody EntryVersionDto modifiedVersion) {
+        try {
+            return ResponseEntity.ok(editorService.replaceSuggestion(entryId, versionIdToReject, modifiedVersion, false));
+        } catch (Exception e) {
+            logger.error("Error while modifying and accepting version", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -242,7 +264,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/search_suggestions")
-    public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language, String field, String searchTerm) {
+    public ResponseEntity<?> getSearchSuggestions(@PathVariable("language") Language language, @RequestParam("field") String field, @RequestParam("searchTerm") String searchTerm) {
         if (searchTerm == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no value sent");
         }
