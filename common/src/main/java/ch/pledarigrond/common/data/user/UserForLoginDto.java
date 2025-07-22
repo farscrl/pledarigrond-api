@@ -19,4 +19,9 @@ public class UserForLoginDto {
     public void addRole(GrantedAuthority role) {
         roles.add(role);
     }
+
+    @Override
+    public String toString() {
+        return email;
+    }
 }

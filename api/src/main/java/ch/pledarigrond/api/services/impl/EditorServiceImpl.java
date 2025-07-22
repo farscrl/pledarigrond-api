@@ -309,6 +309,9 @@ public class EditorServiceImpl implements EditorService {
     }
 
     private EditorRole getEditorRole(UserDto user) {
+        if (user.isAdmin()) {
+            return EditorRole.ADMIN;
+        }
         return switch (RequestContext.getLanguage()) {
             case PUTER -> user.getRoles().getRolePuter();
             case RUMANTSCHGRISCHUN -> user.getRoles().getRoleRumantschGrischun();
