@@ -199,7 +199,7 @@ class LuceneIndexFilesystem {
         List<Document> docs = new ArrayList<>();
         EntryVersionDto currentVersion = entry.getCurrent();
         if (currentVersion != null) {
-            Document doc = FieldTransformer.getDocument(entry, currentVersion);
+            Document doc = FieldTransformer.getDocument(luceneConfiguration.getLanguage(), entry, currentVersion);
             docs.add(doc);
         }
         return docs;

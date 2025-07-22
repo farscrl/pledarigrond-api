@@ -84,8 +84,8 @@ public class DatabaseFields {
                 new IndexedColumn("participperfectmp"),
                 new IndexedColumn("participperfectfp"),
                 new IndexedColumn("participperfectmspredicativ"),
-                new IndexedColumn("imperativ1"),
-                new IndexedColumn("imperativ2"),
+                new IndexedColumn("imperativsing"),
+                new IndexedColumn("imperativplural"),
                 new IndexedColumn("imperativ3"),
                 new IndexedColumn("imperativ4"),
                 new IndexedColumn("imperativ5"),
@@ -142,6 +142,7 @@ public class DatabaseFields {
                 new IndexedColumn("composedWith"),
 
                 // nouns
+                new IndexedColumn("baseForm"),
                 new IndexedColumn("mSingular"),
                 new IndexedColumn("fSingular"),
                 new IndexedColumn("mPlural"),

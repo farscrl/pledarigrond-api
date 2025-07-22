@@ -163,7 +163,7 @@ public class LuceneIndexManager {
         for (int i = page * pageSize; i < scoreDocs.length && i < page * pageSize + pageSize; i++) {
 
             Document doc = storedFields.document(scoreDocs[i].doc);
-            EntryVersionDto e = FieldTransformer.getEntryVersion(doc);
+            EntryVersionDto e = FieldTransformer.getEntryVersion(language, doc);
             results.add(e);
         }
 

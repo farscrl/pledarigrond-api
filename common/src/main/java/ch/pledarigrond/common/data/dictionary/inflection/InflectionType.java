@@ -16,4 +16,14 @@ public enum InflectionType {
     InflectionType(String name) {
         this.name = name;
     }
+
+    public static InflectionType fromString(String text) {
+        for (InflectionType b : InflectionType.values()) {
+            if (b.name.equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+
+        throw new IllegalArgumentException("No enum constant with name " + text + " found");
+    }
 }

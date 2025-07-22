@@ -43,8 +43,8 @@ public class FN {
     public static final String automaticChange = "automaticChange";
 
     // inflection fields
-    public static final String inflectionType = "inflectionType";
-    public static final String inflectionSubtype = "inflectionSubtype";
+    public static final String inflectionType = "rmInflectionType";
+    public static final String inflectionSubtype = "rmInflectionSubtype";
     public static final String reviewLater = "reviewLater";
 
     // verb fields
@@ -73,12 +73,12 @@ public class FN {
     public static final String conjunctivplural2 = "conjunctivplural2";
     public static final String conjunctivplural3 = "conjunctivplural3";
 
-    public static final String conjunctiv2sing1 = "conjunctiv2sing1";
-    public static final String conjunctiv2sing2 = "conjunctiv2sing2";
-    public static final String conjunctiv2sing3 = "conjunctiv2sing3";
-    public static final String conjunctiv2plural1 = "conjunctiv2plural1";
-    public static final String conjunctiv2plural2 = "conjunctiv2plural2";
-    public static final String conjunctiv2plural3 = "conjunctiv2plural3";
+    public static final String conjunctivimperfectsing1 = "conjunctivimperfectsing1";
+    public static final String conjunctivimperfectsing2 = "conjunctivimperfectsing2";
+    public static final String conjunctivimperfectsing3 = "conjunctivimperfectsing3";
+    public static final String conjunctivimperfectplural1 = "conjunctivimperfectplural1";
+    public static final String conjunctivimperfectplural2 = "conjunctivimperfectplural2";
+    public static final String conjunctivimperfectplural3 = "conjunctivimperfectplural3";
 
     public static final String cundizionalsing1 = "cundizionalsing1";
     public static final String cundizionalsing2 = "cundizionalsing2";
@@ -100,8 +100,8 @@ public class FN {
     public static final String participperfectfp = "participperfectfp";
     public static final String participperfectmspredicativ = "participperfectmspredicativ";
 
-    public static final String imperativ1 = "imperativ1";
-    public static final String imperativ2 = "imperativ2";
+    public static final String imperativSing = "imperativsing";
+    public static final String imperativPlural = "imperativplural";
     public static final String imperativ3 = "imperativ3";
     public static final String imperativ4 = "imperativ4";
     public static final String imperativ5 = "imperativ5";
