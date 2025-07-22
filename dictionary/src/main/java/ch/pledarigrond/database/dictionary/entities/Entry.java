@@ -90,7 +90,11 @@ public class Entry {
         } else {
             throw new InvalidDataException("Invalid action: " + action);
         }
-        versions.add(version);
+
+        // only add to versions if it is not already present
+        if(versions.stream().noneMatch(v -> v.getVersionId().equals(version.getVersionId()))) {
+            versions.add(version);
+        }
         this.updateCalculatedFields();
         return this;
     }
