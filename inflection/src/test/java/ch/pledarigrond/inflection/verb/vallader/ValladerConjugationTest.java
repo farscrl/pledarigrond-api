@@ -44,12 +44,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus salüdat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas salüdan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu salüdess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü salüdessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella salüdess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus salüdessan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus salüdessat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas salüdessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu salüdess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü salüdessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella salüdess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus salüdessan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus salüdessat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas salüdessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu salüdess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü salüdessast", forms.getVerb().getCundiziunal().getSing2());
@@ -107,12 +107,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus gratuleschat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas gratuleschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu gratuless", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü gratulessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella gratuless", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus gratulessan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus gratulessat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas gratulessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu gratuless", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü gratulessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella gratuless", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus gratulessan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus gratulessat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas gratulessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu gratuless", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü gratulessast", forms.getVerb().getCundiziunal().getSing2());
@@ -177,12 +177,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus as barricadeschat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas as barricadeschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu am barricadess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü at barricadessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella as barricadess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus ans barricadessan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus as barricadessat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas as barricadessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu am barricadess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü at barricadessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella as barricadess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus ans barricadessan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus as barricadessat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas as barricadessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu am barricadess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü at barricadessast", forms.getVerb().getCundiziunal().getSing2());
@@ -305,12 +305,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus s'inachürat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas s'inachüran", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu m'inachüress", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü t'inachüressast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella s'inachüress", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus ans inachüressan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus s'inachüressat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas s'inachüressan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu m'inachüress", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü t'inachüressast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella s'inachüress", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus ans inachüressan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus s'inachüressat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas s'inachüressan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu m'inachüress", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü t'inachüressast", forms.getVerb().getCundiziunal().getSing2());
@@ -433,12 +433,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus giodat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas giodan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu giodess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü giodessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella giodess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus giodessan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus giodessat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas giodessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu giodess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü giodessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella giodess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus giodessan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus giodessat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas giodessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu giodess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü giodessast", forms.getVerb().getCundiziunal().getSing2());
@@ -496,12 +496,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus vendat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas vendan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu vendess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü vendessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella vendess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus vendessan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus vendessat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas vendessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu vendess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü vendessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella vendess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus vendessan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus vendessat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas vendessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu vendess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü vendessast", forms.getVerb().getCundiziunal().getSing2());
@@ -559,12 +559,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus cusat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas cusan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu cusiss", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü cusissast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella cusiss", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus cusissan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus cusissat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas cusissan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu cusiss", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü cusissast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella cusiss", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus cusissan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus cusissat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas cusissan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu cusiss", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü cusissast", forms.getVerb().getCundiziunal().getSing2());
@@ -622,12 +622,12 @@ public class ValladerConjugationTest {
         assertEquals("cha vus admonischat", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas admonischan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eu admoniss", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü admonissast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella admoniss", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus admonissan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus admonissat", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas admonissan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eu admoniss", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü admonissast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella admoniss", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus admonissan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus admonissat", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas admonissan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eu admoniss", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü admonissast", forms.getVerb().getCundiziunal().getSing2());

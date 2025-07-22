@@ -742,7 +742,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
                 break;
         }
 
-        verb.setConjunctiv2(conjunctiv2);
+        verb.setConjunctivImperfect(conjunctiv2);
     }
 
     private void setCundizional() {
@@ -1040,12 +1040,12 @@ public class SutsilvanConjugation extends LanguageConjugation {
         verb.getConjunctiv().setPlural3(setPronoun(SutsilvanPronouns.pron_conjunctiv_v + SutsilvanPronouns.pron_3pp, verb.getConjunctiv().getPlural3()));
 
         // CONJUNCTIV IMPERFECT
-        verb.getConjunctiv2().setSing1(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_1ps, verb.getConjunctiv2().getSing1()));
-        verb.getConjunctiv2().setSing2(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_2ps, verb.getConjunctiv2().getSing2()));
-        verb.getConjunctiv2().setSing3(setPronoun(SutsilvanPronouns.pron_conjunctiv_v + SutsilvanPronouns.pron_3ps, verb.getConjunctiv2().getSing3()));
-        verb.getConjunctiv2().setPlural1(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_1pp, verb.getConjunctiv2().getPlural1()));
-        verb.getConjunctiv2().setPlural2(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_2pp, verb.getConjunctiv2().getPlural2()));
-        verb.getConjunctiv2().setPlural3(setPronoun(SutsilvanPronouns.pron_conjunctiv_v + SutsilvanPronouns.pron_3pp, verb.getConjunctiv2().getPlural3()));
+        verb.getConjunctivImperfect().setSing1(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_1ps, verb.getConjunctivImperfect().getSing1()));
+        verb.getConjunctivImperfect().setSing2(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_2ps, verb.getConjunctivImperfect().getSing2()));
+        verb.getConjunctivImperfect().setSing3(setPronoun(SutsilvanPronouns.pron_conjunctiv_v + SutsilvanPronouns.pron_3ps, verb.getConjunctivImperfect().getSing3()));
+        verb.getConjunctivImperfect().setPlural1(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_1pp, verb.getConjunctivImperfect().getPlural1()));
+        verb.getConjunctivImperfect().setPlural2(setPronoun(SutsilvanPronouns.pron_conjunctiv_c + SutsilvanPronouns.pron_2pp, verb.getConjunctivImperfect().getPlural2()));
+        verb.getConjunctivImperfect().setPlural3(setPronoun(SutsilvanPronouns.pron_conjunctiv_v + SutsilvanPronouns.pron_3pp, verb.getConjunctivImperfect().getPlural3()));
 
         // CUNDIZIONAL
         verb.getCundiziunal().setSing1(setPronoun(SutsilvanPronouns.pron_1ps, verb.getCundiziunal().getSing1()));

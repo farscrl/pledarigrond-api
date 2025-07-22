@@ -44,12 +44,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus gideias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas gidian\nc'els/ellas gidan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou gidavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei gidavias\nca tei gidavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella gidavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus gidavian\nca nus gidavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus gidavias\nca vus gidavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas gidavian\nc'els/ellas gidavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou gidavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei gidavias\nca tei gidavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella gidavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus gidavian\nca nus gidavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus gidavias\nca vus gidavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas gidavian\nc'els/ellas gidavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou gidass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei gidassas", forms.getVerb().getCundiziunal().getSing2());
@@ -110,12 +110,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus tarleias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas tearlian\nc'els/ellas tearlan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou tarlavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei tarlavias\nca tei tarlavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella tarlavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus tarlavian\nca nus tarlavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus tarlavias\nca vus tarlavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas tarlavian\nc'els/ellas tarlavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou tarlavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei tarlavias\nca tei tarlavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella tarlavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus tarlavian\nca nus tarlavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus tarlavias\nca vus tarlavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas tarlavian\nc'els/ellas tarlavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou tarlass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei tarlassas", forms.getVerb().getCundiziunal().getSing2());
@@ -176,12 +176,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus paseias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas pesian\nc'els/ellas pesan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou pasavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei pasavias\nca tei pasavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella pasavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus pasavian\nca nus pasavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus pasavias\nca vus pasavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas pasavian\nc'els/ellas pasavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou pasavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei pasavias\nca tei pasavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella pasavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus pasavian\nca nus pasavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus pasavias\nca vus pasavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas pasavian\nc'els/ellas pasavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou pasass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei pasassas", forms.getVerb().getCundiziunal().getSing2());
@@ -242,12 +242,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus clameias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas clomian\nc'els/ellas cloman", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou clamavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei clamavias\nca tei clamavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella clamavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus clamavian\nca nus clamavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus clamavias\nca vus clamavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas clamavian\nc'els/ellas clamavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou clamavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei clamavias\nca tei clamavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella clamavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus clamavian\nca nus clamavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus clamavias\nca vus clamavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas clamavian\nc'els/ellas clamavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou clamass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei clamassas", forms.getVerb().getCundiziunal().getSing2());
@@ -308,12 +308,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus passanteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas passaintian\nc'els/ellas passaintan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou passantavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei passantavias\nca tei passantavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella passantavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus passantavian\nca nus passantavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus passantavias\nca vus passantavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas passantavian\nc'els/ellas passantavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou passantavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei passantavias\nca tei passantavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella passantavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus passantavian\nca nus passantavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus passantavias\nca vus passantavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas passantavian\nc'els/ellas passantavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou passantass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei passantassas", forms.getVerb().getCundiziunal().getSing2());
@@ -374,12 +374,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus irteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas iertian\nc'els/ellas iertan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou irtavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei irtavias\nca tei irtavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella irtavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus irtavian\nca nus irtavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus irtavias\nca vus irtavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas irtavian\nc'els/ellas irtavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou irtavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei irtavias\nca tei irtavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella irtavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus irtavian\nca nus irtavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus irtavias\nca vus irtavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas irtavian\nc'els/ellas irtavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou irtass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei irtassas", forms.getVerb().getCundiziunal().getSing2());
@@ -440,12 +440,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus fimeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas femian\nc'els/ellas feman", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou fimavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei fimavias\nca tei fimavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella fimavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus fimavian\nca nus fimavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus fimavias\nca vus fimavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas fimavian\nc'els/ellas fimavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou fimavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei fimavias\nca tei fimavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella fimavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus fimavian\nca nus fimavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus fimavias\nca vus fimavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas fimavian\nc'els/ellas fimavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou fimass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei fimassas", forms.getVerb().getCundiziunal().getSing2());
@@ -506,12 +506,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus scalineias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas scalegnian\nc'els/ellas scalegnan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou scalinavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei scalinavias\nca tei scalinavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella scalinavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus scalinavian\nca nus scalinavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus scalinavias\nca vus scalinavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas scalinavian\nc'els/ellas scalinavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou scalinavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei scalinavias\nca tei scalinavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella scalinavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus scalinavian\nca nus scalinavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus scalinavias\nca vus scalinavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas scalinavian\nc'els/ellas scalinavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou scalinass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei scalinassas", forms.getVerb().getCundiziunal().getSing2());
@@ -572,12 +572,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus luvreias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas lavurian\nc'els/ellas lavuran", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou luvravi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei luvravias\nca tei luvravas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella luvravi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus luvravian\nca nus luvravan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus luvravias\nca vus luvravas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas luvravian\nc'els/ellas luvravan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou luvravi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei luvravias\nca tei luvravas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella luvravi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus luvravian\nca nus luvravan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus luvravias\nca vus luvravas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas luvravian\nc'els/ellas luvravan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou luvrass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei luvrassas", forms.getVerb().getCundiziunal().getSing2());
@@ -638,12 +638,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus purteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas portian\nc'els/ellas portan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou purtavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei purtavias\nca tei purtavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella purtavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus purtavian\nca nus purtavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus purtavias\nca vus purtavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas purtavian\nc'els/ellas purtavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou purtavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei purtavias\nca tei purtavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella purtavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus purtavian\nca nus purtavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus purtavias\nca vus purtavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas purtavian\nc'els/ellas purtavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou purtass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei purtassas", forms.getVerb().getCundiziunal().getSing2());
@@ -704,12 +704,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus tschaneias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas tschagnian\nc'els/ellas tschagnan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou tschanavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei tschanavias\nca tei tschanavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella tschanavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus tschanavian\nca nus tschanavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus tschanavias\nca vus tschanavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas tschanavian\nc'els/ellas tschanavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou tschanavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei tschanavias\nca tei tschanavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella tschanavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus tschanavian\nca nus tschanavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus tschanavias\nca vus tschanavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas tschanavian\nc'els/ellas tschanavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou tschanass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei tschanassas", forms.getVerb().getCundiziunal().getSing2());
@@ -770,12 +770,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus planteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas plàntian\nc'els/ellas plàntan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou plantavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei plantavias\nca tei plantavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella plantavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus plantavian\nca nus plantavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus plantavias\nca vus plantavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas plantavian\nc'els/ellas plantavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou plantavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei plantavias\nca tei plantavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella plantavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus plantavian\nca nus plantavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus plantavias\nca vus plantavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas plantavian\nc'els/ellas plantavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou plantass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei plantassas", forms.getVerb().getCundiziunal().getSing2());
@@ -836,12 +836,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus suneias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sùnian\nc'els/ellas sùnan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou sunavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei sunavias\nca tei sunavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella sunavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus sunavian\nca nus sunavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus sunavias\nca vus sunavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas sunavian\nc'els/ellas sunavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou sunavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei sunavias\nca tei sunavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella sunavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus sunavian\nca nus sunavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus sunavias\nca vus sunavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas sunavian\nc'els/ellas sunavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou sunass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei sunassas", forms.getVerb().getCundiziunal().getSing2());
@@ -902,12 +902,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus sfardeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sfredian\nc'els/ellas sfredan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou sfardavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei sfardavias\nca tei sfardavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella sfardavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus sfardavian\nca nus sfardavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus sfardavias\nca vus sfardavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas sfardavian\nc'els/ellas sfardavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou sfardavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei sfardavias\nca tei sfardavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella sfardavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus sfardavian\nca nus sfardavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus sfardavias\nca vus sfardavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas sfardavian\nc'els/ellas sfardavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou sfardass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei sfardassas", forms.getVerb().getCundiziunal().getSing2());
@@ -968,12 +968,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus sgarmeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sgromian\nc'els/ellas sgroman", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou sgarmavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei sgarmavias\nca tei sgarmavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella sgarmavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus sgarmavian\nca nus sgarmavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus sgarmavias\nca vus sgarmavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas sgarmavian\nc'els/ellas sgarmavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou sgarmavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei sgarmavias\nca tei sgarmavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella sgarmavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus sgarmavian\nca nus sgarmavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus sgarmavias\nca vus sgarmavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas sgarmavian\nc'els/ellas sgarmavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou sgarmass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei sgarmassas", forms.getVerb().getCundiziunal().getSing2());
@@ -1034,12 +1034,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus sgarteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sgratian\nc'els/ellas sgratan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou sgartavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei sgartavias\nca tei sgartavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella sgartavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus sgartavian\nca nus sgartavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus sgartavias\nca vus sgartavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas sgartavian\nc'els/ellas sgartavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou sgartavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei sgartavias\nca tei sgartavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella sgartavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus sgartavian\nca nus sgartavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus sgartavias\nca vus sgartavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas sgartavian\nc'els/ellas sgartavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou sgartass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei sgartassas", forms.getVerb().getCundiziunal().getSing2());
@@ -1100,12 +1100,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus canteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas tgàntian\nc'els/ellas tgàntan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou cantavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei cantavias\nca tei cantavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella cantavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus cantavian\nca nus cantavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus cantavias\nca vus cantavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas cantavian\nc'els/ellas cantavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou cantavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei cantavias\nca tei cantavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella cantavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus cantavian\nca nus cantavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus cantavias\nca vus cantavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas cantavian\nc'els/ellas cantavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou cantass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei cantassas", forms.getVerb().getCundiziunal().getSing2());
@@ -1166,12 +1166,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus anganeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas angonian\nc'els/ellas angonan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou anganavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei anganavias\nca tei anganavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella anganavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus anganavian\nca nus anganavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus anganavias\nca vus anganavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas anganavian\nc'els/ellas anganavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou anganavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei anganavias\nca tei anganavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella anganavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus anganavian\nca nus anganavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus anganavias\nca vus anganavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas anganavian\nc'els/ellas anganavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou anganass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei anganassas", forms.getVerb().getCundiziunal().getSing2());
@@ -1232,12 +1232,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus spargneias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas spargnian\nc'els/ellas spargnan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou spargneavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei spargneavias\nca tei spargneavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella spargneavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus spargneavian\nca nus spargneavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus spargneavias\nca vus spargneavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas spargneavian\nc'els/ellas spargneavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou spargneavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei spargneavias\nca tei spargneavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella spargneavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus spargneavian\nca nus spargneavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus spargneavias\nca vus spargneavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas spargneavian\nc'els/ellas spargneavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou spargness", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei spargnessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1298,12 +1298,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus samtgeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas semtgian\nc'els/ellas semtgan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou samtgeavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei samtgeavias\nca tei samtgeavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella samtgeavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus samtgeavian\nca nus samtgeavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus samtgeavias\nca vus samtgeavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas samtgeavian\nc'els/ellas samtgeavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou samtgeavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei samtgeavias\nca tei samtgeavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella samtgeavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus samtgeavian\nca nus samtgeavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus samtgeavias\nca vus samtgeavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas samtgeavian\nc'els/ellas samtgeavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou samtgess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei samtgessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1364,12 +1364,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus spitgeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas spetgian\nc'els/ellas spetgan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou spitgeavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei spitgeavias\nca tei spitgeavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella spitgeavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus spitgeavian\nca nus spitgeavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus spitgeavias\nca vus spitgeavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas spitgeavian\nc'els/ellas spitgeavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou spitgeavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei spitgeavias\nca tei spitgeavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella spitgeavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus spitgeavian\nca nus spitgeavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus spitgeavias\nca vus spitgeavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas spitgeavian\nc'els/ellas spitgeavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou spitgess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei spitgessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1430,12 +1430,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus cuptgeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas coptgian\nc'els/ellas coptgan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou cuptgeavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei cuptgeavias\nca tei cuptgeavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella cuptgeavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus cuptgeavian\nca nus cuptgeavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus cuptgeavias\nca vus cuptgeavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas cuptgeavian\nc'els/ellas cuptgeavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou cuptgeavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei cuptgeavias\nca tei cuptgeavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella cuptgeavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus cuptgeavian\nca nus cuptgeavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus cuptgeavias\nca vus cuptgeavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas cuptgeavian\nc'els/ellas cuptgeavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou cuptgess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei cuptgessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1496,12 +1496,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus tschartgeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas tscheartgian\nc'els/ellas tscheartgan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou tschartgeavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei tschartgeavias\nca tei tschartgeavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella tschartgeavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus tschartgeavian\nca nus tschartgeavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus tschartgeavias\nca vus tschartgeavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas tschartgeavian\nc'els/ellas tschartgeavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou tschartgeavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei tschartgeavias\nca tei tschartgeavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella tschartgeavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus tschartgeavian\nca nus tschartgeavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus tschartgeavias\nca vus tschartgeavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas tschartgeavian\nc'els/ellas tschartgeavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou tschartgess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei tschartgessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1562,12 +1562,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus svaglieias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sveglian", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou svaglieavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei svaglieavias\nca tei svaglieavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella svaglieavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus svaglieavian\nca nus svaglieavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus svaglieavias\nca vus svaglieavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas svaglieavian\nc'els/ellas svaglieavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou svaglieavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei svaglieavias\nca tei svaglieavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella svaglieavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus svaglieavian\nca nus svaglieavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus svaglieavias\nca vus svaglieavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas svaglieavian\nc'els/ellas svaglieavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou svagliess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei svagliessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1628,12 +1628,12 @@ public class SutsilvanConjugationTest {
         //assertEquals("ca vus spassegeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas spassegian", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou spassageavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei spassageavias\nca tei spassageavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella spassageavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus spassageavian\nca nus spassageavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus spassageavias\nca vus spassageavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas spassageavian\nc'els/ellas spassageavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou spassageavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei spassageavias\nca tei spassageavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella spassageavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus spassageavian\nca nus spassageavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus spassageavias\nca vus spassageavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas spassageavian\nc'els/ellas spassageavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou spassagess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei spassagessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1694,12 +1694,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus zambargeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas zambregian", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou zambargeavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei zambargeavias\nca tei zambargeavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella zambargeavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus zambargeavian\nca nus zambargeavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus zambargeavias\nca vus zambargeavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas zambargeavian\nc'els/ellas zambargeavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou zambargeavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei zambargeavias\nca tei zambargeavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella zambargeavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus zambargeavian\nca nus zambargeavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus zambargeavias\nca vus zambargeavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas zambargeavian\nc'els/ellas zambargeavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou zambargess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei zambargessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1760,12 +1760,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus proponeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas proponian\nc'els/ellas proponan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou proponevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei proponevias\nca tei proponevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella proponevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus proponevian\nca nus proponevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus proponevias\nca vus proponevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas proponevian\nc'els/ellas proponevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou proponevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei proponevias\nca tei proponevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella proponevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus proponevian\nca nus proponevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus proponevias\nca vus proponevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas proponevian\nc'els/ellas proponevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou proponess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei proponessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1826,12 +1826,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus vandeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas vendian\nc'els/ellas vendan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou vandevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei vandevias\nca tei vandevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella vandevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus vandevian\nca nus vandevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus vandevias\nca vus vandevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas vandevian\nc'els/ellas vandevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou vandevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei vandevias\nca tei vandevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella vandevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus vandevian\nca nus vandevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus vandevias\nca vus vandevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas vandevian\nc'els/ellas vandevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou vandess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei vandessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1892,12 +1892,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus dezideias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas dezedian\nc'els/ellas dezedan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou dezidevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei dezidevias\nca tei dezidevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella dezidevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus dezidevian\nca nus dezidevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus dezidevias\nca vus dezidevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas dezidevian\nc'els/ellas dezidevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou dezidevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei dezidevias\nca tei dezidevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella dezidevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus dezidevian\nca nus dezidevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus dezidevias\nca vus dezidevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas dezidevian\nc'els/ellas dezidevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou dezidess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei dezidessas", forms.getVerb().getCundiziunal().getSing2());
@@ -1958,12 +1958,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus pardeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas peardian\nc'els/ellas peardan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou pardevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei pardevias\nca tei pardevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella pardevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus pardevian\nca nus pardevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus pardevias\nca vus pardevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas pardevian\nc'els/ellas pardevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou pardevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei pardevias\nca tei pardevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella pardevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus pardevian\nca nus pardevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus pardevias\nca vus pardevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas pardevian\nc'els/ellas pardevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou pardess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei pardessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2027,12 +2027,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus tanscheias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas tànschian\nc'els/ellas tànschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou tanschevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei tanschevias\nca tei tanschevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella tanschevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus tanschevian\nca nus tanschevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus tanschevias\nca vus tanschevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas tanschevian\nc'els/ellas tanschevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou tanschevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei tanschevias\nca tei tanschevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella tanschevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus tanschevian\nca nus tanschevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus tanschevias\nca vus tanschevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas tanschevian\nc'els/ellas tanschevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou tanschess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei tanschessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2093,12 +2093,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus purscheias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas porschian\nc'els/ellas porschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou purschevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei purschevias\nca tei purschevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella purschevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus purschevian\nca nus purschevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus purschevias\nca vus purschevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas purschevian\nc'els/ellas purschevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou purschevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei purschevias\nca tei purschevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella purschevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus purschevian\nca nus purschevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus purschevias\nca vus purschevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas purschevian\nc'els/ellas purschevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou purschess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei purschessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2159,12 +2159,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus ligeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas ligian", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou ligevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei ligevias\nca tei ligevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella ligevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus ligevian\nca nus ligevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus ligevias\nca vus ligevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas ligevian\nc'els/ellas ligevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou ligevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei ligevias\nca tei ligevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella ligevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus ligevian\nca nus ligevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus ligevias\nca vus ligevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas ligevian\nc'els/ellas ligevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou ligess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei ligessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2225,12 +2225,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus parteias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas partian\nc'els/ellas partan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou partevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei partevias\nca tei partevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella partevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus partevian\nca nus partevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus partevias\nca vus partevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas partevian\nc'els/ellas partevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou partevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei partevias\nca tei partevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella partevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus partevian\nca nus partevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus partevias\nca vus partevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas partevian\nc'els/ellas partevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou partess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei partessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2291,12 +2291,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus santeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas saintian\nc'els/ellas saintan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou santevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei santevias\nca tei santevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella santevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus santevian\nca nus santevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus santevias\nca vus santevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas santevian\nc'els/ellas santevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou santevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei santevias\nca tei santevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella santevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus santevian\nca nus santevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus santevias\nca vus santevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas santevian\nc'els/ellas santevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou santess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei santessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2357,12 +2357,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus sgrigneias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas sgregnian\nc'els/ellas sgregnan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou sgrignevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei sgrignevias\nca tei sgrignevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella sgrignevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus sgrignevian\nca nus sgrignevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus sgrignevias\nca vus sgrignevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas sgrignevian\nc'els/ellas sgrignevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou sgrignevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei sgrignevias\nca tei sgrignevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella sgrignevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus sgrignevian\nca nus sgrignevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus sgrignevias\nca vus sgrignevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas sgrignevian\nc'els/ellas sgrignevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou sgrigness", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei sgrignessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2423,12 +2423,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus udeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas odian\nc'els/ellas odan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou udevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei udevias\nca tei udevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella udevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus udevian\nca nus udevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus udevias\nca vus udevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas udevian\nc'els/ellas udevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou udevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei udevias\nca tei udevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella udevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus udevian\nca nus udevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus udevias\nca vus udevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas udevian\nc'els/ellas udevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou udess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei udessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2489,12 +2489,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus bargeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas bragian", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou bargevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei bargevias\nca tei bargevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella bargevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus bargevian\nca nus bargevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus bargevias\nca vus bargevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas bargevian\nc'els/ellas bargevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou bargevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei bargevias\nca tei bargevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella bargevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus bargevian\nca nus bargevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus bargevias\nca vus bargevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas bargevian\nc'els/ellas bargevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou bargess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei bargessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2555,12 +2555,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus ancureias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas anquierian\nc'els/ellas anquieran", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou ancurevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei ancurevias\nca tei ancurevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella ancurevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus ancurevian\nca nus ancurevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus ancurevias\nca vus ancurevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas ancurevian\nc'els/ellas ancurevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou ancurevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei ancurevias\nca tei ancurevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella ancurevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus ancurevian\nca nus ancurevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus ancurevias\nca vus ancurevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas ancurevian\nc'els/ellas ancurevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou ancuress", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei ancuressas", forms.getVerb().getCundiziunal().getSing2());
@@ -2624,12 +2624,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus gratuleias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas gratuleschian\nc'els/ellas gratuleschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou gratulavi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei gratulavias\nca tei gratulavas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella gratulavi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus gratulavian\nca nus gratulavan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus gratulavias\nca vus gratulavas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas gratulavian\nc'els/ellas gratulavan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou gratulavi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei gratulavias\nca tei gratulavas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella gratulavi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus gratulavian\nca nus gratulavan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus gratulavias\nca vus gratulavas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas gratulavian\nc'els/ellas gratulavan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou gratulass", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei gratulassas", forms.getVerb().getCundiziunal().getSing2());
@@ -2690,12 +2690,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus inditgeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas inditgeschian\nc'els/ellas inditgeschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou inditgevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei inditgevias\nca tei inditgevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella inditgevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus inditgevian\nca nus inditgevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus inditgevias\nca vus inditgevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas inditgevian\nc'els/ellas inditgevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou inditgevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei inditgevias\nca tei inditgevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella inditgevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus inditgevian\nca nus inditgevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus inditgevias\nca vus inditgevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas inditgevian\nc'els/ellas inditgevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou inditgess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei inditgessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2756,12 +2756,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus capeias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas capeschian\nc'els/ellas capeschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou capevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei capevias\nca tei capevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella capevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus capevian\nca nus capevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus capevias\nca vus capevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas capevian\nc'els/ellas capevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou capevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei capevias\nca tei capevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella capevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus capevian\nca nus capevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus capevias\nca vus capevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas capevian\nc'els/ellas capevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou capess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei capessas", forms.getVerb().getCundiziunal().getSing2());
@@ -2822,12 +2822,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus pareias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas parian\nc'els/ellas paran", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou parevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei parevias\nca tei parevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella parevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus parevian\nca nus parevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus parevias\nca vus parevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas parevian\nc'els/ellas parevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou parevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei parevias\nca tei parevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella parevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus parevian\nca nus parevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus parevias\nca vus parevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas parevian\nc'els/ellas parevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou paress", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei paressas", forms.getVerb().getCundiziunal().getSing2());
@@ -2888,12 +2888,12 @@ public class SutsilvanConjugationTest {
         assertEquals("ca vus tameias", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("c'els/ellas temian\nc'els/ellas teman", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ca jou tamevi", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("ca tei tamevias\nca tei tamevas", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("c'el/ella tamevi", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("ca nus tamevian\nca nus tamevan", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("ca vus tamevias\nca vus tamevas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("c'els/ellas tamevian\nc'els/ellas tamevan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ca jou tamevi", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("ca tei tamevias\nca tei tamevas", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("c'el/ella tamevi", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("ca nus tamevian\nca nus tamevan", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("ca vus tamevias\nca vus tamevas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("c'els/ellas tamevian\nc'els/ellas tamevan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("jou tamess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tei tamessas", forms.getVerb().getCundiziunal().getSing2());

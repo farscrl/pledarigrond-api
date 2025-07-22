@@ -15,7 +15,7 @@ public class VerbDto {
     private PersonalVerbDto preschent;
     private PersonalVerbDto imperfect;
     private PersonalVerbDto conjunctiv;
-    private PersonalVerbDto conjunctiv2;
+    private PersonalVerbDto conjunctivImperfect;
     private PersonalVerbDto cundiziunal;
     private PersonalVerbDto cundiziunalIndirect;
     private ParticipPerfectDto participPerfect;

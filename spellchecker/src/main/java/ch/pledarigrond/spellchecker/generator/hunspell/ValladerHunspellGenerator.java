@@ -133,12 +133,12 @@ public class ValladerHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getConjunctiv().getPlural2(), forms);
         addNewlines(v.getConjunctiv().getPlural3(), forms);
 
-        addNewlines(v.getConjunctiv2().getSing1(), forms);
-        addNewlines(v.getConjunctiv2().getSing2(), forms);
-        addNewlines(v.getConjunctiv2().getSing3(), forms);
-        addNewlines(v.getConjunctiv2().getPlural1(), forms);
-        addNewlines(v.getConjunctiv2().getPlural2(), forms);
-        addNewlines(v.getConjunctiv2().getPlural3(), forms);
+        addNewlines(v.getConjunctivImperfect().getSing1(), forms);
+        addNewlines(v.getConjunctivImperfect().getSing2(), forms);
+        addNewlines(v.getConjunctivImperfect().getSing3(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural1(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural2(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural3(), forms);
 
         addNewlines(v.getCundiziunal().getSing1(), forms);
         addNewlines(v.getCundiziunal().getSing2(), forms);

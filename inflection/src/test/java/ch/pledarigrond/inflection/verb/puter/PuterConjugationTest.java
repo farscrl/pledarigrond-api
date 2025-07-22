@@ -44,12 +44,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus güdas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas güdan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau güdess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü güdessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella güdess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus güdessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus güdessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas güdessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau güdess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü güdessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella güdess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus güdessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus güdessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas güdessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau güdess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü güdessast", forms.getVerb().getCundiziunal().getSing2());
@@ -136,12 +136,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus gratuleschas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas gratuleschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau gratuless", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü gratulessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella gratuless", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus gratulessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus gratulessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas gratulessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau gratuless", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü gratulessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella gratuless", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus gratulessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus gratulessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas gratulessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau gratuless", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü gratulessast", forms.getVerb().getCundiziunal().getSing2());
@@ -275,12 +275,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus as s-chalunas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas as s-chalunan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau am s-chaluness", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü at s-chalunessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella as s-chaluness", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus ans s-chalunessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus as s-chalunessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas as s-chalunessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau am s-chaluness", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü at s-chalunessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella as s-chaluness", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus ans s-chalunessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus as s-chalunessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas as s-chalunessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau am s-chaluness", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü at s-chalunessast", forms.getVerb().getCundiziunal().getSing2());
@@ -352,12 +352,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus s'abassas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas s'abassan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau m'abassess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü t'abassessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella s'abassess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus ans abassessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus s'abassessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas s'abassessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau m'abassess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü t'abassessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella s'abassess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus ans abassessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus s'abassessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas s'abassessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau m'abassess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü t'abassessast", forms.getVerb().getCundiziunal().getSing2());
@@ -422,12 +422,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus giodas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas giodan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau giodess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü giodessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella giodess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus giodessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus giodessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas giodessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau giodess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü giodessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella giodess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus giodessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus giodessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas giodessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau giodess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü giodessast", forms.getVerb().getCundiziunal().getSing2());
@@ -492,12 +492,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus vendas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas vendan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau vendess", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü vendessast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella vendess", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus vendessans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus vendessas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas vendessan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau vendess", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü vendessast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella vendess", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus vendessans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus vendessas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas vendessan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau vendess", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü vendessast", forms.getVerb().getCundiziunal().getSing2());
@@ -562,12 +562,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus partas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas partan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau partiss", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü partissast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella partiss", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus partissans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus partissas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas partissan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau partiss", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü partissast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella partiss", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus partissans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus partissas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas partissan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau partiss", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü partissast", forms.getVerb().getCundiziunal().getSing2());
@@ -633,12 +633,12 @@ public class PuterConjugationTest {
         assertEquals("cha vus chapeschas", forms.getVerb().getConjunctiv().getPlural2());
         assertEquals("ch'els/ellas chapeschan", forms.getVerb().getConjunctiv().getPlural3());
 
-        assertEquals("ch'eau chapiss", forms.getVerb().getConjunctiv2().getSing1());
-        assertEquals("cha tü chapissast", forms.getVerb().getConjunctiv2().getSing2());
-        assertEquals("ch'el/ella chapiss", forms.getVerb().getConjunctiv2().getSing3());
-        assertEquals("cha nus chapissans", forms.getVerb().getConjunctiv2().getPlural1());
-        assertEquals("cha vus chapissas", forms.getVerb().getConjunctiv2().getPlural2());
-        assertEquals("ch'els/ellas chapissan", forms.getVerb().getConjunctiv2().getPlural3());
+        assertEquals("ch'eau chapiss", forms.getVerb().getConjunctivImperfect().getSing1());
+        assertEquals("cha tü chapissast", forms.getVerb().getConjunctivImperfect().getSing2());
+        assertEquals("ch'el/ella chapiss", forms.getVerb().getConjunctivImperfect().getSing3());
+        assertEquals("cha nus chapissans", forms.getVerb().getConjunctivImperfect().getPlural1());
+        assertEquals("cha vus chapissas", forms.getVerb().getConjunctivImperfect().getPlural2());
+        assertEquals("ch'els/ellas chapissan", forms.getVerb().getConjunctivImperfect().getPlural3());
 
         assertEquals("eau chapiss", forms.getVerb().getCundiziunal().getSing1());
         assertEquals("tü chapissast", forms.getVerb().getCundiziunal().getSing2());
