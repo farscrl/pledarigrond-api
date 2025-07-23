@@ -65,13 +65,13 @@ public class FieldTransformer {
         if (ev.getInflection() != null) {
             InflectionDto i = ev.getInflection();
             toFieldUpdateAllFields(doc, FN.inflectionType, Optional.ofNullable(i.getInflectionType()).map(InflectionType::getName).orElse(null), allFieldsList);
-            toFieldUpdateAllFields(doc, FN.inflectionSubtype, i.getInflectionSubtype(), allFieldsList);
             toFieldUpdateAllFields(doc, FN.reviewLater, i.isReviewLater() ? "true" : "false", allFieldsList);
 
             if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.VERB) && i.getVerb() != null) {
                 VerbDto v = i.getVerb();
                 toFieldUpdateAllFields(doc, FN.infinitiv, v.getInfinitiv(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.irregular, v.isIrregular() ? "true" : "false", allFieldsList);
+                toFieldUpdateAllFields(doc, FN.inflectionSubtype, v.getInflectionSubtype(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.composedWith, v.getComposedWith(), allFieldsList);
 
                 toFieldUpdateAllFields(doc, FN.preschentsing1, v.getPreschent().getSing1(), allFieldsList);
@@ -208,6 +208,9 @@ public class FieldTransformer {
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.NOUN) && i.getNoun() != null) {
                 NounDto n = i.getNoun();
                 toFieldUpdateAllFields(doc, FN.baseForm, n.getBaseForm(), allFieldsList);
+                toFieldUpdateAllFields(doc, FN.irregular, n.isIrregular() ? "true" : "false", allFieldsList);
+                toFieldUpdateAllFields(doc, FN.inflectionSubtype, n.getInflectionSubtype(), allFieldsList);
+
                 toFieldUpdateAllFields(doc, FN.mSingular, n.getMSingular(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.fSingular, n.getFSingular(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.mPlural, n.getMPlural(), allFieldsList);
@@ -216,6 +219,9 @@ public class FieldTransformer {
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.ADJECTIVE) && i.getAdjective() != null) {
                 AdjectiveDto a = i.getAdjective();
                 toFieldUpdateAllFields(doc, FN.baseForm, a.getBaseForm(), allFieldsList);
+                toFieldUpdateAllFields(doc, FN.irregular, a.isIrregular() ? "true" : "false", allFieldsList);
+                toFieldUpdateAllFields(doc, FN.inflectionSubtype, a.getInflectionSubtype(), allFieldsList);
+
                 toFieldUpdateAllFields(doc, FN.mSingular, a.getMSingular(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.fSingular, a.getFSingular(), allFieldsList);
                 toFieldUpdateAllFields(doc, FN.mPlural, a.getMPlural(), allFieldsList);
@@ -293,13 +299,13 @@ public class FieldTransformer {
         if (inflectionType != null && !inflectionType.isEmpty()) {
             InflectionDto i = new InflectionDto();
             i.setInflectionType(InflectionType.fromString(inflectionType));
-            i.setInflectionSubtype(toValue(doc, FN.inflectionSubtype));
             i.setReviewLater(Boolean.parseBoolean(toValue(doc, FN.reviewLater)));
 
             if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.VERB)) {
                 VerbDto v = new VerbDto();
                 v.setInfinitiv(toValue(doc, FN.infinitiv));
                 v.setIrregular(Boolean.parseBoolean(toValue(doc, FN.irregular)));
+                v.setInflectionSubtype(toValue(doc, FN.inflectionSubtype));
                 v.setComposedWith(toValue(doc, FN.composedWith));
 
                 v.setPreschent(new VerbDto.PersonalVerbDto());
@@ -453,6 +459,9 @@ public class FieldTransformer {
             } else if(i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.NOUN)) {
                 NounDto n = new NounDto();
                 n.setBaseForm(toValue(doc, FN.baseForm));
+                n.setIrregular(Boolean.parseBoolean(toValue(doc, FN.irregular)));
+                n.setInflectionSubtype(toValue(doc, FN.inflectionSubtype));
+
                 n.setMSingular(toValue(doc, FN.mSingular));
                 n.setFSingular(toValue(doc, FN.fSingular));
                 n.setMPlural(toValue(doc, FN.mPlural));
@@ -462,6 +471,9 @@ public class FieldTransformer {
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.ADJECTIVE)) {
                 AdjectiveDto a = new AdjectiveDto();
                 a.setBaseForm(toValue(doc, FN.baseForm));
+                a.setIrregular(Boolean.parseBoolean(toValue(doc, FN.irregular)));
+                a.setInflectionSubtype(toValue(doc, FN.inflectionSubtype));
+
                 a.setMSingular(toValue(doc, FN.mSingular));
                 a.setFSingular(toValue(doc, FN.fSingular));
                 a.setMPlural(toValue(doc, FN.mPlural));

@@ -262,7 +262,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         }
 
         verbClass = subType;
-        inflection.setInflectionSubtype(verbClass.id);
+        verb.setInflectionSubtype(verbClass.id);
 
         if(needsBindingIEnding()) {
             modRoot = modRoot + "i";

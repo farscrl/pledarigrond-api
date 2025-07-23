@@ -6,10 +6,7 @@ import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("{language}/editor/inflection")
@@ -29,7 +26,7 @@ public class InflectionController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/{inflectionType}/subtypes/{baseForm}")
-    ResponseEntity<?> guessSubtypeAndGenerateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("baseForm") String baseForm, String genus, String flex) {
+    ResponseEntity<?> guessSubtypeAndGenerateInflection(@PathVariable("language") Language language, @PathVariable("inflectionType") InflectionType inflectionType, @PathVariable("baseForm") String baseForm, @RequestParam(value = "genus", defaultValue = "") String genus, @RequestParam(value = "flex", defaultValue = "") String flex) {
         if (inflectionType == null) {
             return ResponseEntity.badRequest().build();
         }

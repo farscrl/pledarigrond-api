@@ -43,8 +43,8 @@ public class FN {
     public static final String automaticChange = "automaticChange";
 
     // inflection fields
-    public static final String inflectionType = "rmInflectionType";
-    public static final String inflectionSubtype = "rmInflectionSubtype";
+    public static final String inflectionType = "inflectionType";
+    public static final String inflectionSubtype = "inflectionSubtype";
     public static final String reviewLater = "reviewLater";
 
     // verb fields

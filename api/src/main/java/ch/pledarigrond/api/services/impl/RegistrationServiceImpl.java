@@ -242,7 +242,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                         registration.setRmTags(current.getRmTags());
                         if (current.getInflection() != null) {
                             registration.setRmInflectionType(current.getInflection().getInflectionType().getName());
-                            registration.setRmInflectionSubtype(current.getInflection().getInflectionSubtype());
+                            // registration.setRmInflectionSubtype(current.getInflection().getInflectionSubtype()); // TODO: needed?
                         }
                         registrationRepository.save(registration);
                     } else {

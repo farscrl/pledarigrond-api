@@ -179,7 +179,7 @@ public class RumantschGrischunAdjectiveGenerator extends LanguageAdjectiveGenera
     }
 
     public void buildForms(InflectionSubType adjectiveClass) {
-        inflection.setInflectionSubtype(adjectiveClass.id);
+        adjective.setInflectionSubtype(adjectiveClass.id);
 
         setSingular();
         setPlural();

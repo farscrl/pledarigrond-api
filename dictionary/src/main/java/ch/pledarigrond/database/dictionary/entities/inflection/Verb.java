@@ -6,6 +6,7 @@ import lombok.Data;
 public class Verb {
     private String infinitiv;
     private boolean irregular;
+    private String inflectionSubtype;
     private boolean isReflexive;
     private String composedWith;
 

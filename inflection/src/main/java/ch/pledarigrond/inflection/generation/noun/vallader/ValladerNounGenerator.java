@@ -47,7 +47,7 @@ public class ValladerNounGenerator extends LanguageNounGeneration {
         }
 
         nounClass = subType;
-        inflection.setInflectionSubtype(nounClass.id);
+        noun.setInflectionSubtype(nounClass.id);
         buildForms();
         return inflection;
     }

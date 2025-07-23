@@ -234,7 +234,7 @@ public class LuceneIndexManager {
                 HashMap<String, Integer> inflectionCount = new HashMap<>();
                 String[] inflectionTypes = new String[]{"NOUN", "V", "ADJECTIVE", "PRONOUN", "OTHER"};
                 for (String inflectionType : inflectionTypes) {
-                    term = new Term("rmInflectionType", inflectionType);
+                    term = new Term("inflectionType", inflectionType);
                     query = new TermQuery(term);
                     results = searcher.search(query, Integer.MAX_VALUE);
                     inflectionCount.put(inflectionType, (int) results.totalHits.value);

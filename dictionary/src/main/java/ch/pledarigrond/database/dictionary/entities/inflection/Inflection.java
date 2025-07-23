@@ -7,7 +7,6 @@ import org.springframework.lang.Nullable;
 @Data
 public class Inflection {
     private InflectionType inflectionType;
-    private String inflectionSubtype;
     private boolean reviewLater;
 
     @Nullable private Verb verb;

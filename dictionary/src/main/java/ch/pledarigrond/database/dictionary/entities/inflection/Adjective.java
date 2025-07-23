@@ -6,6 +6,7 @@ import lombok.Data;
 public class Adjective {
     private String baseForm;
     private boolean irregular;
+    private String inflectionSubtype;
 
     private String mSingular;
     private String fSingular;

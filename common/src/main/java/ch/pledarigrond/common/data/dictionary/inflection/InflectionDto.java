@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InflectionDto {
     private InflectionType inflectionType;
-    private String inflectionSubtype;
     private boolean reviewLater;
 
     private VerbDto verb;

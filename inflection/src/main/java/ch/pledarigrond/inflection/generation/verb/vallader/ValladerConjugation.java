@@ -73,7 +73,7 @@ public class ValladerConjugation extends LanguageConjugation {
         }
 
         verbClass = subType;
-        inflection.setInflectionSubtype(verbClass.id);
+        verb.setInflectionSubtype(verbClass.id);
         conjugate();
         addPronouns();
         return inflection;

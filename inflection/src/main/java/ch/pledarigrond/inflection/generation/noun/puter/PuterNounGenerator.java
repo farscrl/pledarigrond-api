@@ -48,7 +48,7 @@ public class PuterNounGenerator extends LanguageNounGeneration {
         }
 
         nounClass = subType;
-        inflection.setInflectionSubtype(nounClass.id);
+        noun.setInflectionSubtype(nounClass.id);
         buildForms();
         return inflection;
     }

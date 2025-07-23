@@ -235,7 +235,7 @@ public class ValladerAdjectiveGenerator extends LanguageAdjectiveGeneration {
     }
 
     public void buildForms(InflectionSubType adjectiveClass) {
-        inflection.setInflectionSubtype(adjectiveClass.id);
+        adjective.setInflectionSubtype(adjectiveClass.id);
 
         setSingular();
         setPlural();

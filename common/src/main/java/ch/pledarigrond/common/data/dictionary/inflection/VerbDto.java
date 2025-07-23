@@ -10,6 +10,7 @@ public class VerbDto {
     @Size(max = 200)  private String infinitiv;
     private boolean irregular;
     private boolean isReflexive;
+    @Size(max = 10) private String inflectionSubtype;
     @Size(max = 200) private String composedWith;
 
     private PersonalVerbDto preschent;

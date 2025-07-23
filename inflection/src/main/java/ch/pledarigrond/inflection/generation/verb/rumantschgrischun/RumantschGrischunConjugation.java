@@ -55,7 +55,7 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
         }
 
         verbClass = subType;
-        inflection.setInflectionSubtype(verbClass.id);
+        verb.setInflectionSubtype(verbClass.id);
         conjugate();
         addPronouns();
         return inflection;

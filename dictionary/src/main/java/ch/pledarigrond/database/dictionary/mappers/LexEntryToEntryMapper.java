@@ -127,7 +127,6 @@ public class LexEntryToEntryMapper {
         if (inflectionType != null) {
             Inflection inflection = new Inflection();
             inflection.setInflectionType(inflectionTypeMapper(inflectionType));
-            inflection.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
             inflection.setReviewLater(Objects.equals(getPgField(lv, "review_later", false), "true"));
 
             if (inflection.getInflectionType() == InflectionType.VERB) {
@@ -262,6 +261,7 @@ public class LexEntryToEntryMapper {
 
         verb.setInfinitiv(getField(lv, "infinitiv", true, mappedFields));
         verb.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", false, mappedFields), "true"));
+        verb.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         verb.setComposedWith(getField(lv, "composedWith", false, mappedFields));
 
         Verb.PersonalVerb preschent = new Verb.PersonalVerb();
@@ -430,7 +430,8 @@ public class LexEntryToEntryMapper {
         Noun noun = new Noun();
 
         noun.setBaseForm(getField(lv, "baseForm", true, mappedFields));
-        noun.setIrregular(Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        noun.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        noun.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         noun.setMSingular(getField(lv, "mSingular", false, mappedFields));
         noun.setFSingular(getField(lv, "fSingular", false, mappedFields));
         noun.setMPlural(getField(lv, "mPlural", false, mappedFields));
@@ -444,7 +445,8 @@ public class LexEntryToEntryMapper {
         Adjective adjective = new Adjective();
 
         adjective.setBaseForm(getField(lv, "baseForm", true, mappedFields));
-        adjective.setIrregular(Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        adjective.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        adjective.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         adjective.setMSingular(getField(lv, "mSingular", false, mappedFields));
         adjective.setFSingular(getField(lv, "fSingular", false, mappedFields));
         adjective.setMPlural(getField(lv, "mPlural", false, mappedFields));

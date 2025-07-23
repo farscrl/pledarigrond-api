@@ -177,7 +177,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             InflectionResultDto result = sursilvanInflectionComparatorUtil.getInflection(verb.getRmStichwort());
             InflectionDto response = result.getInflectionResponse();
             Integer errorCount = result.getErrorCount();
-            data.add(new String[]{verb.getRmStichwort(), response != null ? response.getInflectionSubtype() : "-", errorCount != null ? errorCount.toString() : "222"});
+            data.add(new String[]{verb.getRmStichwort(), response != null ? response.getVerb().getInflectionSubtype() : "-", errorCount != null ? errorCount.toString() : "222"});
         }
 
         data.sort(Comparator.comparing(o -> o[0]));
