@@ -13,7 +13,6 @@ public class EditorQuery {
 
     // filters for EntryVersion
     private String userOrIp; // The current text (first name, last name, email, login) used for filtering results
-    private String verifier;
     private EditorRole role;
     private long startTime = System.currentTimeMillis() - HALF_YEAR;
     private long endTime;

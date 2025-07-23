@@ -136,12 +136,6 @@ public class EntryDalImpl implements EntryDal {
             );
         }
 
-        if (queryData.getVerifier() != null && !queryData.getVerifier().trim().isEmpty()) {
-            criteriaList.add(
-                    Criteria.where("version.verifier").is(queryData.getVerifier())
-            );
-        }
-
         if (queryData.getRole() != null) {
             criteriaList.add(
                     Criteria.where("version.creatorRole").is(queryData.getRole().toString())
