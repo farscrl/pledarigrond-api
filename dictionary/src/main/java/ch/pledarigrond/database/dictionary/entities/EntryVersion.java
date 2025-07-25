@@ -8,10 +8,11 @@ import lombok.Data;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
-public class EntryVersion {
+public class EntryVersion implements Cloneable {
     private String versionId = UUID.randomUUID().toString();
     private String entryId;
 
@@ -60,4 +61,41 @@ public class EntryVersion {
     private boolean automaticChange = false;
 
     private UnusedData unusedData = new UnusedData();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntryVersion version = (EntryVersion) o;
+        return Objects.equals(versionId, version.versionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(versionId);
+    }
+
+    @Override
+    public EntryVersion clone() {
+        try {
+            EntryVersion cloned = (EntryVersion) super.clone();
+            // Deep copy mutable fields
+            if (this.examples != null) {
+                cloned.examples = new ArrayList<>();
+                for (Example ex : this.examples) {
+                    cloned.examples.add(ex == null ? null : ex.clone());
+                }
+            }
+            if (this.inflection != null) {
+                cloned.inflection = this.inflection.clone();
+            }
+            if (this.unusedData != null) {
+                cloned.unusedData = this.unusedData.clone();
+            }
+            // Other fields are either immutable or primitives
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

@@ -3,7 +3,7 @@ package ch.pledarigrond.database.dictionary.entities;
 import lombok.Data;
 
 @Data
-public class UnusedData {
+public class UnusedData implements Cloneable {
     private String recId;
 
     private String rmStatus;
@@ -22,4 +22,13 @@ public class UnusedData {
 
     private Integer importedId;
     private String verbId;
+
+    @Override
+    public UnusedData clone() {
+        try {
+            return (UnusedData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

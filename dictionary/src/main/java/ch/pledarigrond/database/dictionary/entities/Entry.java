@@ -82,7 +82,7 @@ public class Entry {
         validateVersion(version, this, userInfo, action);
 
         if (action == Action.SUGGESTED_ENTRY || action == Action.SUGGESTED_MODIFICATION) {
-            suggestions.add(version);
+            suggestions.add(version.clone());
         } else if (action == Action.ACCEPTED_ENTRY || action == Action.CREATED_ENTRY || action == Action.ACCEPTED_MODIFICATION || action == Action.CREATED_MODIFICATION || action == Action.CHANGED_ORDER) {
             current = version;
         } else if (action == Action.REFUSED_MODIFICATION) {
@@ -93,7 +93,7 @@ public class Entry {
 
         // only add to versions if it is not already present
         if(versions.stream().noneMatch(v -> v.getVersionId().equals(version.getVersionId()))) {
-            versions.add(version);
+            versions.add(version.clone());
         }
         this.updateCalculatedFields();
         return this;
