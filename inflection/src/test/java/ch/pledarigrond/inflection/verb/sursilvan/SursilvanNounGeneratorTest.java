@@ -21,164 +21,164 @@ public class SursilvanNounGeneratorTest {
     @Test
     public void testRule3() {
         forms = generator.generateForms("3", "scolast");
-        assertEquals(forms.getNoun().getMSingular(), "scolast");
-        assertEquals(forms.getNoun().getFSingular(), "scolasta");
-        assertEquals(forms.getNoun().getMPlural(), "scolasts");
-        assertEquals(forms.getNoun().getFPlural(), "scolastas");
+        assertEquals("scolast", forms.getNoun().getMSingular());
+        assertEquals("scolasta", forms.getNoun().getFSingular());
+        assertEquals("scolasts", forms.getNoun().getMPlural());
+        assertEquals("scolastas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule4() {
         forms = generator.generateForms("4", "responsabel");
-        assertEquals(forms.getNoun().getMSingular(), "responsabel");
-        assertEquals(forms.getNoun().getFSingular(), "responsabla");
-        assertEquals(forms.getNoun().getMPlural(), "responsabels");
-        assertEquals(forms.getNoun().getFPlural(), "responsablas");
+        assertEquals("responsabel", forms.getNoun().getMSingular());
+        assertEquals("responsabla", forms.getNoun().getFSingular());
+        assertEquals("responsabels", forms.getNoun().getMPlural());
+        assertEquals("responsablas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule6() {
         forms = generator.generateForms("6", "figliaster");
-        assertEquals(forms.getNoun().getMSingular(), "figliaster");
-        assertEquals(forms.getNoun().getFSingular(), "figliastra");
-        assertEquals(forms.getNoun().getMPlural(), "figliasters");
-        assertEquals(forms.getNoun().getFPlural(), "figliastras");
+        assertEquals("figliaster", forms.getNoun().getMSingular());
+        assertEquals("figliastra", forms.getNoun().getFSingular());
+        assertEquals("figliasters", forms.getNoun().getMPlural());
+        assertEquals("figliastras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule7() {
         forms = generator.generateForms("7", "tat");
-        assertEquals(forms.getNoun().getMSingular(), "tat");
-        assertEquals(forms.getNoun().getFSingular(), "tatta");
-        assertEquals(forms.getNoun().getMPlural(), "tats");
-        assertEquals(forms.getNoun().getFPlural(), "tattas");
+        assertEquals("tat", forms.getNoun().getMSingular());
+        assertEquals("tatta", forms.getNoun().getFSingular());
+        assertEquals("tats", forms.getNoun().getMPlural());
+        assertEquals("tattas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule8() {
         forms = generator.generateForms("8", "quinau");
-        assertEquals(forms.getNoun().getMSingular(), "quinau");
-        assertEquals(forms.getNoun().getFSingular(), "quinada");
-        assertEquals(forms.getNoun().getMPlural(), "quinaus");
-        assertEquals(forms.getNoun().getFPlural(), "quinadas");
+        assertEquals("quinau", forms.getNoun().getMSingular());
+        assertEquals("quinada", forms.getNoun().getFSingular());
+        assertEquals("quinaus", forms.getNoun().getMPlural());
+        assertEquals("quinadas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule9() {
         forms = generator.generateForms("9", "bueder");
-        assertEquals(forms.getNoun().getMSingular(), "bueder");
-        assertEquals(forms.getNoun().getFSingular(), "buedra");
-        assertEquals(forms.getNoun().getMPlural(), "bueders");
-        assertEquals(forms.getNoun().getFPlural(), "buedras");
+        assertEquals("bueder", forms.getNoun().getMSingular());
+        assertEquals("buedra", forms.getNoun().getFSingular());
+        assertEquals("bueders", forms.getNoun().getMPlural());
+        assertEquals("buedras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule10() {
         forms = generator.generateForms("10", "giuven");
-        assertEquals(forms.getNoun().getMSingular(), "giuven");
-        assertEquals(forms.getNoun().getFSingular(), "giuvna");
-        assertEquals(forms.getNoun().getMPlural(), "giuvens");
-        assertEquals(forms.getNoun().getFPlural(), "giuvnas");
+        assertEquals("giuven", forms.getNoun().getMSingular());
+        assertEquals("giuvna", forms.getNoun().getFSingular());
+        assertEquals("giuvens", forms.getNoun().getMPlural());
+        assertEquals("giuvnas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule11() {
         forms = generator.generateForms("11", "lader");
-        assertEquals(forms.getNoun().getMSingular(), "lader");
-        assertEquals(forms.getNoun().getFSingular(), "ladra");
-        assertEquals(forms.getNoun().getMPlural(), "laders");
-        assertEquals(forms.getNoun().getFPlural(), "ladras");
+        assertEquals("lader", forms.getNoun().getMSingular());
+        assertEquals("ladra", forms.getNoun().getFSingular());
+        assertEquals("laders", forms.getNoun().getMPlural());
+        assertEquals("ladras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule13() {
         forms = generator.generateForms("13", "vendider");
-        assertEquals(forms.getNoun().getMSingular(), "vendider");
-        assertEquals(forms.getNoun().getFSingular(), "vendidra");
-        assertEquals(forms.getNoun().getMPlural(), "vendiders");
-        assertEquals(forms.getNoun().getFPlural(), "vendidras");
+        assertEquals("vendider", forms.getNoun().getMSingular());
+        assertEquals("vendidra", forms.getNoun().getFSingular());
+        assertEquals("vendiders", forms.getNoun().getMPlural());
+        assertEquals("vendidras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule15() {
         forms = generator.generateForms("15", "magister");
-        assertEquals(forms.getNoun().getMSingular(), "magister");
-        assertEquals(forms.getNoun().getFSingular(), "magistra");
-        assertEquals(forms.getNoun().getMPlural(), "magisters");
-        assertEquals(forms.getNoun().getFPlural(), "magistras");
+        assertEquals("magister", forms.getNoun().getMSingular());
+        assertEquals("magistra", forms.getNoun().getFSingular());
+        assertEquals("magisters", forms.getNoun().getMPlural());
+        assertEquals("magistras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule16() {
         forms = generator.generateForms("16", "pitoc");
-        assertEquals(forms.getNoun().getMSingular(), "pitoc");
-        assertEquals(forms.getNoun().getFSingular(), "pitocca");
-        assertEquals(forms.getNoun().getMPlural(), "pitocs");
-        assertEquals(forms.getNoun().getFPlural(), "pitoccas");
+        assertEquals("pitoc", forms.getNoun().getMSingular());
+        assertEquals("pitocca", forms.getNoun().getFSingular());
+        assertEquals("pitocs", forms.getNoun().getMPlural());
+        assertEquals("pitoccas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule17() {
         forms = generator.generateForms("17", "tschut");
-        assertEquals(forms.getNoun().getMSingular(), "tschut");
-        assertEquals(forms.getNoun().getFSingular(), "tschutta");
-        assertEquals(forms.getNoun().getMPlural(), "tschuts");
-        assertEquals(forms.getNoun().getFPlural(), "tschuttas");
+        assertEquals("tschut", forms.getNoun().getMSingular());
+        assertEquals("tschutta", forms.getNoun().getFSingular());
+        assertEquals("tschuts", forms.getNoun().getMPlural());
+        assertEquals("tschuttas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule18a() {
         forms = generator.generateForms("18", "plevon");
-        assertEquals(forms.getNoun().getMSingular(), "plevon");
-        assertEquals(forms.getNoun().getFSingular(), "plevonessa");
-        assertEquals(forms.getNoun().getMPlural(), "plevons");
-        assertEquals(forms.getNoun().getFPlural(), "plevonessas");
+        assertEquals("plevon", forms.getNoun().getMSingular());
+        assertEquals("plevonessa", forms.getNoun().getFSingular());
+        assertEquals("plevons", forms.getNoun().getMPlural());
+        assertEquals("plevonessas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule18b() {
         forms = generator.generateForms("18", "barun");
-        assertEquals(forms.getNoun().getMSingular(), "barun");
-        assertEquals(forms.getNoun().getFSingular(), "barunessa");
-        assertEquals(forms.getNoun().getMPlural(), "baruns");
-        assertEquals(forms.getNoun().getFPlural(), "barunessas");
+        assertEquals("barun", forms.getNoun().getMSingular());
+        assertEquals("barunessa", forms.getNoun().getFSingular());
+        assertEquals("baruns", forms.getNoun().getMPlural());
+        assertEquals("barunessas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule18c() {
         forms = generator.generateForms("18", "cont");
-        assertEquals(forms.getNoun().getMSingular(), "cont");
-        assertEquals(forms.getNoun().getFSingular(), "contessa");
-        assertEquals(forms.getNoun().getMPlural(), "conts");
-        assertEquals(forms.getNoun().getFPlural(), "contessas");
+        assertEquals("cont", forms.getNoun().getMSingular());
+        assertEquals("contessa", forms.getNoun().getFSingular());
+        assertEquals("conts", forms.getNoun().getMPlural());
+        assertEquals("contessas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule19() {
         forms = generator.generateForms("19", "apotecher");
-        assertEquals(forms.getNoun().getMSingular(), "apotecher");
-        assertEquals(forms.getNoun().getFSingular(), "apotecra");
-        assertEquals(forms.getNoun().getMPlural(), "apotechers");
-        assertEquals(forms.getNoun().getFPlural(), "apotecras");
+        assertEquals("apotecher", forms.getNoun().getMSingular());
+        assertEquals("apotecra", forms.getNoun().getFSingular());
+        assertEquals("apotechers", forms.getNoun().getMPlural());
+        assertEquals("apotecras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule20() {
         forms = generator.generateForms("20", "flevel");
-        assertEquals(forms.getNoun().getMSingular(), "flevel");
-        assertEquals(forms.getNoun().getFSingular(), "flevla");
-        assertEquals(forms.getNoun().getMPlural(), "flevels");
-        assertEquals(forms.getNoun().getFPlural(), "flevlas");
+        assertEquals("flevel", forms.getNoun().getMSingular());
+        assertEquals("flevla", forms.getNoun().getFSingular());
+        assertEquals("flevels", forms.getNoun().getMPlural());
+        assertEquals("flevlas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule21() {
         forms = generator.generateForms("21", "pèr");
-        assertEquals(forms.getNoun().getMSingular(), "pèr");
+        assertEquals("pèr", forms.getNoun().getMSingular());
         assertNull(forms.getNoun().getFSingular());
-        assertEquals(forms.getNoun().getMPlural(), "pèrs");
+        assertEquals("pèrs", forms.getNoun().getMPlural());
         assertNull(forms.getNoun().getFPlural());
-        assertEquals(forms.getNoun().getPluralCollectiv(), "pèra");
+        assertEquals("pèra", forms.getNoun().getPluralCollectiv());
     }
 
     @Test
@@ -190,178 +190,178 @@ public class SursilvanNounGeneratorTest {
     @Test
     public void testPluralRule1() {
         forms = generator.generateForms("1", "esch-casa");
-        assertEquals(forms.getNoun().getMSingular(), "esch-casa");
-        assertEquals(forms.getNoun().getMPlural(), "eschs-casa");
+        assertEquals("esch-casa", forms.getNoun().getMSingular());
+        assertEquals("eschs-casa", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule2() {
         forms = generator.generateForms("1", "utschi");
-        assertEquals(forms.getNoun().getMSingular(), "utschi");
-        assertEquals(forms.getNoun().getMPlural(), "utschals");
+        assertEquals("utschi", forms.getNoun().getMSingular());
+        assertEquals("utschals", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "ischi");
-        assertEquals(forms.getNoun().getMSingular(), "ischi");
-        assertEquals(forms.getNoun().getMPlural(), "ischals");
+        assertEquals("ischi", forms.getNoun().getMSingular());
+        assertEquals("ischals", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "purschi");
-        assertEquals(forms.getNoun().getMSingular(), "purschi");
-        assertEquals(forms.getNoun().getMPlural(), "purschals");
+        assertEquals("purschi", forms.getNoun().getMSingular());
+        assertEquals("purschals", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "agni");
-        assertEquals(forms.getNoun().getMSingular(), "agni");
-        assertEquals(forms.getNoun().getMPlural(), "agnals");
+        assertEquals("agni", forms.getNoun().getMSingular());
+        assertEquals("agnals", forms.getNoun().getMPlural());
     }
 
 
     @Test
     public void testPluralRule4() {
         forms = generator.generateForms("1", "cunti");
-        assertEquals(forms.getNoun().getMSingular(), "cunti");
-        assertEquals(forms.getNoun().getMPlural(), "cuntials");
+        assertEquals("cunti", forms.getNoun().getMSingular());
+        assertEquals("cuntials", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "risti");
-        assertEquals(forms.getNoun().getMSingular(), "risti");
-        assertEquals(forms.getNoun().getMPlural(), "ristials");
+        assertEquals("risti", forms.getNoun().getMSingular());
+        assertEquals("ristials", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "casti");
-        assertEquals(forms.getNoun().getMSingular(), "casti");
-        assertEquals(forms.getNoun().getMPlural(), "castials");
+        assertEquals("casti", forms.getNoun().getMSingular());
+        assertEquals("castials", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "rispli");
-        assertEquals(forms.getNoun().getMSingular(), "rispli");
-        assertEquals(forms.getNoun().getMPlural(), "risplials");
+        assertEquals("rispli", forms.getNoun().getMSingular());
+        assertEquals("risplials", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule5() {
         forms = generator.generateForms("1", "tschierv");
-        assertEquals(forms.getNoun().getMSingular(), "tschierv");
-        assertEquals(forms.getNoun().getMPlural(), "tscharvs");
+        assertEquals("tschierv", forms.getNoun().getMSingular());
+        assertEquals("tscharvs", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "schierl");
-        assertEquals(forms.getNoun().getMSingular(), "schierl");
-        assertEquals(forms.getNoun().getMPlural(), "scharls");
+        assertEquals("schierl", forms.getNoun().getMSingular());
+        assertEquals("scharls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "gnierv");
-        assertEquals(forms.getNoun().getMSingular(), "gnierv");
-        assertEquals(forms.getNoun().getMPlural(), "gnarvs");
+        assertEquals("gnierv", forms.getNoun().getMSingular());
+        assertEquals("gnarvs", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule6() {
         forms = generator.generateForms("1", "fiep");
-        assertEquals(forms.getNoun().getMSingular(), "fiep");
-        assertEquals(forms.getNoun().getMPlural(), "fops");
+        assertEquals("fiep", forms.getNoun().getMSingular());
+        assertEquals("fops", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "paliet");
-        assertEquals(forms.getNoun().getMSingular(), "paliet");
-        assertEquals(forms.getNoun().getMPlural(), "paliats");
+        assertEquals("paliet", forms.getNoun().getMSingular());
+        assertEquals("paliats", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "iert");
-        assertEquals(forms.getNoun().getMSingular(), "iert");
-        assertEquals(forms.getNoun().getMPlural(), "orts");
+        assertEquals("iert", forms.getNoun().getMSingular());
+        assertEquals("orts", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "iev");
-        assertEquals(forms.getNoun().getMSingular(), "iev");
-        assertEquals(forms.getNoun().getMPlural(), "ovs");
+        assertEquals("iev", forms.getNoun().getMSingular());
+        assertEquals("ovs", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "criec");
-        assertEquals(forms.getNoun().getMSingular(), "criec");
-        assertEquals(forms.getNoun().getMPlural(), "crocs");
+        assertEquals("criec", forms.getNoun().getMSingular());
+        assertEquals("crocs", forms.getNoun().getMPlural());
     }
 
 
     @Test
     public void testPluralRule7() {
         forms = generator.generateForms("1", "gavigliel");
-        assertEquals(forms.getNoun().getMSingular(), "gavigliel");
-        assertEquals(forms.getNoun().getMPlural(), "gaviglieuls");
+        assertEquals("gavigliel", forms.getNoun().getMSingular());
+        assertEquals("gaviglieuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "gugliel");
-        assertEquals(forms.getNoun().getMSingular(), "gugliel");
-        assertEquals(forms.getNoun().getMPlural(), "guglieuls");
+        assertEquals("gugliel", forms.getNoun().getMSingular());
+        assertEquals("guglieuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "tagliel");
-        assertEquals(forms.getNoun().getMSingular(), "tagliel");
-        assertEquals(forms.getNoun().getMPlural(), "taglieuls");
+        assertEquals("tagliel", forms.getNoun().getMSingular());
+        assertEquals("taglieuls", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule8() {
         forms = generator.generateForms("1", "ansiel");
-        assertEquals(forms.getNoun().getMSingular(), "ansiel");
-        assertEquals(forms.getNoun().getMPlural(), "anseuls");
+        assertEquals("ansiel", forms.getNoun().getMSingular());
+        assertEquals("anseuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "cavriel");
-        assertEquals(forms.getNoun().getMSingular(), "cavriel");
-        assertEquals(forms.getNoun().getMPlural(), "cavreuls");
+        assertEquals("cavriel", forms.getNoun().getMSingular());
+        assertEquals("cavreuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "migiel");
-        assertEquals(forms.getNoun().getMSingular(), "migiel");
-        assertEquals(forms.getNoun().getMPlural(), "migeuls");
+        assertEquals("migiel", forms.getNoun().getMSingular());
+        assertEquals("migeuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "caltschiel");
-        assertEquals(forms.getNoun().getMSingular(), "caltschiel");
-        assertEquals(forms.getNoun().getMPlural(), "caltscheuls");
+        assertEquals("caltschiel", forms.getNoun().getMSingular());
+        assertEquals("caltscheuls", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "pigiel");
-        assertEquals(forms.getNoun().getMSingular(), "pigiel");
-        assertEquals(forms.getNoun().getMPlural(), "pigeuls");
+        assertEquals("pigiel", forms.getNoun().getMSingular());
+        assertEquals("pigeuls", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule9() {
         forms = generator.generateForms("1", "glas");
-        assertEquals(forms.getNoun().getMSingular(), "glas");
-        assertEquals(forms.getNoun().getMPlural(), "glas");
+        assertEquals("glas", forms.getNoun().getMSingular());
+        assertEquals("glas", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "tais");
-        assertEquals(forms.getNoun().getMSingular(), "tais");
-        assertEquals(forms.getNoun().getMPlural(), "tais");
+        assertEquals("tais", forms.getNoun().getMSingular());
+        assertEquals("tais", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "ris");
-        assertEquals(forms.getNoun().getMSingular(), "ris");
-        assertEquals(forms.getNoun().getMPlural(), "ris");
+        assertEquals("ris", forms.getNoun().getMSingular());
+        assertEquals("ris", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "pass");
-        assertEquals(forms.getNoun().getMSingular(), "pass");
-        assertEquals(forms.getNoun().getMPlural(), "pass");
+        assertEquals("pass", forms.getNoun().getMSingular());
+        assertEquals("pass", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "cass");
-        assertEquals(forms.getNoun().getMSingular(), "cass");
-        assertEquals(forms.getNoun().getMPlural(), "cass");
+        assertEquals("cass", forms.getNoun().getMSingular());
+        assertEquals("cass", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "bass");
-        assertEquals(forms.getNoun().getMSingular(), "bass");
-        assertEquals(forms.getNoun().getMPlural(), "bass");
+        assertEquals("bass", forms.getNoun().getMSingular());
+        assertEquals("bass", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRule10() {
         forms = generator.generateForms("1", "herox");
-        assertEquals(forms.getNoun().getMSingular(), "herox");
-        assertEquals(forms.getNoun().getMPlural(), "heroxs");
+        assertEquals("herox", forms.getNoun().getMSingular());
+        assertEquals("heroxs", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "suffix");
-        assertEquals(forms.getNoun().getMSingular(), "suffix");
-        assertEquals(forms.getNoun().getMPlural(), "suffixs");
+        assertEquals("suffix", forms.getNoun().getMSingular());
+        assertEquals("suffixs", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "plaz");
-        assertEquals(forms.getNoun().getMSingular(), "plaz");
-        assertEquals(forms.getNoun().getMPlural(), "plazs");
+        assertEquals("plaz", forms.getNoun().getMSingular());
+        assertEquals("plazs", forms.getNoun().getMPlural());
 
         forms = generator.generateForms("1", "caz");
-        assertEquals(forms.getNoun().getMSingular(), "caz");
-        assertEquals(forms.getNoun().getMPlural(), "cazs");
+        assertEquals("caz", forms.getNoun().getMSingular());
+        assertEquals("cazs", forms.getNoun().getMPlural());
     }
 
     @Test
     public void testPluralRuleMbase() {
         forms = generator.generateForms("1", "canaster");
-        assertEquals(forms.getNoun().getMSingular(), "canaster");
+        assertEquals("canaster", forms.getNoun().getMSingular());
         assertNull(forms.getNoun().getFSingular());
-        assertEquals(forms.getNoun().getMPlural(), "canasters");
+        assertEquals("canasters", forms.getNoun().getMPlural());
         assertNull(forms.getNoun().getFPlural());
     }
 
@@ -369,26 +369,26 @@ public class SursilvanNounGeneratorTest {
     public void testPluralRuleFbase() {
         forms = generator.generateForms("2", "dunna");
         assertNull(forms.getNoun().getMSingular());
-        assertEquals(forms.getNoun().getFSingular(), "dunna");
+        assertEquals("dunna", forms.getNoun().getFSingular());
         assertNull(forms.getNoun().getMPlural());
-        assertEquals(forms.getNoun().getFPlural(), "dunnas");
+        assertEquals("dunnas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testPluralRuleMFbase() {
         forms = generator.generateForms("3", "scolast");
-        assertEquals(forms.getNoun().getMSingular(), "scolast");
-        assertEquals(forms.getNoun().getFSingular(), "scolasta");
-        assertEquals(forms.getNoun().getMPlural(), "scolasts");
-        assertEquals(forms.getNoun().getFPlural(), "scolastas");
+        assertEquals("scolast", forms.getNoun().getMSingular());
+        assertEquals("scolasta", forms.getNoun().getFSingular());
+        assertEquals("scolasts", forms.getNoun().getMPlural());
+        assertEquals("scolastas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testUpperCase() {
         forms = generator.generateForms("3", "Argoves");
-        assertEquals(forms.getNoun().getMSingular(), "Argoves");
-        assertEquals(forms.getNoun().getFSingular(), "Argovesa");
-        assertEquals(forms.getNoun().getMPlural(), "Argoves");
-        assertEquals(forms.getNoun().getFPlural(), "Argovesas");
+        assertEquals("Argoves", forms.getNoun().getMSingular());
+        assertEquals("Argovesa", forms.getNoun().getFSingular());
+        assertEquals("Argoves", forms.getNoun().getMPlural());
+        assertEquals("Argovesas", forms.getNoun().getFPlural());
     }
 }

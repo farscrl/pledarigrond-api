@@ -20,175 +20,175 @@ public class SurmiranNounGuessingTest {
     @Test
     public void testRule3() {
         forms = generator.guessInflection("scolast", null, null);
-        assertEquals(forms.getInflectionSubtype(), "3");
-        assertEquals(forms.getNoun().getMSingular(), "scolast");
-        assertEquals(forms.getNoun().getFSingular(), "scolasta");
-        assertEquals(forms.getNoun().getMPlural(), "scolasts");
-        assertEquals(forms.getNoun().getFPlural(), "scolastas");
+        assertEquals("3", forms.getNoun().getInflectionSubtype());
+        assertEquals("scolast", forms.getNoun().getMSingular());
+        assertEquals("scolasta", forms.getNoun().getFSingular());
+        assertEquals("scolasts", forms.getNoun().getMPlural());
+        assertEquals("scolastas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule4() {
         forms = generator.guessInflection("manader",null, null);
-        assertEquals(forms.getInflectionSubtype(), "4");
-        assertEquals(forms.getNoun().getMSingular(), "manader");
-        assertEquals(forms.getNoun().getFSingular(), "manadra");
-        assertEquals(forms.getNoun().getMPlural(), "manaders");
-        assertEquals(forms.getNoun().getFPlural(), "manadras");
+        assertEquals("4", forms.getNoun().getInflectionSubtype());
+        assertEquals("manader", forms.getNoun().getMSingular());
+        assertEquals("manadra", forms.getNoun().getFSingular());
+        assertEquals("manaders", forms.getNoun().getMPlural());
+        assertEquals("manadras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule5() {
         forms = generator.guessInflection("responsabel", null, null);
-        assertEquals(forms.getInflectionSubtype(), "5");
-        assertEquals(forms.getNoun().getMSingular(), "responsabel");
-        assertEquals(forms.getNoun().getFSingular(), "responsabla");
-        assertEquals(forms.getNoun().getMPlural(), "responsabels");
-        assertEquals(forms.getNoun().getFPlural(), "responsablas");
+        assertEquals("5", forms.getNoun().getInflectionSubtype());
+        assertEquals("responsabel", forms.getNoun().getMSingular());
+        assertEquals("responsabla", forms.getNoun().getFSingular());
+        assertEquals("responsabels", forms.getNoun().getMPlural());
+        assertEquals("responsablas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule6() {
         forms = generator.guessInflection("apotecher", null, null);
-        assertEquals(forms.getInflectionSubtype(), "6");
-        assertEquals(forms.getNoun().getMSingular(), "apotecher");
-        assertEquals(forms.getNoun().getFSingular(), "apotecra");
-        assertEquals(forms.getNoun().getMPlural(), "apotechers");
-        assertEquals(forms.getNoun().getFPlural(), "apotecras");
+        assertEquals("6", forms.getNoun().getInflectionSubtype());
+        assertEquals("apotecher", forms.getNoun().getMSingular());
+        assertEquals("apotecra", forms.getNoun().getFSingular());
+        assertEquals("apotechers", forms.getNoun().getMPlural());
+        assertEquals("apotecras", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule7() {
         forms = generator.guessInflection("flevel", null, null);
-        assertEquals(forms.getInflectionSubtype(), "7");
-        assertEquals(forms.getNoun().getMSingular(), "flevel");
-        assertEquals(forms.getNoun().getFSingular(), "flevla");
-        assertEquals(forms.getNoun().getMPlural(), "flevels");
-        assertEquals(forms.getNoun().getFPlural(), "flevlas");
+        assertEquals("7", forms.getNoun().getInflectionSubtype());
+        assertEquals("flevel", forms.getNoun().getMSingular());
+        assertEquals("flevla", forms.getNoun().getFSingular());
+        assertEquals("flevels", forms.getNoun().getMPlural());
+        assertEquals("flevlas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule8() {
         forms = generator.guessInflection("gioven", null, null);
-        assertEquals(forms.getInflectionSubtype(), "8");
-        assertEquals(forms.getNoun().getMSingular(), "gioven");
-        assertEquals(forms.getNoun().getFSingular(), "giovna");
-        assertEquals(forms.getNoun().getMPlural(), "giovens");
-        assertEquals(forms.getNoun().getFPlural(), "giovnas");
+        assertEquals("8", forms.getNoun().getInflectionSubtype());
+        assertEquals("gioven", forms.getNoun().getMSingular());
+        assertEquals("giovna", forms.getNoun().getFSingular());
+        assertEquals("giovens", forms.getNoun().getMPlural());
+        assertEquals("giovnas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule9() {
         forms = generator.guessInflection("ampluia", null, null);
-        assertEquals(forms.getInflectionSubtype(), "9");
-        assertEquals(forms.getNoun().getMSingular(), "ampluia");
-        assertEquals(forms.getNoun().getFSingular(), "amplueida");
-        assertEquals(forms.getNoun().getMPlural(), "ampluias");
-        assertEquals(forms.getNoun().getFPlural(), "amplueidas");
+        assertEquals("9", forms.getNoun().getInflectionSubtype());
+        assertEquals("ampluia", forms.getNoun().getMSingular());
+        assertEquals("amplueida", forms.getNoun().getFSingular());
+        assertEquals("ampluias", forms.getNoun().getMPlural());
+        assertEquals("amplueidas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule10() {
         forms = generator.guessInflection("anvido", null, null);
-        assertEquals(forms.getInflectionSubtype(), "10");
-        assertEquals(forms.getNoun().getMSingular(), "anvido");
-        assertEquals(forms.getNoun().getFSingular(), "anvidada");
-        assertEquals(forms.getNoun().getMPlural(), "anvidos");
-        assertEquals(forms.getNoun().getFPlural(), "anvidadas");
+        assertEquals("10", forms.getNoun().getInflectionSubtype());
+        assertEquals("anvido", forms.getNoun().getMSingular());
+        assertEquals("anvidada", forms.getNoun().getFSingular());
+        assertEquals("anvidos", forms.getNoun().getMPlural());
+        assertEquals("anvidadas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule11() {
         forms = generator.guessInflection("relaschea", null, null);
-        assertEquals(forms.getInflectionSubtype(), "11");
-        assertEquals(forms.getNoun().getMSingular(), "relaschea");
-        assertEquals(forms.getNoun().getFSingular(), "relascheda");
-        assertEquals(forms.getNoun().getMPlural(), "relascheas");
-        assertEquals(forms.getNoun().getFPlural(), "relaschedas");
+        assertEquals("11", forms.getNoun().getInflectionSubtype());
+        assertEquals("relaschea", forms.getNoun().getMSingular());
+        assertEquals("relascheda", forms.getNoun().getFSingular());
+        assertEquals("relascheas", forms.getNoun().getMPlural());
+        assertEquals("relaschedas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testRule12() {
         forms = generator.guessInflection("minoren", null, null);
-        assertEquals(forms.getInflectionSubtype(), "12");
-        assertEquals(forms.getNoun().getMSingular(), "minoren");
-        assertEquals(forms.getNoun().getFSingular(), "minorenna");
-        assertEquals(forms.getNoun().getMPlural(), "minorens");
-        assertEquals(forms.getNoun().getFPlural(), "minorennas");
+        assertEquals("12", forms.getNoun().getInflectionSubtype());
+        assertEquals("minoren", forms.getNoun().getMSingular());
+        assertEquals("minorenna", forms.getNoun().getFSingular());
+        assertEquals("minorens", forms.getNoun().getMPlural());
+        assertEquals("minorennas", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testPluralRule4() {
         forms = generator.guessInflection("pale", "f", null);
-        assertEquals(forms.getInflectionSubtype(), "2");
-        assertEquals(forms.getNoun().getFSingular(), "pale");
-        assertEquals(forms.getNoun().getFPlural(), "paleis");
+        assertEquals("2", forms.getNoun().getInflectionSubtype());
+        assertEquals("pale", forms.getNoun().getFSingular());
+        assertEquals("paleis", forms.getNoun().getFPlural());
     }
 
     @Test
     public void testBaseFormWithWhitespace() {
         forms = generator.guessInflection("isch tga", null, null);
-        assertEquals(forms, null);
+        assertEquals(null, forms);
     }
 
     @Test
     public void testNormalizeBaseForm() {
         forms = generator.guessInflection("  minoren         ", null, null);
-        assertEquals(forms.getInflectionSubtype(), "12");
-        assertEquals(forms.getNoun().getMSingular(), "minoren");
+        assertEquals("12", forms.getNoun().getInflectionSubtype());
+        assertEquals("minoren", forms.getNoun().getMSingular());
     }
 
     @Test
     public void testWithEndingIndicationA() {
         forms = generator.guessInflection("client, -a", null, null);
-        assertEquals(forms.getInflectionSubtype(), "3");
+        assertEquals("3", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationDra() {
         forms = generator.guessInflection("cumprader, -dra", null, null);
-        assertEquals(forms.getInflectionSubtype(), "4");
+        assertEquals("4", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationBla() {
         forms = generator.guessInflection("responsabel, -bla", null, null);
-        assertEquals(forms.getInflectionSubtype(), "5");
+        assertEquals("5", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationCra() {
         forms = generator.guessInflection("scepticher, -cra", null, null);
-        assertEquals(forms.getInflectionSubtype(), "6");
+        assertEquals("6", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationVla() {
         forms = generator.guessInflection("raschunevel, -vla", null, null);
-        assertEquals(forms.getInflectionSubtype(), "7");
+        assertEquals("7", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationVna() {
         forms = generator.guessInflection("gioven, -vna", null, null);
-        assertEquals(forms.getInflectionSubtype(), "8");
+        assertEquals("8", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationEida() {
         forms = generator.guessInflection("crucifitgia, -eida", null, null);
-        assertEquals(forms.getInflectionSubtype(), "9");
+        assertEquals("9", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationAda() {
         forms = generator.guessInflection("scienzio, -ada", null, null);
-        assertEquals(forms.getInflectionSubtype(), "10");
+        assertEquals("10", forms.getNoun().getInflectionSubtype());
     }
 
     @Test
     public void testWithEndingIndicationEda() {
         forms = generator.guessInflection("donnagea, -eda", null, null);
-        assertEquals(forms.getInflectionSubtype(), "11");
+        assertEquals("11", forms.getNoun().getInflectionSubtype());
     }
 }

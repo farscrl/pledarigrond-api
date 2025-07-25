@@ -20,100 +20,100 @@ public class SursilvanAdjectiveGeneratorTest {
     @Test
     public void testRule1() {
         forms = generator.generateForms("1", "verd");
-        assertEquals(forms.getAdjective().getMSingular(), "verd");
-        assertEquals(forms.getAdjective().getPredicative(), "verds");
-        assertEquals(forms.getAdjective().getFSingular(), "verda");
-        assertEquals(forms.getAdjective().getMPlural(), "verds");
-        assertEquals(forms.getAdjective().getFPlural(), "verdas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "verdamein");
+        assertEquals("verd", forms.getAdjective().getMSingular());
+        assertEquals("verds", forms.getAdjective().getPredicative());
+        assertEquals("verda", forms.getAdjective().getFSingular());
+        assertEquals("verds", forms.getAdjective().getMPlural());
+        assertEquals("verdas", forms.getAdjective().getFPlural());
+        assertEquals("verdamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule2() {
         forms = generator.generateForms("2", "ventireivel");
-        assertEquals(forms.getAdjective().getMSingular(), "ventireivel");
-        assertEquals(forms.getAdjective().getPredicative(), "ventireivels");
-        assertEquals(forms.getAdjective().getFSingular(), "ventireivla");
-        assertEquals(forms.getAdjective().getMPlural(), "ventireivels");
-        assertEquals(forms.getAdjective().getFPlural(), "ventireivlas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "ventireivlamein");
+        assertEquals("ventireivel", forms.getAdjective().getMSingular());
+        assertEquals("ventireivels", forms.getAdjective().getPredicative());
+        assertEquals("ventireivla", forms.getAdjective().getFSingular());
+        assertEquals("ventireivels", forms.getAdjective().getMPlural());
+        assertEquals("ventireivlas", forms.getAdjective().getFPlural());
+        assertEquals("ventireivlamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule3() {
         forms = generator.generateForms("3", "viscal");
-        assertEquals(forms.getAdjective().getMSingular(), "viscal");
-        assertEquals(forms.getAdjective().getPredicative(), "viscals");
-        assertEquals(forms.getAdjective().getFSingular(), "viscla");
-        assertEquals(forms.getAdjective().getMPlural(), "viscals");
-        assertEquals(forms.getAdjective().getFPlural(), "visclas");
+        assertEquals("viscal", forms.getAdjective().getMSingular());
+        assertEquals("viscals", forms.getAdjective().getPredicative());
+        assertEquals("viscla", forms.getAdjective().getFSingular());
+        assertEquals("viscals", forms.getAdjective().getMPlural());
+        assertEquals("visclas", forms.getAdjective().getFPlural());
         // exception, as accent is on the first syllable. Correct would be visclamein, but checking the regular pattern
-        assertEquals(forms.getAdjective().getAdverbialForm(), "viscalmein");
+        assertEquals("viscalmein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule4() {
         forms = generator.generateForms("4", "giuven");
-        assertEquals(forms.getAdjective().getMSingular(), "giuven");
-        assertEquals(forms.getAdjective().getPredicative(), "giuvens");
-        assertEquals(forms.getAdjective().getFSingular(), "giuvna");
-        assertEquals(forms.getAdjective().getMPlural(), "giuvens");
-        assertEquals(forms.getAdjective().getFPlural(), "giuvnas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "giuvnamein");
+        assertEquals("giuven", forms.getAdjective().getMSingular());
+        assertEquals("giuvens", forms.getAdjective().getPredicative());
+        assertEquals("giuvna", forms.getAdjective().getFSingular());
+        assertEquals("giuvens", forms.getAdjective().getMPlural());
+        assertEquals("giuvnas", forms.getAdjective().getFPlural());
+        assertEquals("giuvnamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule6() {
         forms = generator.generateForms("6", "pauper");
-        assertEquals(forms.getAdjective().getMSingular(), "pauper");
-        assertEquals(forms.getAdjective().getPredicative(), "paupers");
-        assertEquals(forms.getAdjective().getFSingular(), "paupra");
-        assertEquals(forms.getAdjective().getMPlural(), "paupers");
-        assertEquals(forms.getAdjective().getFPlural(), "paupras");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "paupramein");
+        assertEquals("pauper", forms.getAdjective().getMSingular());
+        assertEquals("paupers", forms.getAdjective().getPredicative());
+        assertEquals("paupra", forms.getAdjective().getFSingular());
+        assertEquals("paupers", forms.getAdjective().getMPlural());
+        assertEquals("paupras", forms.getAdjective().getFPlural());
+        assertEquals("paupramein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule7() {
         forms = generator.generateForms("7", "bugliu");
-        assertEquals(forms.getAdjective().getMSingular(), "bugliu");
-        assertEquals(forms.getAdjective().getPredicative(), "buglius");
-        assertEquals(forms.getAdjective().getFSingular(), "buglida");
-        assertEquals(forms.getAdjective().getMPlural(), "buglius");
-        assertEquals(forms.getAdjective().getFPlural(), "buglidas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "buglidamein");
+        assertEquals("bugliu", forms.getAdjective().getMSingular());
+        assertEquals("buglius", forms.getAdjective().getPredicative());
+        assertEquals("buglida", forms.getAdjective().getFSingular());
+        assertEquals("buglius", forms.getAdjective().getMPlural());
+        assertEquals("buglidas", forms.getAdjective().getFPlural());
+        assertEquals("buglidamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule8() {
         forms = generator.generateForms("8", "barsau");
-        assertEquals(forms.getAdjective().getMSingular(), "barsau");
-        assertEquals(forms.getAdjective().getPredicative(), "barsaus");
-        assertEquals(forms.getAdjective().getFSingular(), "barsada");
-        assertEquals(forms.getAdjective().getMPlural(), "barsaus");
-        assertEquals(forms.getAdjective().getFPlural(), "barsadas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "barsadamein");
+        assertEquals("barsau", forms.getAdjective().getMSingular());
+        assertEquals("barsaus", forms.getAdjective().getPredicative());
+        assertEquals("barsada", forms.getAdjective().getFSingular());
+        assertEquals("barsaus", forms.getAdjective().getMPlural());
+        assertEquals("barsadas", forms.getAdjective().getFPlural());
+        assertEquals("barsadamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRule10() {
         forms = generator.generateForms("10", "tschuf");
-        assertEquals(forms.getAdjective().getMSingular(), "tschuf");
-        assertEquals(forms.getAdjective().getPredicative(), "tschufs");
-        assertEquals(forms.getAdjective().getFSingular(), "tschuffa");
-        assertEquals(forms.getAdjective().getMPlural(), "tschufs");
-        assertEquals(forms.getAdjective().getFPlural(), "tschuffas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "tschuffamein");
+        assertEquals("tschuf", forms.getAdjective().getMSingular());
+        assertEquals("tschufs", forms.getAdjective().getPredicative());
+        assertEquals("tschuffa", forms.getAdjective().getFSingular());
+        assertEquals("tschufs", forms.getAdjective().getMPlural());
+        assertEquals("tschuffas", forms.getAdjective().getFPlural());
+        assertEquals("tschuffamein", forms.getAdjective().getAdverbialForm());
     }
 
     @Test
     public void testRuleSpecialAdverbial() {
         forms = generator.generateForms("1", "final");
-        assertEquals(forms.getAdjective().getMSingular(), "final");
-        assertEquals(forms.getAdjective().getPredicative(), "finals");
-        assertEquals(forms.getAdjective().getFSingular(), "finala");
-        assertEquals(forms.getAdjective().getMPlural(), "finals");
-        assertEquals(forms.getAdjective().getFPlural(), "finalas");
-        assertEquals(forms.getAdjective().getAdverbialForm(), "finalmein");
+        assertEquals("final", forms.getAdjective().getMSingular());
+        assertEquals("finals", forms.getAdjective().getPredicative());
+        assertEquals("finala", forms.getAdjective().getFSingular());
+        assertEquals("finals", forms.getAdjective().getMPlural());
+        assertEquals("finalas", forms.getAdjective().getFPlural());
+        assertEquals("finalmein", forms.getAdjective().getAdverbialForm());
     }
 }
