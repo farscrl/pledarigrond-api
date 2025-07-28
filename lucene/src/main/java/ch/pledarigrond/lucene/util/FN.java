@@ -30,7 +30,9 @@ public class FN {
     public static final String deRedirect = "deRedirect";
 
     public static final String categories = "categories";
-    public static final String examples = "examples";
+    public static final String examplesJson = "examples_json";
+    public static final String examplesRm = "examples_rm";
+    public static final String examplesDe = "examples_de";
     public static final String userComment = "userComment";
     public static final String userEmail = "userEmail";
 

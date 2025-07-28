@@ -45,6 +45,12 @@ public class IndexedColumn {
 		this.type = type;
 	}
 
+	public IndexedColumn(String sourceColumnName, FieldType type, boolean stored) {
+		this(sourceColumnName);
+		this.type = type;
+		this.stored = stored;
+	}
+
 	@Override
 	public String toString() {
 		return "IndexField [sourceColumnName=" + sourceColumnName + ", indexFieldName=" + indexFieldName +

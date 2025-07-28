@@ -5,14 +5,19 @@ import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.ExampleDto;
 import ch.pledarigrond.common.data.dictionary.inflection.*;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 import ch.pledarigrond.lucene.core.FieldManager;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +25,8 @@ import java.util.Optional;
 public class FieldTransformer {
 
     protected static final Logger logger = LoggerFactory.getLogger(FieldTransformer.class);
+
+    static ObjectMapper objectMapper = new ObjectMapper(); // For JSON serialization
 
     public static Document getDocument(Language language, EntryDto entry, EntryVersionDto ev) {
         Document doc = new Document();
@@ -50,7 +57,21 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.deRedirect, ev.getDeRedirect(), allFieldsList);
 
         toFieldUpdateAllFields(doc, FN.categories, ev.getCategories(), allFieldsList);
-        toFieldUpdateAllFields(doc, FN.examples, ev.getExamples().toString(), allFieldsList); // TODO: serialize
+        String examplesJson = "[]";
+        try {
+            examplesJson = objectMapper.writeValueAsString(ev.getExamples());
+        } catch (JsonProcessingException e) {
+            logger.error("Error serializing examples to JSON", e);
+        }
+        toFieldUpdateAllFields(doc, FN.examplesJson, examplesJson, allFieldsList);
+        for (ExampleDto dto : ev.getExamples()) {
+            if (dto.getRm() != null) {
+                toFieldUpdateAllFields(doc, FN.examplesRm, dto.getRm(), allFieldsList);
+            }
+            if (dto.getDe() != null) {
+                toFieldUpdateAllFields(doc, FN.examplesDe, dto.getDe(), allFieldsList);
+            }
+        }
         toFieldUpdateAllFields(doc, FN.userComment, ev.getUserComment(), allFieldsList);
         toFieldUpdateAllFields(doc, FN.userEmail, ev.getUserEmail(), allFieldsList);
 
@@ -249,7 +270,7 @@ public class FieldTransformer {
         for (IndexableField field : fields) {
             doc.add(field);
         }
-        // addPgFieldsToDocument(lexEntry, lemmaVersion, doc);
+
         return doc;
     }
 
@@ -280,11 +301,21 @@ public class FieldTransformer {
         ev.setDeRedirect(toValue(doc, FN.deRedirect));
 
         ev.setCategories(toValue(doc, FN.categories));
-        // ev.setExamples(toValue(doc, FN.examples)); // TODO: deserialize
+        String examplesJson = toValue(doc, FN.examplesJson);
+        if (examplesJson != null && !examplesJson.isEmpty()) {
+            try {
+                ev.setExamples(objectMapper.readValue(examplesJson, new TypeReference<List<ExampleDto>>() {}));
+            } catch (JsonProcessingException e) {
+                logger.error("Error deserializing examples JSON", e);
+                ev.setExamples(new ArrayList<>());
+            }
+        } else {
+            ev.setExamples(new ArrayList<>());
+        }
         ev.setUserComment(toValue(doc, FN.userComment));
         ev.setUserEmail(toValue(doc, FN.userEmail));
 
-        // ev.setTimestamp(toValue(doc, FN.timestamp)); // TODO: deserialize
+        ev.setTimestamp(createInstantFromString(toValue(doc, FN.timestamp)));
 
         ev.setCreator(toValue(doc, FN.creator));
         ev.setCreatorIp(toValue(doc, FN.creatorIp));
@@ -555,5 +586,17 @@ public class FieldTransformer {
             }
         }
         return fields;
+    }
+
+    public static Instant createInstantFromString(String timestampString) {
+        if (timestampString == null || timestampString.isEmpty()) {
+            return null;
+        }
+        try {
+            return Instant.parse(timestampString);
+        } catch (java.time.format.DateTimeParseException e) {
+            logger.error("Error parsing timestamp string: {} - {}", timestampString, e.getMessage());
+            return null;
+        }
     }
 }
