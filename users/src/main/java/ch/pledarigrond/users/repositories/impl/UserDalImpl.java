@@ -1,7 +1,7 @@
-package ch.pledarigrond.database.user.repositories.impl;
+package ch.pledarigrond.users.repositories.impl;
 
-import ch.pledarigrond.database.user.entities.User;
-import ch.pledarigrond.database.user.repositories.UserDal;
+import ch.pledarigrond.users.entities.User;
+import ch.pledarigrond.users.repositories.UserDal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;

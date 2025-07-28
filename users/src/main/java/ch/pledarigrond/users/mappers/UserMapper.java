@@ -1,9 +1,9 @@
-package ch.pledarigrond.database.user.mappers;
+package ch.pledarigrond.users.mappers;
 
 import ch.pledarigrond.common.data.user.RolesDto;
 import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.data.user.UserForLoginDto;
-import ch.pledarigrond.database.user.entities.User;
+import ch.pledarigrond.users.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

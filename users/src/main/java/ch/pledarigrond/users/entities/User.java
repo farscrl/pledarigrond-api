@@ -1,4 +1,4 @@
-package ch.pledarigrond.database.user.entities;
+package ch.pledarigrond.users.entities;
 
 import ch.pledarigrond.common.data.common.EditorRole;
 import lombok.Data;

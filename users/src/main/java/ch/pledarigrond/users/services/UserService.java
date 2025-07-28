@@ -1,4 +1,4 @@
-package ch.pledarigrond.database.services;
+package ch.pledarigrond.users.services;
 
 import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.data.user.UserForLoginDto;

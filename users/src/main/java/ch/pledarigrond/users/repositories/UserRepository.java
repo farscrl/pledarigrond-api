@@ -1,6 +1,6 @@
-package ch.pledarigrond.database.user.repositories;
+package ch.pledarigrond.users.repositories;
 
-import ch.pledarigrond.database.user.entities.User;
+import ch.pledarigrond.users.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package ch.pledarigrond.api.config;
 
-import ch.pledarigrond.api.services.JwtUserDetailsService;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +24,6 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;

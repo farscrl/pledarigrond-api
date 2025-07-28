@@ -1,7 +1,7 @@
 package ch.pledarigrond.api.services;
 
 import ch.pledarigrond.common.data.user.UserForLoginDto;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

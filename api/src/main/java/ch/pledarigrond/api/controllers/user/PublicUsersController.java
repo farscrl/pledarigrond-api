@@ -1,7 +1,7 @@
 package ch.pledarigrond.api.controllers.user;
 
 import ch.pledarigrond.common.data.user.UserDto;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

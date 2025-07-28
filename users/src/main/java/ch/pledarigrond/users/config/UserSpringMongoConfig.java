@@ -1,4 +1,4 @@
-package ch.pledarigrond.database.config;
+package ch.pledarigrond.users.config;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import static java.util.Collections.singletonList;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "ch.pledarigrond.database.user.repositories", mongoTemplateRef = "usersMongoTemplate")
+@EnableMongoRepositories(basePackages = "ch.pledarigrond.users.repositories", mongoTemplateRef = "usersMongoTemplate")
 public class UserSpringMongoConfig {
 
 

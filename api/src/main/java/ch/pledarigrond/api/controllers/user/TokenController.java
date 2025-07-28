@@ -4,7 +4,7 @@ import ch.pledarigrond.api.dtos.JwtRequest;
 import ch.pledarigrond.api.dtos.JwtResponse;
 import ch.pledarigrond.api.utils.JwtTokenUtil;
 import ch.pledarigrond.common.data.user.UserDto;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

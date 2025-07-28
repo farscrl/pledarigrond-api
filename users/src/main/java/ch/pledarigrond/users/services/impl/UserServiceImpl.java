@@ -1,13 +1,13 @@
-package ch.pledarigrond.database.services.impl;
+package ch.pledarigrond.users.services.impl;
 
 import ch.pledarigrond.common.data.common.EditorRole;
 import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.data.user.UserForLoginDto;
 import ch.pledarigrond.common.exception.user.UserNotFoundException;
-import ch.pledarigrond.database.services.UserService;
-import ch.pledarigrond.database.user.entities.User;
-import ch.pledarigrond.database.user.mappers.UserMapper;
-import ch.pledarigrond.database.user.repositories.UserRepository;
+import ch.pledarigrond.users.entities.User;
+import ch.pledarigrond.users.mappers.UserMapper;
+import ch.pledarigrond.users.repositories.UserRepository;
+import ch.pledarigrond.users.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

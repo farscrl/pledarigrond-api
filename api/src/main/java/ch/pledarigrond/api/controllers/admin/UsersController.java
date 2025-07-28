@@ -3,7 +3,7 @@ package ch.pledarigrond.api.controllers.admin;
 import ch.pledarigrond.common.data.common.ApiError;
 import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.exception.user.UserNotFoundException;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

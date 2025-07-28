@@ -30,6 +30,7 @@
         <module>../pronunciation</module>
         <module>../corpus</module>
         <module>../dictionary</module>
+        <module>../users</module>
     </modules>
 
     <profiles>

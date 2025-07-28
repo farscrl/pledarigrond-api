@@ -2,7 +2,7 @@ package ch.pledarigrond.api.config;
 
 import ch.pledarigrond.api.utils.JwtTokenUtil;
 import ch.pledarigrond.common.data.user.UserForLoginDto;
-import ch.pledarigrond.database.services.UserService;
+import ch.pledarigrond.users.services.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
