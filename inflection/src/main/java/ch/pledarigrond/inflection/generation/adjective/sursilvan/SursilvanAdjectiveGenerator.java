@@ -21,6 +21,7 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
 
     private String root;
     private String ending;
+    private InflectionSubType adjectiveClass;
 
     public void reset() {
         inflection = new InflectionDto();
@@ -29,21 +30,23 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
         inflection.setInflectionType(InflectionType.ADJECTIVE);
         root = "";
         ending = "";
+        adjectiveClass = null;
     }
 
-    public InflectionDto generateForms(String adjectiveClass, String baseForm) {
+    public InflectionDto generateForms(String adjectiveClassId, String baseForm) {
         reset();
 
-        root = getRoot(baseForm, adjectiveClass);
+        root = getRoot(baseForm, adjectiveClassId);
 
-        InflectionSubType subType = SursilvanAdjectiveClasses.getAdjectiveInflectionClass(adjectiveClass);
+        InflectionSubType subType = SursilvanAdjectiveClasses.getAdjectiveInflectionClass(adjectiveClassId);
         if (subType == null) {
-            throw new RuntimeException(adjectiveClass + " is not a valid conjugation class.");
+            throw new RuntimeException(adjectiveClassId + " is not a valid adjective class.");
         } else if (getEnding() == null) {
             throw new RuntimeException(baseForm + " is not a valid male singular form. Please enter a valid form.");
         }
-
-        buildForms(subType);
+        adjectiveClass = subType;
+        adjective.setInflectionSubtype(adjectiveClass.id);
+        buildForms();
         return inflection;
     }
 
@@ -151,9 +154,7 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
         }
     }
 
-    public void buildForms(InflectionSubType adjectiveClass) {
-        adjective.setInflectionSubtype(adjectiveClass.id);
-
+    public void buildForms() {
         setSingular();
         setPlural();
         setAdverbialForm();
