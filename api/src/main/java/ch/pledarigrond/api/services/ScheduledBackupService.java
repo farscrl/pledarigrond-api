@@ -4,13 +4,13 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.services.DbBackupService;
+import jakarta.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,6 +74,12 @@ public class ScheduledBackupService {
 		File backupFile = buildBackup(pgEnvironment.getBackupLocation(), backupFileName, language);
 		backupFile.mkdirs();
 		LOG.info("backup file created: {}", backupFile.getAbsolutePath());
+
+		s3BackupService.uploadFile(dbName, backupFile);
+
+		cleanup(dbName);
+
+		LOG.info("finished scheduled backup");
 	}
 
 	private void backupUserDb() throws IOException {
