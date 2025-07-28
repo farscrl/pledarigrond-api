@@ -42,6 +42,7 @@ public class LexEntryToEntryMapper {
             }
 
             EntryVersion ev = map(lv, language);
+            ev.setEntryId(entry.getEntryId());
             versions.add(ev);
             internalToNewIdMap.put(internalId, ev.getVersionId());
         }

@@ -15,18 +15,16 @@
  ******************************************************************************/
 package ch.pledarigrond.common.data.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.xml.bind.annotation.*;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement
 public class LemmaVersion implements Serializable {
 
