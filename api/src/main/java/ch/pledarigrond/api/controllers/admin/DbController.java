@@ -1,9 +1,14 @@
 package ch.pledarigrond.api.controllers.admin;
 
-import ch.pledarigrond.api.services.AdminService;
+import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.database.services.DbBackupService;
+import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,19 +35,31 @@ public class DbController {
     private final Logger logger = LoggerFactory.getLogger(DbController.class);
 
     @Autowired
-    private AdminService adminService;
+    private DictionaryService dictionaryService;
+
+    @Autowired
+    private LuceneService luceneService;
+
+    @Autowired
+    private DbBackupService dbBackupService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/drop_db")
     void dropDb(@PathVariable("language")Language language) {
-        adminService.dropDatabase(language);
+        logger.info("Dropping database for language: {}", language);
+        dictionaryService.deleteAllEntries();
+        logger.info("Dropped database for language: {}", language);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/import_db")
     void importDb(@PathVariable("language")Language language, HttpServletRequest request) {
         try {
-            adminService.importDatabase(language, request);
+            StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
+            MultipartFile multipartFile = (MultipartFile) dmhsRequest.getFile("file");
+            InputStream in = multipartFile.getInputStream();
+            logger.info("Importing from backup file... {}", multipartFile.getName());
+            dbBackupService.restoreLanguage(language, in);
         } catch (IOException e) {
             logger.error("Error while importing database", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -70,7 +86,7 @@ public class DbController {
         ServletOutputStream out;
         try {
             out = response.getOutputStream();
-            adminService.exportData(language, out, fileName.toString());
+            dbBackupService.backupLanguage(language, out, fileName.toString());
         } catch (IOException e) {
             logger.error("Error while exporting database. Error writing.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error writing.");
@@ -80,20 +96,20 @@ public class DbController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/db_stats")
     ResponseEntity<?> getDbStats(@PathVariable("language")Language language) {
-        return ResponseEntity.ok(adminService.getDatabaseStats(language));
+        return ResponseEntity.ok(dictionaryService.getStatistics());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/backup_infos")
     ResponseEntity<?> getBackupInfos(@PathVariable("language")Language language) {
-        return ResponseEntity.ok(adminService.getBackupInfos(language));
+        return ResponseEntity.ok(dbBackupService.getBackupInfos(language));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/download_backup/{file_name}")
     void downloadBackupFile(@PathVariable("language")Language language, @PathVariable("file_name")String fileName, HttpServletResponse response) throws IOException {
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        File export = adminService.getBackupFile(language, fileName);
+        File export = dbBackupService.getBackupFile(language, fileName);
         response.setContentType("application/json");
         response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
         stream(response, export);
@@ -102,18 +118,17 @@ public class DbController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/index_stats")
     ResponseEntity<?> getIndexStats(@PathVariable("language")Language language) {
-        try {
-            return ResponseEntity.ok(adminService.getIndexStats(language));
-        } catch (NoIndexAvailableException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Index not found.");
-        }
+        return ResponseEntity.ok(luceneService.getIndexStatistics());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/rebuild_index")
     ResponseEntity<?> rebuildIndex(@PathVariable("language")Language language) {
         try {
-            adminService.rebuildIndex(language);
+            logger.info("Rebuilding index...");
+            luceneService.dropIndex();
+            luceneService.addToIndex(dictionaryService.getStreamForEntries());
+            logger.info("Index has been created");
             return ResponseEntity.ok().build();
         } catch (NoIndexAvailableException e) {
             logger.error("Error while rebuilding index. Index not found.", e);
@@ -128,7 +143,9 @@ public class DbController {
     @PostMapping("/rebuild_suggestions_index")
     ResponseEntity<?> rebuildSuggestionsIndex(@PathVariable("language")Language language) {
         try {
-            adminService.rebuildSuggestionsIndex(language);
+            logger.info("Rebuilding suggestions index...");
+            luceneService.regenerateSuggestionIndex(language);
+            logger.info("Suggestions index has been rebuild");
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error while rebuilding suggestion index. Index error.", e);
