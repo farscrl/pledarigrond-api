@@ -6,9 +6,9 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
-import ch.pledarigrond.spellchecker.generator.pos.*;
 import ch.pledarigrond.spellchecker.model.GitDataDto;
 import ch.pledarigrond.spellchecker.utils.GitUtil;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -105,12 +104,6 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         logger.info("Execution time for hunspell generation: {}s", executionTime);
     }
 
-    @Override
-    public File exportMsWordlist(Language language) throws IOException {
-        List<String> names = nameService.getWordsForLanguage(language);
-        return Objects.requireNonNull(getMsWordListGenerator(language, names)).exportWordlist(language, dictionaryService.getStreamForEntries());
-    }
-
     private HunspellGenerator getGeneratorForLanguage(Language language, List<String> names) throws IOException {
         return switch (language) {
             case PUTER -> new PuterHunspellGenerator(pgEnvironment, names);
@@ -119,17 +112,6 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
             case SURSILVAN -> new SursilvanHunspellGenerator(pgEnvironment, names);
             case SUTSILVAN -> new SutsilvanHunspellGenerator(pgEnvironment, names);
             case VALLADER -> new ValladerHunspellGenerator(pgEnvironment, names);
-        };
-    }
-
-    private PartOfSpeechListGenerator getMsWordListGenerator(Language language, List<String> names) {
-        return switch (language) {
-            case PUTER -> new PuterPartOfSpeechListGenerator(pgEnvironment, names);
-            case RUMANTSCHGRISCHUN -> new RumantschgrischunPartOfSpeechListGenerator(pgEnvironment, names);
-            case SURMIRAN -> new SurmiranPartOfSpeechListGenerator(pgEnvironment, names);
-            case SURSILVAN -> new SursilvanPartOfSpeechListGenerator(pgEnvironment, names);
-            case SUTSILVAN -> new SutsilvanPartOfSpeechListGenerator(pgEnvironment, names);
-            case VALLADER -> new ValladerPartOfSpeechListGenerator(pgEnvironment, names);
         };
     }
 }

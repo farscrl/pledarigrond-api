@@ -2,6 +2,7 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.SpellcheckerService;
 import ch.pledarigrond.common.data.common.Language;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,21 +53,6 @@ public class SpellcheckerController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error while generating hunspell", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/export_ms_wordlist")
-    void exportMsWordlist(@PathVariable("language")Language language, HttpServletResponse response) {
-        try {
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            File export = spellcheckerService.exportMsWordlist(language);
-            response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=" + export.getName());
-            stream(response, export);
-        } catch (Exception e) {
-            logger.error("Error while exporting ms wordlist", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

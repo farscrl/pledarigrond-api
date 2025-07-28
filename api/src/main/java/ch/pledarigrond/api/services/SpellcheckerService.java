@@ -8,5 +8,4 @@ import java.io.IOException;
 public interface SpellcheckerService {
     File exportHunspell(Language language) throws IOException;
     void generateAndCommit() throws IOException;
-    File exportMsWordlist(Language language) throws IOException;
 }
