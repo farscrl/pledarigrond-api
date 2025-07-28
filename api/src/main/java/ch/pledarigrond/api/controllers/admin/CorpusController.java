@@ -27,7 +27,7 @@ public class CorpusController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/find")
-    ResponseEntity<?> findInCorpus(@PathVariable("language") Language language, @RequestParam String s) {
+    ResponseEntity<?> findInCorpus(@PathVariable("language") Language language, @RequestParam(value = "s") String s) {
         return ResponseEntity.ok(corpusService.findInCorpus(language, s));
     }
 }
