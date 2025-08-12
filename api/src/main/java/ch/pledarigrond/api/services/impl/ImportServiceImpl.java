@@ -114,8 +114,8 @@ public class ImportServiceImpl implements ImportService {
 
             if (isYellowCell(row.getCell(0))) {
                 if (row.getCell(0) != null && row.getCell(8) != null) {
-                    String exampleRm = row.getCell(0).getRichStringCellValue().getString();
-                    String exampleDe = row.getCell(8).getRichStringCellValue().getString();
+                    String exampleRm = row.getCell(0).getRichStringCellValue().getString().trim();
+                    String exampleDe = row.getCell(8).getRichStringCellValue().getString().trim();
                     if (ev == null) {
                         throw new RuntimeException("No lemma found for example: " + exampleRm);
                     }
@@ -136,7 +136,7 @@ public class ImportServiceImpl implements ImportService {
                 }
                 ev = new EntryVersionDto();
                 if (row.getCell(0) != null) {
-                    String rmStichwort = row.getCell(0).getRichStringCellValue().getString();
+                    String rmStichwort = row.getCell(0).getRichStringCellValue().getString().trim();
                     if (rmStichwort.startsWith("# ")) {
                         rmStichwort = rmStichwort.substring(2);
                         ev.setRmRedirect(rmStichwort);
@@ -146,28 +146,28 @@ public class ImportServiceImpl implements ImportService {
                     }
                 }
                 if (row.getCell(1) != null) {
-                    ev.setRmGenus(row.getCell(1).getRichStringCellValue().getString());
+                    ev.setRmGenus(row.getCell(1).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(2) != null) {
-                    ev.setRmGrammatik(row.getCell(2).getRichStringCellValue().getString());
+                    ev.setRmGrammatik(row.getCell(2).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(3) != null) {
-                    ev.setRmPhonetics(row.getCell(3).getRichStringCellValue().getString());
+                    ev.setRmPhonetics(row.getCell(3).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(4) != null) {
-                    ev.setRmSubsemantik(row.getCell(4).getRichStringCellValue().getString());
+                    ev.setRmSubsemantik(row.getCell(4).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(5) != null) {
-                    ev.setRmSemantik(row.getCell(5).getRichStringCellValue().getString());
+                    ev.setRmSemantik(row.getCell(5).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(6) != null) {
-                    ev.setRmEtymologie(row.getCell(6).getRichStringCellValue().getString());
+                    ev.setRmEtymologie(row.getCell(6).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(7) != null) {
-                    ev.setRmSynonym(row.getCell(7).getRichStringCellValue().getString());
+                    ev.setRmSynonym(row.getCell(7).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(8) != null) {
-                    String deStichwort = row.getCell(8).getRichStringCellValue().getString();
+                    String deStichwort = row.getCell(8).getRichStringCellValue().getString().trim();
                     if (deStichwort.startsWith("# ")) {
                         deStichwort = deStichwort.substring(2);
                         ev.setDeRedirect(deStichwort);
@@ -177,16 +177,16 @@ public class ImportServiceImpl implements ImportService {
                     }
                 }
                 if (row.getCell(9) != null) {
-                    ev.setDeGenus(row.getCell(9).getRichStringCellValue().getString());
+                    ev.setDeGenus(row.getCell(9).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(10) != null) {
-                    ev.setDeGrammatik(row.getCell(10).getRichStringCellValue().getString());
+                    ev.setDeGrammatik(row.getCell(10).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(11) != null) {
-                    ev.setDeSubsemantik(row.getCell(11).getRichStringCellValue().getString());
+                    ev.setDeSubsemantik(row.getCell(11).getRichStringCellValue().getString().trim());
                 }
                 if (row.getCell(12) != null) {
-                    ev.setCategories(row.getCell(12).getRichStringCellValue().getString());
+                    ev.setCategories(row.getCell(12).getRichStringCellValue().getString().trim());
                 }
             }
         }
