@@ -26,6 +26,7 @@ import ch.pledarigrond.mongodb.util.MongoHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
@@ -415,31 +416,87 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     public static List<String> getGenderValues() {
         return Stream.of(
-                "m",
+                " f",
+                " m",
+                " n",
+                "(m)",
                 "f",
-                "m.pl",
+                "f ",
+                "f e coll",
+                "f e m",
                 "f.pl",
-                "pl",
-                "f.coll"
+                "f/m",
+                "f/n",
+                "f/pl",
+                "fm",
+                "m",
+                "m ",
+                "m e f/pl",
+                "m u. n",
+                "m.pl",
+                "m/coll",
+                "m/f",
+                "m/n",
+                "m/pl",
+                "m/sg",
+                "n",
+                "n/f",
+                "n/m",
+                "n/pl",
+                "pl"
         ).collect(Collectors.toList());
     }
     
     public static List<String> getGrammarValuesForAdjective() {
         return Stream.of(
-                "adj"
+                "adj",
+                "adj attrib",
+                "adj ed adv",
+                "adj u. adv",
+                "adj u. f",
+                "adj u. m",
+                "adj u. m ",
+                "adj u. prep",
+                "adj.",
+                "adj. attrib",
+                "adj. cump. attrib",
+                "adj. pron",
+                "adj. superl",
+                "adj.attrib",
+                "adj.indef.",
+                "adj.inv",
+                "adj.invar",
+                "adj.invar.",
+                "adj/adv"
         ).collect(Collectors.toList());
     }
 
     public static List<String> getGrammarValuesForVerbs() {
         return Stream.of(
+                "intr",
+                "intr ",
+                "intr u. tr.",
+                "intr.impers",
+                "refl",
+                "refl ",
+                "rw.",
+                "sm",
                 "tr",
-                "intr"
+                "tr cun adv",
+                "tr cun pp",
+                "tr e intr",
+                "tr ed intr",
+                "tr. impers",
+                "v",
+                "v ",
+                "verb"
                 ).collect(Collectors.toList());
     }
 
     private EntryVersionDto cloneVersion(EntryVersionDto version) {
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
             String json = mapper.writeValueAsString(version);
             return mapper.readValue(json, EntryVersionDto.class);
         } catch (JsonProcessingException e) {
