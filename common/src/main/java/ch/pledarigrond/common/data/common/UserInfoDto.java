@@ -8,9 +8,17 @@ public class UserInfoDto {
     private String ipAddress;
     private EditorRole role;
 
-    public static UserInfoDto getSystemDto() {
+    public static UserInfoDto getImportDto() {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setEmail("import@pledarigrond.ch");
+        userInfoDto.setIpAddress("localhost");
+        userInfoDto.setRole(EditorRole.ADMIN);
+        return userInfoDto;
+    }
+
+    public static UserInfoDto getAutomaticChangeDto() {
+        UserInfoDto userInfoDto = new UserInfoDto();
+        userInfoDto.setEmail("automatic-change@pledarigrond.ch");
         userInfoDto.setIpAddress("localhost");
         userInfoDto.setRole(EditorRole.ADMIN);
         return userInfoDto;

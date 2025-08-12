@@ -290,7 +290,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflectionResponse);
             newVersion.setAutomaticChange(true);
-            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getAutomaticChangeDto());
         }
 
         return true;
@@ -349,7 +349,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflectionResponse);
             newVersion.setAutomaticChange(true);
-            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getAutomaticChangeDto());
         }
 
         return true;
@@ -405,7 +405,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             newVersion.setInflection(inflection.getInflectionResponse());
             newVersion.setAutomaticChange(true);
-            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getSystemDto());
+            dictionaryService.addVersion(entry.getEntryId(), newVersion, true, UserInfoDto.getAutomaticChangeDto());
         }
 
         logger.warn("Generated verbs for grammar value: {}. Correct: {} / Not correct: {}", grammarValue, correct, nuncorrect);

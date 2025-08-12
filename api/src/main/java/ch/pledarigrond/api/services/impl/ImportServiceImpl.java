@@ -218,7 +218,7 @@ public class ImportServiceImpl implements ImportService {
     }
 
     private void finalizeVersion(EntryVersionDto ev) {
-        dictionaryService.addEntry(ev, false, UserInfoDto.getSystemDto());
+        dictionaryService.addEntry(ev, false, UserInfoDto.getImportDto());
         logger.info("Inserted: {}", ev.getRmStichwort());
     }
 }

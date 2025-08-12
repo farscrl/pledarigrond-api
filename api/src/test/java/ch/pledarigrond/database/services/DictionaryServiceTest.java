@@ -27,7 +27,7 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
         version.setRmStichwort("rumantsch");
         version.setDeStichwort("deutsch");
 
-        EntryDto entry = dictionaryService.addEntry(version, false, UserInfoDto.getSystemDto());
+        EntryDto entry = dictionaryService.addEntry(version, false, UserInfoDto.getImportDto());
 
         assertNotNull(entry);
 
@@ -59,7 +59,7 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
         version.setRmStichwort("rumantsch");
         version.setDeStichwort("deutsch");
 
-        EntryDto entry = dictionaryService.addEntry(version, true, UserInfoDto.getSystemDto());
+        EntryDto entry = dictionaryService.addEntry(version, true, UserInfoDto.getImportDto());
 
         assertNotNull(entry);
 
