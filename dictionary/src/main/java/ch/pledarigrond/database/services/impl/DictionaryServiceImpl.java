@@ -41,6 +41,11 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Autowired
     private EntryMapper entryMapper;
 
+    @Override
+    public boolean isEmpty() {
+        return entryRepository.count() == 0;
+    }
+
 
     @Override
     public Page<NormalizedEntryVersionsDto> queryForEntries(EditorQuery queryData, int pageSize, int page, boolean excludeAutomaticChanges) {

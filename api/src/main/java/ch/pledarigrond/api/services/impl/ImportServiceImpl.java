@@ -45,6 +45,10 @@ public class ImportServiceImpl implements ImportService {
     }
 
     public boolean importZipSursilvan(Language language, HttpServletRequest request) throws IOException {
+        if (!dictionaryService.isEmpty()) {
+            logger.error("Dictionary is not empty, cannot import ZIP file");
+            throw new RuntimeException("Dictionary is not empty, cannot import ZIP file");
+        }
 
         StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
         MultipartFile zipFile = dmhsRequest.getFile("file");
