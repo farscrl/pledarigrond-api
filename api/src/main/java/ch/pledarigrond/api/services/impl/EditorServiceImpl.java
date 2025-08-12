@@ -58,7 +58,7 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery query, Pagination pagination) {
-        return dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage(), false);
+        return dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage());
     }
 
     @Override
@@ -221,7 +221,7 @@ public class EditorServiceImpl implements EditorService {
         writer.write("\n");
 
         while(true) {
-            Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage(), true);
+            Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage());
             if(result == null || result.getContent().isEmpty()) break;
             for (NormalizedEntryVersionsDto normalizedVersion : result.getContent()) {
                 write(writer, normalizedVersion.getVersion(), fields);

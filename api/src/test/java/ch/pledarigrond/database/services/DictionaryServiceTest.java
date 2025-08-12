@@ -39,11 +39,11 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
 
         EditorQuery editorQuery = new EditorQuery();
         editorQuery.setState(PublicationStatus.PUBLISHED);
-        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0, false);
+        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
         assertEquals(1, result.getTotalElements());
 
         editorQuery.setState(PublicationStatus.HAS_SUGGESTION);
-        result = dictionaryService.queryForEntries(editorQuery, 1000, 0, false);
+        result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
         assertEquals(0, result.getTotalElements());
     }
 
@@ -71,11 +71,11 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
 
         EditorQuery editorQuery = new EditorQuery();
         editorQuery.setState(PublicationStatus.PUBLISHED);
-        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0, false);
+        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
         assertEquals(0, result.getTotalElements());
 
         editorQuery.setState(PublicationStatus.HAS_SUGGESTION);
-        result = dictionaryService.queryForEntries(editorQuery, 1000, 0, false);
+        result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
         assertEquals(1, result.getTotalElements());
     }
 }

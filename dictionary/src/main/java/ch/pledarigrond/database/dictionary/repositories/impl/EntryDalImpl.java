@@ -27,8 +27,7 @@ public class EntryDalImpl implements EntryDal {
     public Page<NormalizedEntryVersionsDto> queryForEntries(
             EditorQuery queryData,
             int pageSize,
-            int page,
-            boolean excludeAutomaticChanges
+            int page
     ) {
         Pageable pageable = PageRequest.of(page, pageSize);
         long skip = pageable.getOffset();
@@ -60,7 +59,7 @@ public class EntryDalImpl implements EntryDal {
         AggregationOperation unwindStage = context -> new Document("$unwind", "$version");
 
         // Stage 5: $match publicationStatus "MODIFIED"
-        AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData, excludeAutomaticChanges));
+        AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData, queryData.isExcludeAutomaticChanges()));
 
         // Stage 6: $set entryId
         AggregationOperation renameIdStage = context -> new Document("$set",

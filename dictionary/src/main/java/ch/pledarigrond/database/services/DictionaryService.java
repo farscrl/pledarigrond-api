@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public interface DictionaryService {
     boolean isEmpty();
-    Page<NormalizedEntryVersionsDto> queryForEntries(EditorQuery queryData, int pageSize, int page, boolean excludeAutomaticChanges);
+    Page<NormalizedEntryVersionsDto> queryForEntries(EditorQuery queryData, int pageSize, int page);
     EntryDto getEntry(String entryId);
     EntryDto addEntry(EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo);
     EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion, UserInfoDto userInfo);

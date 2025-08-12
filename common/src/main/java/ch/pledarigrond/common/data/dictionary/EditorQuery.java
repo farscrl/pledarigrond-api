@@ -10,6 +10,7 @@ public class EditorQuery {
 
     // filters for Entry
     private PublicationStatus state = PublicationStatus.PUBLISHED;
+    private boolean excludeAutomaticChanges = true;
 
     // filters for EntryVersion
     private String userOrIp; // The current text (first name, last name, email, login) used for filtering results
