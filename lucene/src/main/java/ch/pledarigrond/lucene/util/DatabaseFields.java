@@ -1,6 +1,5 @@
 package ch.pledarigrond.lucene.util;
 
-import ch.pledarigrond.common.data.common.LemmaVersion;
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
 
@@ -160,11 +159,7 @@ public class DatabaseFields {
                 new IndexedColumn(FN.otherForm4),
 
                 // automatic generation of forms
-                new IndexedColumn(LemmaVersion.AUTOMATIC_CHANGE),
-
-                // contains all field-names of the current entry. This is used to search for non-existing fields:
-                // https://kuzminva.wordpress.com/2017/04/04/lucene-field-does-not-exist/
-                new IndexedColumn(LemmaVersion.FIELD_NAMES)
+                new IndexedColumn(FN.automaticChange),
         );
     }
 }

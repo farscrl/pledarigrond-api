@@ -2,7 +2,7 @@ package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.common.data.lucene.IndexedColumn;
-import ch.pledarigrond.common.data.user.SearchCriteria;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.lucene.core.BuilderRegistry;
 import ch.pledarigrond.lucene.util.LuceneHelper;
 import org.apache.lucene.analysis.Analyzer;
@@ -21,7 +21,7 @@ import java.util.*;
  * lucene fields required to perform queries, so during startup these
  * fields are used to set up the lucene index.
  * - When performing queries, the {@link BuilderRegistry} will use the
- * information provided in a {@link SearchCriteria } to find the
+ * information provided in a {@link LuceneSearchCriteria } to find the
  * relevant {@link AbstractQueryBuilder}, such that they can be used
  * to build the lucene query string.
  */

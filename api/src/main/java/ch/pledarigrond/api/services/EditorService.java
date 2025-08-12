@@ -3,12 +3,12 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.SearchSuggestions;
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface EditorService {
-    Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery query, Pagination pagination);
+    Page<NormalizedEntryVersionsDto> getDictionaryVersions(DbSearchCriteria query, Pagination pagination);
 
     EntryDto getEntry(String entryId) ;
 
@@ -42,15 +42,15 @@ public interface EditorService {
 
     EntryDto dropOutdatedHistory(String entryId) throws IOException;
 
-    Page<EntryVersionDto> search(SearchCriteria searchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
+    Page<EntryVersionDto> search(LuceneSearchCriteria luceneSearchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
     ArrayList<EntryVersionDto> getOrder(String lemma, DictionaryLanguage dictionaryLanguage) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
     List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered) throws IOException;
 
-    String export(Set<String> fields, EditorQuery query) throws IOException;
+    String export(Set<String> fields, DbSearchCriteria query) throws IOException;
 
-    String export(Set<String> selected, SearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
+    String export(Set<String> selected, LuceneSearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
     SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException;
 }

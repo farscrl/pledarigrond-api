@@ -5,8 +5,8 @@ import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
@@ -37,14 +37,14 @@ public class SearchController {
     @GetMapping("")
     ResponseEntity<?> search(
             @PathVariable("language") Language language,
-            @Validated SearchCriteria searchCriteria,
+            @Validated LuceneSearchCriteria luceneSearchCriteria,
             @Validated Pagination pagination
     ) {
         try {
-            Page<EntryVersionDto> result = luceneService.query(searchCriteria, pagination, true);
+            Page<EntryVersionDto> result = luceneService.query(luceneSearchCriteria, pagination, true);
             
-            String[] suggestionsRm = luceneService.getSuggestionForWord(searchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
-            String[] suggestionsDe = luceneService.getSuggestionForWord(searchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
+            String[] suggestionsRm = luceneService.getSuggestionForWord(luceneSearchCriteria.getSearchPhrase(), 5, SearchDirection.ROMANSH);
+            String[] suggestionsDe = luceneService.getSuggestionForWord(luceneSearchCriteria.getSearchPhrase(), 5, SearchDirection.GERMAN);
             PageDto<EntryVersionDto> suggestionPage = new PageDto<>(
                     result.getContent(),
                     result.getPageable(),

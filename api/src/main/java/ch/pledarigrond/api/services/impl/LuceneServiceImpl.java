@@ -10,8 +10,8 @@ import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.lucene.core.LuceneIndexManager;
 import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
@@ -57,8 +57,8 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public Page<EntryVersionDto> query(SearchCriteria searchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
-        Page<EntryVersionDto> result = luceneIndexMap.get(RequestContext.getLanguage()).query(searchCriteria, pagination);
+    public Page<EntryVersionDto> query(LuceneSearchCriteria luceneSearchCriteria, Pagination pagination, boolean removeInternalData) throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
+        Page<EntryVersionDto> result = luceneIndexMap.get(RequestContext.getLanguage()).query(luceneSearchCriteria, pagination);
         if (removeInternalData) {
             return clean(result);
         }

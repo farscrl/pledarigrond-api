@@ -1,6 +1,7 @@
 package ch.pledarigrond.database.dictionary.repositories.impl;
 
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.database.dictionary.repositories.EntryDal;
 import org.bson.Document;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Repository
 public class EntryDalImpl implements EntryDal {
@@ -25,7 +27,7 @@ public class EntryDalImpl implements EntryDal {
 
     @Override
     public Page<NormalizedEntryVersionsDto> queryForEntries(
-            EditorQuery queryData,
+            DbSearchCriteria queryData,
             int pageSize,
             int page
     ) {
@@ -59,7 +61,7 @@ public class EntryDalImpl implements EntryDal {
         AggregationOperation unwindStage = context -> new Document("$unwind", "$version");
 
         // Stage 5: $match publicationStatus "MODIFIED"
-        AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData, queryData.isExcludeAutomaticChanges()));
+        AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData));
 
         // Stage 6: $set entryId
         AggregationOperation renameIdStage = context -> new Document("$set",
@@ -108,7 +110,7 @@ public class EntryDalImpl implements EntryDal {
         return new PageImpl<>(versionsDtos, pageable, longTotalCount);
     }
 
-    private Criteria getEntryLevelCriteria(EditorQuery queryData) {
+    private Criteria getEntryLevelCriteria(DbSearchCriteria queryData) {
         List<Criteria> criteriaList = new ArrayList<>();
 
         if (queryData.getState() != null) {
@@ -123,8 +125,34 @@ public class EntryDalImpl implements EntryDal {
         return finalCriteria;
     }
 
-    private Criteria getEntryVersionLevelCriteria(EditorQuery queryData, boolean excludeAutomaticChanges) {
+    private Criteria getEntryVersionLevelCriteria(DbSearchCriteria queryData) {
         List<Criteria> criteriaList = new ArrayList<>();
+
+        if (queryData.getSearchPhrase() != null && !queryData.getSearchPhrase().isEmpty()) {
+            String sanitizedPhrase = Pattern.quote(queryData.getSearchPhrase());
+            String regexPattern = switch (queryData.getSearchMethod()) {
+                case SUFFIX -> sanitizedPhrase + "$";
+                case INTERN -> sanitizedPhrase;
+                default -> "^" + sanitizedPhrase;
+            };
+
+            if (queryData.getSearchDirection() == SearchDirection.ROMANSH) {
+                criteriaList.add(
+                    Criteria.where("version.rmStichwort").regex(regexPattern, "i")
+                );
+            } else if (queryData.getSearchDirection() == SearchDirection.GERMAN) {
+                criteriaList.add(
+                    Criteria.where("version.deStichwort").regex(regexPattern, "i")
+                );
+            } else {
+                criteriaList.add(
+                    new Criteria().orOperator(
+                        Criteria.where("version.rmStichwort").regex(regexPattern, "i"),
+                        Criteria.where("version.deStichwort").regex(regexPattern, "i")
+                    )
+                );
+            }
+        }
 
         if (queryData.getUserOrIp() != null && !queryData.getUserOrIp().trim().isEmpty()) {
             criteriaList.add(
@@ -159,13 +187,40 @@ public class EntryDalImpl implements EntryDal {
             );
         }
 
-        if (excludeAutomaticChanges) {
+        if (queryData.isExcludeAutomaticChanges()) {
             criteriaList.add(
                     new Criteria().orOperator(
                             Criteria.where("version.automaticChange").is(false),
                             Criteria.where("version.automaticChange").exists(false)
                     )
             );
+        }
+
+        if (queryData.getOnlyAutomaticChanged()) {
+            criteriaList.add(
+                Criteria.where("version.automaticChange").is(true)
+            );
+        }
+
+        if (queryData.getInflectionType() != null) {
+            criteriaList.add(
+                Criteria.where("version.inflection.inflectionType").is(queryData.getInflectionType().toString())
+            );
+        }
+
+        if (queryData.getShowReviewLater() != null) {
+            if (queryData.getShowReviewLater()) {
+                criteriaList.add(
+                    Criteria.where("version.inflection.reviewLater").is(true)
+                );
+            } else {
+                criteriaList.add(
+                    new Criteria().orOperator(
+                        Criteria.where("version.inflection.reviewLater").is(false),
+                        Criteria.where("version.inflection.reviewLater").exists(false)
+                    )
+                );
+            }
         }
 
         Criteria finalCriteria = new Criteria();

@@ -4,13 +4,13 @@ import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.*;
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
@@ -57,7 +57,7 @@ public class EditorServiceImpl implements EditorService {
     private final Logger logger = LoggerFactory.getLogger(EditorServiceImpl.class);
 
     @Override
-    public Page<NormalizedEntryVersionsDto> getDictionaryVersions(EditorQuery query, Pagination pagination) {
+    public Page<NormalizedEntryVersionsDto> getDictionaryVersions(DbSearchCriteria query, Pagination pagination) {
         return dictionaryService.queryForEntries(query, pagination.getPageSize(), pagination.getPage());
     }
 
@@ -123,8 +123,8 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public Page<EntryVersionDto> search(SearchCriteria searchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
-        return luceneService.query(searchCriteria, pagination, false);
+    public Page<EntryVersionDto> search(LuceneSearchCriteria luceneSearchCriteria, Pagination pagination) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
+        return luceneService.query(luceneSearchCriteria, pagination, false);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public String export(Set<String> fields, EditorQuery query) throws IOException {
+    public String export(Set<String> fields, DbSearchCriteria query) throws IOException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
@@ -159,7 +159,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public String export(Set<String> fields, SearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
+    public String export(Set<String> fields, LuceneSearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException {
         File dir = new File(pgEnvironment.getTempExportLocation());
         dir.mkdirs();
         final File tmp = new File(dir, "export_" + UUID.randomUUID() + ".tsv.zip");
@@ -206,7 +206,7 @@ public class EditorServiceImpl implements EditorService {
         return suggestions;
     }
 
-    private void export(Set<String> fields, EditorQuery query, File dest) throws IOException {
+    private void export(Set<String> fields, DbSearchCriteria query, File dest) throws IOException {
         Pagination pagination = new Pagination();
         pagination.setPageSize(100);
 
@@ -234,7 +234,7 @@ public class EditorServiceImpl implements EditorService {
         writer.close();
     }
 
-    public void export(Set<String> fields, SearchCriteria query, File dest) throws IOException, BrokenIndexException, NoIndexAvailableException, InvalidQueryException {
+    public void export(Set<String> fields, LuceneSearchCriteria query, File dest) throws IOException, BrokenIndexException, NoIndexAvailableException, InvalidQueryException {
         Pagination pagination = new Pagination();
         pagination.setPageSize(100);
 

@@ -13,8 +13,8 @@ import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import ch.pledarigrond.common.util.DbSelector;
 import ch.pledarigrond.database.dictionary.entities.Entry;
 import ch.pledarigrond.database.dictionary.mappers.LexEntryToEntryMapper;
@@ -237,17 +237,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     private boolean updateNounsByGender(String gender, List<String[]> noInflectionList) {
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setGender(gender);
-        searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+        LuceneSearchCriteria luceneSearchCriteria = new LuceneSearchCriteria();
+        luceneSearchCriteria.setGender(gender);
+        luceneSearchCriteria.setExcludeAutomaticChanged(true);
+        luceneSearchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
         Page<EntryVersionDto> versions;
         try {
-            versions = editorService.search(searchCriteria, pagination);
+            versions = editorService.search(luceneSearchCriteria, pagination);
         } catch (Exception e) {
             logger.error("Error while searching for versions", e);
             return false;
@@ -297,17 +297,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     private boolean updateAdjectivesByGrammar(String grammarValue, List<String[]> noInflectionList) {
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setGrammar(grammarValue);
-        searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+        LuceneSearchCriteria luceneSearchCriteria = new LuceneSearchCriteria();
+        luceneSearchCriteria.setGrammar(grammarValue);
+        luceneSearchCriteria.setExcludeAutomaticChanged(true);
+        luceneSearchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
         Page<EntryVersionDto> versions;
         try {
-            versions = editorService.search(searchCriteria, pagination);
+            versions = editorService.search(luceneSearchCriteria, pagination);
         } catch (Exception e) {
             logger.error("Error while searching for versions", e);
             return false;
@@ -356,17 +356,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     private boolean updateVerbsByGrammar(String grammarValue) {
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setGrammar(grammarValue);
-        searchCriteria.setExcludeAutomaticChanged(true);
-        searchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+        LuceneSearchCriteria luceneSearchCriteria = new LuceneSearchCriteria();
+        luceneSearchCriteria.setGrammar(grammarValue);
+        luceneSearchCriteria.setExcludeAutomaticChanged(true);
+        luceneSearchCriteria.setSearchDirection(SearchDirection.ROMANSH);
 
         Pagination pagination = new Pagination();
         pagination.setPageSize(1000000);
 
         Page<EntryVersionDto> versions;
         try {
-            versions = editorService.search(searchCriteria, pagination);
+            versions = editorService.search(luceneSearchCriteria, pagination);
         } catch (Exception e) {
             logger.error("Error while searching for versions", e);
             return false;

@@ -37,13 +37,13 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
         Assertions.assertEquals(1, stats.getNumberOfEntries());
         Assertions.assertEquals(1, stats.getNumberOfApproved());
 
-        EditorQuery editorQuery = new EditorQuery();
-        editorQuery.setState(PublicationStatus.PUBLISHED);
-        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
+        DbSearchCriteria dbSearchCriteria = new DbSearchCriteria();
+        dbSearchCriteria.setState(PublicationStatus.PUBLISHED);
+        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(dbSearchCriteria, 1000, 0);
         assertEquals(1, result.getTotalElements());
 
-        editorQuery.setState(PublicationStatus.HAS_SUGGESTION);
-        result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
+        dbSearchCriteria.setState(PublicationStatus.HAS_SUGGESTION);
+        result = dictionaryService.queryForEntries(dbSearchCriteria, 1000, 0);
         assertEquals(0, result.getTotalElements());
     }
 
@@ -69,13 +69,13 @@ public class DictionaryServiceTest extends AbstractBaseIntegrationTest {
         Assertions.assertEquals(1, stats.getNumberOfEntries());
         Assertions.assertEquals(0, stats.getNumberOfApproved());
 
-        EditorQuery editorQuery = new EditorQuery();
-        editorQuery.setState(PublicationStatus.PUBLISHED);
-        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
+        DbSearchCriteria dbSearchCriteria = new DbSearchCriteria();
+        dbSearchCriteria.setState(PublicationStatus.PUBLISHED);
+        Page<NormalizedEntryVersionsDto> result = dictionaryService.queryForEntries(dbSearchCriteria, 1000, 0);
         assertEquals(0, result.getTotalElements());
 
-        editorQuery.setState(PublicationStatus.HAS_SUGGESTION);
-        result = dictionaryService.queryForEntries(editorQuery, 1000, 0);
+        dbSearchCriteria.setState(PublicationStatus.HAS_SUGGESTION);
+        result = dictionaryService.queryForEntries(dbSearchCriteria, 1000, 0);
         assertEquals(1, result.getTotalElements());
     }
 }

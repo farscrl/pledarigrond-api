@@ -48,7 +48,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
 
     @Override
-    public Page<NormalizedEntryVersionsDto> queryForEntries(EditorQuery queryData, int pageSize, int page) {
+    public Page<NormalizedEntryVersionsDto> queryForEntries(DbSearchCriteria queryData, int pageSize, int page) {
         return entryDal.queryForEntries(queryData, pageSize, page);
     }
 

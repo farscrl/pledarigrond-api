@@ -8,12 +8,12 @@ import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.dictionary.EditorQuery;
+import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.SearchCriteria;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
@@ -53,9 +53,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/entries")
-    ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, @Validated EditorQuery editorQuery, Pagination pagination) {
+    ResponseEntity<?> getDictionaryVersions(@PathVariable("language") Language language, @Validated DbSearchCriteria dbSearchCriteria, Pagination pagination) {
         try {
-            Page<NormalizedEntryVersionsDto> list = editorService.getDictionaryVersions(editorQuery, pagination);
+            Page<NormalizedEntryVersionsDto> list = editorService.getDictionaryVersions(dbSearchCriteria, pagination);
             return ResponseEntity.ok(list);
 
         } catch (Exception e) {
@@ -188,9 +188,9 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/search")
-    ResponseEntity<?> searchEntryVersions(@PathVariable("language") Language language, @Validated SearchCriteria searchCriteria, Pagination pagination) {
+    ResponseEntity<?> searchEntryVersions(@PathVariable("language") Language language, @Validated LuceneSearchCriteria luceneSearchCriteria, Pagination pagination) {
         try {
-            return ResponseEntity.ok(editorService.search(searchCriteria, pagination));
+            return ResponseEntity.ok(editorService.search(luceneSearchCriteria, pagination));
         } catch (Exception e) {
             logger.error("Error while searching lemma versions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -221,7 +221,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/search_export")
-    void exportBySearchQuery(@PathVariable("language") Language language, @Validated SearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
+    void exportBySearchQuery(@PathVariable("language") Language language, @Validated LuceneSearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             String fileName = editorService.export(fields.fields, query);
@@ -237,7 +237,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/entries_export")
-    void exportByEditorQuery(@PathVariable("language") Language language, @Validated EditorQuery query, @RequestBody FieldsList fields, HttpServletResponse response) {
+    void exportByEditorQuery(@PathVariable("language") Language language, @Validated DbSearchCriteria query, @RequestBody FieldsList fields, HttpServletResponse response) {
         try {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             String fileName = editorService.export(fields.fields, query);
