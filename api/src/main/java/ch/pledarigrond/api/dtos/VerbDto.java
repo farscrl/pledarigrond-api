@@ -7,6 +7,7 @@ public class VerbDto {
 
     private String rmStichwort;
     private String rmInflectionSubtype;
+    private String deStichwortList;
     private String irregular;
     private String infinitiv;
     private String preschentsing1;

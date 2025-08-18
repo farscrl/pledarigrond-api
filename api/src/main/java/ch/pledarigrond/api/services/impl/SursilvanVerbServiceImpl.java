@@ -4,9 +4,9 @@ import ch.pledarigrond.api.dtos.VerbDto;
 import ch.pledarigrond.api.services.SursilvanVerbService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class SursilvanVerbServiceImpl implements SursilvanVerbService {
     public void init() {
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<VerbDto>> typeReference = new TypeReference<List<VerbDto>>() {};
-        InputStream inputStream = TypeReference.class.getResourceAsStream("/sursilvan/verbs.json");
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/sursilvan/sursilvan_verbs.json");
         try {
             List<VerbDto> verbs = objectMapper.readValue(inputStream, typeReference);
             for (VerbDto verb : verbs) {
