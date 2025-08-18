@@ -396,7 +396,12 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             InflectionResultDto inflection;
             try {
-                inflection = sursilvanInflectionComparatorUtil.getInflection(newVersion.getRmStichwort());
+                try {
+                    inflection = sursilvanInflectionComparatorUtil.getInflection(newVersion.getRmStichwort());
+                } catch (RuntimeException ex) {
+                    logger.error("Error while getting inflection for verb: {}", newVersion.getRmStichwort(), ex);
+                    continue;
+                }
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 continue;
             }
