@@ -159,7 +159,7 @@ public class DatabaseFields {
                 new IndexedColumn(FN.otherForm4),
 
                 // automatic generation of forms
-                new IndexedColumn(FN.automaticChange),
+                new IndexedColumn(FN.automaticChange)
         );
     }
 }
