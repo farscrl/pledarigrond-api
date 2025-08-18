@@ -278,7 +278,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/reference_inflection")
-    public ResponseEntity<?> getReferenceInflection(@PathVariable("language") Language language, String searchTerm) {
+    public ResponseEntity<?> getReferenceInflection(@PathVariable("language") Language language, @RequestParam("searchTerm") String searchTerm) {
         if (language != Language.SURSILVAN) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
         }
