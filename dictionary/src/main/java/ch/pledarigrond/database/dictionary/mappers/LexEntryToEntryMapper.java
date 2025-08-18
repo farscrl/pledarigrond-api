@@ -300,7 +300,7 @@ public class LexEntryToEntryMapper {
             conjunctiv2.setPlural1(getField(lv, "conjunctiv2plural1", false, mappedFields));
             conjunctiv2.setPlural2(getField(lv, "conjunctiv2plural2", false, mappedFields));
             conjunctiv2.setPlural3(getField(lv, "conjunctiv2plural3", false, mappedFields));
-            verb.setConjunctiv2(conjunctiv2);
+            verb.setConjunctivImperfect(conjunctiv2);
         }
 
         Verb.PersonalVerb cundizional = new Verb.PersonalVerb();

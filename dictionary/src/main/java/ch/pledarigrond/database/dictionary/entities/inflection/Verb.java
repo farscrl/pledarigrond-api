@@ -13,7 +13,7 @@ public class Verb implements Cloneable {
     private PersonalVerb preschent;
     private PersonalVerb imperfect;
     private PersonalVerb conjunctiv;
-    private PersonalVerb conjunctiv2;
+    private PersonalVerb conjunctivImperfect;
     private PersonalVerb cundiziunal;
     private PersonalVerb cundiziunalIndirect;
     private ParticipPerfect participPerfect;
@@ -112,7 +112,7 @@ public class Verb implements Cloneable {
             if (this.preschent != null) cloned.preschent = this.preschent.clone();
             if (this.imperfect != null) cloned.imperfect = this.imperfect.clone();
             if (this.conjunctiv != null) cloned.conjunctiv = this.conjunctiv.clone();
-            if (this.conjunctiv2 != null) cloned.conjunctiv2 = this.conjunctiv2.clone();
+            if (this.conjunctivImperfect != null) cloned.conjunctivImperfect = this.conjunctivImperfect.clone();
             if (this.cundiziunal != null) cloned.cundiziunal = this.cundiziunal.clone();
             if (this.cundiziunalIndirect != null) cloned.cundiziunalIndirect = this.cundiziunalIndirect.clone();
             if (this.participPerfect != null) cloned.participPerfect = this.participPerfect.clone();
