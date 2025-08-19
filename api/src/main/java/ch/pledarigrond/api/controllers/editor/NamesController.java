@@ -5,19 +5,19 @@ import ch.pledarigrond.common.data.common.ApiError;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.names.entities.Category;
 import ch.pledarigrond.names.entities.Name;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class NamesController {
 
     @PreAuthorize("hasPermission('names', 'editor')")
     @GetMapping("")
-    ResponseEntity<?> list(Pagination pagination, String name, Category category) {
+    ResponseEntity<?> list(@Valid @ModelAttribute Pagination pagination, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "category", required = false) Category category) {
         Page<Name> names = nameService.getAllNames(pagination, name, category);
         return ResponseEntity.ok(names);
     }
@@ -97,14 +97,11 @@ public class NamesController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/import")
-    void importAction(HttpServletRequest request) throws IOException {
-        StandardMultipartHttpServletRequest dmhsRequest = (StandardMultipartHttpServletRequest) request;
-        MultipartFile multipartFile = dmhsRequest.getFile("file");
-        assert multipartFile != null;
-        InputStream in = multipartFile.getInputStream();
-
-        nameService.importAllNames(in);
+    @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    void importAction(@RequestParam("file") MultipartFile file) throws IOException {
+        try (InputStream in = file.getInputStream()) {
+            nameService.importAllNames(in);
+        }
     }
 
     private void stream(HttpServletResponse response, File export) throws IOException {
