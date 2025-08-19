@@ -199,7 +199,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/update_order")
-    ResponseEntity<?> reorderEntries(@PathVariable("language") Language language, DictionaryLanguage dictionaryLanguage, @Validated @RequestBody EntryVersionList EntryVersionList) {
+    ResponseEntity<?> reorderEntries(@PathVariable("language") Language language, @RequestParam(value = "dictionaryLanguage") DictionaryLanguage dictionaryLanguage, @Validated @RequestBody EntryVersionList EntryVersionList) {
         try {
             return ResponseEntity.ok(editorService.updateOrder(dictionaryLanguage, EntryVersionList.entries));
         } catch (Exception e) {
@@ -210,7 +210,7 @@ public class EditorController {
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/get_order")
-    ResponseEntity<?> getEntriesOrder(@PathVariable("language") Language language, String lemma, DictionaryLanguage dictionaryLanguage) {
+    ResponseEntity<?> getEntriesOrder(@PathVariable("language") Language language, @RequestParam(value = "lemma") String lemma, @RequestParam(value = "dictionaryLanguage") DictionaryLanguage dictionaryLanguage) {
         try {
             return ResponseEntity.ok(editorService.getOrder(lemma, dictionaryLanguage));
         } catch (Exception e) {

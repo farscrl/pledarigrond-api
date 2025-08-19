@@ -142,7 +142,7 @@ public class DictionaryServiceImpl implements DictionaryService {
             String sortValOld = "";
             String sortValNew = "";
             if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
-                updatedVersion.setDeStichwort(i + "");
+                updatedVersion.setDeStichwortSort(i + "");
                 sortValOld = "deStichwort: " + entry.getCurrent().getDeStichwortSort();
                 sortValNew = "deStichwort: " + updatedVersion.getDeStichwortSort();
             } else {
