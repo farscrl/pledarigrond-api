@@ -277,9 +277,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
+            String rmStichwort = newVersion.getRmStichwort();
+            if (isMultipleWords(rmStichwort)) {
+                continue;
+            }
+
             InflectionDto inflectionResponse;
             try {
-                inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.NOUN, newVersion.getRmStichwort(), newVersion.getRmGenus(), newVersion.getRmFlex());
+                inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.NOUN, rmStichwort, newVersion.getRmGenus(), newVersion.getRmFlex());
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
@@ -336,9 +341,14 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
+            String rmStichwort = newVersion.getRmStichwort();
+            if (isMultipleWords(rmStichwort)) {
+                continue;
+            }
+
             InflectionDto inflectionResponse;
             try {
-                inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.ADJECTIVE, newVersion.getRmStichwort(), newVersion.getRmGenus(), newVersion.getRmFlex());
+                inflectionResponse = inflectionService.guessInflection(RequestContext.getLanguage(), InflectionType.ADJECTIVE, rmStichwort, newVersion.getRmGenus(), newVersion.getRmFlex());
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
                 noInflectionList.add(new String[]{ id, RStichwort, DStichwort, "exception" });
                 continue;
@@ -394,12 +404,17 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
             EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
 
+            String rmStichwort = newVersion.getRmStichwort();
+            if (isMultipleWords(rmStichwort)) {
+                continue;
+            }
+
             InflectionResultDto inflection;
             try {
                 try {
-                    inflection = sursilvanInflectionComparatorUtil.getInflection(newVersion.getRmStichwort());
+                    inflection = sursilvanInflectionComparatorUtil.getInflection(rmStichwort);
                 } catch (RuntimeException ex) {
-                    logger.error("Error while getting inflection for verb: {}", newVersion.getRmStichwort(), ex);
+                    logger.error("Error while getting inflection for verb: {}", rmStichwort, ex);
                     continue;
                 }
             } catch (StringIndexOutOfBoundsException | NullPointerException ex) {
@@ -560,5 +575,11 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         File outputFile = outputDirectory.resolve(fileName).toFile();
 
         OBJECT_MAPPER.writeValue(outputFile, lexEntry);
+    }
+
+    private boolean isMultipleWords(String input) {
+        if (input == null) return false;
+        String trimmed = input.trim();
+        return trimmed.contains(" ");
     }
 }
