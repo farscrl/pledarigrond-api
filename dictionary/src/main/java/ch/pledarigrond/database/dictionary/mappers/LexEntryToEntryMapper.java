@@ -261,7 +261,8 @@ public class LexEntryToEntryMapper {
         Verb verb = new Verb();
 
         verb.setInfinitiv(getField(lv, "infinitiv", true, mappedFields));
-        verb.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", false, mappedFields), "true"));
+        boolean isIrregular = Objects.equals(getField(lv, "RRegularInflection", false, mappedFields), "false");
+        verb.setIrregular(isIrregular);
         verb.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         verb.setComposedWith(getField(lv, "composedWith", false, mappedFields));
 
@@ -431,7 +432,8 @@ public class LexEntryToEntryMapper {
         Noun noun = new Noun();
 
         noun.setBaseForm(getField(lv, "baseForm", true, mappedFields));
-        noun.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        boolean isIrregular = Objects.equals(getField(lv, "RRegularInflection", false, mappedFields), "false");
+        noun.setIrregular(isIrregular);
         noun.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         noun.setMSingular(getField(lv, "mSingular", false, mappedFields));
         noun.setFSingular(getField(lv, "fSingular", false, mappedFields));
@@ -446,7 +448,8 @@ public class LexEntryToEntryMapper {
         Adjective adjective = new Adjective();
 
         adjective.setBaseForm(getField(lv, "baseForm", true, mappedFields));
-        adjective.setIrregular(!Objects.equals(getField(lv, "RRegularInflection", true, mappedFields), "true"));
+        boolean isIrregular = Objects.equals(getField(lv, "RRegularInflection", false, mappedFields), "false");
+        adjective.setIrregular(isIrregular);
         adjective.setInflectionSubtype(getField(lv, "RInflectionSubtype", true, mappedFields));
         adjective.setMSingular(getField(lv, "mSingular", false, mappedFields));
         adjective.setFSingular(getField(lv, "fSingular", false, mappedFields));
