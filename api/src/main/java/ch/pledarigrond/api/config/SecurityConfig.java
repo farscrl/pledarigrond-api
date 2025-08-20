@@ -52,6 +52,7 @@ public class SecurityConfig {
                 // dont authenticate user requests
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
+                                "/error",
                                 "/user/**",
                                 "/puter/user/**",
                                 "/rumantschgrischun/user/**",
