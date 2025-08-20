@@ -38,23 +38,26 @@ public class EntryDalImpl implements EntryDal {
         // Stage 1: $match based on Entry fields
         AggregationOperation matchStage = Aggregation.match(getEntryLevelCriteria(queryData));
 
-        // Stage 2: $set version by concatenating arrays
+        // Stage 2: $addFields version by concatenating arrays
         AggregationOperation setStage2 = switch (queryData.getState()) {
-            case HAS_SUGGESTION -> context -> new Document("$set",
+            case HAS_SUGGESTION -> context -> new Document("$addFields",
                     new Document("version", "$suggestions")
             );
-            case PUBLISHED -> context -> new Document("$set",
+            case PUBLISHED -> context -> new Document("$addFields",
                     new Document("version", List.of("$current"))
             );
-            default -> context -> new Document("$set",
+            default -> context -> new Document("$addFields",
                     new Document("version", Collections.emptyList())
             );
         };
 
 
-        // Stage 3: $unset unwanted fields
-        AggregationOperation unsetStage = context -> new Document("$unset",
-                Arrays.asList("current", "versions", "_class", "suggestions")
+        // Stage 3: $project unwanted fields
+        AggregationOperation unsetStage = context -> new Document("$project",
+                new Document("current", 0)
+                        .append("versions", 0)
+                        .append("_class", 0)
+                        .append("suggestions", 0)
         );
 
         // Stage 4: $unwind suggestions
@@ -63,8 +66,8 @@ public class EntryDalImpl implements EntryDal {
         // Stage 5: $match publicationStatus "MODIFIED"
         AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData));
 
-        // Stage 6: $set entryId
-        AggregationOperation renameIdStage = context -> new Document("$set",
+        // Stage 6: $addFields entryId
+        AggregationOperation renameIdStage = context -> new Document("$addFields",
                 new Document("entryId", "$_id")
         );
 
