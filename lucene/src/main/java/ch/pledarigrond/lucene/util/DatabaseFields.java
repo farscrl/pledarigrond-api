@@ -19,6 +19,7 @@ public class DatabaseFields {
                 new IndexedColumn(FN.deGrammatik, FieldType.STRING_SORTED),
                 new IndexedColumn(FN.deGenus, FieldType.STRING_SORTED),
                 new IndexedColumn(FN.deTags),
+
                 new IndexedColumn(FN.rmStichwort, FieldType.STRING_SORTED),
                 new IndexedColumn(FN.rmStichwortSort, FieldType.INTEGER_SORTED),
                 new IndexedColumn(FN.rmSemantik),

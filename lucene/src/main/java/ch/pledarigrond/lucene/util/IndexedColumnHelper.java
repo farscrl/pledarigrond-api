@@ -50,16 +50,16 @@ public class IndexedColumnHelper {
         fields.add(new SortedDocValuesField(name, new BytesRef(value.toLowerCase())));
         fields.add(new TextField(name, value, stored));
 
-        if (name.equals("deStichwort")) {
+        if (name.equals(FN.deStichwort)) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("deStichwort_dict", valueDict, stored));
+                fields.add(new StringField(FN.deStichwortDict, valueDict, stored));
             }
         }
-        if (name.equals("rmStichwort")) {
+        if (name.equals(FN.rmStichwort)) {
             String valueDict = normalizeDictionaryEntries(value);
             if (!valueDict.isEmpty()) {
-                fields.add(new StringField("rmStichwort_dict", valueDict, stored));
+                fields.add(new StringField(FN.rmStichwortDict, valueDict, stored));
             }
         }
         return fields;
@@ -92,7 +92,7 @@ public class IndexedColumnHelper {
      * @return The normalized file value
      */
     private static String normalizeLadinPronunciationValues(String fieldName, String value) {
-        if (fieldName.startsWith("rmStichwort_")) {
+        if (fieldName.startsWith("rmStichwort")) {
             return PronunciationNormalizer.normalizePronunciation(value);
         }
         return value;

@@ -3,6 +3,7 @@ package ch.pledarigrond.lucene.suggestions;
 import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.lucene.analyzers.CaseInsensitiveStandardTokenizer;
+import ch.pledarigrond.lucene.util.FN;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -60,8 +61,8 @@ public class SuggestionsIndex {
         IndexReader readerDe = DirectoryReader.open(spellIndexDirectoryDe);
 
         // Use the SpellChecker's indexDictionary method to build the suggestion index
-        spellCheckerDe.indexDictionary(new LuceneDictionary(reader, "deStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
-        spellCheckerRm.indexDictionary(new LuceneDictionary(reader, "rmStichwort_dict"), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerDe.indexDictionary(new LuceneDictionary(reader, FN.deStichwortDict), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
+        spellCheckerRm.indexDictionary(new LuceneDictionary(reader, FN.rmStichwortDict), new IndexWriterConfig(new CaseInsensitiveStandardTokenizer()), true);
 
         logIndexedWords();
 

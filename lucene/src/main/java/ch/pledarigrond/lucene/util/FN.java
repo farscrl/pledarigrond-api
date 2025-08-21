@@ -10,6 +10,7 @@ public class FN {
 
     public static final String rmStichwort = "rmStichwort";
     public static final String rmStichwortSort = "rmStichwortSort";
+    public static final String rmStichwortDict = "rmStichwortDict";
     public static final String rmSemantik = "rmSemantik";
     public static final String rmSubsemantik = "rmSubsemantik";
     public static final String rmGrammatik = "rmGrammatik";
@@ -22,6 +23,7 @@ public class FN {
 
     public static final String deStichwort = "deStichwort";
     public static final String deStichwortSort = "deStichwortSort";
+    public static final String deStichwortDict = "deStichwortDict";
     public static final String deSemantik = "deSemantik";
     public static final String deSubsemantik = "deSubsemantik";
     public static final String deGrammatik = "deGrammatik";

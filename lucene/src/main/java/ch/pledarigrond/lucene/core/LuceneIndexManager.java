@@ -4,6 +4,7 @@ import ch.pledarigrond.common.config.LuceneConfiguration;
 import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
+import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.common.data.lucene.IndexStatistics;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
@@ -13,6 +14,7 @@ import ch.pledarigrond.lucene.exceptions.BrokenIndexException;
 import ch.pledarigrond.lucene.exceptions.IndexException;
 import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
+import ch.pledarigrond.lucene.util.FN;
 import ch.pledarigrond.lucene.util.FieldTransformer;
 import ch.pledarigrond.lucene.util.IndexCommandQueue;
 import org.apache.lucene.document.Document;
@@ -104,11 +106,11 @@ public class LuceneIndexManager {
         }
 
         if (luceneSearchCriteria.getSortBy() == SortBy.ROMANSH) {
-            fields[1] = new SortField("rmStichwort", Type.STRING);
-            fields[2] = new SortField("rmStichwortSort", Type.INT);
+            fields[1] = new SortField(FN.rmStichwort, Type.STRING);
+            fields[2] = new SortField(FN.rmStichwortSort, Type.INT);
         } else {
-            fields[1] = new SortField("deStichwort", Type.STRING);
-            fields[2] = new SortField("deStichwortSort", Type.INT);
+            fields[1] = new SortField(FN.deStichwort, Type.STRING);
+            fields[2] = new SortField(FN.deStichwortSort, Type.INT);
         }
         Sort sort = new Sort(fields);
         Page<EntryVersionDto> result;
@@ -173,10 +175,10 @@ public class LuceneIndexManager {
         SortField sortField;
         if (dictionaryLanguage == DictionaryLanguage.GERMAN) {
             queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.GERMAN, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("deStichwortSort", Type.INT);
+            sortField = new SortField(FN.deStichwortSort, Type.INT);
         } else {
             queries = BuilderRegistry.getInstance().getBuilder(SearchDirection.ROMANSH, SearchMethod.EXACT).transform(phrase);
-            sortField = new SortField("rmStichwortSort", Type.INT);
+            sortField = new SortField(FN.rmStichwortSort, Type.INT);
         }
         int pageSize = 120;
         try {
@@ -236,10 +238,10 @@ public class LuceneIndexManager {
         Set<String[]> fields = Set.of();
         if (suggestionField == SuggestionField.GENDER) {
             luceneSearchCriteria.setGender(value);
-            fields = Set.of(new String[]{"deGenus_na_nw_l_t-STRING", "deGenus"}, new String[]{"rmGenus_na_nw_l_t-STRING", "rmGenus"});
+            fields = Set.of(new String[]{"deGenus_na_nw_l_t-STRING", FN.deGenus}, new String[]{"rmGenus_na_nw_l_t-STRING", FN.rmGenus});
         } else if (suggestionField == SuggestionField.GRAMMAR) {
             luceneSearchCriteria.setGrammar(value);
-            fields = Set.of(new String[]{"deGrammatik_na_nw_l_t-STRING", "deGrammatik"}, new String[]{"rmGrammatik_na_nw_l_t-STRING", "rmGrammatik"});
+            fields = Set.of(new String[]{"deGrammatik_na_nw_l_t-STRING", FN.deGrammatik}, new String[]{"rmGrammatik_na_nw_l_t-STRING", FN.rmGrammatik});
         }
         Query query = buildQuery(luceneSearchCriteria);
         if (query == null) {
