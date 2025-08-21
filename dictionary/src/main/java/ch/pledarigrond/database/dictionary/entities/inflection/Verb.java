@@ -7,7 +7,7 @@ public class Verb implements Cloneable {
     private String infinitiv;
     private boolean irregular;
     private String inflectionSubtype;
-    private boolean isReflexive;
+    private Boolean isReflexive;
     private String composedWith;
 
     private PersonalVerb preschent;

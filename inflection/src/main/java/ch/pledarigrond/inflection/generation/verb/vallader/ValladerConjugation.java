@@ -169,7 +169,7 @@ public class ValladerConjugation extends LanguageConjugation {
     }
 
     private void conjugate() {
-        verb.setReflexive(isReflexive);
+        verb.setIsReflexive(isReflexive);
 
         setPreschent();
         setImperfect();
