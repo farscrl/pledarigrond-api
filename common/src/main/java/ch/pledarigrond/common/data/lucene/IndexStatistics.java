@@ -12,12 +12,6 @@ import java.util.HashMap;
 public class IndexStatistics implements Serializable {
 
 	private int numberOfEntries;
-	
-	private int approvedEntries;
-	
-	private int unverifiedEntries;
-	
-	private int unknown;
 
 	private long lastUpdated;
 
@@ -26,8 +20,6 @@ public class IndexStatistics implements Serializable {
 	@Override
 	public String toString() {
 		return "IndexStatistics [numberOfEntries=" + numberOfEntries
-				+ ", approvedEntries=" + approvedEntries
-				+ ", unverifiedEntries=" + unverifiedEntries + ", unknown="
-				+ unknown + ", lastUpdated=" + lastUpdated + "]";
+				+ ", lastUpdated=" + lastUpdated + "]";
 	}
 }

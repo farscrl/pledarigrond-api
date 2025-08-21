@@ -85,7 +85,7 @@ public class FieldTransformer {
 
         if (ev.getInflection() != null) {
             InflectionDto i = ev.getInflection();
-            toFieldUpdateAllFields(doc, FN.inflectionType, Optional.ofNullable(i.getInflectionType()).map(InflectionType::getName).orElse(null));
+            toFieldUpdateAllFields(doc, FN.inflectionType, Optional.ofNullable(i.getInflectionType()).map(InflectionType::name).orElse(null));
             toFieldUpdateAllFields(doc, FN.reviewLater, i.isReviewLater() ? "true" : "false");
 
             if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.VERB) && i.getVerb() != null) {

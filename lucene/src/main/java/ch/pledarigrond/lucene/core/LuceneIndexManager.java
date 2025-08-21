@@ -202,38 +202,16 @@ public class LuceneIndexManager {
                 // Find total number of entries
                 statistics.setNumberOfEntries(reader.numDocs());
 
-                // Find accepted values
-                Term term = new Term("verification", "ACCEPTED"); // TODO: re-implement me
-                Query query = new TermQuery(term);
-                TopDocs results = searcher.search(query, Integer.MAX_VALUE);
-                statistics.setApprovedEntries((int) results.totalHits.value);
-
-                // Find unverified values
-                term = new Term("verification", "UNVERIFIED");  // TODO: re-implement me
-                query = new TermQuery(term);
-                results = searcher.search(query, Integer.MAX_VALUE);
-                statistics.setUnverifiedEntries((int) results.totalHits.value);
-
-                // Find unknown values
-                TermQuery acceptedQuery = new TermQuery(new Term("verification", "ACCEPTED"));  // TODO: re-implement me
-                TermQuery unverifiedQuery = new TermQuery(new Term("verification", "UNVERIFIED"));  // TODO: re-implement me
-                BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
-                booleanQueryBuilder.add(acceptedQuery, BooleanClause.Occur.MUST_NOT);
-                booleanQueryBuilder.add(unverifiedQuery, BooleanClause.Occur.MUST_NOT);
-                query = booleanQueryBuilder.build();
-                results = searcher.search(query, Integer.MAX_VALUE);
-                statistics.setUnknown((int) results.totalHits.value);
-
                 // Find last updated
                 statistics.setLastUpdated(luceneIndexFilesystem.get(language).getLastUpdated());
 
                 // Find inflection count
                 HashMap<String, Integer> inflectionCount = new HashMap<>();
-                String[] inflectionTypes = new String[]{"NOUN", "V", "ADJECTIVE", "PRONOUN", "OTHER"};
+                String[] inflectionTypes = new String[]{InflectionType.NOUN.name(), InflectionType.VERB.name(), InflectionType.ADJECTIVE.name(), InflectionType.PRONOUN.name(), InflectionType.OTHER.name()};
                 for (String inflectionType : inflectionTypes) {
-                    term = new Term("inflectionType", inflectionType);
-                    query = new TermQuery(term);
-                    results = searcher.search(query, Integer.MAX_VALUE);
+                    Term term = new Term(FN.inflectionType, inflectionType);
+                    Query query = new TermQuery(term);
+                    TopDocs results = searcher.search(query, Integer.MAX_VALUE);
                     inflectionCount.put(inflectionType, (int) results.totalHits.value);
                 }
                 statistics.setInflectionCount(inflectionCount);
