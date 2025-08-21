@@ -3,6 +3,8 @@ package ch.pledarigrond.api.controllers.user;
 import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.api.services.ScheduledDumpService;
 import ch.pledarigrond.common.data.common.Language;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class ExportDataController {
     }
 
     @GetMapping("/names")
-    ResponseEntity<?> exportForLanguageAction(@PathVariable Language language) {
+    ResponseEntity<?> exportForLanguageAction(@PathVariable("language") Language language) {
         List<String> names = nameService.getWordsForLanguage(language);
         return ResponseEntity.ok(names);
     }
