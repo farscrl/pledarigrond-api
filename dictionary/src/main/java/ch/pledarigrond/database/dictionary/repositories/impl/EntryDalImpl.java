@@ -2,6 +2,7 @@ package ch.pledarigrond.database.dictionary.repositories.impl;
 
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
+import ch.pledarigrond.common.data.dictionary.DictionaryStatisticsDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.database.dictionary.repositories.EntryDal;
 import org.bson.Document;
@@ -9,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
@@ -111,6 +110,32 @@ public class EntryDalImpl implements EntryDal {
 
         // return page
         return new PageImpl<>(versionsDtos, pageable, longTotalCount);
+    }
+
+    @Override
+    public DictionaryStatisticsDto getStatistics() {
+        Aggregation agg = Aggregation.newAggregation(
+                Aggregation.group()
+                        .count().as("numberOfEntries")
+
+                        .sum( ArrayOperators.Size.lengthOfArray(
+                                ConditionalOperators.ifNull("versions").then(Collections.emptyList())
+                        )).as("numberOfVersions")
+
+                        .sum( ArrayOperators.Size.lengthOfArray(
+                                ConditionalOperators.ifNull("suggestions").then(Collections.emptyList())
+                        )).as("numberOfSuggestions")
+
+                        .sum(
+                                ConditionalOperators.when(
+                                        ConditionalOperators.ifNull("current").then(false)
+                                ).then(1).otherwise(0)
+                        ).as("numberOfApproved"),
+                Aggregation.project("numberOfEntries","numberOfVersions","numberOfSuggestions","numberOfApproved")
+        );
+
+        return mongoTemplate.aggregate(agg, "entries", DictionaryStatisticsDto.class)
+                        .getUniqueMappedResult();
     }
 
     private Criteria getEntryLevelCriteria(DbSearchCriteria queryData) {

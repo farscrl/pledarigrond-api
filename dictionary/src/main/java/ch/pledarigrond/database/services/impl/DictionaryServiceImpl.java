@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -224,27 +223,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public DictionaryStatisticsDto getStatistics() {
-        AtomicLong numberOfEntries = new AtomicLong();
-        AtomicLong numberOfVersions = new AtomicLong();
-        AtomicLong numberOfSuggestions = new AtomicLong();
-        AtomicLong numberOfApproved = new AtomicLong();
-
-        entryRepository.findAllBy().forEach(entry -> {
-            numberOfEntries.incrementAndGet();
-            numberOfVersions.addAndGet(entry.getVersions().size());
-            numberOfSuggestions.addAndGet(entry.getSuggestions().size());
-            if (entry.getCurrent() != null) {
-                numberOfApproved.incrementAndGet();
-            }
-        });
-
-        DictionaryStatisticsDto stats = new DictionaryStatisticsDto();
-        stats.setNumberOfEntries(numberOfEntries.get());
-        stats.setNumberOfVersions(numberOfVersions.get());
-        stats.setNumberOfSuggestions(numberOfSuggestions.get());
-        stats.setNumberOfApproved(numberOfApproved.get());
-
-        return stats;
+        return entryDal.getStatistics();
     }
 
     @Override
