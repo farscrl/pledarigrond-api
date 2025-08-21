@@ -105,14 +105,14 @@ public class RegistrationsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_single_words")
     ResponseEntity<?> extractSingleWords() {
-        registrationService.extractSingleWords(dictionaryService.getStreamForEntries());
+        dictionaryService.withAllEntries(registrationService::extractSingleWords);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_list_of_words_by_ending")
     ResponseEntity<?> extractListOfWordsByEnding() {
-        ByteArrayResource resource = registrationService.extractListOfWordsByEnding(dictionaryService.getStreamForEntries());
+        ByteArrayResource resource = dictionaryService.withAllEntries(registrationService::extractListOfWordsByEnding);
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=strings.txt")
                 .body(resource);

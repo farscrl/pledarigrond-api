@@ -7,6 +7,7 @@ import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.common.data.dictionary.inflection.VerbDto;
 import ch.pledarigrond.common.util.PronunciationNormalizer;
 import ch.pledarigrond.database.services.DictionaryService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,20 +36,22 @@ public class ExportServiceImpl implements ExportService {
 
         AtomicInteger rowNum = new AtomicInteger(0);
 
-        dictionaryService.getStreamForEntries().forEach(entry -> {
-            if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
-                String rmStichwortStripped = entry.getCurrent().getRmStichwort().trim();
-                if (rmStichwortStripped.startsWith("as ")) {
-                    rmStichwortStripped = rmStichwortStripped.substring(3).trim();
-                } else if (rmStichwortStripped.startsWith("s'")) {
-                    rmStichwortStripped = rmStichwortStripped.substring(2).trim();
+        dictionaryService.withAllEntries(stream -> {
+            stream.forEach(entry -> {
+                if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+                    String rmStichwortStripped = entry.getCurrent().getRmStichwort().trim();
+                    if (rmStichwortStripped.startsWith("as ")) {
+                        rmStichwortStripped = rmStichwortStripped.substring(3).trim();
+                    } else if (rmStichwortStripped.startsWith("s'")) {
+                        rmStichwortStripped = rmStichwortStripped.substring(2).trim();
+                    }
+                    if (rmStichwortStripped.contains(" ")) {
+                        Row row = sheet.createRow(rowNum.getAndIncrement());
+                        row.createCell(0).setCellValue(entry.getCurrent().getEntryId());
+                        row.createCell(1).setCellValue(entry.getCurrent().getRmStichwort());
+                    }
                 }
-                if (rmStichwortStripped.contains(" ")) {
-                    Row row = sheet.createRow(rowNum.getAndIncrement());
-                    row.createCell(0).setCellValue(entry.getCurrent().getEntryId());
-                    row.createCell(1).setCellValue(entry.getCurrent().getRmStichwort());
-                }
-            }
+            });
         });
 
         return terminateExcel(workbook);
@@ -63,48 +65,50 @@ public class ExportServiceImpl implements ExportService {
 
         AtomicInteger rowNum = new AtomicInteger(0);
 
-        dictionaryService.getStreamForEntries().forEach(entry -> {
-            if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
-                EntryVersionDto current = entry.getCurrent();
-                VerbDto verb = current.getInflection().getVerb();
+        dictionaryService.withAllEntries(stream -> {
+            stream.forEach(entry -> {
+                if (entry.getCurrent() != null && entry.getCurrent().getInflection() != null && entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+                    EntryVersionDto current = entry.getCurrent();
+                    VerbDto verb = current.getInflection().getVerb();
 
-                if (verb == null) {
-                    return;
-                }
-
-                String infinitiv = verb.getInfinitiv();
-
-                if (infinitiv == null) {
-                    return;
-                }
-
-                infinitiv = PronunciationNormalizer.normalizePronunciation(infinitiv);
-
-                if ( infinitiv.endsWith("er") && infinitiv.length() > 2) {
-                    boolean isCandidate = false;
-
-                    if (isVocal(infinitiv.charAt(infinitiv.length() - 3))) {
+                    if (verb == null) {
                         return;
                     }
 
-                    isCandidate = true;
+                    String infinitiv = verb.getInfinitiv();
 
-                    if (infinitiv.length() > 3 && !isVocal(infinitiv.charAt(infinitiv.length() - 4))) {
-                        if (infinitiv.length() > 4 && !isVocal(infinitiv.charAt(infinitiv.length() - 5))) {
-                            if (infinitiv.length() > 5 && !isVocal(infinitiv.charAt(infinitiv.length() - 6))) {
-                                isCandidate = false;
-                                logger.info("Verb with more thant 3 consonants before -er: " + current.getEntryId() + " - " + infinitiv);
+                    if (infinitiv == null) {
+                        return;
+                    }
+
+                    infinitiv = PronunciationNormalizer.normalizePronunciation(infinitiv);
+
+                    if ( infinitiv.endsWith("er") && infinitiv.length() > 2) {
+                        boolean isCandidate = false;
+
+                        if (isVocal(infinitiv.charAt(infinitiv.length() - 3))) {
+                            return;
+                        }
+
+                        isCandidate = true;
+
+                        if (infinitiv.length() > 3 && !isVocal(infinitiv.charAt(infinitiv.length() - 4))) {
+                            if (infinitiv.length() > 4 && !isVocal(infinitiv.charAt(infinitiv.length() - 5))) {
+                                if (infinitiv.length() > 5 && !isVocal(infinitiv.charAt(infinitiv.length() - 6))) {
+                                    isCandidate = false;
+                                    logger.info("Verb with more thant 3 consonants before -er: " + current.getEntryId() + " - " + infinitiv);
+                                }
                             }
                         }
-                    }
 
-                    if (isCandidate) {
-                        Row row = sheet.createRow(rowNum.getAndIncrement());
-                        row.createCell(0).setCellValue(current.getEntryId());
-                        row.createCell(1).setCellValue(infinitiv);
+                        if (isCandidate) {
+                            Row row = sheet.createRow(rowNum.getAndIncrement());
+                            row.createCell(0).setCellValue(current.getEntryId());
+                            row.createCell(1).setCellValue(infinitiv);
+                        }
                     }
                 }
-            }
+            });
         });
 
         return terminateExcel(workbook);
@@ -118,22 +122,24 @@ public class ExportServiceImpl implements ExportService {
 
         AtomicInteger rowNum = new AtomicInteger(0);
 
-        dictionaryService.getStreamForEntries().forEach(entry -> {
-            EntryVersionDto current = entry.getCurrent();
+        dictionaryService.withAllEntries(stream -> {
+            stream.forEach(entry -> {
+                EntryVersionDto current = entry.getCurrent();
 
-            if (current != null) {
-                String RStichwort = current.getRmStichwort();
-                String RGenus = current.getRmGenus();
+                if (current != null) {
+                    String RStichwort = current.getRmStichwort();
+                    String RGenus = current.getRmGenus();
 
-                if (RStichwort != null && RGenus != null) {
-                    if (RStichwort.contains(",") && RGenus.contains("/")) {
-                        Row row = sheet.createRow(rowNum.getAndIncrement());
-                        row.createCell(0).setCellValue(current.getEntryId());
-                        row.createCell(1).setCellValue(RStichwort);
-                        row.createCell(2).setCellValue(RGenus);
+                    if (RStichwort != null && RGenus != null) {
+                        if (RStichwort.contains(",") && RGenus.contains("/")) {
+                            Row row = sheet.createRow(rowNum.getAndIncrement());
+                            row.createCell(0).setCellValue(current.getEntryId());
+                            row.createCell(1).setCellValue(RStichwort);
+                            row.createCell(2).setCellValue(RGenus);
+                        }
                     }
                 }
-            }
+            });
         });
 
         return terminateExcel(workbook);

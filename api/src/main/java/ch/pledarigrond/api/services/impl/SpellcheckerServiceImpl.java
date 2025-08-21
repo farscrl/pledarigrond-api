@@ -4,6 +4,7 @@ import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.api.services.SpellcheckerService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.database.services.DictionaryService;
 import ch.pledarigrond.spellchecker.generator.hunspell.*;
 import ch.pledarigrond.spellchecker.model.GitDataDto;
@@ -77,7 +78,7 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
     @Override
     public File exportHunspell(Language language) throws IOException {
         List<String> names = nameService.getWordsForLanguage(language);
-        return Objects.requireNonNull(getGeneratorForLanguage(language, names)).exportHunspell(dictionaryService.getStreamForEntries());
+        return Objects.requireNonNull(dictionaryService.withAllEntries(getGeneratorForLanguage(language, names)::exportHunspell));
     }
 
     @Override
@@ -85,11 +86,12 @@ public class SpellcheckerServiceImpl implements SpellcheckerService {
         long startTime = System.currentTimeMillis();
 
         for (Language language : activeLanguages) {
+            RequestContext.setLanguage(language);
             long languageStartTime = System.currentTimeMillis();
             logger.info("Generating Hunspell for language {}", language);
             List<String> names = nameService.getWordsForLanguage(language);
             HunspellGenerator generator = getGeneratorForLanguage(language, names);
-            generator.generateHunspell(dictionaryService.getStreamForEntries());
+            dictionaryService.withAllEntries(generator::generateHunspell);
             long executionTime = (System.currentTimeMillis() - languageStartTime) / 1000;
             logger.info("Execution time for language {}: {}s", language, executionTime);
         }

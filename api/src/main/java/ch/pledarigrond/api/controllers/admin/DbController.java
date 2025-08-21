@@ -1,6 +1,7 @@
 package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.api.services.ScheduledDumpService;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.database.services.DbBackupService;
 import ch.pledarigrond.database.services.DictionaryService;
@@ -42,6 +43,8 @@ public class DbController {
 
     @Autowired
     private DbBackupService dbBackupService;
+    @Autowired
+    private ScheduledDumpService scheduledDumpService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/drop_db")
@@ -127,7 +130,7 @@ public class DbController {
         try {
             logger.info("Rebuilding index...");
             luceneService.dropIndex();
-            luceneService.addToIndex(dictionaryService.getStreamForEntries());
+            dictionaryService.withAllEntries(luceneService::addToIndex);
             logger.info("Index has been created");
             return ResponseEntity.ok().build();
         } catch (NoIndexAvailableException e) {
@@ -152,6 +155,22 @@ public class DbController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/create_json_dumps")
+    ResponseEntity<?> createJsonDumps(@PathVariable("language")Language language) {
+        try {
+            logger.info("Creating JSON dumps...");
+            scheduledDumpService.exportJSON();
+            logger.info("JSON dumps have been created");
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("Error while creating JSON dumps.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+
 
     private void stream(HttpServletResponse response, File export) throws IOException {
         InputStream is = new FileInputStream(export);

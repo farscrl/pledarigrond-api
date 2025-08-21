@@ -79,7 +79,9 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.creatorIp, ev.getCreatorIp());
         toFieldUpdateAllFields(doc, FN.creatorRole, ev.getCreatorRole() != null ? ev.getCreatorRole().toString() : "");
 
-        toFieldUpdateAllFields(doc, FN.automaticChange, ev.isAutomaticChange() + "");
+        if (ev.getAutomaticChange() != null) {
+            toFieldUpdateAllFields(doc, FN.automaticChange, ev.getAutomaticChange() + "");
+        }
 
         if (ev.getInflection() != null) {
             InflectionDto i = ev.getInflection();

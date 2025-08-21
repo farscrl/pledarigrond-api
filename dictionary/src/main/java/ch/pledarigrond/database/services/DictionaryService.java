@@ -1,6 +1,8 @@
 package ch.pledarigrond.database.services;
 
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.ThrowingConsumer;
+import ch.pledarigrond.common.data.common.ThrowingFunction;
 import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
@@ -27,7 +29,8 @@ public interface DictionaryService {
     EntryDto updatePronunciationForEntry(String entryId, String pronunciation);
     EntryDto removePronunciationForEntry(String entryId);
 
-    Stream<EntryDto> getStreamForEntries();
+    <R, E extends Exception> R withAllEntries(ThrowingFunction<Stream<EntryDto>, R, E> fn) throws E;
+    <E extends Exception> void withAllEntries(ThrowingConsumer<Stream<EntryDto>, E> consumer) throws E;
 
     DictionaryStatisticsDto getStatistics();
     void deleteAllEntries();

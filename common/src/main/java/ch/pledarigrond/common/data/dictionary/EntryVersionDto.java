@@ -41,6 +41,7 @@ public class EntryVersionDto {
     @Size(max = 200) private String deSubsemantik;
     @Size(max = 200) private String deGrammatik;
     @Size(max = 200) private String deGenus;
+    @Size(max = 200) private String deFlex;
     @Size(max = 200) private String deTags;
     @Size(max = 200) private String deRedirect;
 
@@ -58,6 +59,6 @@ public class EntryVersionDto {
     @Size(max = 200) private String creatorIp;
     private EditorRole creatorRole;
 
-    private boolean automaticChange = false;
+    private Boolean automaticChange = false;
 }
 

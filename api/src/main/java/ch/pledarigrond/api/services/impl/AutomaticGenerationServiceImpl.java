@@ -271,7 +271,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if version has already new version
-            if (!entry.getSuggestions().isEmpty() || entry.getCurrent().isAutomaticChange()) {
+            if (!entry.getSuggestions().isEmpty() || (entry.getCurrent().getAutomaticChange() != null && entry.getCurrent().getAutomaticChange())) {
                 continue;
             }
 
@@ -335,7 +335,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if version has already new version
-            if (!entry.getSuggestions().isEmpty() || entry.getCurrent().isAutomaticChange()) {
+            if (!entry.getSuggestions().isEmpty() || (entry.getCurrent().getAutomaticChange() != null && entry.getCurrent().getAutomaticChange())) {
                 continue;
             }
 
@@ -398,7 +398,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             }
 
             // ignore if version has already new version
-            if (!entry.getSuggestions().isEmpty() || entry.getCurrent().isAutomaticChange()) {
+            if (!entry.getSuggestions().isEmpty() || (entry.getCurrent().getAutomaticChange() != null && entry.getCurrent().getAutomaticChange())) {
                 continue;
             }
 

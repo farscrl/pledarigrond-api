@@ -1,8 +1,6 @@
 package ch.pledarigrond.database.services.impl;
 
-import ch.pledarigrond.common.data.common.Action;
-import ch.pledarigrond.common.data.common.DictionaryLanguage;
-import ch.pledarigrond.common.data.common.UserInfoDto;
+import ch.pledarigrond.common.data.common.*;
 import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.exception.dictionary.EntityNotFoundException;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
@@ -25,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Service
@@ -189,9 +188,22 @@ public class DictionaryServiceImpl implements DictionaryService {
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
-    @Override
-    public Stream<EntryDto> getStreamForEntries() {
-        return entryRepository.findAllBy();
+    public <R> R withAllEntries(Function<Stream<EntryDto>, R> fn) {
+        try (Stream<Entry> s = entryRepository.findAllBy()) {
+            return fn.apply(s.map(entryMapper::toEntryDto));
+        }
+    }
+    public <R, E extends Exception> R withAllEntries(ThrowingFunction<Stream<EntryDto>, R, E> fn) throws E {
+        try (Stream<Entry> s = entryRepository.findAllBy()) {
+            return fn.apply(s.map(entryMapper::toEntryDto));
+        }
+    }
+
+    // overload needed for functions that return void
+    public <E extends Exception> void withAllEntries(ThrowingConsumer<Stream<EntryDto>, E> consumer) throws E {
+        try (Stream<Entry> s = entryRepository.findAllBy()) {
+            consumer.accept(s.map(entryMapper::toEntryDto));
+        }
     }
 
     private void replaceSuggestion(Entry entry, EntryVersion versionToReplace) {
