@@ -46,6 +46,7 @@ public class LexEntryToEntryMapper {
             versions.add(ev);
             internalToNewIdMap.put(internalId, ev.getVersionId());
         }
+        Collections.reverse(versions);
         entry.setVersions(versions);
 
         ArrayList<EntryVersion> suggestions = new ArrayList<>();
