@@ -94,7 +94,7 @@ public class LuceneIndexManager {
         TopDocs docs;
 
 
-        SortField[] fields = new SortField[3];
+        SortField[] fields = new SortField[5];
         fields[0] = SortField.FIELD_SCORE;
 
         if (luceneSearchCriteria.getSortBy() == null) {
@@ -108,9 +108,13 @@ public class LuceneIndexManager {
         if (luceneSearchCriteria.getSortBy() == SortBy.ROMANSH) {
             fields[1] = new SortField(FN.rmStichwort, Type.STRING);
             fields[2] = new SortField(FN.rmStichwortSort, Type.INT);
+            fields[3] = new SortField(FN.deStichwort, Type.STRING);
+            fields[4] = new SortField(FN.deStichwortSort, Type.INT);
         } else {
             fields[1] = new SortField(FN.deStichwort, Type.STRING);
             fields[2] = new SortField(FN.deStichwortSort, Type.INT);
+            fields[3] = new SortField(FN.rmStichwort, Type.STRING);
+            fields[4] = new SortField(FN.rmStichwortSort, Type.INT);
         }
         Sort sort = new Sort(fields);
         Page<EntryVersionDto> result;
