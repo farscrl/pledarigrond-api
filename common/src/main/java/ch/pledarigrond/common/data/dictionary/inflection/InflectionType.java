@@ -22,6 +22,10 @@ public enum InflectionType {
             if (b.name.equalsIgnoreCase(text)) {
                 return b;
             }
+
+            if (b.toString().equalsIgnoreCase(text)) {
+                return b;
+            }
         }
 
         throw new IllegalArgumentException("No enum constant with name " + text + " found");
