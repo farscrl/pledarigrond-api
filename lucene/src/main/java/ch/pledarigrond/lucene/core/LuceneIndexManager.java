@@ -127,6 +127,18 @@ public class LuceneIndexManager {
             docs = luceneIndexFilesystem.get(language).getSearcher().search(query, pageSize * (pageNr + 1), sort);
             long e2 = System.nanoTime();
             result = toEntryVersionPagination(docs, pageNr, pageSize);
+
+            /*
+            StoredFields storedFields = luceneIndexFilesystem.get(language).getSearcher().getIndexReader().storedFields();
+            for (int i = 0; i < docs.scoreDocs.length; i++) {
+                Document doc = storedFields.document(docs.scoreDocs[i].doc);
+
+                Explanation explanation = luceneIndexFilesystem.get(language).getSearcher().explain(query, docs.scoreDocs[i].doc);
+                System.out.println("DocID: " + docs.scoreDocs[i].doc + " (" + doc.get("rmStichwort") + "). Score: " + docs.scoreDocs[i].score);
+                System.out.println(explanation.toString());
+            }
+            */
+
             if (logger.isDebugEnabled()) {
                 logger.debug("Time to build query: {}, Time to execute query: {}", (e1 - s1) / 1000000, (e2 - s2) / 1000000);
             }
