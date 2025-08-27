@@ -2,6 +2,7 @@ package ch.pledarigrond.lucene.querybuilder;
 
 import ch.pledarigrond.common.data.lucene.FieldType;
 import ch.pledarigrond.lucene.analyzers.CaseInsensitiveWhitespaceAnalyzer;
+import ch.pledarigrond.lucene.util.FN;
 import ch.pledarigrond.lucene.util.TokenizerHelper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
@@ -33,9 +34,9 @@ public class DefaultQueryBuilderSubsemanticsWeighted extends AbstractQueryBuilde
     @Override
     public List<Query> transform(String value) {
         value = TokenizerHelper.tokenizeString(new CaseInsensitiveWhitespaceAnalyzer(), value);
-        String subsemanticsField = "rmSubsemantik";
-        if (column.equals("deStichwort")) {
-            subsemanticsField = "deSubsemantik";
+        String subsemanticsField = FN.rmSubsemantik;
+        if (column.equals(FN.deStichwort)) {
+            subsemanticsField = FN.deSubsemantik;
         }
 
         String[] vulgarWords = {"vulg."};
