@@ -223,7 +223,11 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public DictionaryStatisticsDto getStatistics() {
-        return entryDal.getStatistics();
+        DictionaryStatisticsDto stats = entryDal.getStatistics();
+        if (stats == null) {
+            return new DictionaryStatisticsDto();
+        }
+        return stats;
     }
 
     @Override
