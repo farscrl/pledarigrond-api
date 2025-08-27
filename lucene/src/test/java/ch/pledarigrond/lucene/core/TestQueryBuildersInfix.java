@@ -35,7 +35,7 @@ public class TestQueryBuildersInfix extends TestQueryBuildersBase {
 	public void testInfixQueryBoth() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
 		Page<EntryVersionDto> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.BOTH, SearchMethod.INTERN, "chasa"), IndexTestHelpers.getPagination());
 		String[] found = getStrings(FieldName.RMSTICHWORT, result);
-		String[] expected = new String[] { "chasa", "chasa", "chasa", "a chasa", "a chasa", "La chasa arda", "encunter chasa", "chasan", "Ve a chasa!", "a chasa", "fatg en chasa", "avantchasa", "a chasa", "anavos a chasa", "a chasa" };
+		String[] expected = new String[] { "chasa", "chasa", "chasa", "a chasa", "a chasa", "La chasa arda", "encunter chasa", "chasan", "Ve a chasa!", "a chasa", "fatg en chasa", "avantchasa", "a chasa", "a chasa", "anavos a chasa" };
 		printArray(found);
 		assertArrayEquals(expected, found);
 

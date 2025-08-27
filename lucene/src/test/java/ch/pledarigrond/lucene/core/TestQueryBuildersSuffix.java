@@ -36,7 +36,7 @@ public class TestQueryBuildersSuffix extends TestQueryBuildersBase {
 	public void testSuffixQueryBoth() throws InvalidQueryException, NoIndexAvailableException, BrokenIndexException {
 		Page<EntryVersionDto> result = luceneIndexManager.query(IndexTestHelpers.getSearchCriteria(SearchDirection.BOTH, SearchMethod.SUFFIX, "asa"), IndexTestHelpers.getPagination());
 		String[] found = getStrings(FieldName.RMSTICHWORT, result);
-		String[] expected = new String[] { "cabasa", "a chasa", "a chasa", "chasa", "chasa", "encunter chasa", "Ve a chasa!", "a chasa", "fatg en chasa", "avantchasa", "chasa", "a chasa", "anavos a chasa", "a chasa" };
+		String[] expected = new String[] { "cabasa", "a chasa", "a chasa", "chasa", "chasa", "encunter chasa", "Ve a chasa!", "a chasa", "fatg en chasa", "avantchasa", "chasa", "a chasa", "a chasa", "anavos a chasa" };
 		printArray(found);
 		assertArrayEquals(expected, found);
 
