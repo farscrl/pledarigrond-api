@@ -14,8 +14,13 @@ import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
 public class EntryDalImpl implements EntryDal {
@@ -33,83 +38,114 @@ public class EntryDalImpl implements EntryDal {
         Pageable pageable = PageRequest.of(page, pageSize);
         long skip = pageable.getOffset();
 
+        // criteria on entry level
+        AggregationOperation entryMatch = Aggregation.match(getEntryLevelCriteria(queryData));
 
-        // Stage 1: $match based on Entry fields
-        AggregationOperation matchStage = Aggregation.match(getEntryLevelCriteria(queryData));
+        // sorting
+        final String sortField = queryData.getSortColumn();
+        final boolean asc = queryData.isSortAscending();
+        final Sort.Direction dir = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
 
-        // Stage 2: $addFields version by concatenating arrays
-        AggregationOperation setStage2 = switch (queryData.getState()) {
-            case HAS_SUGGESTION -> context -> new Document("$addFields",
-                    new Document("version", "$suggestions")
-            );
-            case PUBLISHED -> context -> new Document("$addFields",
-                    new Document("version", List.of("$current"))
-            );
-            default -> context -> new Document("$addFields",
-                    new Document("version", Collections.emptyList())
-            );
-        };
+        AggregationOptions options = AggregationOptions.builder()
+                .allowDiskUse(true) // safe for large sorts
+                .build();
+
+        Aggregation agg;
+
+        switch (queryData.getState()) {
+            case HAS_SUGGESTION: {
+                // prefilter suggestions (this can use the index and speed things up)
+                Criteria elemCriteria = getEntryVersionLevelCriteria(queryData, "");
+                Document elemDoc = elemCriteria.getCriteriaObject();
+                List<AggregationOperation> ops = new ArrayList<>();
+                ops.add(entryMatch);
+                if (!elemDoc.isEmpty()) {
+                    ops.add(ctx -> new Document("$match",
+                            new Document("suggestions", new Document("$elemMatch", elemDoc))));
+                }
+
+                // unwind suggestions and filter again
+                ops.add(unwind("suggestions"));
+                Criteria afterUnwind = getEntryVersionLevelCriteria(queryData, "suggestions.");
+                Document afterDoc = afterUnwind.getCriteriaObject();
+                if (!afterDoc.isEmpty()) {
+                    ops.add(ctx -> new Document("$match", afterDoc));
+                }
+
+                // facet for pagination
+                ProjectionOperation toDto = project()
+                        .and("_id").as("entryId")
+                        .and("suggestions").as("version")
+                        .andExclude("_id"); // OK to exclude only _id in inclusion projection
+
+                SortOperation sortOp = sort(Sort.by(
+                        new Sort.Order(dir, "suggestions." + sortField),
+                        new Sort.Order(dir, "_id")
+                ));
+
+                FacetOperation facet = facet(sortOp, skip(skip), limit(pageSize), toDto).as("data")
+                        .and(count().as("totalCount")).as("meta");
+
+                ops.add(facet);
+
+                agg = newAggregation(ops).withOptions(options);
+                break;
+            }
+
+            case PUBLISHED: {
+                List<AggregationOperation> ops = new ArrayList<>();
+                ops.add(entryMatch);
+
+                Criteria currentCrit = getEntryVersionLevelCriteria(queryData, "current.");
+                Document currentDoc = currentCrit.getCriteriaObject();
+                if (!currentDoc.isEmpty()) {
+                    ops.add(ctx -> new Document("$match", currentDoc));
+                }
+
+                ProjectionOperation toDto = project()
+                        .and("_id").as("entryId")
+                        .and("current").as("version")
+                        .andExclude("_id");
+
+                SortOperation sortOp = sort(Sort.by(
+                        new Sort.Order(dir, "current." + sortField),
+                        new Sort.Order(dir, "_id")
+                ));
+
+                FacetOperation facet = facet(sortOp, skip(skip), limit(pageSize), toDto).as("data")
+                        .and(count().as("totalCount")).as("meta");
+
+                ops.add(facet);
+
+                agg = newAggregation(ops).withOptions(options);
+                break;
+            }
+
+            default:
+                return new PageImpl<>(Collections.emptyList(), pageable, 0L);
+        }
 
 
-        // Stage 3: $project unwanted fields
-        AggregationOperation unsetStage = context -> new Document("$project",
-                new Document("current", 0)
-                        .append("versions", 0)
-                        .append("_class", 0)
-                        .append("suggestions", 0)
-        );
+        AggregationResults<Document> raw = mongoTemplate.aggregate(agg, "entries", Document.class);
+        Document root = raw.getUniqueMappedResult();
+        if (root == null) return new PageImpl<>(List.of(), pageable, 0L);
 
-        // Stage 4: $unwind suggestions
-        AggregationOperation unwindStage = context -> new Document("$unwind", "$version");
+        @SuppressWarnings("unchecked")
+        List<Document> dataDocs = (List<Document>) root.getOrDefault("data", List.of());
+        @SuppressWarnings("unchecked")
+        List<Document> metaDocs = (List<Document>) root.getOrDefault("meta", List.of());
 
-        // Stage 5: $match publicationStatus "MODIFIED"
-        AggregationOperation filterStage = Aggregation.match(getEntryVersionLevelCriteria(queryData));
+        long total = 0L;
+        if (!metaDocs.isEmpty()) {
+            Number n = (Number) metaDocs.get(0).getOrDefault("totalCount", 0);
+            total = n.longValue();
+        }
 
-        // Stage 6: $addFields entryId
-        AggregationOperation renameIdStage = context -> new Document("$addFields",
-                new Document("entryId", "$_id")
-        );
+        List<NormalizedEntryVersionsDto> content = dataDocs.stream()
+                .map(d -> mongoTemplate.getConverter().read(NormalizedEntryVersionsDto.class, d))
+                .toList();
 
-        // Combine all stages into the aggregation pipeline for the result page
-        List<AggregationOperation> operationsFilter = Arrays.asList(
-                matchStage,
-                setStage2,
-                unsetStage,
-                unwindStage,
-                filterStage,
-                renameIdStage,
-
-                Aggregation.sort(queryData.isSortAscending() ? Sort.Direction.ASC : Sort.Direction.DESC, "version." + queryData.getSortColumn()),
-
-                Aggregation.skip(skip),
-                Aggregation.limit(pageSize)
-        );
-        Aggregation aggregationFilter = Aggregation.newAggregation(operationsFilter);
-
-        // Combine all stages into the aggregation pipeline for the total count
-        List<AggregationOperation> operationsTotal= Arrays.asList(
-                matchStage,
-                setStage2,
-                unsetStage,
-                unwindStage,
-                filterStage,
-
-                Aggregation.count().as("totalCount")
-        );
-        Aggregation aggregationTotal = Aggregation.newAggregation(operationsTotal);
-
-        // get results page
-        AggregationResults<NormalizedEntryVersionsDto> results = mongoTemplate.aggregate(aggregationFilter, "entries", NormalizedEntryVersionsDto.class);
-        List<NormalizedEntryVersionsDto> versionsDtos = results.getMappedResults();
-
-        // get total amount
-        AggregationResults<Document> countResults = mongoTemplate.aggregate(aggregationTotal, "entries", Document.class);
-        Document countDoc = countResults.getUniqueMappedResult();
-        Number totalCount = countDoc != null ? countDoc.get("totalCount", Number.class) : 0;
-        long longTotalCount = totalCount.longValue();
-
-        // return page
-        return new PageImpl<>(versionsDtos, pageable, longTotalCount);
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
@@ -131,7 +167,7 @@ public class EntryDalImpl implements EntryDal {
                                         ConditionalOperators.ifNull("current").then(false)
                                 ).then(1).otherwise(0)
                         ).as("numberOfApproved"),
-                Aggregation.project("numberOfEntries","numberOfVersions","numberOfSuggestions","numberOfApproved")
+                project("numberOfEntries","numberOfVersions","numberOfSuggestions","numberOfApproved")
         );
 
         return mongoTemplate.aggregate(agg, "entries", DictionaryStatisticsDto.class)
@@ -153,7 +189,7 @@ public class EntryDalImpl implements EntryDal {
         return finalCriteria;
     }
 
-    private Criteria getEntryVersionLevelCriteria(DbSearchCriteria queryData) {
+    private Criteria getEntryVersionLevelCriteria(DbSearchCriteria queryData, String prefix) {
         List<Criteria> criteriaList = new ArrayList<>();
 
         if (queryData.getSearchPhrase() != null && !queryData.getSearchPhrase().isEmpty()) {
@@ -165,97 +201,73 @@ public class EntryDalImpl implements EntryDal {
             };
 
             if (queryData.getSearchDirection() == SearchDirection.ROMANSH) {
-                criteriaList.add(
-                    Criteria.where("version.rmStichwort").regex(regexPattern, "i")
-                );
+                criteriaList.add(Criteria.where(path(prefix, "rmStichwort")).regex(regexPattern, "i"));
             } else if (queryData.getSearchDirection() == SearchDirection.GERMAN) {
-                criteriaList.add(
-                    Criteria.where("version.deStichwort").regex(regexPattern, "i")
-                );
+                criteriaList.add(Criteria.where(path(prefix, "deStichwort")).regex(regexPattern, "i"));
             } else {
-                criteriaList.add(
-                    new Criteria().orOperator(
-                        Criteria.where("version.rmStichwort").regex(regexPattern, "i"),
-                        Criteria.where("version.deStichwort").regex(regexPattern, "i")
-                    )
-                );
+                criteriaList.add(new Criteria().orOperator(
+                        Criteria.where(path(prefix, "rmStichwort")).regex(regexPattern, "i"),
+                        Criteria.where(path(prefix, "deStichwort")).regex(regexPattern, "i")
+                ));
             }
         }
 
         if (queryData.getUserOrIp() != null && !queryData.getUserOrIp().trim().isEmpty()) {
-            criteriaList.add(
-                    new Criteria().orOperator(
-                            Criteria.where("version.creator").is(queryData.getUserOrIp()),
-                            Criteria.where("version.creatorIp").is(queryData.getUserOrIp())
-                    )
-            );
+            criteriaList.add(new Criteria().orOperator(
+                    Criteria.where(path(prefix, "creator")).is(queryData.getUserOrIp()),
+                    Criteria.where(path(prefix, "creatorIp")).is(queryData.getUserOrIp())
+            ));
         }
 
         if (queryData.getRole() != null) {
-            criteriaList.add(
-                    Criteria.where("version.creatorRole").is(queryData.getRole().toString())
-            );
+            criteriaList.add(Criteria.where(path(prefix, "creatorRole")).is(queryData.getRole().toString()));
         }
 
         if (queryData.getStartTime() > 0 && queryData.getEndTime() > 0) {
-            criteriaList.add(
-                    Criteria.where("version.timestamp")
-                            .gt(new Date(queryData.getStartTime()))
-                            .lt(new Date(queryData.getEndTime()))
-            );
+            criteriaList.add(Criteria.where(path(prefix, "timestamp"))
+                    .gt(new Date(queryData.getStartTime()))
+                    .lt(new Date(queryData.getEndTime())));
         } else if (queryData.getStartTime() > 0) {
-            criteriaList.add(
-                    Criteria.where("version.timestamp")
-                            .gt(new Date(queryData.getStartTime()))
-            );
+            criteriaList.add(Criteria.where(path(prefix, "timestamp"))
+                    .gt(new Date(queryData.getStartTime())));
         } else if (queryData.getEndTime() > 0) {
-            criteriaList.add(
-                    Criteria.where("version.timestamp")
-                            .lt(new Date(queryData.getEndTime()))
-            );
+            criteriaList.add(Criteria.where(path(prefix, "timestamp"))
+                    .lt(new Date(queryData.getEndTime())));
         }
 
         if (queryData.isExcludeAutomaticChanges()) {
-            criteriaList.add(
-                    new Criteria().orOperator(
-                            Criteria.where("version.automaticChange").is(false),
-                            Criteria.where("version.automaticChange").exists(false)
-                    )
-            );
+            criteriaList.add(new Criteria().orOperator(
+                    Criteria.where(path(prefix, "automaticChange")).is(false),
+                    Criteria.where(path(prefix, "automaticChange")).exists(false)
+            ));
         }
 
         if (queryData.getOnlyAutomaticChanged()) {
-            criteriaList.add(
-                Criteria.where("version.automaticChange").is(true)
-            );
+            criteriaList.add(Criteria.where(path(prefix, "automaticChange")).is(true));
         }
 
         if (queryData.getInflectionType() != null) {
-            criteriaList.add(
-                Criteria.where("version.inflection.inflectionType").is(queryData.getInflectionType().toString())
-            );
+            criteriaList.add(Criteria.where(path(prefix, "inflection.inflectionType"))
+                    .is(queryData.getInflectionType().toString()));
         }
 
         if (queryData.getShowReviewLater() != null) {
             if (queryData.getShowReviewLater()) {
-                criteriaList.add(
-                    Criteria.where("version.inflection.reviewLater").is(true)
-                );
+                criteriaList.add(Criteria.where(path(prefix, "inflection.reviewLater")).is(true));
             } else {
-                criteriaList.add(
-                    new Criteria().orOperator(
-                        Criteria.where("version.inflection.reviewLater").is(false),
-                        Criteria.where("version.inflection.reviewLater").exists(false)
-                    )
-                );
+                criteriaList.add(new Criteria().orOperator(
+                        Criteria.where(path(prefix, "inflection.reviewLater")).is(false),
+                        Criteria.where(path(prefix, "inflection.reviewLater")).exists(false)
+                ));
             }
         }
 
-        Criteria finalCriteria = new Criteria();
-        if (!criteriaList.isEmpty()) {
-            finalCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
-        }
+        return criteriaList.isEmpty()
+                ? new Criteria() // matches everything
+                : new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
+    }
 
-        return finalCriteria;
+    private static String path(String prefix, String field) {
+        return (prefix == null || prefix.isEmpty()) ? field : prefix + field;
     }
 }
