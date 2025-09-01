@@ -72,6 +72,34 @@ public class DbBackupServiceImpl implements DbBackupService {
     }
 
     @Override
+    public void backupRegistrations(Language language, OutputStream output, String fileName) {
+        String dbName = "registrations";
+        String collectionName = getRegistrationsDbName(language);
+        backupCollection(dbName, collectionName, output, fileName);
+    }
+
+    @Override
+    public void restoreRegistrations(Language language, InputStream input) {
+        String dbName = "registrations";
+        String collectionName = getRegistrationsDbName(language);
+        restoreCollection(dbName, collectionName, input);
+    }
+
+    @Override
+    public void backupNames(OutputStream output, String fileName) {
+        String dbName = "names";
+        String collectionName = "name";
+        backupCollection(dbName, collectionName, output, fileName);
+    }
+
+    @Override
+    public void restoreNames(InputStream input) {
+        String dbName = "names";
+        String collectionName = "name";
+        restoreCollection(dbName, collectionName, input);
+    }
+
+    @Override
     public BackupInfos getBackupInfos(Language language) {
         String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, language);
         List<FileInfo> list = new ArrayList<FileInfo>();
@@ -315,6 +343,18 @@ public class DbBackupServiceImpl implements DbBackupService {
             case SURSILVAN -> "dict_sursilvan";
             case SUTSILVAN -> "dict_sutsilvan";
             case VALLADER -> "dict_vallader";
+            default -> throw new IllegalStateException("Unexpected value: " + language);
+        };
+    }
+
+    private String getRegistrationsDbName(Language language) {
+        return switch (language) {
+            case PUTER -> "registrations_puter";
+            case RUMANTSCHGRISCHUN -> "registrations_rumantschgrischun";
+            case SURMIRAN -> "registrations_surmiran";
+            case SURSILVAN -> "registrations_sursilvan";
+            case SUTSILVAN -> "registrations_sutsilvan";
+            case VALLADER -> "registrations_vallader";
             default -> throw new IllegalStateException("Unexpected value: " + language);
         };
     }

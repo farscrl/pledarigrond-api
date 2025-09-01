@@ -13,6 +13,10 @@ public interface DbBackupService {
     void restoreLanguage(Language language, InputStream input);
     void backupUsers(OutputStream output, String fileName);
     void restoreUsers(InputStream input);
+    void backupRegistrations(Language language, OutputStream output, String fileName);
+    void restoreRegistrations(Language language, InputStream input);
+    void backupNames(OutputStream output, String fileName);
+    void restoreNames(InputStream input);
 
     BackupInfos getBackupInfos(Language language);
     File getBackupFile(Language language, String fileName);
