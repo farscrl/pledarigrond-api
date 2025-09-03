@@ -140,6 +140,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    public void removeRegistrationFromLemma(String entryId) throws IOException {
+        removePronunciationForEntry(RequestContext.getLanguage(), entryId);
+    }
+
+    @Override
     public Registration getOrderedRegistration(String entryId) {
         List<Registration> registrations = registrationRepository.findByLemmaIdsContaining(entryId);
         return registrations.isEmpty() ? null : registrations.get(0);

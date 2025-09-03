@@ -29,6 +29,8 @@ public interface RegistrationService {
 
     Registration addRegistrationToLemma(Registration registration, String entryId) throws IOException;
 
+    void removeRegistrationFromLemma(String entryId) throws IOException;
+
     Registration getOrderedRegistration(String entryId);
 
     Registration order(Registration registration);

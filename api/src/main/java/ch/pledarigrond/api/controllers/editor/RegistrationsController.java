@@ -78,6 +78,13 @@ public class RegistrationsController {
     }
 
     @PreAuthorize("hasPermission('language', 'editor')")
+    @PostMapping("/remove_from_lemma/{entryId}")
+    ResponseEntity<?> removeRegistrationFromLemma(@PathVariable("language") Language language, @PathVariable(value="entryId") String entryId) throws IOException {
+        registrationService.removeRegistrationFromLemma(entryId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasPermission('language', 'editor')")
     @PostMapping("/did_order/{entryId}")
     ResponseEntity<?> didOrder(@PathVariable("language") Language language,  @PathVariable(value="entryId") String entryId) {
         return ResponseEntity.ok(registrationService.getOrderedRegistration(entryId));
