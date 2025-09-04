@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,6 +35,7 @@ public class UserDalImpl implements UserDal {
         }
 
         query.with(pageable);
+        query.with(Sort.by(Sort.Direction.ASC, "email"));
         List<User> users = mongoTemplate.find(query, User.class);
 
         Query countQuery = new Query();
