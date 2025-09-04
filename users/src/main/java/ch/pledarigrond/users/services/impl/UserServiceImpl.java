@@ -61,6 +61,9 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
         if (isAdmin) {
+            user.setFirstName(updated.getFirstName());
+            user.setLastName(updated.getLastName());
+
             user.setAdmin(updated.isAdmin());
             user.setRolePuter(updated.getRoles().getRolePuter());
             user.setRoleRumantschGrischun(updated.getRoles().getRoleRumantschGrischun());
@@ -111,6 +114,9 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
         if (isAdmin) {
+            newUser.setFirstName(user.getFirstName());
+            newUser.setLastName(user.getLastName());
+            
             newUser.setAdmin(user.isAdmin());
             newUser.setRolePuter(user.getRoles().getRolePuter());
             newUser.setRoleRumantschGrischun(user.getRoles().getRoleRumantschGrischun());
