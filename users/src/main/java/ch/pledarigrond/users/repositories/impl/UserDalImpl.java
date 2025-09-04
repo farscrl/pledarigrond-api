@@ -42,7 +42,7 @@ public class UserDalImpl implements UserDal {
             Criteria emailCriteria = Criteria.where("email").regex(pattern);
             Criteria firstNameCriteria = Criteria.where("firstName").regex(pattern);
             Criteria lastNameCriteria = Criteria.where("lastName").regex(pattern);
-            query.addCriteria(new Criteria().orOperator(emailCriteria, firstNameCriteria, lastNameCriteria));
+            countQuery.addCriteria(new Criteria().orOperator(emailCriteria, firstNameCriteria, lastNameCriteria));
         }
         long total = mongoTemplate.count(countQuery, User.class);
 
