@@ -62,6 +62,11 @@ public class ScheduledBackupService {
 		backup(Language.SURMIRAN);
 	}
 
+    @Scheduled(cron = "${pg.backup.cron.sursilvan}")
+    public void backupSursilvan() {
+        backup(Language.SURSILVAN);
+    }
+
 	@Scheduled(cron = "${pg.backup.cron.sutsilvan}")
 	public void backupSutsilvan() {
 		backup(Language.SUTSILVAN);
