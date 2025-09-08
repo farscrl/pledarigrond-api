@@ -216,7 +216,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             DBObject object = new BasicDBObject(cursor.next());
             LexEntry lexEntry = Converter.convertToLexEntry(object);
             // uncomment the following line to write the LexEntry to a file (to use in tests)
-            serializeLexEntryAndSave(lexEntry, RequestContext.getLanguage());
+            // serializeLexEntryAndSave(lexEntry, RequestContext.getLanguage());
 
             Entry entry = LexEntryToEntryMapper.map(lexEntry, RequestContext.getLanguage());
             entry.updateCalculatedFields();
