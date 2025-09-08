@@ -347,12 +347,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private void updatePronunciationForEntry(Language language, String entryId, String pronunciation) throws IOException {
         EntryDto entry = dictionaryService.updatePronunciationForEntry(entryId, pronunciation);
-        luceneService.update(entry);
+        if (entry != null) {
+            luceneService.update(entry);
+        }
     }
 
     private void removePronunciationForEntry(Language language, String id) throws IOException {
         EntryDto entry = dictionaryService.removePronunciationForEntry(id);
-        luceneService.update(entry);
+        if (entry != null) {
+            luceneService.update(entry);
+        }
     }
 
     private String generateRegistrationIdString(Registration registration) {

@@ -18,10 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -163,7 +160,12 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public EntryDto updatePronunciationForEntry(String entryId, String pronunciation) {
-        Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
+        Optional<Entry> entryOptional = entryRepository.findByEntryId(entryId);
+        if (entryOptional.isEmpty()) {
+            logger.warn("Entry with id {} not found. Not assigning pronunciation.", entryId);
+            return null;
+        }
+        Entry entry = entryOptional.get();
         EntryVersion updatedVersion = clone(entry.getCurrent());
         updatedVersion.setRmPronunciation(pronunciation);
 
@@ -176,7 +178,12 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public EntryDto removePronunciationForEntry(String entryId) {
-        Entry entry = entryRepository.findByEntryId(entryId).orElseThrow(() -> new EntityNotFoundException(entryId));
+        Optional<Entry> entryOptional = entryRepository.findByEntryId(entryId);
+        if (entryOptional.isEmpty()) {
+            logger.warn("Entry with id {} not found. Not removing pronunciation.", entryId);
+            return null;
+        }
+        Entry entry = entryOptional.get();
         EntryVersion updatedVersion = clone(entry.getCurrent());
         updatedVersion.setRmPronunciation(null);
 
