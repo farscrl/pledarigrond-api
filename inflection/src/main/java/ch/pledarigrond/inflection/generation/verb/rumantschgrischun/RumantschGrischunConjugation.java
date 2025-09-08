@@ -546,8 +546,11 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
         verb.getImperativ().setPlural(RumantschGrischunPronouns.pron_r_2pp + verb.getImperativ().getPlural());
 
         // PARTICIP_PERFECT
-        verb.getParticipPerfect().setMs(RumantschGrischunPronouns.pp_r1 + " " + RumantschGrischunPronouns.pron_r_3ps + verb.getParticipPerfect().getMs());
-        verb.getParticipPerfect().setFs(RumantschGrischunPronouns.pp_r2 + " " + RumantschGrischunPronouns.pron_r_3ps + verb.getParticipPerfect().getMs() + "/" + verb.getParticipPerfect().getFs());
+        String participPerfectMs = verb.getParticipPerfect().getMs();
+        verb.getParticipPerfect().setMs(RumantschGrischunPronouns.pp_r1 + " " + RumantschGrischunPronouns.pron_r_3ps + participPerfectMs);
+        verb.getParticipPerfect().setFs(RumantschGrischunPronouns.pp_r2 + " " + RumantschGrischunPronouns.pron_r_3ps + participPerfectMs + "/" + verb.getParticipPerfect().getFs());
+        verb.getParticipPerfect().setMp(null);
+        verb.getParticipPerfect().setFp(null);
 
         // GERUNDIUM
         verb.setGerundium(RumantschGrischunPronouns.pron_r_3ps + verb.getGerundium());
@@ -600,8 +603,11 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
         verb.getImperativ().setPlural(RumantschGrischunPronouns.pron_r_v_2pp + verb.getImperativ().getPlural());
 
         // PARTICIP_PERFECT
-        verb.getParticipPerfect().setMs(RumantschGrischunPronouns.pp_r1 + " " + RumantschGrischunPronouns.pron_r_v_3ps + verb.getParticipPerfect().getMs());
-        verb.getParticipPerfect().setFs(RumantschGrischunPronouns.pp_r2 + " " + RumantschGrischunPronouns.pron_r_v_3ps + verb.getParticipPerfect().getMs() + "/" + verb.getParticipPerfect().getFs());
+        String participPerfectMs = verb.getParticipPerfect().getMs();
+        verb.getParticipPerfect().setMs(RumantschGrischunPronouns.pp_r1 + " " + RumantschGrischunPronouns.pron_r_v_3ps + participPerfectMs);
+        verb.getParticipPerfect().setFs(RumantschGrischunPronouns.pp_r2 + " " + RumantschGrischunPronouns.pron_r_v_3ps + participPerfectMs + "/" + verb.getParticipPerfect().getFs());
+        verb.getParticipPerfect().setMp(null);
+        verb.getParticipPerfect().setFp(null);
 
         // GERUNDIUM
         verb.setGerundium(RumantschGrischunPronouns.pron_r_v_3ps + verb.getGerundium());
