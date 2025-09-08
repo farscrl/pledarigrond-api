@@ -45,7 +45,7 @@ public class RumantschGrischunConjugation extends LanguageConjugation {
 
         verb.setInfinitiv(infinitivForm);
         infinitiv = checkReflexiveness(infinitivForm);
-        root = getRoot(infinitivForm);
+        root = getRoot(infinitiv);
 
         InflectionSubType subType = RumantschGrischunConjugationClasses.getConjugationClass(conjugationClass);
         if (subType == null) {
