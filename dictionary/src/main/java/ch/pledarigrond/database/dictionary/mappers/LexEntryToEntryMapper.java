@@ -58,10 +58,15 @@ public class LexEntryToEntryMapper {
         }
         entry.setSuggestions(suggestions);
 
-        String transformedId = internalToNewIdMap.get(lexEntry.getCurrentId());
-        versions.stream()
-                        .filter(version -> version.getVersionId().equals(transformedId))
-                        .findFirst().ifPresent(entry::setCurrent);
+        LemmaVersion lv = lexEntry.getCurrent();
+        if (lv.getVerification() == LemmaVersion.Verification.ACCEPTED) {
+            String transformedId = internalToNewIdMap.get(lexEntry.getCurrentId());
+            versions.stream()
+                    .filter(version -> version.getVersionId().equals(transformedId))
+                    .findFirst().ifPresent(entry::setCurrent);
+        } else {
+            logger.warn("    >> Current version is not accepted, cannot set current entry version. ID {}: {} / {}", lexEntry.getId(), lv.getLemmaValues().get("RStichwort"), lv.getLemmaValues().get("DStichwort"));
+        }
 
         return entry;
     }
