@@ -90,19 +90,21 @@ public class ScheduledDumpService {
                 stream.forEach(entry -> {
                     try {
                         EntryVersionDto current = entry.getCurrent();
-                        current.setUserComment(null);
-                        current.setUserEmail(null);
-                        current.setCreator(null);
-                        current.setCreatorIp(null);
-                        current.setCreatorRole(null);
-                        current.setAction(null);
-                        current.setVersionId(null);
-                        current.setTimestamp(null);
-                        current.setAutomaticChange(null);
-                        if (current.getExamples() != null && current.getExamples().isEmpty()) {
-                            current.setExamples(null);
+                        if (current != null) {
+                            current.setUserComment(null);
+                            current.setUserEmail(null);
+                            current.setCreator(null);
+                            current.setCreatorIp(null);
+                            current.setCreatorRole(null);
+                            current.setAction(null);
+                            current.setVersionId(null);
+                            current.setTimestamp(null);
+                            current.setAutomaticChange(null);
+                            if (current.getExamples() != null && current.getExamples().isEmpty()) {
+                                current.setExamples(null);
+                            }
+                            mapper.writeValue(jsonGenerator, current);
                         }
-                        mapper.writeValue(jsonGenerator, current);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
