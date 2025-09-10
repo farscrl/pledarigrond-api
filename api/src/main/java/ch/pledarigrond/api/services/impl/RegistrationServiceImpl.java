@@ -1,10 +1,6 @@
 package ch.pledarigrond.api.services.impl;
 
-import ch.pledarigrond.api.services.BunnyService;
-import ch.pledarigrond.api.services.LuceneService;
-import ch.pledarigrond.api.services.RegistrationService;
-import ch.pledarigrond.api.services.SlackService;
-import ch.pledarigrond.common.config.PgEnvironment;
+import ch.pledarigrond.api.services.*;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
@@ -52,7 +48,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private RegistrationRepository registrationRepository;
 
     @Autowired
-    private PgEnvironment pgEnvironment;
+    private UserInfoService userInfoService;
 
     @Autowired
     private BunnyService bunnyService;
@@ -247,7 +243,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                         registration.setRmTags(current.getRmTags());
                         if (current.getInflection() != null) {
                             registration.setRmInflectionType(current.getInflection().getInflectionType().getName());
-                            // registration.setRmInflectionSubtype(current.getInflection().getInflectionSubtype()); // TODO: needed?
                         }
                         registrationRepository.save(registration);
                     } else {
@@ -346,14 +341,14 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private void updatePronunciationForEntry(Language language, String entryId, String pronunciation) throws IOException {
-        EntryDto entry = dictionaryService.updatePronunciationForEntry(entryId, pronunciation);
+        EntryDto entry = dictionaryService.updatePronunciationForEntry(entryId, pronunciation, userInfoService.getCurrentUserInfo());
         if (entry != null) {
             luceneService.update(entry);
         }
     }
 
     private void removePronunciationForEntry(Language language, String id) throws IOException {
-        EntryDto entry = dictionaryService.removePronunciationForEntry(id);
+        EntryDto entry = dictionaryService.removePronunciationForEntry(id, userInfoService.getCurrentUserInfo());
         if (entry != null) {
             luceneService.update(entry);
         }

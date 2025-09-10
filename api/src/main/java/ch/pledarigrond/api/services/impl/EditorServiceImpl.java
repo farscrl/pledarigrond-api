@@ -2,8 +2,11 @@ package ch.pledarigrond.api.services.impl;
 
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
+import ch.pledarigrond.api.services.UserInfoService;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.DictionaryLanguage;
+import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.common.SearchSuggestions;
 import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
@@ -11,7 +14,6 @@ import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.data.user.UserDto;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
 import ch.pledarigrond.common.exception.dictionary.SuggestionNotFoundException;
 import ch.pledarigrond.database.services.DictionaryService;
@@ -20,7 +22,6 @@ import ch.pledarigrond.lucene.exceptions.InvalidQueryException;
 import ch.pledarigrond.lucene.exceptions.NoIndexAvailableException;
 import ch.pledarigrond.users.services.UserService;
 import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -30,8 +31,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -54,6 +53,9 @@ public class EditorServiceImpl implements EditorService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserInfoService userInfoService;
+
     private final Logger logger = LoggerFactory.getLogger(EditorServiceImpl.class);
 
     @Override
@@ -68,35 +70,35 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public EntryDto addEntry(EntryVersionDto version, boolean asSuggestion) throws IOException {
-        EntryDto entry = dictionaryService.addEntry(version, asSuggestion, getUserInfo());
+        EntryDto entry = dictionaryService.addEntry(version, asSuggestion, userInfoService.getCurrentUserInfo());
         luceneService.update(entry);
         return entry;
     }
 
     @Override
     public EntryDto addVersion(String entryId, EntryVersionDto version, boolean asSuggestion) throws IOException {
-        EntryDto entry = dictionaryService.addVersion(entryId, version, asSuggestion, getUserInfo());
+        EntryDto entry = dictionaryService.addVersion(entryId, version, asSuggestion, userInfoService.getCurrentUserInfo());
         luceneService.update(entry);
         return entry;
     }
 
     @Override
     public EntryDto replaceSuggestion(String entryId, String versionToReplaceId, EntryVersionDto version, boolean asSuggestion) throws IOException, SuggestionNotFoundException {
-        EntryDto entry = dictionaryService.replaceSuggestion(entryId, versionToReplaceId, version, asSuggestion, getUserInfo());
+        EntryDto entry = dictionaryService.replaceSuggestion(entryId, versionToReplaceId, version, asSuggestion, userInfoService.getCurrentUserInfo());
         luceneService.update(entry);
         return entry;
     }
 
     @Override
     public EntryDto accept(String entryId, String versionIdToAccept) throws SuggestionNotFoundException, IOException {
-        EntryDto entry =  dictionaryService.accept(entryId, versionIdToAccept, getUserInfo());
+        EntryDto entry =  dictionaryService.accept(entryId, versionIdToAccept, userInfoService.getCurrentUserInfo());
         luceneService.update(entry);
         return entry;
     }
 
     @Override
     public EntryDto reject(String entryId, String versionIdToReject) throws SuggestionNotFoundException, IOException {
-        EntryDto entry =  dictionaryService.reject(entryId, versionIdToReject, getUserInfo());
+        EntryDto entry =  dictionaryService.reject(entryId, versionIdToReject, userInfoService.getCurrentUserInfo());
         luceneService.update(entry);
         return entry;
     }
@@ -134,7 +136,7 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered) throws IOException {
-        List<EntryDto> modified = dictionaryService.updateOrder(dictionaryLanguage, ordered);
+        List<EntryDto> modified = dictionaryService.updateOrder(dictionaryLanguage, ordered, userInfoService.getCurrentUserInfo());
         luceneService.updateAll(modified);
         return modified;
     }
@@ -289,37 +291,7 @@ public class EditorServiceImpl implements EditorService {
         }
     }
 
-    private UserInfoDto getUserInfo() {
-        UserDto user = userService.getCurrentUserOrDefaultUser();
 
-        UserInfoDto dto = new UserInfoDto();
-        dto.setEmail(user.getEmail());
-        dto.setIpAddress(getClientIp());
-        dto.setRole(getEditorRole(user));
-        return dto;
-    }
 
-    private String getClientIp() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String ipAddress = request.getHeader("X-Forwarded-For");
-        if (ipAddress != null && !ipAddress.isEmpty()) {
-            return ipAddress.split(",")[0].trim();
-        }
-        return request.getRemoteAddr();
-    }
 
-    private EditorRole getEditorRole(UserDto user) {
-        if (user.isAdmin()) {
-            return EditorRole.ADMIN;
-        }
-        return switch (RequestContext.getLanguage()) {
-            case PUTER -> user.getRoles().getRolePuter();
-            case RUMANTSCHGRISCHUN -> user.getRoles().getRoleRumantschGrischun();
-            case SURSILVAN -> user.getRoles().getRoleSursilvan();
-            case SURMIRAN -> user.getRoles().getRoleSurmiran();
-            case SUTSILVAN -> user.getRoles().getRoleSutsilvan();
-            case VALLADER -> user.getRoles().getRoleVallader();
-            default -> EditorRole.GUEST;
-        };
-    }
 }

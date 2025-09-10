@@ -83,7 +83,7 @@ public class Entry {
 
         if (action == Action.SUGGESTED_ENTRY || action == Action.SUGGESTED_MODIFICATION) {
             suggestions.add(version.clone());
-        } else if (action == Action.ACCEPTED_ENTRY || action == Action.CREATED_ENTRY || action == Action.ACCEPTED_MODIFICATION || action == Action.CREATED_MODIFICATION || action == Action.CHANGED_ORDER) {
+        } else if (action == Action.ACCEPTED_ENTRY || action == Action.CREATED_ENTRY || action == Action.ACCEPTED_MODIFICATION || action == Action.CREATED_MODIFICATION || action == Action.CHANGED_ORDER || action == Action.UPDATED_PRONUNCIATION) {
             current = version.clone();
         } else if (action == Action.REFUSED_MODIFICATION) {
             // do nothing

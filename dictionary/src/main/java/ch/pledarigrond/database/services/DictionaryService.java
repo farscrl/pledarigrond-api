@@ -24,10 +24,10 @@ public interface DictionaryService {
     void delete(String entryId);
     EntryDto reviewSuggestionLater(String entryId, String versionId) throws SuggestionNotFoundException, InvalidReviewLaterException;
     EntryDto dropOutdatedHistory(String entryId);
-    List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered);
+    List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered, UserInfoDto userInfo);
 
-    EntryDto updatePronunciationForEntry(String entryId, String pronunciation);
-    EntryDto removePronunciationForEntry(String entryId);
+    EntryDto updatePronunciationForEntry(String entryId, String pronunciation, UserInfoDto userInfo);
+    EntryDto removePronunciationForEntry(String entryId, UserInfoDto userInfo);
 
     <R, E extends Exception> R withAllEntries(ThrowingFunction<Stream<EntryDto>, R, E> fn) throws E;
     <E extends Exception> void withAllEntries(ThrowingConsumer<Stream<EntryDto>, E> consumer) throws E;

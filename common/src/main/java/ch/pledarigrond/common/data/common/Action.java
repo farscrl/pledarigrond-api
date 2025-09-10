@@ -11,6 +11,7 @@ public enum Action {
     CREATED_MODIFICATION,
 
     CHANGED_ORDER,
+    UPDATED_PRONUNCIATION,
 
     UNKNOWN,
 }

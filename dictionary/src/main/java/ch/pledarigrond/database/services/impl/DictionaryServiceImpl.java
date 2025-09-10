@@ -126,7 +126,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered) {
+    public List<EntryDto> updateOrder(DictionaryLanguage dictionaryLanguage, List<EntryVersionDto> ordered, UserInfoDto userInfo) {
         List<EntryDto> entries = new ArrayList<>();
         for(int i = 0; i < ordered.size(); i++) {
             EntryVersionDto versionDto = ordered.get(i);
@@ -148,10 +148,8 @@ public class DictionaryServiceImpl implements DictionaryService {
             logger.info("Entry {} <-> {} had sortVal «{}», now is «{}»", updatedVersion.getRmStichwort(), updatedVersion.getDeStichwort(), sortValOld, sortValNew);
 
             updatedVersion.setTimestamp(Instant.now());
-            entry.setCurrent(updatedVersion);
-            entry.getVersions().add(updatedVersion);
+            entry.addVersion(updatedVersion, userInfo, Action.CHANGED_ORDER);
             entry = entryRepository.save(entry);
-
             entries.add(entryMapper.toEntryDto(entry));
         }
 
@@ -159,7 +157,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public EntryDto updatePronunciationForEntry(String entryId, String pronunciation) {
+    public EntryDto updatePronunciationForEntry(String entryId, String pronunciation, UserInfoDto userInfo) {
         Optional<Entry> entryOptional = entryRepository.findByEntryId(entryId);
         if (entryOptional.isEmpty()) {
             logger.warn("Entry with id {} not found. Not assigning pronunciation.", entryId);
@@ -170,14 +168,13 @@ public class DictionaryServiceImpl implements DictionaryService {
         updatedVersion.setRmPronunciation(pronunciation);
 
         updatedVersion.setTimestamp(Instant.now());
-        entry.setCurrent(updatedVersion);
-        entry.getVersions().add(updatedVersion);
+        entry.addVersion(updatedVersion, userInfo, Action.UPDATED_PRONUNCIATION);
 
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
     @Override
-    public EntryDto removePronunciationForEntry(String entryId) {
+    public EntryDto removePronunciationForEntry(String entryId, UserInfoDto userInfo) {
         Optional<Entry> entryOptional = entryRepository.findByEntryId(entryId);
         if (entryOptional.isEmpty()) {
             logger.warn("Entry with id {} not found. Not removing pronunciation.", entryId);
@@ -188,9 +185,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         updatedVersion.setRmPronunciation(null);
 
         updatedVersion.setTimestamp(Instant.now());
-        entry.setCurrent(updatedVersion);
-        entry.getVersions().add(updatedVersion);
-
+        entry.addVersion(updatedVersion, userInfo, Action.UPDATED_PRONUNCIATION);
         return entryMapper.toEntryDto(entryRepository.save(entry));
     }
 
