@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 
 /**
@@ -52,6 +53,9 @@ class LuceneIndexFilesystem {
     // single lock object for reader/searcher lifecycle
     private final Object searcherLock = new Object();
 
+    // serialize all IndexWriter lifecycles to avoid concurrent writers
+    private final ReentrantLock writerMutex = new ReentrantLock(true); // fair lock
+
     public LuceneIndexFilesystem(LuceneConfiguration luceneConfiguration) {
         setLuceneConfiguration(luceneConfiguration);
     }
@@ -62,7 +66,7 @@ class LuceneIndexFilesystem {
 
     void initialize() throws IOException {
         resetIndexDirectory();
-//		analyzer = LuceneHelper.newAnalyzer();
+//      analyzer = LuceneHelper.newAnalyzer();
         analyzer = LuceneHelper.newWhitespaceAnalyzer();
 
         try {
@@ -113,21 +117,26 @@ class LuceneIndexFilesystem {
 
 
     void addToIndex(final Stream<EntryDto> stream) throws IndexException {
-        logger.info("Indexing...");
-        Date begin = new Date();
-        IndexWriter writer = null;
+        writerMutex.lock();
         try {
-            writer = initIndexWriter();
-            int counter = indexDocs(writer, stream);
-            writer.commit();
-            writeTimestamp();
-            refreshSearcher();
-            logger.info("Indexing prepared. {} items added. {} total milliseconds", counter, new Date().getTime() - begin.getTime());
-        } catch (Exception e) {
-            safelyRollback(writer);
-            throw new IndexException(e);
+            logger.info("Indexing...");
+            Date begin = new Date();
+            IndexWriter writer = null;
+            try {
+                writer = initIndexWriter();
+                int counter = indexDocs(writer, stream);
+                writer.commit();
+                writeTimestamp();
+                refreshSearcher();
+                logger.info("Indexing prepared. {} items added. {} total milliseconds", counter, new Date().getTime() - begin.getTime());
+            } catch (Exception e) {
+                safelyRollback(writer);
+                throw new IndexException(e);
+            } finally {
+                IOUtils.closeWhileHandlingException(writer);
+            }
         } finally {
-            IOUtils.closeWhileHandlingException(writer);
+            writerMutex.unlock();
         }
     }
 
@@ -146,9 +155,9 @@ class LuceneIndexFilesystem {
 
     private void writeTimestamp() throws IOException {
         try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(luceneConfiguration.getLuceneTimestampFile()), StandardCharsets.UTF_8);
-            BufferedWriter bw = new BufferedWriter(osw)) {
-                bw.write("Created on " + new Date());
-            }
+             BufferedWriter bw = new BufferedWriter(osw)) {
+            bw.write("Created on " + new Date());
+        }
     }
 
     private void refreshSearcher() throws IOException {
@@ -219,59 +228,74 @@ class LuceneIndexFilesystem {
     }
 
     void dropIndex() throws IndexException {
-        IndexWriter writer = null;
+        writerMutex.lock();
         try {
-            writer = initIndexWriter();
-            writer.deleteAll();
-            writer.commit();
-            // After deleting everything, refresh searcher to see empty index (or close it if index is now empty)
-            synchronized (searcherLock) {
-                IOUtils.closeWhileHandlingException(reader);
-                reader = DirectoryReader.open(indexDirectory); // empty index still has segments_N
-                searcher = new IndexSearcher(reader);
+            IndexWriter writer = null;
+            try {
+                writer = initIndexWriter();
+                writer.deleteAll();
+                writer.commit();
+                // After deleting everything, refresh searcher to see empty index (or close it if index is now empty)
+                synchronized (searcherLock) {
+                    IOUtils.closeWhileHandlingException(reader);
+                    reader = DirectoryReader.open(indexDirectory); // empty index still has segments_N
+                    searcher = new IndexSearcher(reader);
+                }
+            } catch (IOException e) {
+                safelyRollback(writer);
+                throw new IndexException(e);
+            } finally {
+                IOUtils.closeWhileHandlingException(writer);
             }
-        } catch (IOException e) {
-            safelyRollback(writer);
-            throw new IndexException(e);
         } finally {
-            IOUtils.closeWhileHandlingException(writer);
+            writerMutex.unlock();
         }
     }
 
     void update(EntryDto entry) throws IOException {
-        IndexWriter writer = null;
+        writerMutex.lock();
         try {
-            writer = initIndexWriter();
-            Term term = new Term(FN.entryId, entry.getEntryId());
-            if (entry.getCurrent() != null) {
-                List<Document> docs = createDocument(entry);
-                writer.updateDocuments(term, docs); // works also if docs.isEmpty()
-            } else {
-                writer.deleteDocuments(term);
+            IndexWriter writer = null;
+            try {
+                writer = initIndexWriter();
+                Term term = new Term(FN.entryId, entry.getEntryId());
+                if (entry.getCurrent() != null) {
+                    List<Document> docs = createDocument(entry);
+                    writer.updateDocuments(term, docs); // works also if docs.isEmpty()
+                } else {
+                    writer.deleteDocuments(term);
+                }
+                writer.commit();
+                refreshSearcher();
+            } catch (Exception e) {
+                safelyRollback(writer);
+                throw e instanceof IOException ? (IOException) e : new IOException(e);
+            } finally {
+                IOUtils.closeWhileHandlingException(writer);
             }
-            writer.commit();
-            refreshSearcher();
-        } catch (Exception e) {
-            safelyRollback(writer);
-            throw e instanceof IOException ? (IOException) e : new IOException(e);
         } finally {
-            IOUtils.closeWhileHandlingException(writer);
+            writerMutex.unlock();
         }
     }
 
     void delete(EntryDto entry) throws IOException {
-        IndexWriter writer = null;
+        writerMutex.lock();
         try {
-            writer = initIndexWriter();
-            Term queryTerm = new Term(FN.entryId, entry.getEntryId());
-            writer.deleteDocuments(queryTerm);
-            writer.commit();
-            refreshSearcher();
-        } catch (Exception e) {
-            safelyRollback(writer);
-            throw e instanceof IOException ? (IOException) e : new IOException(e);
+            IndexWriter writer = null;
+            try {
+                writer = initIndexWriter();
+                Term queryTerm = new Term(FN.entryId, entry.getEntryId());
+                writer.deleteDocuments(queryTerm);
+                writer.commit();
+                refreshSearcher();
+            } catch (Exception e) {
+                safelyRollback(writer);
+                throw e instanceof IOException ? (IOException) e : new IOException(e);
+            } finally {
+                IOUtils.closeWhileHandlingException(writer);
+            }
         } finally {
-            IOUtils.closeWhileHandlingException(writer);
+            writerMutex.unlock();
         }
     }
 
