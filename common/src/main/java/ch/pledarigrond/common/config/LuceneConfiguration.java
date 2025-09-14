@@ -31,7 +31,7 @@ public class LuceneConfiguration {
 	}
 
 	public File getLuceneTimestampFile() {
-		return new File(indexDir + "/" +  ".stamp");
+		return new File(indexDir + "/PG_" + language.getSubtag() + ".timestamp");
 	}
 
 	public File getLuceneIndexDir() {
