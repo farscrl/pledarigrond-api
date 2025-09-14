@@ -72,7 +72,7 @@ class LuceneIndexFilesystem {
         try {
             createSearcher();
         } catch (NoIndexAvailableException ex) {
-            logger.error("Could not initialize LuceneIndexFilesystem", ex);
+            logger.error("Could not initialize LuceneIndexFilesystem for language " + luceneConfiguration.getLanguage(), ex);
         }
     }
 
@@ -91,7 +91,7 @@ class LuceneIndexFilesystem {
                 try {
                     // If index doesn't exist yet, throw a controlled exception
                     if (!DirectoryReader.indexExists(indexDirectory)) {
-                        throw new NoIndexAvailableException("Index not available yet");
+                        throw new NoIndexAvailableException("Index not available yet for language " + luceneConfiguration.getLanguage());
                     }
                     reader = DirectoryReader.open(indexDirectory);
                     searcher = new IndexSearcher(reader);
@@ -109,7 +109,7 @@ class LuceneIndexFilesystem {
                     });
                     logger.info("Searcher created.");
                 } catch (IOException e) {
-                    throw new NoIndexAvailableException("Failed to load index", e);
+                    throw new NoIndexAvailableException("Failed to load index for language " + luceneConfiguration.getLanguage(), e);
                 }
             }
         }
@@ -131,7 +131,7 @@ class LuceneIndexFilesystem {
                 logger.info("Indexing prepared. {} items added. {} total milliseconds", counter, new Date().getTime() - begin.getTime());
             } catch (Exception e) {
                 safelyRollback(writer);
-                throw new IndexException(e);
+                throw new IndexException("Error when adding to language " + luceneConfiguration.getLanguage(), e);
             } finally {
                 IOUtils.closeWhileHandlingException(writer);
             }
@@ -211,7 +211,7 @@ class LuceneIndexFilesystem {
         logger.info("Indexing completed - {} entries have been indexed.", nf.format(counter));
         if (!failures.isEmpty()) {
             logger.warn("{} entries failed to index.", failures.size());
-            throw new IOException("Failed to index " + failures.size() + " entries");
+            throw new IOException("Failed to index " + failures.size() + " entries for language " + luceneConfiguration.getLanguage());
         }
         logger.info("###########################################");
         return counter.get();
@@ -243,7 +243,7 @@ class LuceneIndexFilesystem {
                 }
             } catch (IOException e) {
                 safelyRollback(writer);
-                throw new IndexException(e);
+                throw new IndexException("Error when dropping index for language" + luceneConfiguration.getLanguage(), e);
             } finally {
                 IOUtils.closeWhileHandlingException(writer);
             }
