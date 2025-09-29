@@ -50,19 +50,19 @@ public class LuceneConfiguration {
 		lucenePath = new File(luceneDir).toPath().toAbsolutePath();
 		this.indexDir = new File(lucenePath + "/" + language.getName() + "/");
 		boolean success = this.indexDir.mkdirs();
-		if (!success) {
+		if (!success && !this.indexDir.exists()) {
             logger.warn("Could not create index directory: {}", this.indexDir);
 		}
 
 		this.suggestionIndexDirRm = new File(lucenePath + "/" + language.getName() + "_suggestions_rm/");
 		success = this.suggestionIndexDirRm.mkdirs();
-		if (!success) {
+		if (!success && !this.suggestionIndexDirRm.exists()) {
             logger.warn("Could not create suggestion index directory RM: {}", this.suggestionIndexDirRm);
 		}
 
 		this.suggestionIndexDirDe = new File(lucenePath + "/" + language.getName() + "_suggestions_de/");
 		success = this.suggestionIndexDirDe.mkdirs();
-		if (!success) {
+		if (!success && !this.suggestionIndexDirDe.exists()) {
 			logger.warn("Could not create suggestion index directory DE: {}", this.suggestionIndexDirDe);
 		}
 	}
