@@ -66,7 +66,7 @@ class LuceneIndexFilesystem {
 
     void initialize() {
         try {
-        resetIndexDirectory();
+            resetIndexDirectory();
         } catch (IOException ioe) {
             logger.error("Could not initialize LuceneIndexFilesystem for language {}", luceneConfiguration.getLanguage(), ioe);
             return;
@@ -152,8 +152,18 @@ class LuceneIndexFilesystem {
     }
 
     void resetIndexDirectory() throws IOException {
-        IOUtils.closeWhileHandlingException(indexDirectory);
-        indexDirectory = new MMapDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
+        writerMutex.lock();
+        try {
+            synchronized (searcherLock) {
+                IOUtils.closeWhileHandlingException(reader);
+                reader = null;
+                searcher = null;
+                IOUtils.closeWhileHandlingException(indexDirectory);
+                indexDirectory = new MMapDirectory(luceneConfiguration.getLuceneIndexDir().toPath());
+            }
+        } finally {
+            writerMutex.unlock();
+        }
     }
 
     private IndexWriter initIndexWriter() throws IOException {
