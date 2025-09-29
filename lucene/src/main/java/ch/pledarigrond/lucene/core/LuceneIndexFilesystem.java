@@ -64,15 +64,26 @@ class LuceneIndexFilesystem {
         this.luceneConfiguration = luceneConfiguration;
     }
 
-    void initialize() throws IOException {
+    void initialize() {
+        try {
         resetIndexDirectory();
+        } catch (IOException ioe) {
+            logger.error("Could not initialize LuceneIndexFilesystem for language {}", luceneConfiguration.getLanguage(), ioe);
+            return;
+        }
+
 //      analyzer = LuceneHelper.newAnalyzer();
         analyzer = LuceneHelper.newWhitespaceAnalyzer();
+        try {
+            ensureIndexExists();
+        } catch (IOException ioe) {
+            logger.error("Could not create initial index for language {}", luceneConfiguration.getLanguage(), ioe);
+        }
 
         try {
             createSearcher();
         } catch (NoIndexAvailableException ex) {
-            logger.error("Could not initialize LuceneIndexFilesystem for language " + luceneConfiguration.getLanguage(), ex);
+            logger.error("Could not initialize LuceneIndexFilesystem for language {}", luceneConfiguration.getLanguage(), ex);
         }
     }
 
@@ -316,6 +327,24 @@ class LuceneIndexFilesystem {
                 writer.rollback();
             } catch (IOException ioe) {
                 logger.warn("Rollback failed: {}", ioe.toString());
+            }
+        }
+    }
+
+    private void ensureIndexExists() throws IOException {
+        if (!DirectoryReader.indexExists(indexDirectory)) {
+            writerMutex.lock();
+            IndexWriter w = null;
+            try {
+                IndexWriterConfig cfg = new IndexWriterConfig(analyzer);
+                cfg.setOpenMode(OpenMode.CREATE);
+                w = new IndexWriter(indexDirectory, cfg);
+                w.commit();
+                writeTimestamp();
+                logger.info("Bootstrapped empty index (no prior commit existed).");
+            } finally {
+                IOUtils.closeWhileHandlingException(w);
+                writerMutex.unlock();
             }
         }
     }
