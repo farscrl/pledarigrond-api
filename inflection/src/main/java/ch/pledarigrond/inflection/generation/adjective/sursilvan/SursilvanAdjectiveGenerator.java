@@ -163,6 +163,14 @@ public class SursilvanAdjectiveGenerator extends LanguageAdjectiveGeneration {
     public String buildPlural(String base) {
         String l1 = base.substring(base.length() - 1);
 
+        if (adjectiveClass.id.equals("7") && base.endsWith("iu")) {
+            return base.substring(0, base.length() - 1);
+        }
+
+        if (adjectiveClass.id.equals("8") && base.endsWith("au")) {
+            return base.substring(0, base.length() - 1) + "i";
+        }
+
         if (base.contains("-")) {
             String[] s = base.split("-", 2);
             return  buildPlural(s[0]) + "-" + s[1];

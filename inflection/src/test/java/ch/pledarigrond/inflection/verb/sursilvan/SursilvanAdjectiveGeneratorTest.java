@@ -79,7 +79,7 @@ public class SursilvanAdjectiveGeneratorTest {
         assertEquals("bugliu", forms.getAdjective().getMSingular());
         assertEquals("buglius", forms.getAdjective().getPredicative());
         assertEquals("buglida", forms.getAdjective().getFSingular());
-        assertEquals("buglius", forms.getAdjective().getMPlural());
+        assertEquals("bugli", forms.getAdjective().getMPlural());
         assertEquals("buglidas", forms.getAdjective().getFPlural());
         assertEquals("buglidamein", forms.getAdjective().getAdverbialForm());
     }
@@ -90,7 +90,7 @@ public class SursilvanAdjectiveGeneratorTest {
         assertEquals("barsau", forms.getAdjective().getMSingular());
         assertEquals("barsaus", forms.getAdjective().getPredicative());
         assertEquals("barsada", forms.getAdjective().getFSingular());
-        assertEquals("barsaus", forms.getAdjective().getMPlural());
+        assertEquals("barsai", forms.getAdjective().getMPlural());
         assertEquals("barsadas", forms.getAdjective().getFPlural());
         assertEquals("barsadamein", forms.getAdjective().getAdverbialForm());
     }
