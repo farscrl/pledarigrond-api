@@ -274,7 +274,7 @@ public class SursilvanConjugation extends LanguageConjugation {
                 modRoot = root.substring(0, start) + "e" + root.substring(start + 2);
             }
             case "3e" -> {
-                int start = root.lastIndexOf("ou");
+                int start = root.lastIndexOf("uo");
                 if (start == -1) break;
                 modRoot = root.substring(0, start) + "u" + root.substring(start + 2);
             }
