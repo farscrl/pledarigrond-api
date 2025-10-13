@@ -39,13 +39,13 @@ public class PuterConjugationEncliticTest {
         assertEquals("mangiaivas", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("mangiaivane", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("mangessi", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("mangessast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("mangessa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("mangess'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("mangessans", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("mangessas", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("mangessane", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("mangessi", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("mangessast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("mangessa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("mangess'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("mangessans", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("mangessas", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("mangessane", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("mangiaro eau", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("mangiarost", forms.getVerb().getFuturEnclitic().getSing2());
@@ -172,13 +172,13 @@ public class PuterConjugationEncliticTest {
         assertEquals("as s-chalunaivas", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("as s-chalunaivane", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("am s-chalunessi", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("at s-chalunessast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("as s-chalunessa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("as s-chaluness'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("ans s-chalunessans", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("as s-chalunessas", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("as s-chalunessane", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("am s-chalunessi", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("at s-chalunessast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("as s-chalunessa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("as s-chaluness'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("ans s-chalunessans", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("as s-chalunessas", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("as s-chalunessane", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("am s-chalunaro eau", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("at s-chalunarost", forms.getVerb().getFuturEnclitic().getSing2());
@@ -217,13 +217,13 @@ public class PuterConjugationEncliticTest {
         assertEquals("s'abassaivas", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("s'abassaivane", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("m'abassessi", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("t'abassessast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("s'abassessa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("s'abassess'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("ans abassessans", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("s'abassessas", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("s'abassessane", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("m'abassessi", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("t'abassessast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("s'abassessa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("s'abassess'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("ans abassessans", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("s'abassessas", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("s'abassessane", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("m'abassaro eau", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("t'abassarost", forms.getVerb().getFuturEnclitic().getSing2());

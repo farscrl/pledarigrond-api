@@ -147,13 +147,13 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getImperfectEnclitic().getPlural2(), forms);
         addNewlines(v.getImperfectEnclitic().getPlural3(), forms);
 
-        addNewlines(v.getCundizionalEnclitic().getSing1(), forms);
-        addNewlines(v.getCundizionalEnclitic().getSing2(), forms);
-        addNewlines(v.getCundizionalEnclitic().getSing3m(), forms);
-        addNewlines(v.getCundizionalEnclitic().getSing3f(), forms);
-        addNewlines(v.getCundizionalEnclitic().getPlural1(), forms);
-        addNewlines(v.getCundizionalEnclitic().getPlural2(), forms);
-        addNewlines(v.getCundizionalEnclitic().getPlural3(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getSing1(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getSing2(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getSing3m(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getSing3f(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getPlural1(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getPlural2(), forms);
+        addNewlines(v.getCundiziunalEnclitic().getPlural3(), forms);
 
         addNewlines(v.getFuturEnclitic().getSing1(), forms);
         addNewlines(v.getFuturEnclitic().getSing2(), forms);

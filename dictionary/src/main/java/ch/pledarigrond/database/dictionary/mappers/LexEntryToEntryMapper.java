@@ -404,7 +404,7 @@ public class LexEntryToEntryMapper {
             cundizionalEnclitic.setPlural1(getField(lv, "cundizionalplural1enclitic", false, mappedFields));
             cundizionalEnclitic.setPlural2(getField(lv, "cundizionalplural2enclitic", false, mappedFields));
             cundizionalEnclitic.setPlural3(getField(lv, "cundizionalplural3enclitic", false, mappedFields));
-            verb.setCundizionalEnclitic(cundizionalEnclitic);
+            verb.setCundiziunalEnclitic(cundizionalEnclitic);
         }
 
         if (language.getName().equals("puter")|| language.getName().equals("surmiran") || language.getName().equals("vallader")) {

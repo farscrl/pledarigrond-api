@@ -25,7 +25,7 @@ public class Verb implements Cloneable {
 
     private PersonalVerbEnclitic preschentEnclitic;
     private PersonalVerbEnclitic imperfectEnclitic;
-    private PersonalVerbEnclitic cundizionalEnclitic;
+    private PersonalVerbEnclitic cundiziunalEnclitic;
     private PersonalVerbEnclitic futurEnclitic;
     private PersonalVerbEnclitic futurDubitativEnclitic;
 
@@ -121,7 +121,7 @@ public class Verb implements Cloneable {
             if (this.futurDubitativ != null) cloned.futurDubitativ = this.futurDubitativ.clone();
             if (this.preschentEnclitic != null) cloned.preschentEnclitic = this.preschentEnclitic.clone();
             if (this.imperfectEnclitic != null) cloned.imperfectEnclitic = this.imperfectEnclitic.clone();
-            if (this.cundizionalEnclitic != null) cloned.cundizionalEnclitic = this.cundizionalEnclitic.clone();
+            if (this.cundiziunalEnclitic != null) cloned.cundiziunalEnclitic = this.cundiziunalEnclitic.clone();
             return cloned;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

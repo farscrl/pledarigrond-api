@@ -27,7 +27,7 @@ public class VerbDto {
 
     private PersonalVerbEncliticDto preschentEnclitic;
     private PersonalVerbEncliticDto imperfectEnclitic;
-    private PersonalVerbEncliticDto cundizionalEnclitic;
+    private PersonalVerbEncliticDto cundiziunalEnclitic;
     private PersonalVerbEncliticDto futurEnclitic;
     private PersonalVerbEncliticDto futurDubitativEnclitic;
 

@@ -198,13 +198,13 @@ public class FieldTransformer {
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.SUTSILVAN || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing1enclitic, v.getCundizionalEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing2enclitic, v.getCundizionalEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticm, v.getCundizionalEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticf, v.getCundizionalEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural1enclitic, v.getCundizionalEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural2enclitic, v.getCundizionalEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural3enclitic, v.getCundizionalEnclitic().getPlural3());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing1enclitic, v.getCundiziunalEnclitic().getSing1());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing2enclitic, v.getCundiziunalEnclitic().getSing2());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticm, v.getCundiziunalEnclitic().getSing3m());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticf, v.getCundiziunalEnclitic().getSing3f());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural1enclitic, v.getCundiziunalEnclitic().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural2enclitic, v.getCundiziunalEnclitic().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural3enclitic, v.getCundiziunalEnclitic().getPlural3());
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.VALLADER) {
@@ -448,14 +448,14 @@ public class FieldTransformer {
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.SUTSILVAN || language == Language.VALLADER) {
-                    v.setCundizionalEnclitic(new VerbDto.PersonalVerbEncliticDto());
-                    v.getCundizionalEnclitic().setSing1(toValue(doc, FN.cundizionalsing1enclitic));
-                    v.getCundizionalEnclitic().setSing2(toValue(doc, FN.cundizionalsing2enclitic));
-                    v.getCundizionalEnclitic().setSing3m(toValue(doc, FN.cundizionalsing3encliticm));
-                    v.getCundizionalEnclitic().setSing3f(toValue(doc, FN.cundizionalsing3encliticf));
-                    v.getCundizionalEnclitic().setPlural1(toValue(doc, FN.cundizionalplural1enclitic));
-                    v.getCundizionalEnclitic().setPlural2(toValue(doc, FN.cundizionalplural2enclitic));
-                    v.getCundizionalEnclitic().setPlural3(toValue(doc, FN.cundizionalplural3enclitic));
+                    v.setCundiziunalEnclitic(new VerbDto.PersonalVerbEncliticDto());
+                    v.getCundiziunalEnclitic().setSing1(toValue(doc, FN.cundizionalsing1enclitic));
+                    v.getCundiziunalEnclitic().setSing2(toValue(doc, FN.cundizionalsing2enclitic));
+                    v.getCundiziunalEnclitic().setSing3m(toValue(doc, FN.cundizionalsing3encliticm));
+                    v.getCundiziunalEnclitic().setSing3f(toValue(doc, FN.cundizionalsing3encliticf));
+                    v.getCundiziunalEnclitic().setPlural1(toValue(doc, FN.cundizionalplural1enclitic));
+                    v.getCundiziunalEnclitic().setPlural2(toValue(doc, FN.cundizionalplural2enclitic));
+                    v.getCundiziunalEnclitic().setPlural3(toValue(doc, FN.cundizionalplural3enclitic));
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.VALLADER) {

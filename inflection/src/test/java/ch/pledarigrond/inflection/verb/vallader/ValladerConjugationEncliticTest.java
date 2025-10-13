@@ -39,13 +39,13 @@ public class ValladerConjugationEncliticTest {
         assertEquals("müdaivat", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("müdaivna", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("müdessa", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("müdessast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("müdessa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("müdess'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("müdessna", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("müdessat", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("müdessna", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("müdessa", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("müdessast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("müdessa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("müdess'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("müdessna", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("müdessat", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("müdessna", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("müdaraja", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("müdarast", forms.getVerb().getFuturEnclitic().getSing2());
@@ -78,13 +78,13 @@ public class ValladerConjugationEncliticTest {
         assertEquals("partivat", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("partivna", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("partissa", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("partissast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("partissa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("partiss'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("partissna", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("partissat", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("partissna", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("partissa", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("partissast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("partissa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("partiss'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("partissna", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("partissat", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("partissna", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("partiraja", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("partirast", forms.getVerb().getFuturEnclitic().getSing2());
@@ -247,13 +247,13 @@ public class ValladerConjugationEncliticTest {
         assertEquals("as barricadaivat", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("as barricadaivna", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("am barricadessa", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("at barricadessast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("as barricadessa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("as barricadess'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("ans barricadessna", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("as barricadessat", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("as barricadessna", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("am barricadessa", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("at barricadessast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("as barricadessa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("as barricadess'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("ans barricadessna", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("as barricadessat", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("as barricadessna", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("am barricadaraja", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("at barricadarast", forms.getVerb().getFuturEnclitic().getSing2());
@@ -284,13 +284,13 @@ public class ValladerConjugationEncliticTest {
         assertEquals("s'inachüraivat", forms.getVerb().getImperfectEnclitic().getPlural2());
         assertEquals("s'inachüraivna", forms.getVerb().getImperfectEnclitic().getPlural3());
 
-        assertEquals("m'inachüressa", forms.getVerb().getCundizionalEnclitic().getSing1());
-        assertEquals("t'inachüressast", forms.getVerb().getCundizionalEnclitic().getSing2());
-        assertEquals("s'inachüressa'l", forms.getVerb().getCundizionalEnclitic().getSing3m());
-        assertEquals("s'inachüress'la", forms.getVerb().getCundizionalEnclitic().getSing3f());
-        assertEquals("ans inachüressna", forms.getVerb().getCundizionalEnclitic().getPlural1());
-        assertEquals("s'inachüressat", forms.getVerb().getCundizionalEnclitic().getPlural2());
-        assertEquals("s'inachüressna", forms.getVerb().getCundizionalEnclitic().getPlural3());
+        assertEquals("m'inachüressa", forms.getVerb().getCundiziunalEnclitic().getSing1());
+        assertEquals("t'inachüressast", forms.getVerb().getCundiziunalEnclitic().getSing2());
+        assertEquals("s'inachüressa'l", forms.getVerb().getCundiziunalEnclitic().getSing3m());
+        assertEquals("s'inachüress'la", forms.getVerb().getCundiziunalEnclitic().getSing3f());
+        assertEquals("ans inachüressna", forms.getVerb().getCundiziunalEnclitic().getPlural1());
+        assertEquals("s'inachüressat", forms.getVerb().getCundiziunalEnclitic().getPlural2());
+        assertEquals("s'inachüressna", forms.getVerb().getCundiziunalEnclitic().getPlural3());
 
         assertEquals("m'inachüraraja", forms.getVerb().getFuturEnclitic().getSing1());
         assertEquals("t'inachürarast", forms.getVerb().getFuturEnclitic().getSing2());

@@ -1010,7 +1010,7 @@ public class SutsilvanConjugation extends LanguageConjugation {
         cundizionalEnclitic.setPlural2(verb.getCundiziunal().getPlural2());
         cundizionalEnclitic.setPlural3(verb.getCundiziunal().getPlural3() + "i");
 
-        verb.setCundizionalEnclitic(cundizionalEnclitic);
+        verb.setCundiziunalEnclitic(cundizionalEnclitic);
     }
 
     private void addPronouns() {
@@ -1103,13 +1103,13 @@ public class SutsilvanConjugation extends LanguageConjugation {
         verb.getImperfectEnclitic().setPlural3(verb.getImperfectEnclitic().getPlural3());
 
         // ENCLITIC: CUNDIZIUNAL
-        verb.getCundizionalEnclitic().setSing1(verb.getCundizionalEnclitic().getSing1());
-        verb.getCundizionalEnclitic().setSing2(verb.getCundizionalEnclitic().getSing2());
-        verb.getCundizionalEnclitic().setSing3m(verb.getCundizionalEnclitic().getSing3m());
-        verb.getCundizionalEnclitic().setSing3f(verb.getCundizionalEnclitic().getSing3f());
-        verb.getCundizionalEnclitic().setPlural1(verb.getCundizionalEnclitic().getPlural1());
-        verb.getCundizionalEnclitic().setPlural2(verb.getCundizionalEnclitic().getPlural2());
-        verb.getCundizionalEnclitic().setPlural3(verb.getCundizionalEnclitic().getPlural3());
+        verb.getCundiziunalEnclitic().setSing1(verb.getCundiziunalEnclitic().getSing1());
+        verb.getCundiziunalEnclitic().setSing2(verb.getCundiziunalEnclitic().getSing2());
+        verb.getCundiziunalEnclitic().setSing3m(verb.getCundiziunalEnclitic().getSing3m());
+        verb.getCundiziunalEnclitic().setSing3f(verb.getCundiziunalEnclitic().getSing3f());
+        verb.getCundiziunalEnclitic().setPlural1(verb.getCundiziunalEnclitic().getPlural1());
+        verb.getCundiziunalEnclitic().setPlural2(verb.getCundiziunalEnclitic().getPlural2());
+        verb.getCundiziunalEnclitic().setPlural3(verb.getCundiziunalEnclitic().getPlural3());
     }
 
     private boolean endsOnGl() {
