@@ -8,30 +8,20 @@ import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.api.utils.InflectionResultDto;
 import ch.pledarigrond.api.utils.SursilvanInflectionComparatorUtil;
 import ch.pledarigrond.common.config.PgEnvironment;
-import ch.pledarigrond.common.data.common.*;
+import ch.pledarigrond.common.data.common.RequestContext;
+import ch.pledarigrond.common.data.common.SearchDirection;
+import ch.pledarigrond.common.data.common.UserInfoDto;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionType;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
-import ch.pledarigrond.common.util.DbSelector;
-import ch.pledarigrond.database.dictionary.entities.Entry;
-import ch.pledarigrond.database.dictionary.mappers.LexEntryToEntryMapper;
-import ch.pledarigrond.database.dictionary.repositories.EntryRepository;
 import ch.pledarigrond.database.services.DictionaryService;
-import ch.pledarigrond.mongodb.core.Converter;
-import ch.pledarigrond.mongodb.core.Database;
-import ch.pledarigrond.mongodb.util.MongoHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +29,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -72,9 +61,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
     @Autowired
     private SursilvanVerbService sursilvanVerbService;
-
-    @Autowired
-    private EntryRepository entryRepository;
 
     @Autowired
     private DictionaryService dictionaryService;
@@ -197,44 +183,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         csvWriter.flush();
 
         return writer.toString();
-    }
-
-    @Override
-    public boolean migrateDb() throws IOException {
-        if (entryRepository.count() != 0) {
-            logger.error("Dictionary is not empty. Aborting.");
-            return false;
-        }
-
-        String dbName = DbSelector.getDbNameByLanguage(pgEnvironment, RequestContext.getLanguage());
-        MongoCursor<Document> cursor = Database.getInstance(dbName, pgEnvironment).getAll();
-        MongoCollection<Document> entryCollection = MongoHelper.getDB(pgEnvironment, RequestContext.getLanguage().getName()).getCollection("entries");
-        long entries = entryCollection.countDocuments();
-
-        int counter = 0;
-        while (cursor.hasNext()) {
-            DBObject object = new BasicDBObject(cursor.next());
-            LexEntry lexEntry = Converter.convertToLexEntry(object);
-            // uncomment the following line to write the LexEntry to a file (to use in tests)
-            // serializeLexEntryAndSave(lexEntry, RequestContext.getLanguage());
-
-            Entry entry = LexEntryToEntryMapper.map(lexEntry, RequestContext.getLanguage());
-            entry.updateCalculatedFields();
-            entryRepository.save(entry);
-            counter++;
-
-            if (counter % 1000 == 0) {
-                logger.info("migrated {} entries ({}%)", counter, (counter * 100L) / entries);
-            }
-        }
-
-        if (entries != entryRepository.count()) {
-            logger.error("Number of entries in dictionary does not match number of entries in MongoDB. Aborting.");
-            return false;
-        }
-
-        logger.info("number of LexEntries migrated: {}", counter);
-        return true;
     }
 
     private boolean updateNounsByGender(String gender, List<String[]> noInflectionList) {
@@ -541,40 +489,6 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
             escapedData = "\"" + data + "\"";
         }
         return escapedData;
-    }
-
-    public static void serializeLexEntryAndSave(LexEntry lexEntry, Language language) throws IOException {
-        if (lexEntry == null) {
-            throw new IllegalArgumentException("LexEntry object cannot be null.");
-        }
-        if (lexEntry.getId() == null || lexEntry.getId().trim().isEmpty()) {
-            throw new IllegalArgumentException("LexEntry object must have a non-empty objectId for filename.");
-        }
-        if (language == null) {
-            throw new IllegalArgumentException("language cannot be null or empty.");
-        }
-
-        String fileName = lexEntry.getId() + ".json";
-
-        Path projectRoot = Paths.get("").toAbsolutePath();
-
-        Path outputDirectory = projectRoot
-                .resolve("api")
-                .resolve("src")
-                .resolve("test")
-                .resolve("resources")
-                .resolve("testdata")
-                .resolve(language.getSubtag());
-
-        File directory = outputDirectory.toFile();
-        if (!directory.exists()) {
-            directory.mkdirs();
-            System.out.println("Created directory: " + directory.getAbsolutePath());
-        }
-
-        File outputFile = outputDirectory.resolve(fileName).toFile();
-
-        OBJECT_MAPPER.writeValue(outputFile, lexEntry);
     }
 
     private boolean isMultipleWords(String input) {

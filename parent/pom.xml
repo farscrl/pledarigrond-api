@@ -23,7 +23,6 @@
         <module>../api</module>
         <module>../common</module>
         <module>../lucene</module>
-        <module>../mongodb</module>
         <module>../inflection</module>
         <module>../names</module>
         <module>../spellchecker</module>

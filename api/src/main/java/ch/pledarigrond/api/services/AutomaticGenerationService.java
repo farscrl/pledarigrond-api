@@ -1,7 +1,5 @@
 package ch.pledarigrond.api.services;
 
-import java.io.IOException;
-
 public interface AutomaticGenerationService {
 
     boolean generateNounForms();
@@ -11,6 +9,4 @@ public interface AutomaticGenerationService {
     boolean generateVerbForms();
 
     String getVerbListWithConjugationClass();
-
-    boolean migrateDb() throws IOException;
 }

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("{language}/admin/generation")
 public class AutomaticGenerationController {
@@ -83,19 +81,5 @@ public class AutomaticGenerationController {
         headers.add("Content-Type", "text/csv");
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
-    }
-
-    /**
-     * This command allows to migrate the data from the old database structure to the new one.
-     */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/db_migrate")
-    ResponseEntity<?> migrateDbStructure(@PathVariable("language")Language language) throws IOException {
-        boolean success = automaticGenerationService.migrateDb();
-        if (!success) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during db migration");
-        }
-
-        return ResponseEntity.ok().build();
     }
 }

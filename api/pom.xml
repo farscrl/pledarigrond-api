@@ -42,12 +42,6 @@
 			<artifactId>inflection</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>ch.pledarigrond</groupId>
-            <artifactId>mongodb</artifactId>
-			<version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
 		<dependency>
 			<groupId>ch.pledarigrond</groupId>
 			<artifactId>names</artifactId>

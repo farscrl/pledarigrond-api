@@ -15,7 +15,6 @@
         <module name="corpus" />
         <module name="api" />
         <module name="spellchecker" />
-        <module name="mongodb" />
         <module name="users" />
         <module name="inflection" />
       </profile>
