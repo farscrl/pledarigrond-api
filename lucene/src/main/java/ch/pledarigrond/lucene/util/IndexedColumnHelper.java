@@ -92,7 +92,7 @@ public class IndexedColumnHelper {
      * @return The normalized file value
      */
     private static String normalizeLadinPronunciationValues(String fieldName, String value) {
-        if (fieldName.startsWith("rmStichwort")) {
+        if (fieldName.startsWith("rmStichwort") && !fieldName.equals("rmStichwort")) {
             return PronunciationNormalizer.normalizePronunciation(value);
         }
         return value;
