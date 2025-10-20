@@ -54,7 +54,7 @@ public class SlackServiceImpl implements SlackService {
         }
 
         String stackTrace = Arrays.stream(ex.getStackTrace())
-                .limit(10)
+                .limit(30)
                 .map(StackTraceElement::toString)
                 .collect(Collectors.joining("\n"));
 
