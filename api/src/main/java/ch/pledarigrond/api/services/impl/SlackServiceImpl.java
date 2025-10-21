@@ -49,16 +49,23 @@ public class SlackServiceImpl implements SlackService {
     @Async
     public void sendException(Exception ex, String title) {
         // do not send exceptions in dev profile
-        if (activeProfile.equals("dev")) {
+        if ("dev".equals(activeProfile)) {
             return;
         }
+
+        String header = ex.toString();
 
         String stackTrace = Arrays.stream(ex.getStackTrace())
                 .limit(10)
                 .map(StackTraceElement::toString)
                 .collect(Collectors.joining("\n"));
 
-        String body = String.format("*Exception:* `%s`\n```%s```", ex.getMessage(), stackTrace);
+        // add a marker if it was truncated
+        if (ex.getStackTrace().length > 10) {
+            stackTrace += "\n... (truncated)";
+        }
+
+        String body = String.format("*Exception:* `%s`\n```%s\n%s```", ex.getMessage(), header, stackTrace);
 
         sendMessage(title != null ? title : "Unhandled Exception", body, SlackMessageType.ERROR);
     }
