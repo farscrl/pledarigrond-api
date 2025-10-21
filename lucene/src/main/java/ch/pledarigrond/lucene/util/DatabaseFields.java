@@ -152,6 +152,7 @@ public class DatabaseFields {
 
                 // adjectives
                 new IndexedColumn(FN.adverbialForm),
+                new IndexedColumn(FN.predicative),
 
                 // other
                 new IndexedColumn(FN.otherForm1),

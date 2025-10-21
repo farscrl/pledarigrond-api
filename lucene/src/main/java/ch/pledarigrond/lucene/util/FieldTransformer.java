@@ -248,6 +248,7 @@ public class FieldTransformer {
                 toFieldUpdateAllFields(doc, FN.mPlural, a.getMPlural());
                 toFieldUpdateAllFields(doc, FN.fPlural, a.getFPlural());
                 toFieldUpdateAllFields(doc, FN.adverbialForm, a.getAdverbialForm());
+                toFieldUpdateAllFields(doc, FN.predicative, a.getPredicative());
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.PRONOUN) && i.getPronoun() != null) {
                 PronounDto p = i.getPronoun();
                 toFieldUpdateAllFields(doc, FN.baseForm, p.getBaseForm());
@@ -504,6 +505,7 @@ public class FieldTransformer {
                 a.setMPlural(toValue(doc, FN.mPlural));
                 a.setFPlural(toValue(doc, FN.fPlural));
                 a.setAdverbialForm(toValue(doc, FN.adverbialForm));
+                a.setPredicative(toValue(doc, FN.predicative));
                 i.setAdjective(a);
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.PRONOUN)) {
                 PronounDto p = new PronounDto();

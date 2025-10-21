@@ -177,6 +177,7 @@ public class FN {
 
     // adjective
     public static final String adverbialForm = "adverbialForm";
+    public static final String predicative = "predicative";
 
     // other
     public static final String otherForm1 = "otherForm1";
