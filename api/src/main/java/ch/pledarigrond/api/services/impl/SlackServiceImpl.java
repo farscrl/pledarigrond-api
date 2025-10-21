@@ -53,19 +53,33 @@ public class SlackServiceImpl implements SlackService {
             return;
         }
 
-        String header = ex.toString();
+        // Filter out common harmless network errors
+        if (isIgnorableNetworkException(ex)) {
+            logger.debug("Ignored harmless exception: {}", String.valueOf(ex));
+            return;
+        }
 
         String stackTrace = Arrays.stream(ex.getStackTrace())
                 .limit(10)
                 .map(StackTraceElement::toString)
                 .collect(Collectors.joining("\n"));
 
-        // add a marker if it was truncated
         if (ex.getStackTrace().length > 10) {
             stackTrace += "\n... (truncated)";
         }
 
-        String body = String.format("*Exception:* `%s`\n```%s\n%s```", ex.getMessage(), header, stackTrace);
+        // Find and include root cause if different
+        Throwable root = getRootCause(ex);
+        String rootInfo = "";
+        if (root != null && root != ex) {
+            rootInfo = String.format(
+                    "\n*Root cause:* `%s: %s`",
+                    root.getClass().getSimpleName(),
+                    root.getMessage()
+            );
+        }
+
+        String body = String.format("*Exception:* `%s: %s`%s\n```%s```", ex.getClass().getSimpleName(), ex.getMessage(), rootInfo, stackTrace);
 
         sendMessage(title != null ? title : "Unhandled Exception", body, SlackMessageType.ERROR);
     }
@@ -79,5 +93,34 @@ public class SlackServiceImpl implements SlackService {
         } catch (Exception e) {
             logger.error("Failed to send Slack message: {}", e.getMessage());
         }
+    }
+
+    /**
+     * Checks if this exception or any of its causes are harmless network disconnects
+     */
+    private boolean isIgnorableNetworkException(Throwable ex) {
+        Throwable t = ex;
+        while (t != null) {
+            String msg = t.getMessage();
+            String className = t.getClass().getName();
+
+            if ((msg != null && msg.contains("Connection reset by peer")) || "org.springframework.web.context.request.async.AsyncRequestNotUsableException".equals(className)) {
+                return true;
+            }
+
+            t = t.getCause();
+        }
+        return false;
+    }
+
+    /**
+     * Finds the deepest cause (root) of an exception
+     */
+    private Throwable getRootCause(Throwable ex) {
+        Throwable root = ex;
+        while (root.getCause() != null && root.getCause() != root) {
+            root = root.getCause();
+        }
+        return root;
     }
 }

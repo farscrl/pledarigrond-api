@@ -1,5 +1,4 @@
 <configuration>
-
     <property name="LOG_HOME" value="logs"/>
     <springProperty name="apiToken" source="grafana.api.token"/>
     <springProperty name="profile" source="spring.profiles.active" defaultValue="dev" />
@@ -21,6 +20,8 @@
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- The active log file -->
         <file>${LOG_HOME}/app.log</file>
+
+        <filter class="ch.pledarigrond.api.logging.DropNoisyNetworkErrorsFilter" />
 
         <!-- Rolling policy -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -44,6 +45,8 @@
     </appender>
 
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <filter class="ch.pledarigrond.api.logging.DropNoisyNetworkErrorsFilter" />
+
         <http>
             <url>https://logs-prod-012.grafana.net/loki/api/v1/push</url>
             <auth>
