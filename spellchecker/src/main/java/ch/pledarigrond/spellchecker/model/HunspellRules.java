@@ -25,7 +25,8 @@ public enum HunspellRules {
 
 
     // RULES FOR SURSILVAN (according to sursilvan/rm-sursilv.aff)
-
+    SURSILVAN_PRONOMS_REFLEXIVS("P"),
+    SURSILVAN_PLEDS_APOSTROFAI("T"),
 
 
 

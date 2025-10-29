@@ -3,6 +3,7 @@ package ch.pledarigrond.spellchecker.generator;
 import ch.pledarigrond.inflection.generation.verb.puter.PuterPronouns;
 import ch.pledarigrond.inflection.generation.verb.rumantschgrischun.RumantschGrischunPronouns;
 import ch.pledarigrond.inflection.generation.verb.surmiran.SurmiranPronouns;
+import ch.pledarigrond.inflection.generation.verb.sursilvan.SursilvanPronouns;
 import ch.pledarigrond.inflection.generation.verb.sutsilvan.SutsilvanPronouns;
 import ch.pledarigrond.inflection.generation.verb.vallader.ValladerPronouns;
 
@@ -179,7 +180,58 @@ public class WordListUtils {
     }
 
     // SURSILVAN
+    public static String removePronounsSursilvan(String input) {
+        if (input == null) {
+            return null;
+        }
 
+        List<String> prefixes = new ArrayList<>();
+        Collections.addAll(prefixes,
+                // has to be upfront, as other pronouns may follow
+                SursilvanPronouns.pron_conjunctiv_c,
+                SursilvanPronouns.pron_conjunctiv_v,
+
+                SursilvanPronouns.pron_1ps,
+                SursilvanPronouns.pron_2ps,
+                SursilvanPronouns.pron_3ps,
+                SursilvanPronouns.pron_1pp,
+                SursilvanPronouns.pron_2pp,
+                SursilvanPronouns.pron_3pp,
+                SursilvanPronouns.pron_3ps_impers,
+                SursilvanPronouns.pron_r,
+                SursilvanPronouns.pron_r_v,
+
+                SursilvanPronouns.prefix_futur_1ps,
+                SursilvanPronouns.prefix_futur_1ps_v,
+                SursilvanPronouns.prefix_futur_2ps,
+                SursilvanPronouns.prefix_futur_2ps_v,
+                SursilvanPronouns.prefix_futur_3ps,
+                SursilvanPronouns.prefix_futur_3ps_v,
+                SursilvanPronouns.prefix_futur_1pp,
+                SursilvanPronouns.prefix_futur_1pp_v,
+                SursilvanPronouns.prefix_futur_2pp,
+                SursilvanPronouns.prefix_futur_2pp_v,
+                SursilvanPronouns.prefix_futur_3pp,
+                SursilvanPronouns.prefix_futur_3pp_v
+        );
+
+        List<String> suffixes = new ArrayList<>();
+        Collections.addAll(suffixes,
+                ""
+        );
+
+        for(String p: prefixes) {
+            if (input.startsWith(p)) {
+                input =  input.substring(p.length());
+            }
+        }
+        for(String s: suffixes) {
+            if (input.endsWith(s)) {
+                input = input.substring(0, input.length() - s.length());
+            }
+        }
+        return input;
+    }
 
     // SUTSILVAN
     public static String removePronounsSutsilvan(String input) {

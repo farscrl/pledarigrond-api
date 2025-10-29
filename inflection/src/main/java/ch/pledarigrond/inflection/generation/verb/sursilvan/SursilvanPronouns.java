@@ -18,4 +18,18 @@ public class SursilvanPronouns {
 	// Conjunctiv
 	public static final String pron_conjunctiv_c = "che ";
 	public static final String pron_conjunctiv_v = "ch'";
+
+    // futur
+    public static final String prefix_futur_1ps = "vegn(el) a ";
+    public static final String prefix_futur_1ps_v = "vegn(el) ad ";
+    public static final String prefix_futur_2ps = "vegns a ";
+    public static final String prefix_futur_2ps_v = "vegns ad ";
+    public static final String prefix_futur_3ps = "vegn a ";
+    public static final String prefix_futur_3ps_v = "vegn ad ";
+    public static final String prefix_futur_1pp = "vegnin a ";
+    public static final String prefix_futur_1pp_v = "vegnin ad ";
+    public static final String prefix_futur_2pp = "vegnis a ";
+    public static final String prefix_futur_2pp_v = "vegnis ad ";
+    public static final String prefix_futur_3pp = "vegnan a ";
+    public static final String prefix_futur_3pp_v = "vegnan ad ";
 }
