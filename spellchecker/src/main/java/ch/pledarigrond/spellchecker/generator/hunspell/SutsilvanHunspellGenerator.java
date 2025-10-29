@@ -110,12 +110,26 @@ public class SutsilvanHunspellGenerator extends HunspellGenerator {
         addNewlines(v.getConjunctiv().getPlural2(), forms);
         addNewlines(v.getConjunctiv().getPlural3(), forms);
 
+        addNewlines(v.getConjunctivImperfect().getSing1(), forms);
+        addNewlines(v.getConjunctivImperfect().getSing2(), forms);
+        addNewlines(v.getConjunctivImperfect().getSing3(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural1(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural2(), forms);
+        addNewlines(v.getConjunctivImperfect().getPlural3(), forms);
+
         addNewlines(v.getCundiziunal().getSing1(), forms);
         addNewlines(v.getCundiziunal().getSing2(), forms);
         addNewlines(v.getCundiziunal().getSing3(), forms);
         addNewlines(v.getCundiziunal().getPlural1(), forms);
         addNewlines(v.getCundiziunal().getPlural2(), forms);
         addNewlines(v.getCundiziunal().getPlural3(), forms);
+
+        addNewlines(v.getCundiziunalIndirect().getSing1(), forms);
+        addNewlines(v.getCundiziunalIndirect().getSing2(), forms);
+        addNewlines(v.getCundiziunalIndirect().getSing3(), forms);
+        addNewlines(v.getCundiziunalIndirect().getPlural1(), forms);
+        addNewlines(v.getCundiziunalIndirect().getPlural2(), forms);
+        addNewlines(v.getCundiziunalIndirect().getPlural3(), forms);
 
         addNewlines(v.getParticipPerfect().getMs(), forms);
         addNewlines(v.getParticipPerfect().getFs(), forms);
