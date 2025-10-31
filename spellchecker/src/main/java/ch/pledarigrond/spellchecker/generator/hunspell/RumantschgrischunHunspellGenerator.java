@@ -93,50 +93,65 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         }
 
         ArrayList<String> forms = new ArrayList<>();
-        addNewlines(v.getPreschent().getSing1(), forms);
-        addNewlines(v.getPreschent().getSing2(), forms);
-        // addNewlines(v.getPreschent().getSing3(), forms); // below
-        addNewlines(v.getPreschent().getPlural1(), forms);
-        addNewlines(v.getPreschent().getPlural2(), forms);
-        addNewlines(v.getPreschent().getPlural3(), forms);
 
-        addNewlines(v.getImperfect().getSing1(), forms);
-        addNewlines(v.getImperfect().getSing2(), forms);
-        // addNewlines(v.getImperfect().getSing3(), forms); // below
-        addNewlines(v.getImperfect().getPlural1(), forms);
-        addNewlines(v.getImperfect().getPlural2(), forms);
-        addNewlines(v.getImperfect().getPlural3(), forms);
+        if (v.getPreschent() != null) {
+            addNewlines(v.getPreschent().getSing1(), forms);
+            addNewlines(v.getPreschent().getSing2(), forms);
+            // addNewlines(v.getPreschent().getSing3(), forms); // below
+            addNewlines(v.getPreschent().getPlural1(), forms);
+            addNewlines(v.getPreschent().getPlural2(), forms);
+            addNewlines(v.getPreschent().getPlural3(), forms);
+        }
 
-        addNewlines(v.getConjunctiv().getSing1(), forms);
-        addNewlines(v.getConjunctiv().getSing2(), forms);
-        addNewlines(v.getConjunctiv().getSing3(), forms);
-        addNewlines(v.getConjunctiv().getPlural1(), forms);
-        addNewlines(v.getConjunctiv().getPlural2(), forms);
-        addNewlines(v.getConjunctiv().getPlural3(), forms);
+        if (v.getImperfect() != null) {
+            addNewlines(v.getImperfect().getSing1(), forms);
+            addNewlines(v.getImperfect().getSing2(), forms);
+            // addNewlines(v.getImperfect().getSing3(), forms); // below
+            addNewlines(v.getImperfect().getPlural1(), forms);
+            addNewlines(v.getImperfect().getPlural2(), forms);
+            addNewlines(v.getImperfect().getPlural3(), forms);
+        }
 
-        addNewlines(v.getCundiziunal().getSing1(), forms);
-        addNewlines(v.getCundiziunal().getSing2(), forms);
-        addNewlines(v.getCundiziunal().getSing3(), forms);
-        addNewlines(v.getCundiziunal().getPlural1(), forms);
-        addNewlines(v.getCundiziunal().getPlural2(), forms);
-        addNewlines(v.getCundiziunal().getPlural3(), forms);
+        if (v.getConjunctiv() != null) {
+            addNewlines(v.getConjunctiv().getSing1(), forms);
+            addNewlines(v.getConjunctiv().getSing2(), forms);
+            addNewlines(v.getConjunctiv().getSing3(), forms);
+            addNewlines(v.getConjunctiv().getPlural1(), forms);
+            addNewlines(v.getConjunctiv().getPlural2(), forms);
+            addNewlines(v.getConjunctiv().getPlural3(), forms);
+        }
 
-        addNewlines(v.getParticipPerfect().getMs(), forms);
-        addNewlines(v.getParticipPerfect().getFs(), forms);
-        addNewlines(v.getParticipPerfect().getMp(), forms);
-        addNewlines(v.getParticipPerfect().getFp(), forms);
+        if (v.getCundiziunal() != null) {
+            addNewlines(v.getCundiziunal().getSing1(), forms);
+            addNewlines(v.getCundiziunal().getSing2(), forms);
+            addNewlines(v.getCundiziunal().getSing3(), forms);
+            addNewlines(v.getCundiziunal().getPlural1(), forms);
+            addNewlines(v.getCundiziunal().getPlural2(), forms);
+            addNewlines(v.getCundiziunal().getPlural3(), forms);
+        }
+
+        if (v.getParticipPerfect() != null) {
+            addNewlines(v.getParticipPerfect().getMs(), forms);
+            addNewlines(v.getParticipPerfect().getFs(), forms);
+            addNewlines(v.getParticipPerfect().getMp(), forms);
+            addNewlines(v.getParticipPerfect().getFp(), forms);
+        }
 
         addNewlines(v.getGerundium(), forms);
 
-        addNewlines(v.getFutur().getSing1(), forms);
-        addNewlines(v.getFutur().getSing2(), forms);
-        addNewlines(v.getFutur().getSing3(), forms);
-        addNewlines(v.getFutur().getPlural1(), forms);
-        addNewlines(v.getFutur().getPlural2(), forms);
-        addNewlines(v.getFutur().getPlural3(), forms);
+        if (v.getFutur() != null) {
+            addNewlines(v.getFutur().getSing1(), forms);
+            addNewlines(v.getFutur().getSing2(), forms);
+            addNewlines(v.getFutur().getSing3(), forms);
+            addNewlines(v.getFutur().getPlural1(), forms);
+            addNewlines(v.getFutur().getPlural2(), forms);
+            addNewlines(v.getFutur().getPlural3(), forms);
+        }
 
-        addNewlines(v.getImperativ().getSingular(), forms);
-        addNewlines(v.getImperativ().getPlural(), forms);
+        if (v.getImperativ() != null) {
+            addNewlines(v.getImperativ().getSingular(), forms);
+            addNewlines(v.getImperativ().getPlural(), forms);
+        }
 
         forms.forEach(f -> {
             String form = removePronouns(f);
@@ -147,7 +162,9 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         });
 
         forms = new ArrayList<>();
-        addNewlines(v.getPreschent().getSing3(), forms);
+        if (v.getPreschent() != null) {
+            addNewlines(v.getPreschent().getSing3(), forms);
+        }
 
         String finalInfinitiv = infinitiv;
         forms.forEach(f -> {
@@ -162,7 +179,9 @@ public class RumantschgrischunHunspellGenerator extends HunspellGenerator {
         });
 
         forms = new ArrayList<>();
-        addNewlines(v.getImperfect().getSing3(), forms);
+        if (v.getImperfect() != null) {
+            addNewlines(v.getImperfect().getSing3(), forms);
+        }
 
         forms.forEach(f -> {
             String form = removePronouns(f);

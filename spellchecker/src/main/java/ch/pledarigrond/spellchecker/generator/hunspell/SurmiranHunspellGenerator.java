@@ -89,87 +89,110 @@ public class SurmiranHunspellGenerator extends HunspellGenerator {
         list.addWord(removePronouns(infinitiv), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
 
         ArrayList<String> forms = new ArrayList<>();
-        addNewlines(v.getPreschent().getSing1(), forms);
-        addNewlines(v.getPreschent().getSing2(), forms);
-        addNewlines(v.getPreschent().getSing3(), forms);
-        addNewlines(v.getPreschent().getPlural1(), forms);
-        addNewlines(v.getPreschent().getPlural2(), forms);
-        addNewlines(v.getPreschent().getPlural3(), forms);
 
-        addNewlines(v.getImperfect().getSing1(), forms);
-        addNewlines(v.getImperfect().getSing2(), forms);
-        addNewlines(v.getImperfect().getSing3(), forms);
-        addNewlines(v.getImperfect().getPlural1(), forms);
-        addNewlines(v.getImperfect().getPlural2(), forms);
-        addNewlines(v.getImperfect().getPlural3(), forms);
+        if (v.getPreschent() != null) {
+            addNewlines(v.getPreschent().getSing1(), forms);
+            addNewlines(v.getPreschent().getSing2(), forms);
+            addNewlines(v.getPreschent().getSing3(), forms);
+            addNewlines(v.getPreschent().getPlural1(), forms);
+            addNewlines(v.getPreschent().getPlural2(), forms);
+            addNewlines(v.getPreschent().getPlural3(), forms);
+        }
 
-        addNewlines(v.getConjunctiv().getSing1(), forms);
-        addNewlines(v.getConjunctiv().getSing2(), forms);
-        addNewlines(v.getConjunctiv().getSing3(), forms);
-        addNewlines(v.getConjunctiv().getPlural1(), forms);
-        addNewlines(v.getConjunctiv().getPlural2(), forms);
-        addNewlines(v.getConjunctiv().getPlural3(), forms);
+        if (v.getImperfect() != null) {
+            addNewlines(v.getImperfect().getSing1(), forms);
+            addNewlines(v.getImperfect().getSing2(), forms);
+            addNewlines(v.getImperfect().getSing3(), forms);
+            addNewlines(v.getImperfect().getPlural1(), forms);
+            addNewlines(v.getImperfect().getPlural2(), forms);
+            addNewlines(v.getImperfect().getPlural3(), forms);
+        }
 
-        addNewlines(v.getCundiziunal().getSing1(), forms);
-        addNewlines(v.getCundiziunal().getSing2(), forms);
-        addNewlines(v.getCundiziunal().getSing3(), forms);
-        addNewlines(v.getCundiziunal().getPlural1(), forms);
-        addNewlines(v.getCundiziunal().getPlural2(), forms);
-        addNewlines(v.getCundiziunal().getPlural3(), forms);
+        if (v.getConjunctiv() != null) {
+            addNewlines(v.getConjunctiv().getSing1(), forms);
+            addNewlines(v.getConjunctiv().getSing2(), forms);
+            addNewlines(v.getConjunctiv().getSing3(), forms);
+            addNewlines(v.getConjunctiv().getPlural1(), forms);
+            addNewlines(v.getConjunctiv().getPlural2(), forms);
+            addNewlines(v.getConjunctiv().getPlural3(), forms);
+        }
 
-        addNewlines(v.getParticipPerfect().getMs(), forms);
-        addNewlines(v.getParticipPerfect().getFs(), forms);
-        addNewlines(v.getParticipPerfect().getMp(), forms);
-        addNewlines(v.getParticipPerfect().getFp(), forms);
+        if (v.getCundiziunal() != null) {
+            addNewlines(v.getCundiziunal().getSing1(), forms);
+            addNewlines(v.getCundiziunal().getSing2(), forms);
+            addNewlines(v.getCundiziunal().getSing3(), forms);
+            addNewlines(v.getCundiziunal().getPlural1(), forms);
+            addNewlines(v.getCundiziunal().getPlural2(), forms);
+            addNewlines(v.getCundiziunal().getPlural3(), forms);
+        }
+
+        if (v.getParticipPerfect() != null) {
+            addNewlines(v.getParticipPerfect().getMs(), forms);
+            addNewlines(v.getParticipPerfect().getFs(), forms);
+            addNewlines(v.getParticipPerfect().getMp(), forms);
+            addNewlines(v.getParticipPerfect().getFp(), forms);
+        }
 
         addNewlines(v.getGerundium(), forms);
 
-        addNewlines(v.getFutur().getSing1(), forms);
-        addNewlines(v.getFutur().getSing2(), forms);
-        addNewlines(v.getFutur().getSing3(), forms);
-        addNewlines(v.getFutur().getPlural1(), forms);
-        addNewlines(v.getFutur().getPlural2(), forms);
-        addNewlines(v.getFutur().getPlural3(), forms);
+        if (v.getFutur() != null) {
+            addNewlines(v.getFutur().getSing1(), forms);
+            addNewlines(v.getFutur().getSing2(), forms);
+            addNewlines(v.getFutur().getSing3(), forms);
+            addNewlines(v.getFutur().getPlural1(), forms);
+            addNewlines(v.getFutur().getPlural2(), forms);
+            addNewlines(v.getFutur().getPlural3(), forms);
+        }
 
-        addNewlines(v.getPreschentEnclitic().getSing1(), forms);
-        addNewlines(v.getPreschentEnclitic().getSing2(), forms);
-        addNewlines(v.getPreschentEnclitic().getSing3m(), forms);
-        addNewlines(v.getPreschentEnclitic().getSing3f(), forms);
-        addNewlines(v.getPreschentEnclitic().getPlural1(), forms);
-        addNewlines(v.getPreschentEnclitic().getPlural2(), forms);
-        addNewlines(v.getPreschentEnclitic().getPlural3(), forms);
+        if (v.getPreschentEnclitic() != null) {
+            addNewlines(v.getPreschentEnclitic().getSing1(), forms);
+            addNewlines(v.getPreschentEnclitic().getSing2(), forms);
+            addNewlines(v.getPreschentEnclitic().getSing3m(), forms);
+            addNewlines(v.getPreschentEnclitic().getSing3f(), forms);
+            addNewlines(v.getPreschentEnclitic().getPlural1(), forms);
+            addNewlines(v.getPreschentEnclitic().getPlural2(), forms);
+            addNewlines(v.getPreschentEnclitic().getPlural3(), forms);
+        }
 
-        addNewlines(v.getImperfectEnclitic().getSing1(), forms);
-        addNewlines(v.getImperfectEnclitic().getSing2(), forms);
-        addNewlines(v.getImperfectEnclitic().getSing3m(), forms);
-        addNewlines(v.getImperfectEnclitic().getSing3f(), forms);
-        addNewlines(v.getImperfectEnclitic().getPlural1(), forms);
-        addNewlines(v.getImperfectEnclitic().getPlural2(), forms);
-        addNewlines(v.getImperfectEnclitic().getPlural3(), forms);
+        if (v.getImperfectEnclitic() != null) {
+            addNewlines(v.getImperfectEnclitic().getSing1(), forms);
+            addNewlines(v.getImperfectEnclitic().getSing2(), forms);
+            addNewlines(v.getImperfectEnclitic().getSing3m(), forms);
+            addNewlines(v.getImperfectEnclitic().getSing3f(), forms);
+            addNewlines(v.getImperfectEnclitic().getPlural1(), forms);
+            addNewlines(v.getImperfectEnclitic().getPlural2(), forms);
+            addNewlines(v.getImperfectEnclitic().getPlural3(), forms);
+        }
 
-        addNewlines(v.getCundiziunalEnclitic().getSing1(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getSing2(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getSing3m(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getSing3f(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getPlural1(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getPlural2(), forms);
-        addNewlines(v.getCundiziunalEnclitic().getPlural3(), forms);
+        if (v.getCundiziunalEnclitic() != null) {
+            addNewlines(v.getCundiziunalEnclitic().getSing1(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getSing2(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getSing3m(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getSing3f(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getPlural1(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getPlural2(), forms);
+            addNewlines(v.getCundiziunalEnclitic().getPlural3(), forms);
+        }
 
-        addNewlines(v.getFuturEnclitic().getSing1(), forms);
-        addNewlines(v.getFuturEnclitic().getSing2(), forms);
-        addNewlines(v.getFuturEnclitic().getSing3m(), forms);
-        addNewlines(v.getFuturEnclitic().getSing3f(), forms);
-        addNewlines(v.getFuturEnclitic().getPlural1(), forms);
-        addNewlines(v.getFuturEnclitic().getPlural2(), forms);
-        addNewlines(v.getFuturEnclitic().getPlural3(), forms);
+        if (v.getFuturEnclitic() != null) {
+            addNewlines(v.getFuturEnclitic().getSing1(), forms);
+            addNewlines(v.getFuturEnclitic().getSing2(), forms);
+            addNewlines(v.getFuturEnclitic().getSing3m(), forms);
+            addNewlines(v.getFuturEnclitic().getSing3f(), forms);
+            addNewlines(v.getFuturEnclitic().getPlural1(), forms);
+            addNewlines(v.getFuturEnclitic().getPlural2(), forms);
+            addNewlines(v.getFuturEnclitic().getPlural3(), forms);
+        }
 
         forms.forEach(f -> {
             list.addWord(removePronouns(f), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOMS_REFLEXIVS});
         });
 
         forms = new ArrayList<>();
-        addNewlines(v.getImperativ().getSingular(), forms);
-        addNewlines(v.getImperativ().getPlural(), forms);
+        if (v.getImperativ() != null) {
+            addNewlines(v.getImperativ().getSingular(), forms);
+            addNewlines(v.getImperativ().getPlural(), forms);
+        }
 
         forms.forEach(f -> {
             list.addWord(removePronouns(f), new HunspellRules[]{SURMIRAN_PLEDS_APOSTROFAI, SURMIRAN_PRONOM_CONGIUNT_IMPERATIV, SURMIRAN_PRONOMS_REFLEXIVS});

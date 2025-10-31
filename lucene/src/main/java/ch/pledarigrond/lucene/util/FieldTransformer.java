@@ -95,136 +95,166 @@ public class FieldTransformer {
                 toFieldUpdateAllFields(doc, FN.inflectionSubtype, v.getInflectionSubtype());
                 toFieldUpdateAllFields(doc, FN.composedWith, v.getComposedWith());
 
-                toFieldUpdateAllFields(doc, FN.preschentsing1, v.getPreschent().getSing1());
-                toFieldUpdateAllFields(doc, FN.preschentsing2, v.getPreschent().getSing2());
-                toFieldUpdateAllFields(doc, FN.preschentsing3, v.getPreschent().getSing3());
-                toFieldUpdateAllFields(doc, FN.preschentplural1, v.getPreschent().getPlural1());
-                toFieldUpdateAllFields(doc, FN.preschentplural2, v.getPreschent().getPlural2());
-                toFieldUpdateAllFields(doc, FN.preschentplural3, v.getPreschent().getPlural3());
+                if (v.getPreschent() != null) {
+                    toFieldUpdateAllFields(doc, FN.preschentsing1, v.getPreschent().getSing1());
+                    toFieldUpdateAllFields(doc, FN.preschentsing2, v.getPreschent().getSing2());
+                    toFieldUpdateAllFields(doc, FN.preschentsing3, v.getPreschent().getSing3());
+                    toFieldUpdateAllFields(doc, FN.preschentplural1, v.getPreschent().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.preschentplural2, v.getPreschent().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.preschentplural3, v.getPreschent().getPlural3());
+                }
 
-                toFieldUpdateAllFields(doc, FN.imperfectsing1, v.getImperfect().getSing1());
-                toFieldUpdateAllFields(doc, FN.imperfectsing2, v.getImperfect().getSing2());
-                toFieldUpdateAllFields(doc, FN.imperfectsing3, v.getImperfect().getSing3());
-                toFieldUpdateAllFields(doc, FN.imperfectplural1, v.getImperfect().getPlural1());
-                toFieldUpdateAllFields(doc, FN.imperfectplural2, v.getImperfect().getPlural2());
-                toFieldUpdateAllFields(doc, FN.imperfectplural3, v.getImperfect().getPlural3());
+                if (v.getImperfect() != null) {
+                    toFieldUpdateAllFields(doc, FN.imperfectsing1, v.getImperfect().getSing1());
+                    toFieldUpdateAllFields(doc, FN.imperfectsing2, v.getImperfect().getSing2());
+                    toFieldUpdateAllFields(doc, FN.imperfectsing3, v.getImperfect().getSing3());
+                    toFieldUpdateAllFields(doc, FN.imperfectplural1, v.getImperfect().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.imperfectplural2, v.getImperfect().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.imperfectplural3, v.getImperfect().getPlural3());
+                }
 
-                toFieldUpdateAllFields(doc, FN.conjunctivsing1, v.getConjunctiv().getSing1());
-                toFieldUpdateAllFields(doc, FN.conjunctivsing2, v.getConjunctiv().getSing2());
-                toFieldUpdateAllFields(doc, FN.conjunctivsing3, v.getConjunctiv().getSing3());
-                toFieldUpdateAllFields(doc, FN.conjunctivplural1, v.getConjunctiv().getPlural1());
-                toFieldUpdateAllFields(doc, FN.conjunctivplural2, v.getConjunctiv().getPlural2());
-                toFieldUpdateAllFields(doc, FN.conjunctivplural3, v.getConjunctiv().getPlural3());
+                if (v.getConjunctiv() != null) {
+                    toFieldUpdateAllFields(doc, FN.conjunctivsing1, v.getConjunctiv().getSing1());
+                    toFieldUpdateAllFields(doc, FN.conjunctivsing2, v.getConjunctiv().getSing2());
+                    toFieldUpdateAllFields(doc, FN.conjunctivsing3, v.getConjunctiv().getSing3());
+                    toFieldUpdateAllFields(doc, FN.conjunctivplural1, v.getConjunctiv().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.conjunctivplural2, v.getConjunctiv().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.conjunctivplural3, v.getConjunctiv().getPlural3());
+                }
 
                 if (language != Language.RUMANTSCHGRISCHUN && language != Language.SURMIRAN) {
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing1, v.getConjunctivImperfect().getSing1());
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing2, v.getConjunctivImperfect().getSing2());
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing3, v.getConjunctivImperfect().getSing3());
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural1, v.getConjunctivImperfect().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural2, v.getConjunctivImperfect().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural3, v.getConjunctivImperfect().getPlural3());
+                    if (v.getConjunctivImperfect() != null) {
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing1, v.getConjunctivImperfect().getSing1());
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing2, v.getConjunctivImperfect().getSing2());
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectsing3, v.getConjunctivImperfect().getSing3());
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural1, v.getConjunctivImperfect().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural2, v.getConjunctivImperfect().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.conjunctivimperfectplural3, v.getConjunctivImperfect().getPlural3());
+                    }
                 }
 
-                toFieldUpdateAllFields(doc, FN.cundizionalsing1, v.getCundiziunal().getSing1());
-                toFieldUpdateAllFields(doc, FN.cundizionalsing2, v.getCundiziunal().getSing2());
-                toFieldUpdateAllFields(doc, FN.cundizionalsing3, v.getCundiziunal().getSing3());
-                toFieldUpdateAllFields(doc, FN.cundizionalplural1, v.getCundiziunal().getPlural1());
-                toFieldUpdateAllFields(doc, FN.cundizionalplural2, v.getCundiziunal().getPlural2());
-                toFieldUpdateAllFields(doc, FN.cundizionalplural3, v.getCundiziunal().getPlural3());
+                if (v.getCundiziunal() != null) {
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing1, v.getCundiziunal().getSing1());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing2, v.getCundiziunal().getSing2());
+                    toFieldUpdateAllFields(doc, FN.cundizionalsing3, v.getCundiziunal().getSing3());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural1, v.getCundiziunal().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural2, v.getCundiziunal().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.cundizionalplural3, v.getCundiziunal().getPlural3());
+                }
 
                 if (language == Language.SURSILVAN || language == Language.SUTSILVAN) {
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectsing1, v.getCundiziunalIndirect().getSing1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectsing2, v.getCundiziunalIndirect().getSing2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectsing3, v.getCundiziunalIndirect().getSing3());
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectplural1, v.getCundiziunalIndirect().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectplural2, v.getCundiziunalIndirect().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalindirectplural3, v.getCundiziunalIndirect().getPlural3());
+                    if (v.getCundiziunalIndirect() != null) {
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectsing1, v.getCundiziunalIndirect().getSing1());
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectsing2, v.getCundiziunalIndirect().getSing2());
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectsing3, v.getCundiziunalIndirect().getSing3());
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectplural1, v.getCundiziunalIndirect().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectplural2, v.getCundiziunalIndirect().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.cundizionalindirectplural3, v.getCundiziunalIndirect().getPlural3());
+                    }
                 }
 
-                toFieldUpdateAllFields(doc, FN.participperfectms, v.getParticipPerfect().getMs());
-                toFieldUpdateAllFields(doc, FN.participperfectfs, v.getParticipPerfect().getFs());
-                toFieldUpdateAllFields(doc, FN.participperfectmp, v.getParticipPerfect().getMp());
-                toFieldUpdateAllFields(doc, FN.participperfectfp, v.getParticipPerfect().getFp());
-                if (language == Language.SURSILVAN) {
-                    toFieldUpdateAllFields(doc, FN.participperfectmspredicativ, v.getParticipPerfect().getMsPredicativ());
+                if (v.getParticipPerfect() != null) {
+                    toFieldUpdateAllFields(doc, FN.participperfectms, v.getParticipPerfect().getMs());
+                    toFieldUpdateAllFields(doc, FN.participperfectfs, v.getParticipPerfect().getFs());
+                    toFieldUpdateAllFields(doc, FN.participperfectmp, v.getParticipPerfect().getMp());
+                    toFieldUpdateAllFields(doc, FN.participperfectfp, v.getParticipPerfect().getFp());
+                    if (language == Language.SURSILVAN) {
+                        toFieldUpdateAllFields(doc, FN.participperfectmspredicativ, v.getParticipPerfect().getMsPredicativ());
+                    }
                 }
 
-                toFieldUpdateAllFields(doc, FN.imperativSing, v.getImperativ().getSingular());
-                toFieldUpdateAllFields(doc, FN.imperativPlural, v.getImperativ().getPlural());
-                if (language == Language.PUTER || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.imperativ3, v.getImperativ().getForm3());
-                    toFieldUpdateAllFields(doc, FN.imperativ4, v.getImperativ().getForm4());
-                    toFieldUpdateAllFields(doc, FN.imperativ5, v.getImperativ().getForm5());
-                    toFieldUpdateAllFields(doc, FN.imperativ6, v.getImperativ().getForm6());
+                if (v.getImperativ() != null) {
+                    toFieldUpdateAllFields(doc, FN.imperativSing, v.getImperativ().getSingular());
+                    toFieldUpdateAllFields(doc, FN.imperativPlural, v.getImperativ().getPlural());
+                    if (language == Language.PUTER || language == Language.VALLADER) {
+                        toFieldUpdateAllFields(doc, FN.imperativ3, v.getImperativ().getForm3());
+                        toFieldUpdateAllFields(doc, FN.imperativ4, v.getImperativ().getForm4());
+                        toFieldUpdateAllFields(doc, FN.imperativ5, v.getImperativ().getForm5());
+                        toFieldUpdateAllFields(doc, FN.imperativ6, v.getImperativ().getForm6());
+                    }
                 }
 
                 toFieldUpdateAllFields(doc, FN.gerundium, v.getGerundium());
 
-                toFieldUpdateAllFields(doc, FN.futursing1, v.getFutur().getSing1());
-                toFieldUpdateAllFields(doc, FN.futursing2, v.getFutur().getSing2());
-                toFieldUpdateAllFields(doc, FN.futursing3, v.getFutur().getSing3());
-                toFieldUpdateAllFields(doc, FN.futurplural1, v.getFutur().getPlural1());
-                toFieldUpdateAllFields(doc, FN.futurplural2, v.getFutur().getPlural2());
-                toFieldUpdateAllFields(doc, FN.futurplural3, v.getFutur().getPlural3());
+                if (v.getFutur() != null) {
+                    toFieldUpdateAllFields(doc, FN.futursing1, v.getFutur().getSing1());
+                    toFieldUpdateAllFields(doc, FN.futursing2, v.getFutur().getSing2());
+                    toFieldUpdateAllFields(doc, FN.futursing3, v.getFutur().getSing3());
+                    toFieldUpdateAllFields(doc, FN.futurplural1, v.getFutur().getPlural1());
+                    toFieldUpdateAllFields(doc, FN.futurplural2, v.getFutur().getPlural2());
+                    toFieldUpdateAllFields(doc, FN.futurplural3, v.getFutur().getPlural3());
+                }
 
                 if (language == Language.PUTER) {
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing1, v.getFuturDubitativ().getSing1());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing2, v.getFuturDubitativ().getSing2());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing3, v.getFuturDubitativ().getSing3());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural1, v.getFuturDubitativ().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural2, v.getFuturDubitativ().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural3, v.getFuturDubitativ().getPlural3());
+                    if (v.getFuturDubitativ() != null) {
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing1, v.getFuturDubitativ().getSing1());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing2, v.getFuturDubitativ().getSing2());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing3, v.getFuturDubitativ().getSing3());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural1, v.getFuturDubitativ().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural2, v.getFuturDubitativ().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural3, v.getFuturDubitativ().getPlural3());
+                    }
                 }
 
                 // Enclitic forms
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.SUTSILVAN || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.preschentsing1enclitic, v.getPreschentEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.preschentsing2enclitic, v.getPreschentEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.preschentsing3encliticm, v.getPreschentEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.preschentsing3encliticf, v.getPreschentEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.preschentplural1enclitic, v.getPreschentEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.preschentplural2enclitic, v.getPreschentEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.preschentplural3enclitic, v.getPreschentEnclitic().getPlural3());
+                    if (v.getPreschentEnclitic() != null) {
+                        toFieldUpdateAllFields(doc, FN.preschentsing1enclitic, v.getPreschentEnclitic().getSing1());
+                        toFieldUpdateAllFields(doc, FN.preschentsing2enclitic, v.getPreschentEnclitic().getSing2());
+                        toFieldUpdateAllFields(doc, FN.preschentsing3encliticm, v.getPreschentEnclitic().getSing3m());
+                        toFieldUpdateAllFields(doc, FN.preschentsing3encliticf, v.getPreschentEnclitic().getSing3f());
+                        toFieldUpdateAllFields(doc, FN.preschentplural1enclitic, v.getPreschentEnclitic().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.preschentplural2enclitic, v.getPreschentEnclitic().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.preschentplural3enclitic, v.getPreschentEnclitic().getPlural3());
+                    }
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.SUTSILVAN || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.imperfectsing1enclitic, v.getImperfectEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.imperfectsing2enclitic, v.getImperfectEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.imperfectsing3encliticm, v.getImperfectEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.imperfectsing3encliticf, v.getImperfectEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.imperfectplural1enclitic, v.getImperfectEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.imperfectplural2enclitic, v.getImperfectEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.imperfectplural3enclitic, v.getImperfectEnclitic().getPlural3());
+                    if (v.getImperfectEnclitic() != null) {
+                        toFieldUpdateAllFields(doc, FN.imperfectsing1enclitic, v.getImperfectEnclitic().getSing1());
+                        toFieldUpdateAllFields(doc, FN.imperfectsing2enclitic, v.getImperfectEnclitic().getSing2());
+                        toFieldUpdateAllFields(doc, FN.imperfectsing3encliticm, v.getImperfectEnclitic().getSing3m());
+                        toFieldUpdateAllFields(doc, FN.imperfectsing3encliticf, v.getImperfectEnclitic().getSing3f());
+                        toFieldUpdateAllFields(doc, FN.imperfectplural1enclitic, v.getImperfectEnclitic().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.imperfectplural2enclitic, v.getImperfectEnclitic().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.imperfectplural3enclitic, v.getImperfectEnclitic().getPlural3());
+                    }
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.SUTSILVAN || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing1enclitic, v.getCundiziunalEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing2enclitic, v.getCundiziunalEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticm, v.getCundiziunalEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticf, v.getCundiziunalEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural1enclitic, v.getCundiziunalEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural2enclitic, v.getCundiziunalEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.cundizionalplural3enclitic, v.getCundiziunalEnclitic().getPlural3());
+                    if (v.getCundiziunalEnclitic() != null) {
+                        toFieldUpdateAllFields(doc, FN.cundizionalsing1enclitic, v.getCundiziunalEnclitic().getSing1());
+                        toFieldUpdateAllFields(doc, FN.cundizionalsing2enclitic, v.getCundiziunalEnclitic().getSing2());
+                        toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticm, v.getCundiziunalEnclitic().getSing3m());
+                        toFieldUpdateAllFields(doc, FN.cundizionalsing3encliticf, v.getCundiziunalEnclitic().getSing3f());
+                        toFieldUpdateAllFields(doc, FN.cundizionalplural1enclitic, v.getCundiziunalEnclitic().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.cundizionalplural2enclitic, v.getCundiziunalEnclitic().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.cundizionalplural3enclitic, v.getCundiziunalEnclitic().getPlural3());
+                    }
                 }
 
                 if (language == Language.PUTER || language == Language.SURMIRAN || language == Language.VALLADER) {
-                    toFieldUpdateAllFields(doc, FN.futursing1enclitic, v.getFuturEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.futursing2enclitic, v.getFuturEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.futursing3encliticm, v.getFuturEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.futursing3encliticf, v.getFuturEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.futurplural1enclitic, v.getFuturEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.futurplural2enclitic, v.getFuturEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.futurplural3enclitic, v.getFuturEnclitic().getPlural3());
+                    if (v.getFuturEnclitic() != null) {
+                        toFieldUpdateAllFields(doc, FN.futursing1enclitic, v.getFuturEnclitic().getSing1());
+                        toFieldUpdateAllFields(doc, FN.futursing2enclitic, v.getFuturEnclitic().getSing2());
+                        toFieldUpdateAllFields(doc, FN.futursing3encliticm, v.getFuturEnclitic().getSing3m());
+                        toFieldUpdateAllFields(doc, FN.futursing3encliticf, v.getFuturEnclitic().getSing3f());
+                        toFieldUpdateAllFields(doc, FN.futurplural1enclitic, v.getFuturEnclitic().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.futurplural2enclitic, v.getFuturEnclitic().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.futurplural3enclitic, v.getFuturEnclitic().getPlural3());
+                    }
                 }
 
                 if (language == Language.PUTER) {
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing1enclitic, v.getFuturDubitativEnclitic().getSing1());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing2enclitic, v.getFuturDubitativEnclitic().getSing2());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing3encliticm, v.getFuturDubitativEnclitic().getSing3m());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativsing3encliticf, v.getFuturDubitativEnclitic().getSing3f());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural1enclitic, v.getFuturDubitativEnclitic().getPlural1());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural2enclitic, v.getFuturDubitativEnclitic().getPlural2());
-                    toFieldUpdateAllFields(doc, FN.futurdubitativplural3enclitic, v.getFuturDubitativEnclitic().getPlural3());
+                    if (v.getFuturDubitativEnclitic() != null) {
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing1enclitic, v.getFuturDubitativEnclitic().getSing1());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing2enclitic, v.getFuturDubitativEnclitic().getSing2());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing3encliticm, v.getFuturDubitativEnclitic().getSing3m());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativsing3encliticf, v.getFuturDubitativEnclitic().getSing3f());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural1enclitic, v.getFuturDubitativEnclitic().getPlural1());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural2enclitic, v.getFuturDubitativEnclitic().getPlural2());
+                        toFieldUpdateAllFields(doc, FN.futurdubitativplural3enclitic, v.getFuturDubitativEnclitic().getPlural3());
+                    }
                 }
             } else if (i.getInflectionType() != null && i.getInflectionType().equals(InflectionType.NOUN) && i.getNoun() != null) {
                 NounDto n = i.getNoun();
