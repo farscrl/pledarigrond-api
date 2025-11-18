@@ -1419,8 +1419,8 @@ public class SursilvanConjugation extends LanguageConjugation {
                 futur.setSing2("vegns a " + SursilvanPronouns.pron_r_v + infinitiv);
                 futur.setSing3("vegn a " + SursilvanPronouns.pron_r_v + infinitiv);
 
-                futur.setPlural1("vegnin ad " + SursilvanPronouns.pron_r_v + infinitiv);
-                futur.setPlural2("vegnis ad " + SursilvanPronouns.pron_r_v + infinitiv);
+                futur.setPlural1("vegnin a " + SursilvanPronouns.pron_r_v + infinitiv);
+                futur.setPlural2("vegnis a " + SursilvanPronouns.pron_r_v + infinitiv);
                 futur.setPlural3("vegnan a " + SursilvanPronouns.pron_r_v + infinitiv);
 
             } else {
@@ -1428,8 +1428,8 @@ public class SursilvanConjugation extends LanguageConjugation {
                 futur.setSing2("vegns a " + SursilvanPronouns.pron_r + infinitiv);
                 futur.setSing3("vegn a " + SursilvanPronouns.pron_r + infinitiv);
 
-                futur.setPlural1("vegnin ad " + SursilvanPronouns.pron_r + infinitiv);
-                futur.setPlural2("vegnis ad " + SursilvanPronouns.pron_r + infinitiv);
+                futur.setPlural1("vegnin a " + SursilvanPronouns.pron_r + infinitiv);
+                futur.setPlural2("vegnis a " + SursilvanPronouns.pron_r + infinitiv);
                 futur.setPlural3("vegnan a " + SursilvanPronouns.pron_r + infinitiv);
 
             }
