@@ -198,8 +198,6 @@ public class WordListUtils {
                 SursilvanPronouns.pron_2pp,
                 SursilvanPronouns.pron_3pp,
                 SursilvanPronouns.pron_3ps_impers,
-                SursilvanPronouns.pron_r,
-                SursilvanPronouns.pron_r_v,
 
                 SursilvanPronouns.prefix_futur_1ps,
                 SursilvanPronouns.prefix_futur_1ps_v,
