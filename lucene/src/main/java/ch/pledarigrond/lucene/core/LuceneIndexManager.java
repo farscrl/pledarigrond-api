@@ -27,6 +27,7 @@ import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.grouping.GroupDocs;
 import org.apache.lucene.search.grouping.GroupingSearch;
 import org.apache.lucene.search.grouping.TopGroups;
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,6 +143,9 @@ public class LuceneIndexManager {
             if (logger.isDebugEnabled()) {
                 logger.debug("Time to build query: {}, Time to execute query: {}", (e1 - s1) / 1000000, (e2 - s2) / 1000000);
             }
+        } catch (AlreadyClosedException e) {
+            logger.warn("Index reader was closed during search (index likely being refreshed): {}", e.getMessage());
+            return new PageImpl<>(new ArrayList<>(), PageRequest.of(pageNr, pageSize), 0);
         } catch (IOException e) {
             throw new BrokenIndexException("Failed to access index", e);
         }
@@ -205,6 +209,9 @@ public class LuceneIndexManager {
             TopDocs docs = luceneIndexFilesystem.get(language).getSearcher().search(qBuilder.build(), pageSize, new Sort(sortField));
 
             return toEntryVersionPagination(docs, 0, pageSize);
+        } catch (AlreadyClosedException e) {
+            logger.warn("Index reader was closed during search (index likely being refreshed): {}", e.getMessage());
+            return new PageImpl<>(new ArrayList<>(), PageRequest.of(0, pageSize), 0);
         } catch (IOException e) {
             throw new BrokenIndexException("Broken index!", e);
         }
