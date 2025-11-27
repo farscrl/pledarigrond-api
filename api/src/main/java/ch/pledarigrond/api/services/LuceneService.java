@@ -43,5 +43,5 @@ public interface LuceneService {
 
     void regenerateSuggestionIndex(Language language) throws Exception;
 
-    String[] getSuggestionForWord(String word, int numSuggestions, SearchDirection searchDirection) throws Exception;
+    String[] getSuggestionForWord(String word, int numSuggestions, SearchDirection searchDirection);
 }

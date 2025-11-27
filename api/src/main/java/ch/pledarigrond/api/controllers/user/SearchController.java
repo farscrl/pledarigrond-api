@@ -57,9 +57,6 @@ public class SearchController {
         } catch (InvalidQueryException | BrokenIndexException | NoIndexAvailableException | IOException e) {
             logger.error("Error while searching", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            logger.error("Error while generating suggestions", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

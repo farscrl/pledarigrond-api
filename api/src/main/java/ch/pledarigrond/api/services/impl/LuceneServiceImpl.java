@@ -122,7 +122,7 @@ public class LuceneServiceImpl implements LuceneService {
     }
 
     @Override
-    public String[] getSuggestionForWord(String word, int numSuggestions, SearchDirection searchDirection) throws Exception {
+    public String[] getSuggestionForWord(String word, int numSuggestions, SearchDirection searchDirection) {
         return luceneSuggestionsIndexMap.get(RequestContext.getLanguage()).suggestSimilar(word, numSuggestions, searchDirection);
     }
 
