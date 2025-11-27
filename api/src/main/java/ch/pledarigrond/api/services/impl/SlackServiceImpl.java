@@ -59,6 +59,8 @@ public class SlackServiceImpl implements SlackService {
             return;
         }
 
+        logger.error("Unhandled exception sent to Slack", ex);
+
         String stackTrace = Arrays.stream(ex.getStackTrace())
                 .limit(10)
                 .map(StackTraceElement::toString)

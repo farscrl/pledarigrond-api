@@ -28,8 +28,6 @@ public class SlackNotifyingExceptionResolver implements HandlerExceptionResolver
                                          HttpServletResponse response,
                                          Object handler,
                                          Exception ex) {
-
-        log.error("Unhandled exception caught by SlackNotifyingExceptionResolver", ex);
         slack.sendException(ex, "Unhandled exception");
         return null;
     }
