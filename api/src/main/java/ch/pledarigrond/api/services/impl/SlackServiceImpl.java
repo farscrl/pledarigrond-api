@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,6 +51,12 @@ public class SlackServiceImpl implements SlackService {
     public void sendException(Exception ex, String title) {
         // do not send exceptions in dev profile
         if ("dev".equals(activeProfile)) {
+            return;
+        }
+
+        // Ignore authentication errors
+        if (ex instanceof AuthenticationException) {
+            logger.debug("Ignored authentication exception: {}", String.valueOf(ex));
             return;
         }
 
