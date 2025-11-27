@@ -11,6 +11,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.RequestContext;
 import ch.pledarigrond.common.data.common.SearchDirection;
 import ch.pledarigrond.common.data.common.UserInfoDto;
+import ch.pledarigrond.common.data.dictionary.DuplicateGroupDto;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.inflection.InflectionDto;
@@ -495,5 +496,37 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
         if (input == null) return false;
         String trimmed = input.trim();
         return trimmed.contains(" ");
+    }
+
+    @Override
+    public int deleteExactDuplicates() {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        int totalItemsToDelete = 0;
+
+        List<DuplicateGroupDto> duplicateGroups = dictionaryService.findAllExactDuplicates();
+        for (int groupIndex = 0; groupIndex < duplicateGroups.size(); groupIndex++) {
+            DuplicateGroupDto group = duplicateGroups.get(groupIndex);
+            List<EntryVersionDto> duplicateVersions = group.getDuplicateVersions();
+
+            logger.info("Group {}: {} entries with key - rmStichwort='{}', deStichwort='{}'",
+                    groupIndex + 1, duplicateVersions.size(),
+                    group.getDuplicateKey().getRmStichwort(),
+                    group.getDuplicateKey().getDeStichwort());
+
+            // Keep the first entry, delete the rest
+            if (duplicateVersions.size() > 1) {
+                for (int i = 1; i < duplicateVersions.size(); i++) {
+                    String entryIdToDelete = duplicateVersions.get(i).getEntryId();
+                    dictionaryService.delete(entryIdToDelete);
+                    totalItemsToDelete++;
+                }
+            }
+        }
+
+        watch.stop();
+
+        return totalItemsToDelete;
     }
 }

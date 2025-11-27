@@ -3,10 +3,7 @@ package ch.pledarigrond.api.services;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.SearchSuggestions;
-import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
-import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
 import ch.pledarigrond.common.exception.dictionary.InvalidReviewLaterException;
@@ -53,4 +50,6 @@ public interface EditorService {
     String export(Set<String> selected, LuceneSearchCriteria query) throws BrokenIndexException, NoIndexAvailableException, IOException, InvalidQueryException;
 
     SearchSuggestions getSuggestionsForFields(Language language) throws NoIndexAvailableException, IOException;
+
+    Page<DuplicateGroupDto> findDuplicates(int page);
 }

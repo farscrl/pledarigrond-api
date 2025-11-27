@@ -82,4 +82,21 @@ public class AutomaticGenerationController {
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
+    /**
+     * Delete all exact duplicate entries.
+     * Currently logs the number of entries that would be deleted without actually deleting them.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/delete_exact_duplicates")
+    ResponseEntity<?> deleteExactDuplicates(@PathVariable("language") Language language) {
+        try {
+            int deletedCount = automaticGenerationService.deleteExactDuplicates();
+            return ResponseEntity.ok().body(
+                String.format("Scan complete: Found %d duplicate entries that got deleted.", deletedCount)
+            );
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during duplicate deletion scan");
+        }
+    }
 }

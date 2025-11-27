@@ -7,10 +7,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.common.SearchSuggestions;
-import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
-import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.data.lucene.SuggestionField;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
@@ -206,6 +203,11 @@ public class EditorServiceImpl implements EditorService {
         suggestions.setGrammar(luceneService.getSuggestionsForFieldChoice(SuggestionField.GRAMMAR, "", 10000));
         suggestions.setGender(luceneService.getSuggestionsForFieldChoice(SuggestionField.GENDER, "", 10000));
         return suggestions;
+    }
+
+    @Override
+    public Page<DuplicateGroupDto> findDuplicates(int page) {
+        return dictionaryService.findDuplicates(page);
     }
 
     private void export(Set<String> fields, DbSearchCriteria query, File dest) throws IOException {

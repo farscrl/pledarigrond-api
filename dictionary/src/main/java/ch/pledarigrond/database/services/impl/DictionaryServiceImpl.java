@@ -237,6 +237,16 @@ public class DictionaryServiceImpl implements DictionaryService {
         entryRepository.deleteAll();
     }
 
+    @Override
+    public Page<DuplicateGroupDto> findDuplicates(int page) {
+        return entryDal.findDuplicates(page);
+    }
+
+    @Override
+    public List<DuplicateGroupDto> findAllExactDuplicates() {
+        return entryDal.findAllExactDuplicates();
+    }
+
     private EntryVersion clone(EntryVersion version) {
         EntryVersion clone = entryMapper.toEntryVersion(entryMapper.toEntryVersionDto(version));
         clone.setVersionId(UUID.randomUUID().toString());

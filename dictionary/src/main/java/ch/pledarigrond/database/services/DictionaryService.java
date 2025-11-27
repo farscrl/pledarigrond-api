@@ -34,4 +34,7 @@ public interface DictionaryService {
 
     DictionaryStatisticsDto getStatistics();
     void deleteAllEntries();
+
+    Page<DuplicateGroupDto> findDuplicates(int page);
+    List<DuplicateGroupDto> findAllExactDuplicates();
 }

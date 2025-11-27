@@ -9,4 +9,6 @@ public interface AutomaticGenerationService {
     boolean generateVerbForms();
 
     String getVerbListWithConjugationClass();
+
+    int deleteExactDuplicates();
 }

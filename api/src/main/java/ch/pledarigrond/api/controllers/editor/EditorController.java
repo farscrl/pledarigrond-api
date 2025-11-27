@@ -9,6 +9,7 @@ import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
 import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
+import ch.pledarigrond.common.data.dictionary.DuplicateGroupDto;
 import ch.pledarigrond.common.data.dictionary.EntryDto;
 import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
 import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
@@ -288,6 +289,17 @@ public class EditorController {
         }
 
         return ResponseEntity.ok(verbService.getVerb(searchTerm));
+    }
+
+    @PreAuthorize("hasPermission('language', 'editor')")
+    @GetMapping("/duplicates")
+    public ResponseEntity<Page<DuplicateGroupDto>> getDuplicates(@PathVariable("language") Language language, @RequestParam(value = "page", defaultValue = "0") int page) {
+        try {
+            return ResponseEntity.ok(editorService.findDuplicates(page));
+        } catch (Exception e) {
+            logger.error("Error while fetching duplicates", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private void stream(HttpServletResponse response, File export) throws IOException {
