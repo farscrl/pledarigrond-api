@@ -8,11 +8,12 @@ MAP iìIÌ
 MAP oòOÒ
 MAP uùUÙ
 
-REP 4
+REP 5
 REP ó ò
 REP á à
 REP ú ù
 REP í ì
+REP ^tg ch
 
 ICONV 1
 ICONV ’ '
