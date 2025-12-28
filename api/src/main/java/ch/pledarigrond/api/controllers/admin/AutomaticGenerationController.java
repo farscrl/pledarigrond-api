@@ -2,16 +2,16 @@ package ch.pledarigrond.api.controllers.admin;
 
 import ch.pledarigrond.api.services.AutomaticGenerationService;
 import ch.pledarigrond.common.data.common.Language;
+import ch.pledarigrond.common.data.dictionary.DuplicateGroupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("{language}/admin/generation")
@@ -85,18 +85,18 @@ public class AutomaticGenerationController {
 
     /**
      * Delete all exact duplicate entries.
-     * Currently logs the number of entries that would be deleted without actually deleting them.
+     * Without the 'delete' parameter or when delete=false, returns a JSON list of all duplicate groups without deleting them.
+     * With delete=true, performs the actual deletion and returns the list of deleted duplicate groups.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete_exact_duplicates")
-    ResponseEntity<?> deleteExactDuplicates(@PathVariable("language") Language language) {
+    ResponseEntity<?> deleteExactDuplicates(@PathVariable("language") Language language, @RequestParam(value = "delete", required = false, defaultValue = "false") boolean delete) {
         try {
-            int deletedCount = automaticGenerationService.deleteExactDuplicates();
-            return ResponseEntity.ok().body(
-                String.format("Scan complete: Found %d duplicate entries that got deleted.", deletedCount)
-            );
+            List<DuplicateGroupDto> duplicateGroups = automaticGenerationService.deleteExactDuplicates(delete);
+            return ResponseEntity.ok().body(duplicateGroups);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error during duplicate deletion scan");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    delete ? "Error during duplicate deletion" : "Error during duplicate detection");
         }
     }
 }

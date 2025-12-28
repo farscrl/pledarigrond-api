@@ -499,7 +499,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
     }
 
     @Override
-    public int deleteExactDuplicates() {
+    public List<DuplicateGroupDto> deleteExactDuplicates(boolean execute) {
         StopWatch watch = new StopWatch();
         watch.start();
 
@@ -516,7 +516,7 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
                     group.getDuplicateKey().getDeStichwort());
 
             // Keep the first entry, delete the rest
-            if (duplicateVersions.size() > 1) {
+            if (execute && duplicateVersions.size() > 1) {
                 for (int i = 1; i < duplicateVersions.size(); i++) {
                     String entryIdToDelete = duplicateVersions.get(i).getEntryId();
                     dictionaryService.delete(entryIdToDelete);
@@ -527,6 +527,15 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         watch.stop();
 
-        return totalItemsToDelete;
+        if (execute) {
+            logger.info("Deleted {} duplicate entries", totalItemsToDelete);
+        } else {
+            logger.info("Dry-run: Found {} duplicate groups that would result in {} deletions",
+                    duplicateGroups.size(), duplicateGroups.stream()
+                            .mapToInt(g -> Math.max(0, g.getDuplicateVersions().size() - 1))
+                            .sum());
+        }
+
+        return duplicateGroups;
     }
 }

@@ -1,5 +1,9 @@
 package ch.pledarigrond.api.services;
 
+import ch.pledarigrond.common.data.dictionary.DuplicateGroupDto;
+
+import java.util.List;
+
 public interface AutomaticGenerationService {
 
     boolean generateNounForms();
@@ -10,5 +14,5 @@ public interface AutomaticGenerationService {
 
     String getVerbListWithConjugationClass();
 
-    int deleteExactDuplicates();
+    List<DuplicateGroupDto> deleteExactDuplicates(boolean execute);
 }
