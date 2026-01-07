@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("{language}/admin/generation")
@@ -97,6 +98,26 @@ public class AutomaticGenerationController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     delete ? "Error during duplicate deletion" : "Error during duplicate detection");
+        }
+    }
+
+    /**
+     * Set auxiliar "haver" for transitive verbs that don't have a composedWith value.
+     * Returns the count of updated entries.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/set_auxiliar")
+    ResponseEntity<?> setAuxiliar(@PathVariable("language") Language language) {
+        if (language != Language.SURSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+
+        try {
+            int updatedCount = automaticGenerationService.setAuxiliarForTransitiveVerbs();
+            return ResponseEntity.ok().body(Map.of("updatedCount", updatedCount));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error during auxiliar setting");
         }
     }
 }

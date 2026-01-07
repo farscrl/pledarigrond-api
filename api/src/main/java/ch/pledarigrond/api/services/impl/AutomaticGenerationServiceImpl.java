@@ -538,4 +538,66 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         return duplicateGroups;
     }
+
+    @Override
+    public int setAuxiliarForTransitiveVerbs() {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        LuceneSearchCriteria luceneSearchCriteria = new LuceneSearchCriteria();
+        luceneSearchCriteria.setGrammar("tr");
+        luceneSearchCriteria.setExcludeAutomaticChanged(true);
+        luceneSearchCriteria.setSearchDirection(SearchDirection.ROMANSH);
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(1000000);
+
+        Page<EntryVersionDto> versions;
+        try {
+            versions = editorService.search(luceneSearchCriteria, pagination);
+        } catch (Exception e) {
+            logger.error("Error while searching for transitive verbs", e);
+            return 0;
+        }
+
+        int updatedCount = 0;
+
+        for (EntryVersionDto version : versions.getContent()) {
+            try {
+                EntryDto entry = editorService.getEntry(version.getEntryId());
+
+                if (entry.getCurrent() == null) {
+                    continue;
+                }
+
+                if (entry.getCurrent().getInflection() != null &&
+                    entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+
+                    if (entry.getCurrent().getInflection().getVerb() == null) {
+                        continue;
+                    }
+
+                    String composedWith = entry.getCurrent().getInflection().getVerb().getComposedWith();
+
+                    if (composedWith != null && !composedWith.isEmpty()) {
+                        continue;
+                    }
+
+                    EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
+                    newVersion.getInflection().getVerb().setComposedWith("haver");
+
+                    dictionaryService.addVersion(entry.getEntryId(), newVersion, false, UserInfoDto.getAutomaticChangeDto());
+
+                    updatedCount++;
+                }
+            } catch (Exception e) {
+                logger.error("Error processing entry: {}", version.getEntryId(), e);
+            }
+        }
+
+        watch.stop();
+        logger.info("Set auxiliar for {} transitive verbs. Elapsed time: {}s", updatedCount, watch.getTotalTimeMillis()/1000);
+
+        return updatedCount;
+    }
 }

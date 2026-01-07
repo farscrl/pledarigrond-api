@@ -15,4 +15,6 @@ public interface AutomaticGenerationService {
     String getVerbListWithConjugationClass();
 
     List<DuplicateGroupDto> deleteExactDuplicates(boolean execute);
+
+    int setAuxiliarForTransitiveVerbs();
 }
