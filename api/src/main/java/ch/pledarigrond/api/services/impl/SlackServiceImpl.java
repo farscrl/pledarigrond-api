@@ -113,7 +113,9 @@ public class SlackServiceImpl implements SlackService {
             String msg = t.getMessage();
             String className = t.getClass().getName();
 
-            if ((msg != null && msg.contains("Connection reset by peer")) || "org.springframework.web.context.request.async.AsyncRequestNotUsableException".equals(className)) {
+            if ((msg != null && msg.contains("Connection reset by peer"))
+                || "org.springframework.web.context.request.async.AsyncRequestNotUsableException".equals(className)
+                || "org.springframework.web.HttpMediaTypeNotAcceptableException".equals(className)) {
                 return true;
             }
 
