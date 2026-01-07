@@ -297,6 +297,19 @@ public class RegistrationServiceImpl implements RegistrationService {
         return statistics;
     }
 
+    @Override
+    public void acceptAllRegistrationsInReview() {
+        Language language = RequestContext.getLanguage();
+        if (language != Language.VALLADER) {
+            return;
+        }
+
+        List<Registration> registrations = registrationRepository.findAll();
+        registrations.stream()
+                .filter(registration -> registration.getStatus() == RegistrationStatus.IN_REVIEW)
+                .forEach(this::acceptRegistration);
+    }
+
     private static boolean isSingleWord(String input) {
         if (input == null || input.trim().isEmpty()) {
             return false; // Consider empty or null input as not a single word

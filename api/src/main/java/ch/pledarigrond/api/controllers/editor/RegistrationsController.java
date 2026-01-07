@@ -110,6 +110,13 @@ public class RegistrationsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/accept_all_in_review")
+    ResponseEntity<?> acceptAllInReview() {
+        registrationService.acceptAllRegistrationsInReview();
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/extract_single_words")
     ResponseEntity<?> extractSingleWords() {
         dictionaryService.withAllEntries(registrationService::extractSingleWords);

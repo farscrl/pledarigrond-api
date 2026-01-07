@@ -164,6 +164,12 @@ public class DictionaryServiceImpl implements DictionaryService {
             return null;
         }
         Entry entry = entryOptional.get();
+
+        // ignore suggestions
+        if (entry.getCurrent() == null) {
+            return entryMapper.toEntryDto(entry);
+        }
+
         EntryVersion updatedVersion = clone(entry.getCurrent());
         updatedVersion.setRmPronunciation(pronunciation);
 

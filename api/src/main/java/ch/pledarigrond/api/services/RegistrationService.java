@@ -44,4 +44,6 @@ public interface RegistrationService {
     ByteArrayResource extractListOfWordsByEnding(Stream<EntryDto> stream);
 
     RegistrationStatistics getStatistics();
+
+    void acceptAllRegistrationsInReview();
 }
