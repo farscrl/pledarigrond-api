@@ -120,4 +120,25 @@ public class AutomaticGenerationController {
                     "Error during auxiliar setting");
         }
     }
+
+    /**
+     * Fix futur forms that incorrectly use "ad se" before consonants.
+     * Replaces "nus vegnin ad se" with "nus vegnin a se" and "vus vegnis ad se" with "vus vegnis a se".
+     * Returns the count of updated entries.
+     */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/fix_futur_ad_se")
+    ResponseEntity<?> fixFuturAdSe(@PathVariable("language") Language language) {
+        if (language != Language.SURSILVAN) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
+        }
+
+        try {
+            int updatedCount = automaticGenerationService.fixFuturFormsAdSe();
+            return ResponseEntity.ok().body(Map.of("updatedCount", updatedCount));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error during futur form fixing");
+        }
+    }
 }

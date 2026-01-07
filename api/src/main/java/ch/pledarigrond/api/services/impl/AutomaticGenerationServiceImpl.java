@@ -600,4 +600,82 @@ public class AutomaticGenerationServiceImpl implements AutomaticGenerationServic
 
         return updatedCount;
     }
+
+    @Override
+    public int fixFuturFormsAdSe() {
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        int updatedCount = 0;
+
+        // Iterate over all entries
+        try {
+            updatedCount = dictionaryService.withAllEntries(entries -> {
+                int count = 0;
+                for (EntryDto entry : entries.toList()) {
+                    try {
+                        if (entry.getCurrent() == null) {
+                            continue;
+                        }
+
+                        if (entry.getCurrent().getInflection() == null ||
+                            !entry.getCurrent().getInflection().getInflectionType().equals(InflectionType.VERB)) {
+                            continue;
+                        }
+
+                        if (entry.getCurrent().getInflection().getVerb() == null) {
+                            continue;
+                        }
+
+                        if (entry.getCurrent().getInflection().getVerb().getFutur() == null) {
+                            continue;
+                        }
+
+                        String plural1 = entry.getCurrent().getInflection().getVerb().getFutur().getPlural1();
+                        String plural2 = entry.getCurrent().getInflection().getVerb().getFutur().getPlural2();
+
+                        boolean needsUpdate = false;
+
+                        if (plural1 != null && plural1.startsWith("nus vegnin ad se")) {
+                            needsUpdate = true;
+                        }
+
+                        if (plural2 != null && plural2.startsWith("vus vegnis ad se")) {
+                            needsUpdate = true;
+                        }
+
+                        if (!needsUpdate) {
+                            continue;
+                        }
+
+                        EntryVersionDto newVersion = cloneVersion(entry.getCurrent());
+
+                        if (plural1 != null && plural1.startsWith("nus vegnin ad se")) {
+                            String fixed = plural1.replaceFirst("^nus vegnin ad se", "nus vegnin a se");
+                            newVersion.getInflection().getVerb().getFutur().setPlural1(fixed);
+                        }
+
+                        if (plural2 != null && plural2.startsWith("vus vegnis ad se")) {
+                            String fixed = plural2.replaceFirst("^vus vegnis ad se", "vus vegnis a se");
+                            newVersion.getInflection().getVerb().getFutur().setPlural2(fixed);
+                        }
+
+                        dictionaryService.addVersion(entry.getEntryId(), newVersion, false, UserInfoDto.getAutomaticChangeDto());
+
+                        count++;
+                    } catch (Exception e) {
+                        logger.error("Error processing entry: {}", entry.getEntryId(), e);
+                    }
+                }
+                return count;
+            });
+        } catch (Exception e) {
+            logger.error("Error while iterating over all entries", e);
+        }
+
+        watch.stop();
+        logger.info("Fixed futur forms 'ad se' for {} verbs. Elapsed time: {}s", updatedCount, watch.getTotalTimeMillis()/1000);
+
+        return updatedCount;
+    }
 }

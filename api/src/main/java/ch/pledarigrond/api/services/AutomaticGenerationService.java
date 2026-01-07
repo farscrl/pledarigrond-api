@@ -17,4 +17,6 @@ public interface AutomaticGenerationService {
     List<DuplicateGroupDto> deleteExactDuplicates(boolean execute);
 
     int setAuxiliarForTransitiveVerbs();
+
+    int fixFuturFormsAdSe();
 }
