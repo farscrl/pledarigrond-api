@@ -44,8 +44,6 @@ public class FN {
     public static final String creatorIp = "creatorIp";
     public static final String creatorRole = "creatorRole";
 
-    public static final String automaticChange = "automaticChange";
-
     // inflection fields
     public static final String inflectionType = "inflectionType";
     public static final String inflectionSubtype = "inflectionSubtype";

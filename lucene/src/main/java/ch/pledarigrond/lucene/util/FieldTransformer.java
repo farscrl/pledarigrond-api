@@ -79,10 +79,6 @@ public class FieldTransformer {
         toFieldUpdateAllFields(doc, FN.creatorIp, ev.getCreatorIp());
         toFieldUpdateAllFields(doc, FN.creatorRole, ev.getCreatorRole() != null ? ev.getCreatorRole().toString() : "");
 
-        if (ev.getAutomaticChange() != null) {
-            toFieldUpdateAllFields(doc, FN.automaticChange, ev.getAutomaticChange() + "");
-        }
-
         if (ev.getInflection() != null) {
             InflectionDto i = ev.getInflection();
             toFieldUpdateAllFields(doc, FN.inflectionType, Optional.ofNullable(i.getInflectionType()).map(InflectionType::name).orElse(null));
@@ -348,8 +344,6 @@ public class FieldTransformer {
         if (creatorRole != null && creatorRole.isEmpty()) {
             ev.setCreatorRole(EditorRole.valueOf(creatorRole));
         }
-
-        ev.setAutomaticChange(Boolean.parseBoolean(toValue(doc, FN.automaticChange)));
 
         String inflectionType = toValue(doc, FN.inflectionType);
         if (inflectionType != null && !inflectionType.isEmpty()) {

@@ -15,12 +15,4 @@ public class UserInfoDto {
         userInfoDto.setRole(EditorRole.ADMIN);
         return userInfoDto;
     }
-
-    public static UserInfoDto getAutomaticChangeDto() {
-        UserInfoDto userInfoDto = new UserInfoDto();
-        userInfoDto.setEmail("automatic-change@pledarigrond.ch");
-        userInfoDto.setIpAddress("localhost");
-        userInfoDto.setRole(EditorRole.ADMIN);
-        return userInfoDto;
-    }
 }

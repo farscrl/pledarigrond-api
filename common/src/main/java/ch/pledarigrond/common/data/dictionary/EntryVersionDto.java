@@ -58,7 +58,5 @@ public class EntryVersionDto {
     @Size(max = 200) private String creator;
     @Size(max = 200) private String creatorIp;
     private EditorRole creatorRole;
-
-    private Boolean automaticChange = false;
 }
 

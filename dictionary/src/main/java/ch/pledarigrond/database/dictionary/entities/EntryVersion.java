@@ -58,8 +58,6 @@ public class EntryVersion implements Cloneable {
     private String creatorIp;
     private EditorRole creatorRole;
 
-    private boolean automaticChange = false;
-
     private UnusedData unusedData = new UnusedData();
 
     @Override

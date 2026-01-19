@@ -90,18 +90,6 @@ public class DictionaryIndexInitializer {
 
         ops.ensureIndex(new Index()
                 .on("publicationStatus", Sort.Direction.ASC)
-                .on("current.automaticChange", Sort.Direction.ASC)
-                .on("_id", Sort.Direction.ASC)
-                .named("pubStatus_current_automaticChange__id"));
-
-        ops.ensureIndex(new Index()
-                .on("publicationStatus", Sort.Direction.ASC)
-                .on("suggestions.automaticChange", Sort.Direction.ASC)
-                .on("_id", Sort.Direction.ASC)
-                .named("pubStatus_suggestions_automaticChange__id"));
-
-        ops.ensureIndex(new Index()
-                .on("publicationStatus", Sort.Direction.ASC)
                 .on("current.inflection.reviewLater", Sort.Direction.ASC)
                 .on("_id", Sort.Direction.ASC)
                 .named("pubStatus_current_reviewLater__id"));

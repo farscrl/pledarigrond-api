@@ -408,17 +408,6 @@ public class EntryDalImpl implements EntryDal {
                     .lt(new Date(queryData.getEndTime())));
         }
 
-        if (queryData.isExcludeAutomaticChanges()) {
-            criteriaList.add(new Criteria().orOperator(
-                    Criteria.where(path(prefix, "automaticChange")).is(false),
-                    Criteria.where(path(prefix, "automaticChange")).exists(false)
-            ));
-        }
-
-        if (queryData.getOnlyAutomaticChanged()) {
-            criteriaList.add(Criteria.where(path(prefix, "automaticChange")).is(true));
-        }
-
         if (queryData.getInflectionType() != null) {
             criteriaList.add(Criteria.where(path(prefix, "inflection.inflectionType"))
                     .is(queryData.getInflectionType().toString()));

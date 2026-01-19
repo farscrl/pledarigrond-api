@@ -4,15 +4,10 @@ import ch.pledarigrond.api.dtos.EntryVersionList;
 import ch.pledarigrond.api.dtos.FieldsList;
 import ch.pledarigrond.api.services.EditorService;
 import ch.pledarigrond.api.services.LuceneService;
-import ch.pledarigrond.api.services.SursilvanVerbService;
 import ch.pledarigrond.common.config.PgEnvironment;
 import ch.pledarigrond.common.data.common.DictionaryLanguage;
 import ch.pledarigrond.common.data.common.Language;
-import ch.pledarigrond.common.data.dictionary.DbSearchCriteria;
-import ch.pledarigrond.common.data.dictionary.DuplicateGroupDto;
-import ch.pledarigrond.common.data.dictionary.EntryDto;
-import ch.pledarigrond.common.data.dictionary.EntryVersionDto;
-import ch.pledarigrond.common.data.dictionary.NormalizedEntryVersionsDto;
+import ch.pledarigrond.common.data.dictionary.*;
 import ch.pledarigrond.common.data.user.LuceneSearchCriteria;
 import ch.pledarigrond.common.data.user.Pagination;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,9 +43,6 @@ public class EditorController {
 
     @Autowired
     private PgEnvironment pgEnvironment;
-
-    @Autowired
-    private SursilvanVerbService verbService;
 
     @PreAuthorize("hasPermission('language', 'editor')")
     @GetMapping("/entries")
@@ -275,20 +267,6 @@ public class EditorController {
             logger.error("Error while fetching search suggestions", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @PreAuthorize("hasPermission('language', 'editor')")
-    @GetMapping("/reference_inflection")
-    public ResponseEntity<?> getReferenceInflection(@PathVariable("language") Language language, @RequestParam("searchTerm") String searchTerm) {
-        if (language != Language.SURSILVAN) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid language");
-        }
-
-        if (searchTerm.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no value sent");
-        }
-
-        return ResponseEntity.ok(verbService.getVerb(searchTerm));
     }
 
     @PreAuthorize("hasPermission('language', 'editor')")

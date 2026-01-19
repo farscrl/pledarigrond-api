@@ -99,7 +99,6 @@ public class ScheduledDumpService {
                             current.setAction(null);
                             current.setVersionId(null);
                             current.setTimestamp(null);
-                            current.setAutomaticChange(null);
                             if (current.getExamples() != null && current.getExamples().isEmpty()) {
                                 current.setExamples(null);
                             }

@@ -16,8 +16,6 @@ public class DbSearchCriteria {
     private SearchDirection searchDirection = SearchDirection.BOTH;
     private SearchMethod searchMethod = SearchMethod.NORMAL;
     private PublicationStatus state = PublicationStatus.PUBLISHED;
-    private Boolean onlyAutomaticChanged = false;
-    private boolean excludeAutomaticChanges = true;
     private InflectionType inflectionType = null;
     private Boolean showReviewLater = null;
 
