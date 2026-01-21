@@ -33,9 +33,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress != null && !ipAddress.isEmpty()) {
-            return ipAddress.split(",")[0].trim();
+            ipAddress = ipAddress.split(",")[0].trim();
+        } else {
+            ipAddress = request.getRemoteAddr();
         }
-        return request.getRemoteAddr();
+
+        // Normalize IPv4-mapped IPv6 addresses (e.g., ::ffff:192.168.1.1 -> 192.168.1.1)
+        if (ipAddress != null && ipAddress.startsWith("::ffff:")) {
+            ipAddress = ipAddress.substring(7);
+        }
+        return ipAddress;
     }
 
     private EditorRole getEditorRole(UserDto user) {
