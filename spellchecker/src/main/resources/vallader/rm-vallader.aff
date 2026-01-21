@@ -20,13 +20,8 @@ ICONV ’ '
 OCONV 1
 OCONV ' ’
 
-PFX T Y 299
+PFX T Y 247
 PFX T 0 l' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è l'è è
-PFX T ò l'ò ò
-PFX T ê l'ê ê
-PFX T ô l'ô ô
-PFX T î l'î î
 PFX T a l'A a
 PFX T e l'E e
 PFX T i l'I i
@@ -35,7 +30,7 @@ PFX T u l'U u
 PFX T h l'H h
 PFX T ö l'Ö ö
 PFX T ü l'Ü ü
-PFX T 0 L' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 L' [AEIOUHÖÜ]
 PFX T a L'A a
 PFX T e L'E e
 PFX T i L'I i
@@ -44,12 +39,8 @@ PFX T u L'U u
 PFX T h L'H h
 PFX T ö L'Ö ö
 PFX T ü L'Ü ü
+PFX T 0 L' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 ün' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è ün'è è
-PFX T ò ün'ò ò
-PFX T ê ün'ê ê
-PFX T ô ün'ô ô
-PFX T î ün'î î
 PFX T a ün'A a
 PFX T e ün'E e
 PFX T i ün'I i
@@ -58,7 +49,7 @@ PFX T u ün'U u
 PFX T h ün'H h
 PFX T ö ün'Ö ö
 PFX T ü ün'Ü ü
-PFX T 0 ÜN' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Ün' [AEIOUHÖÜ]
 PFX T a Ün'A a
 PFX T e Ün'E e
 PFX T i Ün'I i
@@ -67,12 +58,8 @@ PFX T u Ün'U u
 PFX T h Ün'H h
 PFX T ö Ün'Ö ö
 PFX T ü Ün'Ü ü
+PFX T 0 ÜN' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 d' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è d'è è
-PFX T ò d'ò ò
-PFX T ê d'ê ê
-PFX T ô d'ô ô
-PFX T î d'î î
 PFX T a d'A a
 PFX T e d'E e
 PFX T i d'I i
@@ -81,7 +68,7 @@ PFX T u d'U u
 PFX T h d'H h
 PFX T ö d'Ö ö
 PFX T ü d'Ü ü
-PFX T 0 D' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 D' [AEIOUHÖÜ]
 PFX T a D'A a
 PFX T e D'E e
 PFX T i D'I i
@@ -90,12 +77,8 @@ PFX T u D'U u
 PFX T h D'H h
 PFX T ö D'Ö ö
 PFX T ü D'Ü ü
+PFX T 0 D' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 quist' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è quist'è è
-PFX T ò quist'ò ò
-PFX T ê quist'ê ê
-PFX T ô quist'ô ô
-PFX T î quist'î î
 PFX T a quist'A a
 PFX T e quist'E e
 PFX T i quist'I i
@@ -104,7 +87,7 @@ PFX T u quist'U u
 PFX T h quist'H h
 PFX T ö quist'Ö ö
 PFX T ü quist'Ü ü
-PFX T 0 QUIST' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Quist' [AEIOUHÖÜ]
 PFX T a Quist'A a
 PFX T e Quist'E e
 PFX T i Quist'I i
@@ -113,12 +96,8 @@ PFX T u Quist'U u
 PFX T h Quist'H h
 PFX T ö Quist'Ö ö
 PFX T ü Quist'Ü ü
+PFX T 0 QUIST' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 quell' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è quell'è è
-PFX T ò quell'ò ò
-PFX T ê quell'ê ê
-PFX T ô quell'ô ô
-PFX T î quell'î î
 PFX T a quell'A a
 PFX T e quell'E e
 PFX T i quell'I i
@@ -127,7 +106,7 @@ PFX T u quell'U u
 PFX T h quell'H h
 PFX T ö quell'Ö ö
 PFX T ü quell'Ü ü
-PFX T 0 QUELL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Quell' [AEIOUHÖÜ]
 PFX T a Quell'A a
 PFX T e Quell'E e
 PFX T i Quell'I i
@@ -136,12 +115,8 @@ PFX T u Quell'U u
 PFX T h Quell'H h
 PFX T ö Quell'Ö ö
 PFX T ü Quell'Ü ü
+PFX T 0 QUELL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 ch' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è ch'è è
-PFX T ò ch'ò ò
-PFX T ê ch'ê ê
-PFX T ô ch'ô ô
-PFX T î ch'î î
 PFX T a ch'A a
 PFX T e ch'E e
 PFX T i ch'I i
@@ -150,7 +125,7 @@ PFX T u ch'U u
 PFX T h ch'H h
 PFX T ö ch'Ö ö
 PFX T ü ch'Ü ü
-PFX T 0 CH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Ch' [AEIOUHÖÜ]
 PFX T a Ch'A a
 PFX T e Ch'E e
 PFX T i Ch'I i
@@ -159,12 +134,8 @@ PFX T u Ch'U u
 PFX T h Ch'H h
 PFX T ö Ch'Ö ö
 PFX T ü Ch'Ü ü
+PFX T 0 CH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 sch' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è sch'è è
-PFX T ò sch'ò ò
-PFX T ê sch'ê ê
-PFX T ô sch'ô ô
-PFX T î sch'î î
 PFX T a sch'A a
 PFX T e sch'E e
 PFX T i sch'I i
@@ -173,7 +144,7 @@ PFX T u sch'U u
 PFX T h sch'H h
 PFX T ö sch'Ö ö
 PFX T ü sch'Ü ü
-PFX T 0 SCH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Sch' [AEIOUHÖÜ]
 PFX T a Sch'A a
 PFX T e Sch'E e
 PFX T i Sch'I i
@@ -182,12 +153,8 @@ PFX T u Sch'U u
 PFX T h Sch'H h
 PFX T ö Sch'Ö ö
 PFX T ü Sch'Ü ü
+PFX T 0 SCH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 sainz' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è sainz'è è
-PFX T ò sainz'ò ò
-PFX T ê sainz'ê ê
-PFX T ô sainz'ô ô
-PFX T î sainz'î î
 PFX T a sainz'A a
 PFX T e sainz'E e
 PFX T i sainz'I i
@@ -196,7 +163,7 @@ PFX T u sainz'U u
 PFX T h sainz'H h
 PFX T ö sainz'Ö ö
 PFX T ü sainz'Ü ü
-PFX T 0 SAINZ' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Sainz' [AEIOUHÖÜ]
 PFX T a Sainz'A a
 PFX T e Sainz'E e
 PFX T i Sainz'I i
@@ -205,12 +172,8 @@ PFX T u Sainz'U u
 PFX T h Sainz'H h
 PFX T ö Sainz'Ö ö
 PFX T ü Sainz'Ü ü
+PFX T 0 SAINZ' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 minch' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è minch'è è
-PFX T ò minch'ò ò
-PFX T ê minch'ê ê
-PFX T ô minch'ô ô
-PFX T î minch'î î
 PFX T a minch'A a
 PFX T e minch'E e
 PFX T i minch'I i
@@ -219,7 +182,7 @@ PFX T u minch'U u
 PFX T h minch'H h
 PFX T ö minch'Ö ö
 PFX T ü minch'Ü ü
-PFX T 0 MINCH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Minch' [AEIOUHÖÜ]
 PFX T a Minch'A a
 PFX T e Minch'E e
 PFX T i Minch'I i
@@ -228,12 +191,8 @@ PFX T u Minch'U u
 PFX T h Minch'H h
 PFX T ö Minch'Ö ö
 PFX T ü Minch'Ü ü
+PFX T 0 MINCH' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 cull' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è cull'è è
-PFX T ò cull'ò ò
-PFX T ê cull'ê ê
-PFX T ô cull'ô ô
-PFX T î cull'î î
 PFX T a cull'A a
 PFX T e cull'E e
 PFX T i cull'I i
@@ -242,7 +201,7 @@ PFX T u cull'U u
 PFX T h cull'H h
 PFX T ö cull'Ö ö
 PFX T ü cull'Ü ü
-PFX T 0 CULL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Cull' [AEIOUHÖÜ]
 PFX T a Cull'A a
 PFX T e Cull'E e
 PFX T i Cull'I i
@@ -251,12 +210,8 @@ PFX T u Cull'U u
 PFX T h Cull'H h
 PFX T ö Cull'Ö ö
 PFX T ü Cull'Ü ü
+PFX T 0 CULL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 pell' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è pell'è è
-PFX T ò pell'ò ò
-PFX T ê pell'ê ê
-PFX T ô pell'ô ô
-PFX T î pell'î î
 PFX T a pell'A a
 PFX T e pell'E e
 PFX T i pell'I i
@@ -265,7 +220,7 @@ PFX T u pell'U u
 PFX T h pell'H h
 PFX T ö pell'Ö ö
 PFX T ü pell'Ü ü
-PFX T 0 PELL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Pell' [AEIOUHÖÜ]
 PFX T a Pell'A a
 PFX T e Pell'E e
 PFX T i Pell'I i
@@ -274,12 +229,8 @@ PFX T u Pell'U u
 PFX T h Pell'H h
 PFX T ö Pell'Ö ö
 PFX T ü Pell'Ü ü
+PFX T 0 PELL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 süll' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è süll'è è
-PFX T ò süll'ò ò
-PFX T ê süll'ê ê
-PFX T ô süll'ô ô
-PFX T î süll'î î
 PFX T a süll'A a
 PFX T e süll'E e
 PFX T i süll'I i
@@ -288,7 +239,7 @@ PFX T u süll'U u
 PFX T h süll'H h
 PFX T ö süll'Ö ö
 PFX T ü süll'Ü ü
-PFX T 0 SÜLL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Süll' [AEIOUHÖÜ]
 PFX T a Süll'A a
 PFX T e Süll'E e
 PFX T i Süll'I i
@@ -297,12 +248,8 @@ PFX T u Süll'U u
 PFX T h Süll'H h
 PFX T ö Süll'Ö ö
 PFX T ü Süll'Ü ü
+PFX T 0 SÜLL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 PFX T 0 ill' [aeiouhöüèòêôîAEIOUHÖÜ]
-PFX T è ill'è è
-PFX T ò ill'ò ò
-PFX T ê ill'ê ê
-PFX T ô ill'ô ô
-PFX T î ill'î î
 PFX T a ill'A a
 PFX T e ill'E e
 PFX T i ill'I i
@@ -311,7 +258,7 @@ PFX T u ill'U u
 PFX T h ill'H h
 PFX T ö ill'Ö ö
 PFX T ü ill'Ü ü
-PFX T 0 ILL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+PFX T 0 Ill' [AEIOUHÖÜ]
 PFX T a Ill'A a
 PFX T e Ill'E e
 PFX T i Ill'I i
@@ -320,6 +267,7 @@ PFX T u Ill'U u
 PFX T h Ill'H h
 PFX T ö Ill'Ö ö
 PFX T ü Ill'Ü ü
+PFX T 0 ILL' [AEIOUHÖÜ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]
 
 # pronoms reflexivs apostrofads
 # pronoms objects
