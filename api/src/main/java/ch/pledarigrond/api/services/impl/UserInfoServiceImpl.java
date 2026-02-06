@@ -29,7 +29,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         return dto;
     }
 
-    private String getClientIp() {
+    @Override
+    public String getClientIp() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress != null && !ipAddress.isEmpty()) {

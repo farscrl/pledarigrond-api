@@ -6,4 +6,5 @@ public interface UserInfoService {
 
     UserInfoDto getCurrentUserInfo();
 
+    String getClientIp();
 }

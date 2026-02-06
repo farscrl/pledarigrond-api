@@ -3,8 +3,10 @@ package ch.pledarigrond.api.controllers.user;
 import ch.pledarigrond.api.dtos.PronunciationDownloadRequest;
 import ch.pledarigrond.api.services.BunnyService;
 import ch.pledarigrond.api.services.EmailService;
+import ch.pledarigrond.api.services.MatomoService;
 import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.api.services.ScheduledDumpService;
+import ch.pledarigrond.api.services.UserInfoService;
 import ch.pledarigrond.common.data.common.Language;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +37,12 @@ public class ExportDataController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private MatomoService matomoService;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/json")
@@ -95,6 +103,7 @@ public class ExportDataController {
 
         String secureLink = bunnyService.generateSecureUrl(fileName, 3600);
         emailService.sendPronunciationDownloadLink(request.getEmail(), secureLink, language);
+        matomoService.trackPronunciationDownload(request.getEmail(), language, userInfoService.getClientIp());
         return ResponseEntity.ok().build();
     }
 
