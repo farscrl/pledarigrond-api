@@ -1,5 +1,8 @@
 package ch.pledarigrond.api.controllers.user;
 
+import ch.pledarigrond.api.dtos.PronunciationDownloadRequest;
+import ch.pledarigrond.api.services.BunnyService;
+import ch.pledarigrond.api.services.EmailService;
 import ch.pledarigrond.api.services.NameService;
 import ch.pledarigrond.api.services.ScheduledDumpService;
 import ch.pledarigrond.common.data.common.Language;
@@ -9,10 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +29,12 @@ public class ExportDataController {
 
     @Autowired
     private NameService nameService;
+
+    @Autowired
+    private BunnyService bunnyService;
+
+    @Autowired
+    private EmailService emailService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/json")
@@ -49,6 +55,47 @@ public class ExportDataController {
     ResponseEntity<?> exportForLanguageAction(@PathVariable("language") Language language) {
         List<String> names = nameService.getWordsForLanguage(language);
         return ResponseEntity.ok(names);
+    }
+
+    @PostMapping("/pronunciation/request-link")
+    public ResponseEntity<String> requestDownload(@PathVariable("language") Language language, @RequestBody PronunciationDownloadRequest request) {
+
+        if (!request.isAcceptedTerms()) {
+            return ResponseEntity.badRequest().body("You must accept the terms and conditions.");
+        }
+        if (request.getEmail() == null || !request.getEmail().contains("@")) {
+            return ResponseEntity.badRequest().body("Invalid email address.");
+        }
+
+        String fileName;
+        switch (language) {
+            case PUTER:
+                fileName = "ladin-rm-puter-mp3.zip";
+                break;
+            case RUMANTSCHGRISCHUN:
+                fileName = "prod-rm-rumgr-mp3.zip";
+                break;
+            case SURMIRAN:
+                fileName = "prod-rm-surmiran-mp3.zip";
+                break;
+            case SURSILVAN:
+                fileName = "prod-rm-sursilv-mp3.zip";
+                break;
+            case SUTSILVAN:
+                fileName = "prod-rm-sutsilv-mp3.zip";
+                break;
+            case VALLADER:
+                fileName = "ladin-rm-vallader-mp3.zip";
+                break;
+            default:
+                return ResponseEntity.badRequest().body("Invalid language.");
+        }
+
+        fileName = "pronunzia/" + fileName;
+
+        String secureLink = bunnyService.generateSecureUrl(fileName, 3600);
+        emailService.sendPronunciationDownloadLink(request.getEmail(), secureLink, language);
+        return ResponseEntity.ok().build();
     }
 
     private void stream(HttpServletResponse response, File export) throws IOException {

@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.time.Instant;
+import java.util.Base64;
 
 @Service
 public class BunnyServiceImpl implements BunnyService {
@@ -20,6 +24,12 @@ public class BunnyServiceImpl implements BunnyService {
 
     @Value("${bunny.apiKey}")
     private String apiKey;
+
+    @Value("${bunny.secure.zoneName}")
+    private String secureZoneName;
+
+    @Value("${bunny.secure.authentication.token}")
+    private String secureAuthToken;
 
     @Override
     public void uploadFile(String fileName, File file) {
@@ -76,6 +86,30 @@ public class BunnyServiceImpl implements BunnyService {
             }
         } catch (IOException e) {
             logger.error("Failed to delete file", e);
+        }
+    }
+
+    @Override
+    public String generateSecureUrl(String filePath, long expirationSeconds) {
+        try {
+            String hostname = "https://" + secureZoneName + ".b-cdn.net";
+
+            String path = filePath.startsWith("/") ? filePath : "/" + filePath;
+            long expiresAt = Instant.now().getEpochSecond() + expirationSeconds;
+
+            String signatureBase = secureAuthToken + path + expiresAt;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(signatureBase.getBytes(StandardCharsets.UTF_8));
+
+            String token = Base64.getEncoder().encodeToString(hash)
+                    .replace("\n", "")
+                    .replace("+", "-")
+                    .replace("/", "_")
+                    .replace("=", "");
+
+            return String.format("%s%s?token=%s&expires=%d", hostname, path, token, expiresAt);
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating BunnyCDN link", e);
         }
     }
 }

@@ -6,4 +6,6 @@ public interface BunnyService {
     void uploadFile(String fileName, File file);
 
     void deleteFile(String fileName);
+
+    String generateSecureUrl(String filePath, long expirationSeconds);
 }
